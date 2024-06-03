@@ -6,58 +6,43 @@ export default defineConfig({
   description: "Desc",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
+    // logo: {
+    //   light: '/assets/tess-b2.png',
+    //   dark: '/assets/tess-b2.png'
+    // },
     nav: [
       { text: 'Home', link: '/' },
     ],
 
     sidebar: [
       {
-        text: '前言',
+        text: 'Prelude · 序',
         items: [
-          { text: '前言', link: '/intro' },
-          { text: '作者简介', link: '/markdown-examples' },
-          { text: '写作目的', link: '/api-examples' }
+          { text: '前言', link: '/prelude' },
         ]
       },
       {
-        text: 'Minecraft 历史',
+        text: 'Minecraft History',
         items: [
-          { text: '起源与早期发展', link: '/markdown-examples' },
-          { text: '关键版本和更新', link: '/api-examples' },
-          { text: 'Mojang到微软', link: '/api-examples' }
+          { text: '起源与发展', link: '/history' },
+          { text: '版本更新与变迁', link: '/history/versions' },
+          { text: '从Mojang到微软', link: '/history/from-mojang-to-microsoft' },
         ]
       },
       {
-        text: '成功的因素',
+        text: 'Minecraft Philosophy',
         items: [
-          { text: 'Innovation', link: '/markdown-examples' },
-          { text: '社区驱动', link: '/api-examples' },
+          { text: '成功因素分析', link: '/history/success-analysis' },
           { text: '开放性和可扩展性', link: '/api-examples' },
         ]
       },
       {
-        text: '商业市场分析',
+        text: 'Minecraft Algorithms',  // 演算法 & 技术分析
         items: [
-          { text: '市场定位', link: '/markdown-examples' },
-          { text: '用户群体', link: '/api-examples' },
-          { text: '商业模式', link: '/api-examples' },
-        ]
-      },
-      {
-        text: '游戏设计分析',
-        items: [
-          { text: '沙盒概念', link: '/markdown-examples' },
-          { text: '玩法多样性', link: '/api-examples' },
-          { text: '美学设计', link: '/api-examples' },
-        ]
-      },
-      {
-        text: '算法和技术分析',
-        items: [
-          { text: '体素系统', link: '/markdown-examples' },
-          { text: '生成算法', link: '/api-examples' },
-          { text: '性能优化', link: '/api-examples' },
-          { text: '多人游戏架构', link: '/api-examples' },
+          { text: '体素系统', link: '/tech/voxel' },
+          { text: '程序化生成', link: '/tech/pcg' },
+          { text: '红石系统', link: '/tech/redstone' },
+          { text: '多人游戏', link: '/tech/network' },
         ]
       }
     ],

@@ -5,24 +5,27 @@ layout: home
 hero:
   name: ""  # Thinking in Minecraft
   text: "Minecraft 設計思想"
-  tagline: "歷史、哲學與演算法<br><small>Thinking in Minecraft: History, Philosophy and Algorithms</small>"
-  # image:
-  #   src: /assets/tess2.png
-  #   alt: VitePress
+  tagline: "歷史、哲思與演算法<br><small>Thinking in Minecraft: History, Philosophy and Algorithms</small>"
+  image:
+    src: /assets/cover/tri.png
+    alt: VitePress
   actions:
     - theme: brand
-      text: 目录
-      link: /markdown-examples
+      text: 序
+      link: /prelude/
     - theme: alt
-      text: 作者介绍
-      link: /api-examples
+      text: PDF档
+      link: /prelude/
+    - theme: alt
+      text: 購買實體版
+      link: /prelude/
 
 features:
-  - title: Minecraft 歷史
+  - title: Minecraft 歷史、起源與發展
     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Minecraft 哲學
+  - title: Minecraft 設計哲思
     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Minecraft 演算法
+  - title: Minecraft 演算法與技術分析
     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
 ---
 
@@ -31,5 +34,43 @@ features:
 </p>
 
 <p>
-<h1 style="display:inline-block;">但</h1>如今 Minecraft的光辉岁月已经过去了，Minecraft社区已经有了他们的问题 我认为微软拥有它的过去几年已经对Minecraft造成了极大的破坏。 游戏可能还有很多东西需要添加，这会让它变得更有趣。 但现在并非如此，Minecraft现在正在获得它根本不需要的东西，添加了愚蠢的地图包 更多迷你游戏，以及更多纹理和服装包。 微软不断将游戏货币化，而不是努力让游戏变得更好。不幸的是，没有人能够将游戏从死亡中拯救出来。
+<h1 style="display:inline-block;">但</h1>如今 Minecraft的光辉岁月已经过去了，Minecraft社区已经有了他们的问题
 </p>
+
+
+<br><br><br>
+<div>
+  <img src="/assets/cover/tim-1.jpg" class="book-img">
+  <img src="/assets/cover/tim-1-1.jpg" class="book-img">
+  <img src="/assets/cover/tim-2.jpg" class="book-img">
+  <img src="/assets/cover/tim-3.jpg" class="book-img">
+  <img src="/assets/cover/tim-3-1.jpg" class="book-img">
+  <img src="/assets/cover/tim-3-2.jpg" class="book-img">
+</div>
+
+
+<style>
+
+.book-img {
+  display: inline-block;
+  width: calc(100% / 6.4);
+  margin-right: 6px;
+}
+
+.image-bg {
+  opacity: 40%;
+  background-image: linear-gradient(97deg, #abe160 50%, #0091e9 50%) !important;
+}
+
+@media (min-width: 640px) {
+  .image-src {
+    max-width: 115%!important;
+  }
+}
+@media (min-width: 960px) {
+  .image-src {
+    max-width: 78%!important;
+  }
+}
+
+</style>
