@@ -4,6 +4,11 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "Minecraft 設计思想",
   description: "Desc",
+  lang: 'en-US',
+  base: "/thinking-in-minecraft/",
+  head: [
+    ['link', { rel: 'icon', href: '/assets/logo-bl.png' }],
+  ],
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     // logo: {
@@ -48,7 +53,7 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
+      { icon: 'github', link: 'https://github.com/Dreamtowards/Thinking-In-Minecraft' }
     ]
   }
 })
