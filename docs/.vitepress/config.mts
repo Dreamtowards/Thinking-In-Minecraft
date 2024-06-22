@@ -27,27 +27,29 @@ export default defineConfig({
         ]
       },
       {
-        text: 'Minecraft History',
+        text: 'Minecraft Origin',
         items: [
-          { text: '起源与发展', link: '/history' },
-          { text: '版本更新与变迁', link: '/history/versions' },
-          { text: '从Mojang到微软', link: '/history/from-mojang-to-microsoft' },
+          { text: '起源与发展', link: '/origin/' },
+          { text: '版本更新与变迁', link: '/origin/versions' },
+          { text: '从Mojang到微软', link: '/origin/from-mojang-to-microsoft' },
         ]
       },
       {
-        text: 'Minecraft Philosophy',
+        text: 'Minecraft Ideology',
         items: [
-          { text: '成功因素分析', link: '/history/success-analysis' },
-          { text: '开放性和可扩展性', link: '/api-examples' },
+          { text: '设计哲思', link: '/ideology/' },
+          { text: '成功因素分析', link: '/ideology/success-analysis' },
+          { text: '开放性和可扩展性', link: '/ideology/' },
         ]
       },
       {
         text: 'Minecraft Algorithms',  // 演算法 & 技术分析
         items: [
-          { text: '体素系统', link: '/tech/voxel' },
-          { text: '程序化生成', link: '/tech/pcg' },
-          { text: '红石系统', link: '/tech/redstone' },
-          { text: '多人游戏', link: '/tech/network' },
+          { text: '算法与技术', link: '/impl/' },
+          { text: '体素系统', link: '/impl/voxel' },
+          { text: '程序化生成', link: '/impl/pcg' },
+          { text: '红石系统', link: '/impl/redstone' },
+          { text: '多人游戏', link: '/impl/network' },
         ]
       }
     ],
