@@ -5,7 +5,7 @@ layout: home
 hero:
   name: ""  # Thinking in Minecraft
   text: "Minecraft 設計思想"
-  tagline: "歷史、哲思與演算法<br><small>Thinking in Minecraft: History, Ideology and Algorithms</small>"
+  tagline: "歷史、設計與演算法<br><small>Thinking in Minecraft: History, Designs and Algorithms</small>"
   image:
     src: /assets/cover/tri.png
     alt: Cover
@@ -23,12 +23,12 @@ hero:
 features:
   - title: Minecraft 歷史、起源與發展
     details: "从2009年前的伏笔 到2014年的辉煌，背后的历史、事件与人物，Minecraft 是如何造就流量黑洞，成为史上最具影响力的游戏"
-    link: /origin
-    linkText: Vol.I · Minecraft Origins
+    link: /history
+    linkText: Vol.I · Minecraft History
   - title: Minecraft 設計哲思
     details: 通过简单却深邃的游戏机制，Minecraft 赋予了玩家极大的自由。除了创造与生存，最感人的方面是它让玩家以独特且有意义的方式表达自己。
-    link: /ideology
-    linkText: Vol.II · Minecraft Ideology
+    link: /design
+    linkText: Vol.II · Minecraft Designs
   - title: Minecraft 演算法與技術分析
     details: 体素系统与程序化世界生成，物理计算 红石系统
     link: /tech
