@@ -1,5 +1,19 @@
 
-# Prelude 前言
+# 前言
+
+Minecraft 无疑是史上最具影响力的游戏之一，它引发了大规模的独立游戏运动，也是有史以来最畅销的游戏。游戏通过视频平台和其他社交媒体在互联网上像野火一样传播，任何游戏都不太可能再次达到这样成功的水平。 从2011年中期到2014年，这个游戏连续近3年无与伦比的发展， 有段时间你会进入视频平台并且看到很多Minecraft频道实况主，你甚至无法避免他们。Minecraft是很多实况主们的第一个主要浪潮，可以大胆的说 在YouTube的历史上，大多数创作者实际上只制作Minecraft的内容。
+但如今 Minecraft的光辉岁月已经过去了，Minecraft社区已经有了他们的问题
+
+本书作者为Minecraft资深玩家、沙盒游戏《以太效应 · AetherEffect》开发者 Aether，意志再次创造Minecraft的辉煌，特此分析MC的历史、设计与技术实现。
+
+
+
+
+
+
+
+
+<!-- 
 
 Minecraft is a game that needs no introduction. it has taken the gaming world by storm, since its release back in 2011.
 
@@ -17,17 +31,6 @@ But perhaps the most touching aspect of Minecraft is how it allows players to ex
 from recreating famous landmarks, to building memorial for loved ones, the game has become a platform for creative expression and emotional catharsis.
 Minecraft iffers a glimmer of hope and a chance to connect with others in a profound way
 
-
-Minecraft無疑是史上最具影響力的游戲之一，它引发了大规模的独立游戏运动，成为最成功的游戏。也是有史以来第二个最畅销的游戏 游戏通过视频平台和其他社交媒体在互联网上像野火一样传播。任何游戏都不太可能再次达到这样成功的水平。 从2011年中期开始 到2014年，这个游戏连续近3年无与伦比的发展， 有段时间你会进入视频平台并且看到很多Minecraft频道 实况主，你甚至无法避免他们 Minecraft是很多实况主们的第一个主要浪潮，可以大胆的说 在YouTube的历史上，大多数创作者实际上只制作Minecraft的内容
-
-但如今 Minecraft的光辉岁月已经过去了，Minecraft社区已经有了他们的问题
-
-
-## Author
-
-
-
-
-<!-- 从本书获得的各项大奖以及来自世界各地的读者评论中，不难看出这是一本经典之作。本书深入探讨了Minecraft的设计哲学、历史背景以及核心算法。通过通俗易懂且直接的小示例，解释了一个个复杂抽象的概念。
+从本书获得的各项大奖以及来自世界各地的读者评论中，不难看出这是一本经典之作。本书深入探讨了Minecraft的设计哲学、历史背景以及核心算法。通过通俗易懂且直接的小示例，解释了一个个复杂抽象的概念。
 
 本书共分为三大部分，包括Minecraft的历史与成功因素、Minecraft哲学及Minecraft核心算法与技术。这些丰富的内容，涵盖了从基础的游戏设计理念到高级的技术实现细节，适合各个层次的Minecraft爱好者阅读，同时也是高等院校讲授游戏设计和程序生成算法的绝佳教材和参考书。 -->
