@@ -1,10 +1,40 @@
 {
-  "devDependencies": {
-    "vitepress": "^1.2.3"
-  },
+  "name": "thinking-in-minecraft",
+  "version": "0.0.1",
+  "private": true,
   "scripts": {
+    "build": "next build",
+    "dev": "next dev",
+    "start": "next start",
+    "types:check": "next typegen && tsc --noEmit",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs"
+  },
+  "dependencies": {
+    "fumadocs-core": "16.15.8",
+    "fumadocs-mdx": "15.4.0",
+    "fumadocs-ui": "npm:@fumadocs/base-ui@16.15.8",
+    "katex": "^0.18.7",
+    "lucide-react": "^1.39.0",
+    "mermaid": "^11.12.2",
+    "next": "16.3.4",
+    "next-themes": "^0.4.6",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "rehype-katex": "^7.0.1",
+    "remark-math": "^6.0.0",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/mdx": "^2.0.14",
+    "@types/node": "^26.4.1",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
+    "postcss": "^8.5.26",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.3",
+    "vitepress": "^1.2.3"
   }
 }

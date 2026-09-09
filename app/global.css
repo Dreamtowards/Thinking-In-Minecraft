@@ -1,0 +1,23 @@
+@import 'tailwindcss';
+@import 'fumadocs-ui/css/neutral.css';
+@import 'fumadocs-ui/css/preset.css';
+
+html {
+  scrollbar-gutter: stable;
+}
+
+html > body[data-scroll-locked] {
+  margin-right: 0px !important;
+  --removed-body-scroll-bar-size: 0px !important;
+}
+
+.fd-article video {
+  width: 100%;
+  max-width: 48rem;
+  height: auto;
+}
+
+/* Existing notes use a markdown H1; Fumadocs also renders the page title. */
+.fd-article > h1:first-child {
+  display: none;
+}
