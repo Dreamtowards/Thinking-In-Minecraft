@@ -7,12 +7,12 @@ export function Note({ children }: { children?: ReactNode }) {
 
 export function Impl({ title, children }: { title?: string; children?: ReactNode }) {
   return (
-    <div className="my-6 rounded-xl border border-fd-border bg-fd-card p-4">
-      {title ? (
-        <p className="mb-2 text-sm font-semibold text-fd-muted-foreground">{title}</p>
-      ) : null}
-      <div className="text-fd-muted-foreground [&_:last-child]:mb-0">{children}</div>
-    </div>
+    <details className="my-6 rounded-xl border border-fd-border bg-fd-card p-4">
+      <summary className="cursor-pointer text-sm font-semibold text-fd-muted-foreground">
+        {title ?? '实现细节'}
+      </summary>
+      <div className="mt-3 text-fd-muted-foreground [&_:last-child]:mb-0">{children}</div>
+    </details>
   );
 }
 
@@ -28,9 +28,9 @@ export function Constraint({
   chain,
   children,
 }: {
-  name?: string;
-  verdict?: string;
-  chain?: string;
+  name: string;
+  verdict: string;
+  chain: string;
   children?: ReactNode;
 }) {
   return (

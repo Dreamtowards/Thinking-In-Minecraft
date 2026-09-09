@@ -14,6 +14,8 @@ docs/intro/showcase/res
 /out/
 /build
 *.tsbuildinfo
+AGENTS.md
+CLAUDE.md
 
 # misc
 .DS_Store

@@ -1,4 +1,6 @@
-# 商业与治理：链条为何断裂
+---
+title: 商业与治理：链条为何断裂
+---
 
 > **第一卷 · 枢纽章**
 >
@@ -16,7 +18,7 @@
 
 ## Minecraft 怎么做的
 
-先把事实排出来。下面每一条都有出处，列在本章末尾。
+先把事实排出来。下面每一条都有出处。
 
 ```mermaid
 flowchart LR
@@ -48,7 +50,7 @@ flowchart LR
 
 Mojang 从 Curse 手里买下了 Bukkit 项目，并雇下了它的团队。公开目标非常明确：做一个官方的 Minecraft API，同时覆盖服务端和客户端的修改，让 mod 开发不必再依赖脆弱的非官方方案。
 
-这个承诺此后被反复提及，从未在 Java 版上交付。2013 年，Mojang 开发者 Nathan "Dinnerbone" Adams 在推特上说得很直白：
+这个承诺此后被反复提及，从未在 Java 版上交付。2013 年，Mojang 开发者 Nathan "Dinnerbone" Adams 在推特上说得很直白：[^dinnerbone]
 
 > 提醒一下：Minecraft 没有官方的 mod 方式，我们也仍然不官方支持 mod。我们还在做 plugin API。
 
@@ -60,7 +62,7 @@ Mojang 从 Curse 手里买下了 Bukkit 项目，并雇下了它的团队。公�
 
 ### 2014 年 6 月：服务器可以赚钱了，但只能这样赚
 
-Mojang 发布《Let's talk server monetisation!》。这篇文章的开头常被误引，值得原样看清楚：
+Mojang 发布《Let's talk server monetisation!》。[^eula] 这篇文章的开头常被误引，值得原样看清楚：
 
 > 在法律上，你不允许从我们的产品上赚钱。到目前为止这条规则只有一个例外——Minecraft 视频。我们即将给出第二个例外——Minecraft 服务器。
 
@@ -78,27 +80,27 @@ Mojang 发布《Let's talk server monetisation!》。这篇文章的开头常被
 
 CraftBukkit 的构成是这样的：Bukkit 的 API 部分以 GPLv3 授权开源，而可运行的服务端 jar 里同时打包了 Mojang 反编译得来的专有服务端代码。GPL 明确要求与其链接的代码同样开源。这个矛盾存在了好几年，没有人追究。
 
-2014 年 9 月 5 日，从 2012 年起就是核心贡献者、向项目提交了超过一万五千行代码的 Wesley "Wolvereness" Wolfe，对 CraftBukkit 及其衍生项目（包括 Spigot）提起了 DMCA 下架通知。他的论据不复杂：我的代码是 GPL 的，你们把它和不开源的专有代码打包分发，那么要么把专有部分也开源，要么就是侵犯我的著作权。
+2014 年 9 月 5 日，从 2012 年起就是核心贡献者、向项目提交了超过一万五千行代码的 Wesley "Wolvereness" Wolfe，对 CraftBukkit 及其衍生项目（包括 Spigot）提起了 DMCA 下架通知。[^dmca][^bukkit-gpl] 他的论据不复杂：我的代码是 GPL 的，你们把它和不开源的专有代码打包分发，那么要么把专有部分也开源，要么就是侵犯我的著作权。
 
 他在通知中直接引用了 Mojang 首席运营官 Vu Bui 的书面答复：
 
 > Mojang 未授权将其任何专有 Minecraft 软件（包括其 Minecraft 服务端软件）纳入 Bukkit 项目，或使其受任何 GPL、LGPL 许可，或任何其他开源许可的约束。
 
-有了这句话，事情就没有回旋空间了。CraftBukkit 的下载被撤下，GitHub 锁定了相关仓库。而当时 Bukkit 系服务端的使用量，大约是 Mojang 官方服务端的三倍。
+有了这句话，事情就没有回旋空间了。CraftBukkit 的下载被撤下，GitHub 锁定了相关仓库。而当时 Bukkit 系服务端的使用量，大约是 Mojang 官方服务端的三倍。[^bukkit-implosion]
 
-::: details 实现细节 · Spigot 是怎么绕过去的
+<Impl title="Spigot 是怎么绕过去的">
 下架针对的是"分发"这个动作，而不是代码本身。于是 Spigot 把发布物从"编译好的服务端 jar"改成了一个叫 BuildTools 的工具：用户在自己机器上运行它，它去下载 Mojang 官方的服务端 jar、反编译、打补丁、编译，最终产物只存在于用户本地。
 
 没有人再分发含有专有代码的二进制，所以 GPL 的分发条款不再被触发。这个方案至今仍是 Spigot 与 Paper 的安装方式。
 
 它解决了法律问题，也把一个后果固定下来：整个 Java 服务端生态的标准安装流程，从此包含"在你自己的机器上把游戏反编译一遍"这一步。一个官方 API 本可以让这一步根本不存在。
-:::
+</Impl>
 
 ### 2014 年 9 月 15 日：25 亿美元
 
-DMCA 事件十天后，微软宣布以 25 亿美元收购 Mojang。Notch、Carl Manneh、Jakob Porsér 三位创始人同时离开。
+DMCA 事件十天后，微软宣布以 25 亿美元收购 Mojang。[^msft-acquire] Notch、Carl Manneh、Jakob Porsér 三位创始人同时离开。
 
-Notch 当天发出的公开信里有两句话，构成了这一章后面所有内容的注脚。第一句是他的理由：
+Notch 当天发出的公开信里有两句话，构成了这一章后面所有内容的注脚。[^notch-leaving] 第一句是他的理由：
 
 > 这不是关于钱的。这是关于我的理智。
 
@@ -114,7 +116,7 @@ Notch 当天发出的公开信里有两句话，构成了这一章后面所有�
 
 ### 2017 年 4 月：一个策展的商店
 
-Marketplace 随基岩版 1.1 "Discovery Update" 上线。它的设计选择比它的存在更值得注意——时任 Minecraft Realms 执行制作人 John Thornton 说得毫不含糊：
+Marketplace 随基岩版 1.1 "Discovery Update" 上线。[^marketplace] 它的设计选择比它的存在更值得注意——时任 Minecraft Realms 执行制作人 John Thornton 说得毫不含糊：
 
 > 我们挑了九位创作者来首发。这是一个经过策展的商店，它不是开放的。
 
@@ -124,7 +126,7 @@ Marketplace 随基岩版 1.1 "Discovery Update" 上线。它的设计选择比�
 
 ### 2017 年 9 月 20 日：Java 版被加上了后缀
 
-Better Together 更新发布，把口袋版、Windows 10 版、Gear VR 版、Fire TV 版和 Xbox One 上的新版本统一成同一套基于 C++ 的代码库，后来通称基岩版。Switch 在 2018 年 6 月加入，PS4 在 2019 年 12 月加入。
+Better Together 更新发布，把口袋版、Windows 10 版、Gear VR 版、Fire TV 版和 Xbox One 上的新版本统一成同一套基于 C++ 的代码库，后来通称基岩版。[^better-together][^better-together-wiki] Switch 在 2018 年 6 月加入，PS4 在 2019 年 12 月加入。
 
 技术上这是一次了不起的工程。但有一个细节在当时被当作命名琐事，今天回头看是这一整章里最有信息量的一件事：**统一之后的基岩版直接叫「Minecraft」，而原本叫这个名字的 Java 版，被改名为「Minecraft: Java Edition」。**
 
@@ -144,7 +146,7 @@ Java 版账号被要求迁移到微软账号。官方的迁移问答里给了一
 
 2022 年 7 月 27 日，1.19.1 正式发布，带来了玩家举报系统。玩家可以举报聊天消息，**包括在私人服务器上发生的聊天**；处罚绑定微软账号，封禁期间无法进入任何联机服务器，包括自己的私人服务器，时长从三天到永久。
 
-社区的反弹很猛：#saveminecraft 上了趋势，这个版本被叫作 1.19.84，"No Chat Reports" 模组在 Kotaku 报道时下载量已超过二十万。
+社区的反弹很猛：#saveminecraft 上了趋势，这个版本被叫作 1.19.84，[^vice-2022] "No Chat Reports" 模组在 Kotaku 报道时下载量已超过二十万。[^kotaku-2022]
 
 不过公平地说，当时流传最广的那种恐慌是错的。这个系统不主动扫描聊天，也没有用机器人巡查，它由举报触发、由人工复核；游戏里那个脏话过滤器是另一个独立功能，不会导致封禁。
 
@@ -162,7 +164,7 @@ Mojang 社区经理的回应，则给这次冲突加上了一个语气上的注�
 
 然后事情朝着相反的方向动了一次，而且幅度不小。
 
-Mojang 宣布彻底取消 Java 版的代码混淆。从 Mounts of Mayhem 更新之后的第一个快照开始，客户端和服务端 jar 不再混淆，原始的类名、方法名、字段名和变量名全部默认包含在内；版本 json 里不再需要混淆映射表；1.21.11 是第一个去混淆的正式版本。为了给工具链留出适配时间，Mojang 还在过渡期同时提供了未混淆的实验性版本。
+Mojang 宣布彻底取消 Java 版的代码混淆。[^deobf][^deobf-adt] 从 Mounts of Mayhem 更新之后的第一个快照开始，客户端和服务端 jar 不再混淆，原始的类名、方法名、字段名和变量名全部默认包含在内；版本 json 里不再需要混淆映射表；1.21.11 是第一个去混淆的正式版本。为了给工具链留出适配时间，Mojang 还在过渡期同时提供了未混淆的实验性版本。
 
 官方公告里的这句话，请和 2013 年 Dinnerbone 那句"我们不支持"并排读：
 
@@ -176,17 +178,17 @@ Mojang 宣布彻底取消 Java 版的代码混淆。从 Mounts of Mayhem 更新�
 
 一小群人发现了举报系统的一个漏洞：用插件在服务器里造一个顶着目标玩家用户名的假玩家，然后用脚本对它发起大量举报，自动化处置流程便会在缺乏人工复核的情况下直接封禁真实账号。这个方法不需要入侵，不需要目标所在服务器的权限，据当事人称对任何账号都有效。
 
-多位知名创作者被波及，部分人丢掉的不只是 Minecraft 权限，而是整个 Xbox 账号。Jens "Jeb" Bergensten 公开确认团队正在调查自动化处置为何失效，Mojang 表示已陆续恢复受影响账号。
+多位知名创作者被波及，部分人丢掉的不只是 Minecraft 权限，而是整个 Xbox 账号。[^ban-wave] Jens "Jeb" Bergensten 公开确认团队正在调查自动化处置为何失效，Mojang 表示已陆续恢复受影响账号。
 
 这件事的技术细节里藏着本章的全部论点：**攻击之所以可行，正是因为治理权已经从服务器上移到了平台账号。**当一台你自己的服务器上发生的事情能够触发一个全局后果，那么这台服务器就不再是你的辖区，而它的安全性也不再取决于你。
 
-::: info 亲历 · 服主视角的那几年
+<Memoir title="服主视角的那几年">
 我初中的时候开过自己的服务器，给它写插件，也写过配套的管理工具。所以这一章里的每一条规则，对我来说都不是新闻稿，而是当年某个晚上必须处理的具体麻烦：某个插件在版本更新后不能用了、某种收费方式忽然变得不能确定是否合规、某个必须自己动手补上的功能。
 
 那几年我学到的东西，后来发现和这一章的论点是同一件事：真正把人留在服务器上的，从来不是我配置的那些内容，而是他们在里面自己动手改出来的东西。而我作为服主能给他们的动手空间有多大，取决于我这一层能拿到多少权限——那一层的宽窄，是别人在很远的地方决定的。
 
-<!-- 可补：服务器的名字与年份、第一个插件解决的具体问题、1.7 到 1.8 迁移时坏掉的插件清单、EULA 规则出来那几天服主圈的具体反应 -->
-:::
+{/* 可补：服务器的名字与年份、第一个插件解决的具体问题、1.7 到 1.8 迁移时坏掉的插件清单、EULA 规则出来那几天服主圈的具体反应 */}
+</Memoir>
 
 ## 为什么这么做
 
@@ -224,7 +226,7 @@ Mojang 宣布彻底取消 Java 版的代码混淆。从 Mounts of Mayhem 更新�
 
 ## 别人怎么做的
 
-::: tip 另一种可能 · Factorio 把这件事做完了
+<Alternative title="Factorio 把这件事做完了">
 最有力的反例不是某个大厂，是一支几十人的团队。Factorio 提供官方 mod API（Lua）、官方 mod portal、游戏内的 mod 浏览与一键安装、显式的 API 版本号与迁移说明，以及随版本更新的 API 文档。mod 作者不需要反编译，不需要社区映射表，不需要在每次大版本后重写一遍。
 
 这个对照直接反驳了"太难所以做不到"这个辩解。它当然不能反驳"在一个每月都在变的游戏上更难"——但 Factorio 也在持续更新，也做过大版本重构。真正的区别不在难度，在优先级：Factorio 把 API 当成产品的一部分来排期，Minecraft 长期把它当成一件想做但总排不上的事。
@@ -232,7 +234,7 @@ Mojang 宣布彻底取消 Java 版的代码混淆。从 Mounts of Mayhem 更新�
 至于其他几条路：Valve 靠官方 SDK 加 Steam Workshop，把 Garry's Mod 这类完全由社区长出来的东西变成了自己的资产；Terraria 的官方团队最终接纳了社区做的 tModLoader，还把它放上了 Steam；Luanti 从第一天就把引擎和游戏内容彻底分开，代价是始终没有一个足够好的默认游戏来吸引人进来；Roblox 把整条创作链平台化到了极致，代价是创作者的实际分成只有大约四分之一。
 
 这些路径的取舍各不相同，但它们至少都承认了同一件事：**扩展接口是产品，不是附属品。**它需要被设计、被排期、被承诺、被兼容。
-:::
+</Alternative>
 
 ## 如果我重做
 
@@ -252,33 +254,33 @@ Mojang 宣布彻底取消 Java 版的代码混淆。从 Mounts of Mayhem 更新�
 
 **2026 年那次误封潮的信源偏弱。** 它主要由社区媒体和创作者视频记录，Mojang 至今没有发布完整的事后说明。Jeb 的公开确认是可靠的，攻击手法的细节则来自当事人自述与转述。我把它写进来是因为它精确地印证了管辖权这个论点，但它的证据等级低于本章其他事实，请据此打折。
 
-::: info 亲历 · 一个我没法自证的偏见
+<Memoir title="一个我没法自证的偏见">
 我在这个游戏最好的那几年里正好是个服主。所以当我说"折腾的空间被压缩了"，我说的可能是一件客观发生的事，也可能只是我自己那几年不可复制的运气。
 
 我能给出的只是这一章列出的那些可查的决定。至于它们加起来是否真的构成了我说的那条因果链，你有权自己判断。
-:::
+</Memoir>
 
-## 资料来源
+## 脚注
 
-- Mojang，《Let's talk server monetisation!》，2014 年 6 月 — [archive.org 存档](https://web.archive.org/web/20190221061149/https://mojang.com/2014/06/lets-talk-server-monetisation/)
-- GitHub DMCA 存档，《2014-09-05-CraftBukkit》 — [github/dmca](https://github.com/github/dmca/blob/master/2014/2014-09-05-CraftBukkit.md)
-- Justin Wheeler，《The day open source died: a story about Minecraft, Bukkit, and the GPL》 — [jwheel.org](https://jwheel.org/blog/2020/04/open-source-minecraft-bukkit-gpl/)
-- 《The Bukkit Implosion: A History》 — [rdwl.xyz](http://rdwl.xyz/blog/the-bukkit-implosion/)
-- Microsoft，《Minecraft to join Microsoft》，2014 年 9 月 15 日 — [news.microsoft.com](https://news.microsoft.com/source/2014/09/15/minecraft-to-join-microsoft/)
-- Markus Persson，《I'm leaving Mojang》，2014 年 9 月 15 日 — [BBC 全文转载](https://www.bbc.co.uk/news/technology-29205368)
-- Microsoft，《Minecraft fans will soon be able to buy items from the first-ever official marketplace》，2017 年 4 月 10 日 — [news.microsoft.com](https://news.microsoft.com/en-gb/2017/04/10/43566/)
-- Mojang，《The Better Together Update is here!》，2017 年 9 月 20 日 — [minecraft.net](https://www.minecraft.net/en-us/article/better-together-update-here)
-- Minecraft Wiki，《Better Together Update》 — [minecraft.wiki](https://minecraft.wiki/w/Better_Together_Update)
-- Attack of the Fanboy，《Minecraft Developer Explains Mojang's Viewpoint On Mods》（Dinnerbone 推特引述） — [attackofthefanboy.com](https://attackofthefanboy.com/news/minecraft-developer-explains-mojangs-viewpoint-mods/)
-- Kotaku，《'Save Minecraft!' Cry Players After Mojang Starts Moderating Private Servers》，2022 年 — [kotaku.com](https://kotaku.com/save-minecraft-private-server-ban-mojang-microsoft-1849345188)
-- Vice，《'Minecraft' Players Say '1984' Patch Turns Game Into Totalitarian Dystopia》，2022 年 — [vice.com](https://www.vice.com/en/article/minecraft-players-say-1984-patch-turns-game-into-totalitarian-dystopia/)
-- Mojang，《Removing obfuscation in Java Edition》，2025 年 10 月 29 日 — [minecraft.net](https://www.minecraft.net/en-us/article/removing-obfuscation-in-java-edition)
-- ADTmag，《Mojang Studios to Remove Code Obfuscation from Minecraft Java Edition》，2025 年 11 月 4 日 — [adtmag.com](https://adtmag.com/articles/2025/11/04/mojang-studios-to-remove-code-obfuscation-from-minecraft-java-edition.aspx)
-- NewsMinecraft，2026 年误封潮系列报道 — [报道一](https://newsminecraft.com/minecraft-report-exploit-triggers-creator-ban-wave/)、[报道二](https://newsminecraft.com/mojang-responds-to-2026-minecraft-ban-wave/)
+[^eula]: Mojang，《Let's talk server monetisation!》，2014 年 6 月。<https://web.archive.org/web/20190221061149/https://mojang.com/2014/06/lets-talk-server-monetisation/>
+[^dmca]: GitHub DMCA 存档，《2014-09-05-CraftBukkit》。<https://github.com/github/dmca/blob/master/2014/2014-09-05-CraftBukkit.md>
+[^bukkit-gpl]: Justin Wheeler，《The day open source died: a story about Minecraft, Bukkit, and the GPL》。<https://jwheel.org/blog/2020/04/open-source-minecraft-bukkit-gpl/>
+[^bukkit-implosion]: 《The Bukkit Implosion: A History》。<http://rdwl.xyz/blog/the-bukkit-implosion/>
+[^msft-acquire]: Microsoft，《Minecraft to join Microsoft》，2014 年 9 月 15 日。<https://news.microsoft.com/source/2014/09/15/minecraft-to-join-microsoft/>
+[^notch-leaving]: Markus Persson，《I'm leaving Mojang》，2014 年 9 月 15 日。BBC 全文转载：<https://www.bbc.co.uk/news/technology-29205368>
+[^marketplace]: Microsoft，《Minecraft fans will soon be able to buy items from the first-ever official marketplace》，2017 年 4 月 10 日。<https://news.microsoft.com/en-gb/2017/04/10/43566/>
+[^better-together]: Mojang，《The Better Together Update is here!》，2017 年 9 月 20 日。<https://www.minecraft.net/en-us/article/better-together-update-here>
+[^better-together-wiki]: Minecraft Wiki，《Better Together Update》。<https://minecraft.wiki/w/Better_Together_Update>
+[^dinnerbone]: Attack of the Fanboy，《Minecraft Developer Explains Mojang's Viewpoint On Mods》（Dinnerbone 推特引述）。<https://attackofthefanboy.com/news/minecraft-developer-explains-mojangs-viewpoint-mods/>
+[^kotaku-2022]: Kotaku，《'Save Minecraft!' Cry Players After Mojang Starts Moderating Private Servers》，2022 年。<https://kotaku.com/save-minecraft-private-server-ban-mojang-microsoft-1849345188>
+[^vice-2022]: Vice，《'Minecraft' Players Say '1984' Patch Turns Game Into Totalitarian Dystopia》，2022 年。<https://www.vice.com/en/article/minecraft-players-say-1984-patch-turns-game-into-totalitarian-dystopia/>
+[^deobf]: Mojang，《Removing obfuscation in Java Edition》，2025 年 10 月 29 日。<https://www.minecraft.net/en-us/article/removing-obfuscation-in-java-edition>
+[^deobf-adt]: ADTmag，《Mojang Studios to Remove Code Obfuscation from Minecraft Java Edition》，2025 年 11 月 4 日。<https://adtmag.com/articles/2025/11/04/mojang-studios-to-remove-code-obfuscation-from-minecraft-java-edition.aspx>
+[^ban-wave]: NewsMinecraft，2026 年误封潮系列报道。<https://newsminecraft.com/minecraft-report-exploit-triggers-creator-ban-wave/> <https://newsminecraft.com/mojang-responds-to-2026-minecraft-ban-wave/>
 
-<!-- 待补来源：
+{/* 待补来源：
      - Mojang 2012 年 2 月收购 Bukkit 的官方公告原文（目前依赖二手转述）
      - 微软账号迁移 FAQ 中「Java Edition will stay exactly the same」的原始页面存档
      - 基岩版脚本 API 2018 年 12 月公开测试的官方公告
      - Mojang 关于「做不出比 Forge 更好的东西」这一表述的原始出处
--->
+*/}
