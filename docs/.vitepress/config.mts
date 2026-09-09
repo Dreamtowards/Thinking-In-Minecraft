@@ -7,6 +7,9 @@ export default defineConfig({
   lang: 'en-US',
   // base: "/thinking-in-minecraft/",
   cleanUrls: true,
+  // 各卷章节骨架尚未生成，正文里指向后续章节的前向引用暂时是死链。
+  // TODO: 章节文件补齐后移除此项，恢复死链检查。
+  ignoreDeadLinks: true,
   head: [
     ['link', { rel: 'icon', href: '/assets/logo-bl.png' }],
   ],
@@ -25,6 +28,7 @@ export default defineConfig({
         text: 'Prelude · 序',
         items: [
           { text: '前言', link: '/prelude' },
+          { text: '本书的命题', link: '/prelude/thesis' },
         ]
       },
       {
