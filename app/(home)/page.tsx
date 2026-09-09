@@ -4,21 +4,28 @@ import { appDescription, appName } from '@/lib/shared';
 const volumes = [
   {
     href: '/history',
-    kicker: 'Vol.I · Minecraft History',
+    kicker: 'Vol.I · 历史',
     title: 'Minecraft 歷史、起源與發展',
     details:
       '从2009年前的伏笔到2014年的辉煌，背后的历史、事件与人物，Minecraft 是如何造就流量黑洞，成为史上最具影响力的游戏',
   },
   {
     href: '/design',
-    kicker: 'Vol.II · Minecraft Designs',
+    kicker: 'Vol.II · 设计',
     title: 'Minecraft 設計哲思',
     details:
       '通过简单却深邃的游戏机制，Minecraft 赋予了玩家极大的自由。除了创造与生存，最感人的方面是它让玩家以独特且充满意义的方式表达自己。',
   },
   {
-    href: '/tech',
-    kicker: 'Vol.III · Minecraft Algorithms',
+    href: '/foundations',
+    kicker: '卷间脊椎 · 地基',
+    title: '地基与凑合',
+    details:
+      'Minecraft 的哪些约束动了会死，哪些动了没事。一份来自四次重写的约束清单，连接第二卷与第三卷。',
+  },
+  {
+    href: undefined,
+    kicker: 'Vol.III · 算法',
     title: 'Minecraft 演算法與技術分析',
     details:
       '刨析Minecraft的引擎架构与工具链、体素系统与相关算法、程序化世界生成、红石系统、多人网络、主流Mod系统。优缺点及其他方案。',
@@ -57,18 +64,29 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto mt-16 grid w-full max-w-5xl gap-4 md:grid-cols-3">
-        {volumes.map((volume) => (
-          <Link
-            key={volume.href}
-            href={volume.href}
-            className="rounded-2xl border bg-fd-card p-5 text-left transition-colors hover:bg-fd-accent"
-          >
-            <h2 className="text-lg font-semibold mb-2">{volume.title}</h2>
-            <p className="text-sm text-fd-muted-foreground mb-4">{volume.details}</p>
-            <p className="text-sm font-medium">{volume.kicker}</p>
-          </Link>
-        ))}
+      <section className="mx-auto mt-16 grid w-full max-w-5xl gap-4 sm:grid-cols-2">
+        {volumes.map((volume) => {
+          const className =
+            'rounded-2xl border bg-fd-card p-5 text-left transition-colors' +
+            (volume.href ? ' hover:bg-fd-accent' : '');
+          const body = (
+            <>
+              <h2 className="text-lg font-semibold mb-2">{volume.title}</h2>
+              <p className="text-sm text-fd-muted-foreground mb-4">{volume.details}</p>
+              <p className="text-sm font-medium">{volume.kicker}</p>
+            </>
+          );
+
+          return volume.href ? (
+            <Link key={volume.kicker} href={volume.href} className={className}>
+              {body}
+            </Link>
+          ) : (
+            <div key={volume.kicker} className={className}>
+              {body}
+            </div>
+          );
+        })}
       </section>
 
       <section className="mx-auto mt-16 w-full max-w-5xl text-fd-muted-foreground leading-7">

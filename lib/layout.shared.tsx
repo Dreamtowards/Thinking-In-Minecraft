@@ -11,7 +11,7 @@ export function baseOptions(): BaseLayoutProps {
       { text: '序', url: '/prelude' },
       { text: '历史', url: '/history' },
       { text: '设计', url: '/design' },
-      { text: '算法', url: '/tech' },
+      { text: '地基', url: '/foundations' },
     ],
   };
 }
