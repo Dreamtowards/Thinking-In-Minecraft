@@ -1,53 +1,45 @@
-'use client';
+import { CodeBlock, Pre } from 'fumadocs-ui/components/codeblock';
+import { renderMermaidSVG } from 'beautiful-mermaid';
 
-import { use, useEffect, useId, useState } from 'react';
-import { useTheme } from 'next-themes';
+function normalizeChart(chart: string) {
+  return chart.replaceAll('\\n', '\n').trim();
+}
+
+function inheritPageFont(svg: string) {
+  return svg
+    .replace(/@import url\('https:\/\/fonts\.googleapis\.com[^']+'\);\s*/g, '')
+    .replace(
+      /text \{ font-family: '[^']+', system-ui, sans-serif; \}/,
+      'text { font-family: inherit; }',
+    );
+}
 
 export function Mermaid({ chart }: { chart: string }) {
-  const [mounted, setMounted] = useState(false);
+  try {
+    const svg = inheritPageFont(
+      renderMermaidSVG(normalizeChart(chart), {
+        bg: 'var(--color-fd-card)',
+        fg: 'var(--color-fd-foreground)',
+        accent: 'var(--color-fd-primary)',
+        muted: 'var(--color-fd-muted-foreground)',
+        surface: 'var(--color-fd-secondary)',
+        border: 'var(--color-fd-border)',
+        interactive: true,
+        transparent: true,
+      }),
+    );
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
-  return <MermaidContent chart={chart} />;
-}
-
-const cache = new Map<string, Promise<unknown>>();
-
-function cachePromise<T>(key: string, setPromise: () => Promise<T>): Promise<T> {
-  const cached = cache.get(key);
-  if (cached) return cached as Promise<T>;
-
-  const promise = setPromise();
-  cache.set(key, promise);
-  return promise;
-}
-
-function MermaidContent({ chart }: { chart: string }) {
-  const id = useId();
-  const { resolvedTheme } = useTheme();
-  const { default: mermaid } = use(cachePromise('mermaid', () => import('mermaid')));
-
-  mermaid.initialize({
-    startOnLoad: false,
-    securityLevel: 'loose',
-    fontFamily: 'inherit',
-    themeCSS: 'margin: 1.5rem auto 0;',
-    theme: resolvedTheme === 'dark' ? 'dark' : 'default',
-  });
-
-  const { svg, bindFunctions } = use(
-    cachePromise(`${chart}-${resolvedTheme}`, () => mermaid.render(id.replace(/:/g, ''), chart)),
-  );
-
-  return (
-    <div
-      ref={(container) => {
-        if (container) bindFunctions?.(container);
-      }}
-      dangerouslySetInnerHTML={{ __html: svg }}
-    />
-  );
+    return (
+      <div
+        className="mermaid-diagram my-6 overflow-x-auto rounded-xl border border-fd-border bg-fd-card p-4 [&_svg]:mx-auto [&_svg]:h-auto [&_svg]:max-w-full"
+        dangerouslySetInnerHTML={{ __html: svg }}
+      />
+    );
+  } catch {
+    return (
+      <CodeBlock title="Mermaid">
+        <Pre>{chart}</Pre>
+      </CodeBlock>
+    );
+  }
 }

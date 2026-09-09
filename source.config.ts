@@ -1,6 +1,7 @@
 import { createRequire } from 'node:module';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { remarkMdxMermaid } from 'fumadocs-core/mdx-plugins';
 import { defineConfig, type MDXPresetOptions } from 'fumadocs-mdx/config';
 import type { Plugin } from 'unified';
 import { rehypeStyleToObject } from './lib/rehype-style-object';
@@ -34,7 +35,7 @@ export default defineConfig({
     ]);
 
     return {
-      remarkPlugins: [remarkMath],
+      remarkPlugins: [remarkMath, remarkMdxMermaid],
       rehypePlugins: (v) => [
         rehypeStyleToObject,
         [rehypeKatex, { throwOnError: false, strict: false }],

@@ -21,3 +21,9 @@ html > body[data-scroll-locked] {
 .fd-article > h1:first-child {
   display: none;
 }
+
+.mermaid-diagram svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
