@@ -38,6 +38,7 @@ export default defineConfig({
           { text: '版本更新与变迁', link: '/history/versions' },
           { text: '成功的因素分析', link: '/history/success-analysis' },
           { text: 'Notch、Jeb、Mojang 的故事', link: '/history/mojang' },
+          { text: '商业与治理：链条为何断裂', link: '/history/business' },
         ]
       },
       {
