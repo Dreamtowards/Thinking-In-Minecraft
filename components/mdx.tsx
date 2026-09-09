@@ -30,8 +30,9 @@ function codeLanguage(node: ReactNode): string | undefined {
   return codeLanguage(props?.children);
 }
 
-function isMermaidBlock(props: ComponentPropsWithoutRef<'pre'> & Record<string, unknown>) {
-  const lang = props['data-language'] ?? props['data-lang'] ?? props.lang;
+function isMermaidBlock(props: ComponentPropsWithoutRef<'pre'>) {
+  const data = props as ComponentPropsWithoutRef<'pre'> & Record<string, unknown>;
+  const lang = data['data-language'] ?? data['data-lang'] ?? data.lang;
   if (lang === 'mermaid') return true;
   if (typeof props.className === 'string' && /\blanguage-mermaid\b/.test(props.className)) {
     return true;
@@ -39,7 +40,7 @@ function isMermaidBlock(props: ComponentPropsWithoutRef<'pre'> & Record<string, 
   return codeLanguage(props.children) === 'mermaid';
 }
 
-function Pre(props: ComponentPropsWithoutRef<'pre'> & Record<string, unknown>) {
+function Pre(props: ComponentPropsWithoutRef<'pre'>) {
   if (isMermaidBlock(props)) {
     return <Mermaid chart={nodeText(props.children)} />;
   }
