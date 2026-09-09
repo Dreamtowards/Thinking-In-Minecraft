@@ -1,7 +1,7 @@
 import { loader } from 'fumadocs-core/source';
 import { lucideIconsPlugin } from 'fumadocs-core/source/lucide-icons';
 import type { Folder, Item, Node, Root } from 'fumadocs-core/page-tree';
-import { docsContentRoute, docsImageRoute, docsRoute, folderOrder, folderTitles } from './shared';
+import { docsContentRoute, docsImageRoute, docsRoute, folderTitles } from './shared';
 import { defineDocs } from 'fumadocs-mdx/macro';
 import { metaSchema, pageSchema } from 'fumadocs-core/source/schema';
 import { z } from 'zod';
@@ -52,34 +52,22 @@ function folderKey(node: Folder): string {
   return parts[0] ?? nodeName(node);
 }
 
+function decoratePage(node: Item): Item {
+  const page = source.getPage(node.url.replace(docsRoute, '').split('/').filter(Boolean));
+  if (!page) return node;
+  return { ...node, name: getPageTitle(page) };
+}
+
 function decorateNode(node: Node): Node {
-  if (node.type === 'page') {
-    const page = source.getPage(node.url.replace(docsRoute, '').split('/').filter(Boolean));
-    if (!page) return node;
-    return { ...node, name: getPageTitle(page) };
-  }
+  if (node.type === 'page') return decoratePage(node);
 
   if (node.type === 'folder') {
     const key = folderKey(node);
-    const children = node.children.map(decorateNode);
-    const index = node.index
-      ? ({
-          ...node.index,
-          name: (() => {
-            const page = source.getPage(
-              node.index.url.replace(docsRoute, '').split('/').filter(Boolean),
-            );
-            return page ? getPageTitle(page) : node.index.name;
-          })(),
-        } satisfies Item)
-      : undefined;
-
     return {
       ...node,
       name: folderTitles[key] ?? node.name,
-      defaultOpen: true,
-      index,
-      children,
+      index: node.index ? decoratePage(node.index) : undefined,
+      children: node.children.map(decorateNode),
     };
   }
 
@@ -88,24 +76,9 @@ function decorateNode(node: Node): Node {
 
 export function getDecoratedPageTree(): Root {
   const tree = source.getPageTree();
-  const ranked = [...tree.children].sort((a, b) => {
-    const keyOf = (node: Node) => {
-      if (node.type === 'folder') return folderKey(node);
-      if (node.type === 'page') {
-        return node.url.split('/').filter(Boolean)[0] ?? nodeName(node);
-      }
-      return nodeName(node);
-    };
-    const aKey = keyOf(a);
-    const bKey = keyOf(b);
-    const aRank = folderOrder.indexOf(aKey as (typeof folderOrder)[number]);
-    const bRank = folderOrder.indexOf(bKey as (typeof folderOrder)[number]);
-    return (aRank === -1 ? 999 : aRank) - (bRank === -1 ? 999 : bRank);
-  });
-
   return {
     ...tree,
-    children: ranked.map(decorateNode),
+    children: tree.children.map(decorateNode),
   };
 }
 
