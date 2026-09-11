@@ -11,6 +11,8 @@ const config = {
     return [
       { source: '/history', destination: '/history/business', permanent: false },
       { source: '/design', destination: '/design/constraint', permanent: false },
+      { source: '/foundations', destination: '/design/foundations', permanent: true },
+      { source: '/foundations/', destination: '/design/foundations', permanent: true },
     ];
   },
 };

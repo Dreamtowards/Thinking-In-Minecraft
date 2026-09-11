@@ -17,13 +17,6 @@ const volumes = [
       '通过简单却深邃的游戏机制，Minecraft 赋予了玩家极大的自由。除了创造与生存，最感人的方面是它让玩家以独特且充满意义的方式表达自己。',
   },
   {
-    href: '/foundations',
-    kicker: '卷间脊椎 · 地基',
-    title: '地基与凑合',
-    details:
-      'Minecraft 的哪些约束动了会死，哪些动了没事。一份来自四次重写的约束清单，连接第二卷与第三卷。',
-  },
-  {
     href: undefined,
     kicker: 'Vol.III · 算法',
     title: 'Minecraft 演算法與技術分析',

@@ -23,7 +23,6 @@ export default defineConfig({
       { text: '序', link: '/prelude' },
       { text: '历史', link: '/history/business' },
       { text: '设计', link: '/design/constraint' },
-      { text: '地基', link: '/foundations/' },
     ],
 
     sidebar: [
@@ -35,21 +34,16 @@ export default defineConfig({
         ]
       },
       {
-        text: '第一卷 · 历史',
+        text: '卷一 · 历史',
         items: [
           { text: '商业与治理：链条为何断裂', link: '/history/business' },
         ]
       },
       {
-        text: '第二卷 · 设计',
+        text: '卷二 · 设计',
         items: [
           { text: '约束生成自由', link: '/design/constraint' },
-        ]
-      },
-      {
-        text: '地基与凑合',
-        items: [
-          { text: '地基与凑合', link: '/foundations/' },
+          { text: '地基与凑合', link: '/design/foundations' },
         ]
       },
     ],
