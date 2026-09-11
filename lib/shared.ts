@@ -13,10 +13,11 @@ export const gitConfig = {
 
 export const folderTitles: Record<string, string> = {
   prelude: '序',
-  history: '卷一 · 历史',
-  design: '卷二 · 设计',
-  tech: '卷三 · 算法',
-  aether: '卷四 · 以太效应',
+  history: '卷一 · 历史与商业',
+  design: '卷二 · 游戏设计',
+  impl: '卷三 · 技术实现',
+  rewrite: '卷四 · 重写',
+  appendix: '附录',
 };
 
-export const folderOrder = ['prelude', 'history', 'design', 'tech', 'aether'] as const;
+export const folderOrder = ['prelude', 'history', 'design', 'impl', 'rewrite', 'appendix'] as const;

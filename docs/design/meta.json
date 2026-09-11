@@ -1,0 +1,26 @@
+{
+  "title": "卷二 · 游戏设计",
+  "pages": [
+    "index",
+    "---第一部 · 设计原语---",
+    "voxel-primitive",
+    "verbs-feel",
+    "survival",
+    "creative-mode",
+    "---第二部 · 系统如何互相咬合---",
+    "crafting-inventory",
+    "worldgen",
+    "redstone",
+    "commands-datapacks",
+    "mobs-combat",
+    "dimensions-endgame",
+    "---第三部 · 社会设计---",
+    "multiplayer",
+    "who-makes-rules",
+    "mods-as-method",
+    "---第四部 · 设计哲学与可迁移原则---",
+    "emergence",
+    "constraints",
+    "transferable"
+  ]
+}
