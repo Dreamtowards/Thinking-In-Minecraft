@@ -7,7 +7,7 @@ html.home-page body {
 html.home-page {
   overflow-x: hidden;
   overflow-y: auto;
-  --home-cover-hover-scale: 2.4;
+  --home-cover-hover-scale: 1.8;
 }
 
 .home-text-glow {

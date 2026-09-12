@@ -769,7 +769,7 @@ const VOXELAO = twigl(`
 const BRICKS = twigl(`
   int j;
   vec2 u = round(FC.xy) - r * 0.5;
-  vec2 p;
+  vec2 p = vec2(0.0);
   vec2 z = p + 2e1;
   vec2 c;
   for (; z.x < 1e2 && (j = int(p) ^ int(p.y) ^ int(z)) % 93 % 43 < 32; p = u * z / r.y + t * vec2(2, 9)) {
@@ -1073,6 +1073,7 @@ const FRAGS: Record<BgEffectId, string> = {
 };
 
 const FEEDBACK = new Set<BgEffectId>(['frames']);
+const FULLRES = new Set<BgEffectId>(['bricks']);
 
 function compile(gl: WebGL2RenderingContext, type: number, source: string) {
   const shader = gl.createShader(type);
@@ -1139,7 +1140,11 @@ export function HomeBackground({ effect }: { effect: BgEffectId }) {
     const timeLoc = gl.getUniformLocation(program, 'iTime');
     const backLoc = gl.getUniformLocation(program, 'b');
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const scale = reduced ? 0.4 : 0.55;
+    const scale = FULLRES.has(effect)
+      ? Math.min(window.devicePixelRatio || 1, 2)
+      : reduced
+        ? 0.4
+        : 0.55;
     const feedback = FEEDBACK.has(effect);
     let targets: { tex: WebGLTexture; fbo: WebGLFramebuffer }[] | null = null;
     let read = 0;
@@ -1159,8 +1164,8 @@ export function HomeBackground({ effect }: { effect: BgEffectId }) {
     };
 
     const resize = () => {
-      const w = Math.max(1, Math.floor(canvas.clientWidth * scale));
-      const h = Math.max(1, Math.floor(canvas.clientHeight * scale));
+      const w = Math.max(1, Math.round(canvas.clientWidth * scale));
+      const h = Math.max(1, Math.round(canvas.clientHeight * scale));
       if (canvas.width !== w || canvas.height !== h) {
         canvas.width = w;
         canvas.height = h;
@@ -1245,7 +1250,11 @@ export function HomeBackground({ effect }: { effect: BgEffectId }) {
 
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden bg-[#14080c]">
-      <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 h-full w-full"
+        style={FULLRES.has(effect) ? { imageRendering: 'pixelated' } : undefined}
+      />
       <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/20 to-black/75" />
     </div>
   );
