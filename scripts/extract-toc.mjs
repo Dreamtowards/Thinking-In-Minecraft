@@ -219,9 +219,9 @@ const meta = {
   prelude: {
     roman: '',
     short: '序',
-    english: 'How to read',
+    english: 'Preface',
     color: 'gray',
-    payoffFan: '先知道这书不是攻略、维基或怀旧。读命题，再决定跳哪一卷。',
+    payoffFan: '先立约：这书要证明规则不是关卡。读命题，再决定跳哪一卷。',
     payoffDev: '原则必须带不可迁移条件。不要从卷四起笔。',
   },
   v1: {
