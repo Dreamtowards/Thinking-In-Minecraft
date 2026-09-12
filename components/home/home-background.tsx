@@ -10,7 +10,7 @@ void main() {
 `;
 
 // "Sunset" by @XorDev — https://www.shadertoy.com/view/Wf3SWn
-const FRAG = `#version 300 es
+const SUNSET = `#version 300 es
 precision highp float;
 
 uniform vec3 iResolution;
@@ -59,6 +59,53 @@ void main() {
 }
 `;
 
+// Compact twigl raymarch: sphere + folded noise field.
+const ORB = `#version 300 es
+precision highp float;
+
+uniform vec3 iResolution;
+uniform float iTime;
+out vec4 fragColor;
+
+void main() {
+  vec2 r = iResolution.xy;
+  vec4 FC = gl_FragCoord;
+  vec4 o = vec4(0.0);
+  float z = 0.0;
+  float d = 0.0;
+  float f = 0.0;
+
+  for (float i = 0.0; i++ < 1e2; ) {
+    vec3 p = z * (FC.rgb * 2.0 - r.xyy) / r.y;
+    vec3 c = p;
+    p.z += 8.0;
+    c.z *= 3.0;
+    for (f = 1.0; f++ < 9.0; )
+      c += sin(c.yzx * f + z + iTime * 0.5) / f;
+    f = 0.1 + abs(0.2 * c.y + abs(p.y + 0.8));
+    d = max(length(p) - 3.0, 0.9 - length(p - vec3(-1.0, 1.0, 3.0)));
+    z += min(f, d) / 7.0;
+    o += vec4(4.0, 6.0, 8.0 + z, 0.0) / f
+      - min(dFdx(z) * r.y + z, 0.0) / exp(d * d / 0.1);
+  }
+
+  o = tanh(o / 2e3);
+  fragColor = vec4(o.rgb, 1.0);
+}
+`;
+
+export const BG_EFFECTS = [
+  { id: 'sunset', label: '日落 Sunset' },
+  { id: 'orb', label: '星核 Orb' },
+] as const;
+
+export type BgEffectId = (typeof BG_EFFECTS)[number]['id'];
+
+const FRAGS: Record<BgEffectId, string> = {
+  sunset: SUNSET,
+  orb: ORB,
+};
+
 function compile(gl: WebGL2RenderingContext, type: number, source: string) {
   const shader = gl.createShader(type);
   if (!shader) return null;
@@ -72,7 +119,7 @@ function compile(gl: WebGL2RenderingContext, type: number, source: string) {
   return shader;
 }
 
-export function SunsetBackground() {
+export function HomeBackground({ effect }: { effect: BgEffectId }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -89,7 +136,7 @@ export function SunsetBackground() {
     if (!gl) return;
 
     const vert = compile(gl, gl.VERTEX_SHADER, VERT);
-    const frag = compile(gl, gl.FRAGMENT_SHADER, FRAG);
+    const frag = compile(gl, gl.FRAGMENT_SHADER, FRAGS[effect]);
     if (!vert || !frag) return;
 
     const program = gl.createProgram();
@@ -137,7 +184,6 @@ export function SunsetBackground() {
       if (document.hidden) {
         cancelAnimationFrame(frame);
       } else if (!reduced) {
-        start = performance.now() - ((performance.now() - start) % 1e9);
         frame = requestAnimationFrame(draw);
       }
     };
@@ -157,7 +203,7 @@ export function SunsetBackground() {
       gl.deleteShader(frag);
       gl.deleteVertexArray(vao);
     };
-  }, []);
+  }, [effect]);
 
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden bg-[#14080c]">

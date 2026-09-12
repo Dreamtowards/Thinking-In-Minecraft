@@ -7,6 +7,7 @@ html.home-page body {
 html.home-page {
   overflow-x: hidden;
   overflow-y: auto;
+  --home-cover-hover-scale: 2.4;
 }
 
 .home-text-glow {
@@ -43,9 +44,50 @@ html.home-page {
 .home-cover:hover,
 .home-cover:focus-visible {
   z-index: 8;
-  transform: rotate(0deg) translateY(-0.35rem) scale(1.55);
+  transform: rotate(0deg) translateY(-0.5rem) scale(var(--home-cover-hover-scale));
   outline: none;
-  filter: drop-shadow(0 18px 24px rgba(0, 0, 0, 0.45));
+  filter: drop-shadow(0 22px 28px rgba(0, 0, 0, 0.5));
+}
+
+.home-bg-picker {
+  position: fixed;
+  bottom: 1.1rem;
+  left: 3.75rem;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(10, 8, 12, 0.45);
+  padding: 0.35rem 0.7rem 0.35rem 0.85rem;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.75rem;
+  backdrop-filter: blur(12px);
+}
+
+.home-bg-picker select {
+  appearance: none;
+  border: 0;
+  background-color: transparent;
+  color: white;
+  font-size: 0.75rem;
+  outline: none;
+  cursor: pointer;
+  padding-right: 0.9rem;
+  background-image: linear-gradient(45deg, transparent 50%, rgba(255, 255, 255, 0.7) 50%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.7) 50%, transparent 50%);
+  background-position:
+    calc(100% - 8px) 55%,
+    calc(100% - 3px) 55%;
+  background-size:
+    5px 5px,
+    5px 5px;
+  background-repeat: no-repeat;
+}
+
+.home-bg-picker option {
+  color: black;
 }
 
 @media (prefers-reduced-motion: reduce) {
