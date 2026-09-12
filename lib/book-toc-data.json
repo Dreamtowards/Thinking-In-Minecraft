@@ -1222,8 +1222,8 @@
                 "把代价写进范围"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/rewrite/compat",
+              "written": true
             },
             {
               "id": "rewrite/10",
@@ -1239,8 +1239,8 @@
                 "判定标准：不变量仍在"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/rewrite/who-rewrites",
+              "written": true
             },
             {
               "id": "rewrite/11",
@@ -1257,8 +1257,8 @@
               "tags": [
                 "结语"
               ],
-              "href": null,
-              "written": false
+              "href": "/rewrite/seeing-the-original",
+              "written": true
             }
           ]
         }
