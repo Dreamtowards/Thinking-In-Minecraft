@@ -1130,8 +1130,8 @@
                 "旧档"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/rewrite/world-rep",
+              "written": true
             },
             {
               "id": "rewrite/05",
@@ -1147,8 +1147,8 @@
                 "时间旅行调试：因果可解释"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/rewrite/scheduler",
+              "written": true
             },
             {
               "id": "rewrite/06",
@@ -1164,8 +1164,8 @@
                 "作者体验是产品"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/rewrite/scripting",
+              "written": true
             },
             {
               "id": "rewrite/07",
@@ -1181,8 +1181,8 @@
                 "权限模型推广"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/rewrite/network-perms",
+              "written": true
             },
             {
               "id": "rewrite/08",
@@ -1198,8 +1198,8 @@
                 "工具与运行时同一世界模型"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/rewrite/render-tools",
+              "written": true
             }
           ]
         },
