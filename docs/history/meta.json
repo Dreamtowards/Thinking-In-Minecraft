@@ -3,6 +3,10 @@
   "description": "Minecraft 如何成为一种可被再开发的媒介",
   "pages": [
     "---第一部 · 起源（2009–2011）---",
-    "infiniminer"
+    "infiniminer",
+    "alpha",
+    "mojang-beta",
+    "---第二部 · 成为文化（2011–2014）---",
+    "mods-as-authors"
   ]
 }
