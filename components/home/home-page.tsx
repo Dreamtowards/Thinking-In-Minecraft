@@ -10,47 +10,47 @@ const covers = [
   {
     src: 'https://elytra.dev/thinking-in-minecraft/assets/cover/tim-1.jpg',
     alt: '卷一封面',
-    rotate: '-rotate-6',
+    tilt: '-6',
   },
   {
     src: 'https://elytra.dev/thinking-in-minecraft/assets/cover/tim-2.jpg',
     alt: '卷二封面',
-    rotate: 'rotate-0 translate-y-1',
+    tilt: '0',
   },
   {
     src: 'https://elytra.dev/thinking-in-minecraft/assets/cover/tim-3.jpg',
     alt: '卷三封面',
-    rotate: 'rotate-6',
+    tilt: '6',
   },
 ];
 
 const cards = [
   {
     href: '/history/infiniminer',
-    kicker: 'Vol. I',
+    kicker: '卷一',
     title: '历史与商业',
-    detail: '规则如何变成媒介',
+    detail: '从原型到产业。这套规则如何变成媒介。',
     tint: 'rgba(251, 146, 60, 0.18)',
   },
   {
     href: '/design/voxel-primitive',
-    kicker: 'Vol. II',
+    kicker: '卷二',
     title: '游戏设计',
-    detail: '规则为何有效 · 中轴',
+    detail: '全书中轴。深度来自极少数规则在体素世界上的组合。',
     tint: 'rgba(96, 165, 250, 0.18)',
   },
   {
     href: '/impl/data-model',
-    kicker: 'Vol. III',
+    kicker: '卷三',
     title: '技术实现',
-    detail: '如何被拖进规模',
+    detail: '一个能跑的原型，如何被拖进不可能的规模。',
     tint: 'rgba(52, 211, 153, 0.16)',
   },
   {
     href: '/toc',
-    kicker: 'Vol. IV',
+    kicker: '卷四',
     title: '重写',
-    detail: '考试，不是开工令',
+    detail: '把偶然从本质里剥开。考试，不是开工令。',
     tint: 'rgba(192, 132, 252, 0.18)',
   },
 ];
@@ -66,7 +66,7 @@ function CardCopy({
 }) {
   return (
     <>
-      <p className="text-xs tracking-[0.22em] text-white/45 uppercase">{kicker}</p>
+      <p className="text-xs tracking-widest text-white/45">{kicker}</p>
       <h2 className="mt-2 text-lg font-semibold">{title}</h2>
       <p className="mt-1 text-sm text-white/55">{detail}</p>
     </>
@@ -81,7 +81,7 @@ export function HomePage() {
   }, []);
 
   return (
-    <div className="relative min-h-screen overflow-hidden font-sans text-white">
+    <div className="relative min-h-screen overflow-x-hidden font-sans text-white">
       <SunsetBackground />
 
       <section className="relative flex min-h-[min(86svh,52rem)] flex-col items-center justify-center px-6 pb-16 pt-20 text-center">
@@ -95,16 +95,23 @@ export function HomePage() {
           Thinking in Minecraft: History, Designs and Algorithms
         </p>
 
-        <div className="mt-10 flex items-end justify-center gap-3 sm:gap-4">
+        <div className="home-covers mt-10 flex items-end justify-center gap-3 sm:gap-4">
           {covers.map((cover) => (
-            <img
+            <button
               key={cover.src}
-              src={cover.src}
-              alt={cover.alt}
-              width={90}
-              height={128}
-              className={`h-28 w-auto rounded-sm shadow-lg shadow-black/40 sm:h-32 ${cover.rotate}`}
-            />
+              type="button"
+              className="home-cover"
+              data-tilt={cover.tilt}
+              aria-label={`放大${cover.alt}`}
+            >
+              <img
+                src={cover.src}
+                alt={cover.alt}
+                width={90}
+                height={128}
+                className="h-28 w-auto rounded-sm shadow-lg shadow-black/40 sm:h-32"
+              />
+            </button>
           ))}
         </div>
 
