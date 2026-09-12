@@ -397,8 +397,8 @@
               "tags": [
                 "先写"
               ],
-              "href": null,
-              "written": false
+              "href": "/design/verbs-feel",
+              "written": true
             },
             {
               "id": "design/03",
@@ -416,8 +416,8 @@
               "tags": [
                 "先写"
               ],
-              "href": null,
-              "written": false
+              "href": "/design/survival",
+              "written": true
             },
             {
               "id": "design/04",
@@ -435,8 +435,8 @@
               "tags": [
                 "先写"
               ],
-              "href": null,
-              "written": false
+              "href": "/design/creative-mode",
+              "written": true
             }
           ]
         },
