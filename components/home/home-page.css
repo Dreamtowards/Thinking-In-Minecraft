@@ -1,0 +1,43 @@
+html.home-page,
+html.home-page body {
+  background: #14080c;
+  scrollbar-gutter: auto;
+}
+
+html.home-page {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.home-text-glow {
+  text-shadow: 0 0 28px rgba(255, 255, 255, 0.28);
+}
+
+.home-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.7rem 1.4rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: white;
+  backdrop-filter: blur(12px);
+  transition: background-color 0.15s;
+}
+
+.home-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.home-btn-solid {
+  border-color: transparent;
+  background: white;
+  color: #14080c;
+}
+
+.home-btn-solid:hover {
+  background: rgba(255, 255, 255, 0.88);
+}
