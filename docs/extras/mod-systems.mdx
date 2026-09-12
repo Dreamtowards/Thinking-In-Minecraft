@@ -23,17 +23,11 @@ description: 强弱不看能改多少，看作者席开在哪一层。资产、�
 
 「强大」如果只量能替换百分之几的资产，Doom 的 PWAD、Minecraft 的资源包、上古卷轴的贴图包会排在一起。它们不在一层。一层决定三件事：你能发明新动词吗，你的作品别人能不能叠在上面，版本更新时桌子会不会被掀。
 
-```mermaid
-flowchart TB
-  L1[皮：覆盖资产]
-  L2[数据：改内容表]
-  L3[沙箱：脚本 / 命令]
-  L4[API：宿主语言事件]
-  L5[注入：补丁当接口]
-  L6[法律：服务端立法]
-  L1 --> L2 --> L3 --> L4 --> L5
-  L3 --> L6
-```
+<Figure
+  src="/extras/mod-systems/layers.png"
+  alt="六层作者席从上到下：皮、数据、沙箱、API、注入、法律"
+  caption="皮在上，法律在下。越往下越能发明新动词，跨版本也越难当财产继承。"
+/>
 
 **皮。** 引擎认一套档案格式，后加载的同名资源盖住先加载的。Doom 的 PWAD、Quake 的 PAK、Minecraft 的资源包、Source 的 VPK 替换，走这一层。你换的是看见和听见的世界，不是世界里可以发生什么。官方最愿意承认它，因为它最不像在抢笔。
 
@@ -61,6 +55,14 @@ Workshop、Marketplace、模组门户是分发层。分发可以养活作者，�
 
 1993 年的 Doom 把引擎和数据拆开。`DOOM.EXE` 负责显示和输入，`DOOM.WAD` 装着几乎全部图形、声音和关卡。档案是扁平的 lump 表：十二字节头，目录里每条十六字节，名字只有八个字符。IWAD 是能独自启动的内部包；PWAD 是补丁包，加载时按名字覆盖同名 lump。原版命令行 `-file` 就能叠一张新图上去，不必改可执行文件。[^wad]
 
+典型用例是一张新关卡：作者只分发 PWAD，玩家仍用自己的 `DOOM.EXE` 和那份买来的 IWAD。关卡、怪物摆放、贴图都可以被盖住；重力、碰撞、网络协议仍在引擎里。
+
+<Figure
+  src="/extras/mod-systems/wad-overlay.png"
+  alt="DOOM.EXE 保持不动，PWAD 按名字盖住 IWAD 里的同名 lump"
+  caption="覆盖合同：后到的同名 lump 胜过先到的。改，被收成叠。"
+/>
+
 这看起来只是换皮加换关。它其实是一份**覆盖合同**：后到的同名数据胜过先到的，分发物可以很小，引擎保持同一份。狼穴 3D 时代的社区往往直接改游戏资源文件；Doom 把「改」收成「叠」。叠，才能把别人的关卡再叠一层，而不必每人发一份完整 IWAD。Matt Fell 1994 年的非官方规格书从外部把这张表写清，早期编辑器靠的就是这份外溢的合同，不是 id 先开了现代意义上的模组 API。[^uds]
 
 后来的 ZDoom / GZDoom 家族在覆盖之上加了沙箱：ACS、DECORATE、再后来的 ZScript，PK3 用 zip 代替扁平 WAD。那是第二代。第一代的力量更朴素——承认数据可以在引擎外面活。三十年后还打得开的社区关卡，靠的是这张覆盖表比引擎版本更稳。
@@ -68,6 +70,14 @@ Workshop、Marketplace、模组门户是分发层。分发可以养活作者，�
 ### 逻辑可替换：从 QuakeC 到 GMod
 
 Quake 把游戏规则从引擎里再拆一截。John Carmack 做了 QuakeC：`.qc` 编成 `progs.dat` 字节码，引擎解释它。武器、触发器、一部分 AI，走这份字节码而不是写死在 C 里。1996 年 id 连同编译器放出原版 QC 源码，Capture the Flag 这类改规则的模组有了桌子。[^qc]
+
+典型用例是新武器、新模式：你改的是 `weapons.qc` 里 `self` 怎么射、碰到谁算击中，不是重编渲染器。引擎继续解释 `progs.dat`。语法像缩水的 C：函数写成 `void()`，实体是一等值，字段直接点出来。
+
+<Figure
+  src="/extras/mod-systems/quakec-pipeline.png"
+  alt="weapons.qc 经 qcc 编成 progs.dat，再插入保持封闭的 Quake.exe"
+  caption="QuakeC 的合同：游戏规则是可替换的字节码模块。引擎不重编。"
+/>
 
 Half-Life 把这一层从解释型字节码换成 C++ 游戏 DLL。Hammer 做图，SDK 给示例源码，模组可以编出另一套战斗。Counter-Strike 起先就是这样一份模组：Minh Lê 与 Jess Cliffe 在 GoldSrc 上改规则，2000 年才被收成可单卖的产品。[^cs] 合同的含义变了：第二作者写的不是覆盖资源，是**可替换的游戏模块**。成功的模组可以变成正作的下一款游戏。这是 Valve 那一代模组生态的核心许诺，不是「皮肤商城」。
 
@@ -81,6 +91,14 @@ Source 继续这条河，也分出法律那条支流：服务端插件用 Source
 
 Bethesda 把世界做成可编辑的数据库。Creation Kit 与游戏共用同一套记录：主文件 ESM、插件 ESP、后来的轻量 ESL，资产打进 BSA / BA2。插件格式是二进制记录流，头里登记自己依赖哪些 master；加载顺序决定谁覆盖谁的 FormID。脚本是 Papyrus：创作套件里写 `.psc`，运行时吃编译过的 `.pex`，挂在记录的 VMAD 上。[^ck] Steam 页上的句子很满：新任务、环境、人物、对话、武器。这是官方承认的数据加沙箱。
 
+典型用例是「这扇门、这只箱子、这一段任务」上的事件：玩家激活、容器改变、任务阶段跳转。Papyrus 是附着在记录上的事件脚本，不是替换整个游戏模块。对象、任务、对话仍住在 ESM/ESP 里；脚本只决定它们被碰到时说什么、做什么。
+
+<Figure
+  src="/extras/mod-systems/papyrus-stack.png"
+  alt="ESM/ESP 记录之上，Papyrus 从 psc 编成 pex，SKSE 夹住可执行文件"
+  caption="官方给内容作者席。SKSE 给沙箱不肯开的钩子。两层叠在一起，才是人口中的上古卷轴模组。"
+/>
+
 它不够。Papyrus 到不了的动词——输入、引擎事件、内存里那一层——由 SKSE 补。Silverlock 上的说明写得很干净：扩展脚本能力，并且不改磁盘上的游戏可执行文件；插件另有 C/C++ 的 PluginAPI。[^skse] 于是出现叠层：Creation Kit 做世界与任务，Papyrus 做官方允许的逻辑，SKSE 做官方没开的钩子，再上面才是具体模组。玩家口中「没 SKSE 玩不了」不是口味，是合同裂开的证据：官方编辑器给了内容作者席，没给系统作者席。系统作者席靠社区在每次更新后把钩子重新焊上。
 
 Fallout 的 GECK / Creation Kit 加 F4SE、后来的星空 SFSE，是同一张图换皮。强大在叠层完整：数据记录真的就是游戏。脆弱也在叠层：扩展器绑死具体 EXE 版本，商店版、主机版往往直接没有这把钥匙。
@@ -88,6 +106,14 @@ Fallout 的 GECK / Creation Kit 加 F4SE、后来的星空 SFSE，是同一张�
 ### 地图即模组：魔兽争霸 III
 
 《魔兽争霸 III》把编辑器打进零售盒。World Editor 改地形、物件、技能，触发器是事件–条件–动作；保存时 GUI 编成 JASS，也可以手写。地图是一份能嵌入模型、贴图、声音的档案。别人要玩你的规则，下载地图即可，不必换客户端。[^dota-pm]
+
+典型用例是一张自定义地图：地形、技能、胜负条件打进同一份档案。World Editor 的触发器是事件–条件–动作；保存时编成 JASS，复杂地图后来直接手写。JASS 像带 `call` / `set` 的 Pascal：没有类，函数是一等公民，英雄死亡、技能释放、计时器全是触发器登记出来的。
+
+<Figure
+  src="/extras/mod-systems/jass-map.png"
+  alt="World Editor 的事件条件动作编成 JASS，打进一份 map.w3x"
+  caption="地图即模组：作者席不在加载器里，在可分发的那一只箱子里。"
+/>
 
 Defense of the Ancients 从这张桌子上长出来。Eul 在 2002 年末到 2003 年用编辑器做出第一代；资料片《冰封王座》加厚编辑器之后变体爆发，Allstars 经 Guinsoo、后来 IceFrog 之手，把英雄、出装、肉山做成能在 Battle.net 上被一晚上万人同时打开的规则。[^dota-pm][^dota-wiki] 逻辑越来越从 GUI 迁到手写 JASS。一款类型——后来被叫做 MOBA——的原型，是一张不能脱离《魔兽》客户端的地图。
 
@@ -134,11 +160,41 @@ Bedrock 不是这三条河的 C++ 翻译。附加包用 `manifest.json` 登记 U
 
 左边这份声明的是：我要进进程，我可能改类。右边这份声明的是：我是一个可被引擎识别的包，模块类型已经先帮你选好能走多远。JSON 都叫清单，权限不是一回事。Java 的数据包清单 `pack.mcmeta` 更接近右边——所以数据包是温和模组，不是 Forge。[《模组作为设计方法》](/design/mods-as-method)
 
+典型用例分三条河。资源包：换一把镐的贴图。数据包：改铁锭怎么掉、进度怎么写。模组 JAR：加一条新的「挖」。插件：这台生存服开始有领地。同叫模组，目录已经把权限写死了。
+
+<Files>
+  <Folder name="world/datapacks/example" defaultOpen>
+    <File name="pack.mcmeta" />
+    <Folder name="data/example" defaultOpen>
+      <Folder name="function" defaultOpen>
+        <File name="tick.mcfunction" />
+      </Folder>
+      <Folder name="loot_table">
+        <File name="blocks/iron_ore.json" />
+      </Folder>
+    </Folder>
+  </Folder>
+</Files>
+
 ### 设计出来的双层：Factorio
 
 Wube 没有把模组当成事后破解。模组是 zip（或目录），强制文件是 `info.json`：内部名、版本、依赖。其余按阶段进场。设置阶段写 `settings.lua` 三轮；原型阶段写 `data.lua`、`data-updates.lua`、`data-final-fixes.lua` 三轮，所有模组先各自添加，再互相改，再最终修补；运行时才加载 `control.lua`，而且原型表已经冻结。[^factorio]
 
 这不是「用 Lua 写一切」的浪漫。这是崩溃域被设计过：改配方和改皮带上正在发生的事，不共用一个全局可变宇宙。三轮更新让模组改别人的原型时，不必把加载顺序赌成唯一接口。运行时事件再管工厂还活着的那一段。官方文档把生命周期写到可以当引擎课来读。模组门户是第一公民，不是论坛附件。
+
+典型用例拆成两半：`data.lua` 里声明一种新炉子、一条新配方；`control.lua` 里监听「这条皮带上的物品刚到站」。一半改宇宙的说明书，一半改正在运转的工厂。目录把两半写在不同的文件名上，不是为了好看。
+
+<Files>
+  <Folder name="example_0.1.0" defaultOpen>
+    <File name="info.json" />
+    <File name="data.lua" />
+    <File name="data-updates.lua" />
+    <File name="control.lua" />
+    <Folder name="locale" defaultOpen>
+      <File name="en.cfg" />
+    </Folder>
+  </Folder>
+</Files>
 
 对照 Minecraft：数据包接近 Factorio 的原型阶段，Forge / Fabric 接近把原型和运行时焊在同一份 Java 里，再靠事件总线和 Mixin 补官方没留的缝。Factorio 证明双层可以是产品决策。Minecraft 证明双层缺席时，社区会用三条河和注入把双层仿出来，仿出来的版本账单在每个大版本上。
 
@@ -151,6 +207,130 @@ Wube 没有把模组当成事后破解。模组是 zip（或目录），强制�
 游戏没打算当模组平台时，社区会把平台焊在外面。GTA 单机一侧是 ASI、Script Hook、各种脚本钩子；多人一侧 FiveM 把资源做成服务器上的一等单位——`fxmanifest.lua` 声明客户端 / 服务端 / 共享脚本，扩展名决定走 Lua、JavaScript 还是 .NET。[^fivem] 这不是 Rockstar 给你的编辑器。这是另一份运行时寄宿在原作资产上：进门仍要有正作，玩的已经是资源清单里的法律。
 
 Stardew 的 SMAPI 给 C# 模组入口和事件，必要时再让 Harmony 去补丁原方法；RimWorld 则是 XML Def 加程序集，缺的钩子同样常落到 Harmony。BepInEx 一类加载器把这套做法搬到大量 Unity 游戏上：先闯进 Mono / IL2CPP 进程，再谈 API。它们著名，是因为正作把作者席关了，需求没有关。强大，是对「没有合同」的补偿。补偿很贵。EXE 一换，河就断。TES 那一节的 SKSE 是同一家族里最老的样本：官方编辑器给内容，扩展器给动词，扩展器绑死构建号。
+
+## 沙箱长什么样
+
+下面不是教程。各举一个最小用例，只为看清钥匙开到哪一层。语法可以跳过；跳过之后，合同还在。
+
+<Accordions>
+  <Accordion title="QuakeC：规则从引擎里拆出来">
+
+QuakeC 是 1996 年给游戏逻辑用的 C 方言。源文件 `.qc` 经 `qcc` 编成 `progs.dat`，由引擎解释。作者席在**整份游戏规则模块**：武器、触发器、一部分 AI。渲染和网络仍在 `Quake.exe` 里。
+
+用例：加一支会飞的钉。不必重编引擎。
+
+```c
+void() spike_touch =
+{
+    if (other.solid == SOLID_TRIGGER)
+        return;
+    T_Damage(other, self, self.owner, 9);
+    remove(self);
+};
+
+void() W_FireSpike =
+{
+    local entity spike;
+    spike = spawn();
+    spike.owner = self;
+    spike.movetype = MOVETYPE_FLYMISSILE;
+    spike.solid = SOLID_BBOX;
+    setmodel(spike, "progs/spike.mdl");
+    spike.touch = spike_touch;
+    spike.velocity = v_forward * 1000;
+};
+```
+
+`self` / `other` 是这门语言的主语。你改的是实体怎么出生、碰到谁算伤害，不是引擎怎么画那根钉。原版 QC 源码 1996 年随编译器放出，CTF 一类模式就是在这份桌子上长出来的。[^qc]
+
+  </Accordion>
+  <Accordion title="Papyrus：事件挂在一条记录上">
+
+Papyrus 是 Creation Kit 的脚本。你写 `.psc`，套件编成 `.pex`，挂到某条 ESP 记录的 VMAD 上。作者席在**这个物件 / 任务被碰到时**：开锁、给物品、跳任务阶段。你换不了世界表示，也换不了战斗的底层。
+
+用例：玩家激活这扇门，锁打开。
+
+```csharp
+Scriptname ExampleUnlockDoor extends ObjectReference
+
+Event OnActivate(ObjectReference akActionRef)
+    if akActionRef == Game.GetPlayer()
+        Lock(false)
+        Debug.Notification("The door yields.")
+    endif
+EndEvent
+```
+
+门仍是 Creation Kit 里的那条记录。脚本只回答「被激活之后」。要读内存、拦输入、加官方没开的函数，就要 SKSE 那种扩展器——那已经离开沙箱，进入注入。[^skse]
+
+  </Accordion>
+  <Accordion title="JASS：一张地图里的整份规则">
+
+JASS 是《魔兽争霸 III》地图的脚本。World Editor 的 GUI 触发器保存时编成它，也可以手写。作者席在**这一份 `.w3x`**：地形、技能、胜负，和脚本打在一起分发。别人要玩你的规则，下载地图即可。
+
+用例：英雄倒下时向全场宣布。DotA 把同一张桌子用到了类型的尽头。
+
+```pascal
+function Trig_HeroKill_Actions takes nothing returns nothing
+    local unit u = GetTriggerUnit()
+    call DisplayTextToForce(GetPlayersAll(), GetHeroProperName(u) + " has fallen.")
+    set u = null
+endfunction
+
+function InitTrig_HeroKill takes nothing returns nothing
+    set gg_trg_HeroKill = CreateTrigger()
+    call TriggerRegisterAnyUnitEventBJ(gg_trg_HeroKill, EVENT_PLAYER_UNIT_DEATH)
+    call TriggerAddAction(gg_trg_HeroKill, function Trig_HeroKill_Actions)
+endfunction
+```
+
+`call` / `set` / `takes nothing returns` 是这门语言的口气。没有类。事件要登记。GUI 三格（事件、条件、动作）就是上面这份函数的可视化皮肤。[^dota-pm]
+
+  </Accordion>
+  <Accordion title="GLua：沙箱本身就是产品">
+
+Garry's Mod 把 Lua 当成正作来卖。作者席默认打开：游戏模式、脚本武器、脚本实体。钩子就是 API。
+
+用例：玩家一出生就给一把重力枪——这在别的游戏里可能是模组，在这里是附加组件。
+
+```lua
+hook.Add("PlayerSpawn", "example_gravgun", function(ply)
+    ply:Give("weapon_physcannon")
+end)
+```
+
+没有这份沙箱，GMod 几乎不存在。强到一个悖论：模组系统就是游戏。[^gmod]
+
+  </Accordion>
+  <Accordion title="Factorio Lua：先改说明书，再改正在转的厂">
+
+同一门 Lua，两个崩溃域。原型阶段往 `data` 表里塞配方和实体，存档还不存在；运行时 `control.lua` 才能碰 `game`，但原型已经冻结。
+
+用例：加一条熔炼配方；另一次，监听科技研究完成。
+
+```lua
+-- data.lua  宇宙的说明书
+data:extend({
+  {
+    type = "recipe",
+    name = "example-plate",
+    ingredients = { { type = "item", name = "iron-ore", amount = 1 } },
+    results = { { type = "item", name = "iron-plate", amount = 2 } },
+  },
+})
+```
+
+```lua
+-- control.lua  正在转的厂
+script.on_event(defines.events.on_research_finished, function(event)
+  game.print("Research complete: " .. event.research.name)
+end)
+```
+
+两段不能抢同一份可变全局。这就是设计出来的双层，不是目录习惯。[^factorio]
+
+  </Accordion>
+</Accordions>
 
 ## 代码、脚本、命令、数据不是同一把钥匙
 

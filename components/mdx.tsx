@@ -1,7 +1,9 @@
 import defaultMdxComponents from 'fumadocs-ui/mdx';
 import type { MDXComponents } from 'mdx/types';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
-import { Alternative, Constraint, Impl, Memoir, Note } from '@/components/mdx/blocks';
+import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
+import { File, Files, Folder } from 'fumadocs-ui/components/files';
+import { Alternative, Constraint, Figure, Impl, Memoir, Note } from '@/components/mdx/blocks';
 import { BookToc } from '@/components/book-toc';
 import { Mermaid } from '@/components/mdx/mermaid';
 
@@ -77,6 +79,12 @@ export function getMDXComponents(components?: MDXComponents) {
     Constraint,
     Memoir,
     Alternative,
+    Figure,
+    Accordion,
+    Accordions,
+    File,
+    Files,
+    Folder,
     BookToc,
     ...components,
   };
