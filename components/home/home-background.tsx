@@ -22,6 +22,41 @@ float fsnoise(vec2 c) {
   return fract(sin(dot(c, vec2(12.9898, 78.233))) * 43758.5453);
 }
 
+vec2 mod289(vec2 x) {
+  return x - floor(x * (1.0 / 289.0)) * 289.0;
+}
+
+vec3 mod289(vec3 x) {
+  return x - floor(x * (1.0 / 289.0)) * 289.0;
+}
+
+vec3 permute(vec3 x) {
+  return mod289(((x * 34.0) + 1.0) * x);
+}
+
+float snoise2D(vec2 v) {
+  const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
+  vec2 i = floor(v + dot(v, C.yy));
+  vec2 x0 = v - i + dot(i, C.xx);
+  vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+  vec4 x12 = x0.xyxy + C.xxzz;
+  x12.xy -= i1;
+  i = mod289(i);
+  vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0)) + i.x + vec3(0.0, i1.x, 1.0));
+  vec3 m = max(0.5 - vec3(dot(x0, x0), dot(x12.xy, x12.xy), dot(x12.zw, x12.zw)), 0.0);
+  m = m * m;
+  m = m * m;
+  vec3 x = 2.0 * fract(p * C.www) - 1.0;
+  vec3 h = abs(x) - 0.5;
+  vec3 ox = floor(x + 0.5);
+  vec3 a0 = x - ox;
+  m *= 1.79284291400159 - 0.85373472095314 * (a0 * a0 + h * h);
+  vec3 g;
+  g.x = a0.x * x0.x + h.x * x0.y;
+  g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+  return 130.0 * dot(m, g);
+}
+
 mat2 rotate2D(float r) {
   return mat2(cos(r), sin(r), -sin(r), cos(r));
 }
@@ -336,6 +371,138 @@ const RADIANT = twigl(`
   o = tanh(o / 4e2);
 `);
 
+// Laser Dance — @XorDev https://x.com/XorDev/status/1923037860485075114
+const LASERDANCE = twigl(`
+  float z = 0.0;
+  float d = 0.0;
+  for (float i = 0.0; i++ < 1e2; o += (cos(z + vec4(0, 2, 3, 0)) + 1.5) / d / z) {
+    vec3 p = z * normalize(FC.rgb * 2.0 - r.xyy) + 0.8;
+    d = max(-p.y, 0.0);
+    p.y += d + d - 1.0;
+    float ground = d;
+    p = cos(p + t) + cos(p / 0.6).yzx;
+    d = ground + 1.0;
+    z += d = 0.3 * (0.01 + 0.1 * ground + length(min(p, p.zxy)) / d / d);
+  }
+  o = tanh(o / 7e2);
+`);
+
+// Neutron — @XorDev https://x.com/XorDev/status/1940496912718991572
+const NEUTRON = twigl(`
+  float z = 0.0;
+  float d = 0.0;
+  float s = 0.0;
+  for (float i = 0.0; i++ < 1e2; o += (cos(s + vec4(0, 1, 2, 0)) + 1.0) / d) {
+    vec3 p = z * normalize(FC.rgb * 2.0 - r.xyy);
+    vec3 a = normalize(cos(vec3(7, 1, 0) + t - 0.3 * s));
+    p.z += 9.0;
+    a = a * dot(a, p) - cross(a, p);
+    for (d = 0.5; d++ < 9.0; )
+      a += sin(a * d + t).yzx / d;
+    z += d = 0.01 * abs(s = length(a) - 5.0) + 0.05 * abs(a.y);
+  }
+  o = tanh(o / 3e3);
+`);
+
+// Particles — @XorDev https://x.com/XorDev/status/2018817870495641914
+const PARTICLES = twigl(`
+  vec3 p = vec3(0.0);
+  float z = 0.0;
+  float d = 0.0;
+  float f = 0.0;
+  for (float i = 0.0; i++ < 6e1; p = z * normalize(FC.rgb * 2.0 - r.xyy), p.z += 9.0) {
+    z += d = 0.4 * max(
+      f = abs(z - 5.0) * 0.05,
+      length(vec4(dot(sin(p), sin(p / 0.6)) - length(p) + 5.0, sin(p / 0.1 + t) * cos(p.yzx / 0.1 + t) * 0.3)) - f
+    );
+    o += (cos(p.y + i * 0.2 + d / 0.2 + vec4(0, 1, 2, 3)) + 1.1) / d;
+  }
+  o = tanh(o * o / 3e5);
+`);
+
+// Bloxels — @XorDev https://x.com/XorDev/status/1831732594846921030
+const BLOXELS = twigl(`
+  vec2 c = FC.xy - r * 0.5;
+  vec2 f = 1.0 - abs(c.yy / r.y) / 0.6;
+  vec2 p = c / vec2(14.0, 10.0) / (1.0 + 0.02 * f * asin(cos(c.y / 20.0 + t / 0.2))) + t / 0.1;
+  o = vec4(1, 2, 3, 0);
+  p += sin(p += sin(p += sin(p) * f) * f) * f;
+  o = tanh(snoise2D(p * 0.1) * 0.5 * o + cos(p.x * 0.2 + p.y * 0.1 + o)) * 0.5 + 0.5;
+`);
+
+// Juice — @XorDev https://x.com/XorDev/status/1943747695501320447
+const JUICE = twigl(`
+  float z = 0.0;
+  float d = 0.0;
+  for (float i = 0.0; i++ < 1e2; ) {
+    vec4 c;
+    vec3 p = z * normalize(FC.rgb * 2.0 - r.xyx);
+    p.z += 9.0;
+    p.xy *= mat2(c = cos(i * 0.1 + vec4(0, 33, 11, 0)));
+    for (d = 1.0; d < 7.0; d++)
+      p += sin(p.yzx * d + t - i * 0.1) / d;
+    z += d = 0.2 * length(cos(p + i * 0.3) + 1.0);
+    o += (c + 1.0) / d * z;
+  }
+  o = tanh(o * o / 1e8);
+`);
+
+// Lapse — @XorDev https://x.com/XorDev/status/1975230424982183956
+const LAPSE = twigl(`
+  float z = 0.0;
+  float d = 0.0;
+  float h = 0.0;
+  for (float i = 0.0; i++ < 5e1; o += vec4(3, z, i, 1) / d) {
+    vec3 p = z * normalize(FC.rgb * 2.0 - r.xyy);
+    vec3 a = vec3(0.0, 1.0, 0.0);
+    p.z += 7.0;
+    h = length(p) - t;
+    a = mix(dot(a, p) * a, p, sin(h)) + cos(h) * cross(a, p);
+    for (d = 0.0; d++ < 9.0; )
+      a += sin(round(a * d) - t).zxy / d;
+    z += d = 0.1 * length(a.xz);
+  }
+  o = tanh(o / 1e4);
+`);
+
+// LAUNCH — @XorDev https://x.com/XorDev/status/1950699117367189854
+const LAUNCH = twigl(`
+  float z = 0.0;
+  float d = 0.0;
+  float f = 0.0;
+  for (float i = 0.0; i++ < 1e2; o += vec4(3, 1, d, z / f) / z) {
+    vec3 v = vec3(0, -2, 7);
+    vec3 p = z * normalize(FC.rgb * 2.0 - r.xyx) + v;
+    vec3 a = p;
+    a.y *= 0.3;
+    for (d = 1.0; d++ < 9.0; )
+      a -= 0.1 * sin((a.zxy + t * v + d) * d) * p.y / d;
+    f = 0.2 + abs(length(a.xz - cos(a.zx * 6.0)) + max(p.y / 0.1, -0.6));
+    z += d = min(max(-p.y, length(a) - 2.0), f) / 8.0;
+  }
+  o = tanh(o * o.a / 1e3);
+`);
+
+// Quasar 2 — @XorDev https://x.com/XorDev/status/1968828619435782446
+const QUASAR2 = twigl(`
+  float z = 0.0;
+  float d = 0.0;
+  float s = 0.0;
+  for (float i = 0.0; i++ < 7e1; o += vec4(z, 2, s, 1) / s / d) {
+    vec3 p = z * normalize(FC.rgb * 2.0 - r.xyy);
+    vec3 a = vec3(0.0);
+    p.z += 9.0;
+    a -= 0.57;
+    s -= t;
+    a = mix(dot(a, p) * a, p, cos(s)) - sin(s) * cross(a, p);
+    s = sqrt(length(a.xz - a.y));
+    for (d = 1.0; d++ < 9.0; )
+      a += sin(a * d - t).yzx / d;
+    z += d = length(sin(a) + dot(a, a / a) * 0.2) * s / 2e1;
+  }
+  o = tanh(o / 2e3);
+`);
+
 export const BG_EFFECTS = [
   { id: 'sunset', label: 'Sunset', credit: 'https://www.shadertoy.com/view/Wf3SWn' },
   { id: 'orb', label: 'Orb', credit: 'https://x.com/XorDev/status/1953620412648014334' },
@@ -352,6 +519,14 @@ export const BG_EFFECTS = [
   { id: 'frames', label: 'Frames', credit: 'https://x.com/XorDev/status/2016904976174317637' },
   { id: 'cloudcompute', label: 'Cloud Compute', credit: 'https://x.com/XorDev/status/1918680610127659112' },
   { id: 'radiant', label: 'Radiant', credit: 'https://x.com/XorDev/status/1947652770393153850' },
+  { id: 'laserdance', label: 'Laser Dance', credit: 'https://x.com/XorDev/status/1923037860485075114' },
+  { id: 'neutron', label: 'Neutron', credit: 'https://x.com/XorDev/status/1940496912718991572' },
+  { id: 'particles', label: 'Particles', credit: 'https://x.com/XorDev/status/2018817870495641914' },
+  { id: 'bloxels', label: 'Bloxels', credit: 'https://x.com/XorDev/status/1831732594846921030' },
+  { id: 'juice', label: 'Juice', credit: 'https://x.com/XorDev/status/1943747695501320447' },
+  { id: 'lapse', label: 'Lapse', credit: 'https://x.com/XorDev/status/1975230424982183956' },
+  { id: 'launch', label: 'LAUNCH', credit: 'https://x.com/XorDev/status/1950699117367189854' },
+  { id: 'quasar2', label: 'Quasar 2', credit: 'https://x.com/XorDev/status/1968828619435782446' },
 ] as const;
 
 export type BgEffectId = (typeof BG_EFFECTS)[number]['id'];
@@ -372,6 +547,14 @@ const FRAGS: Record<BgEffectId, string> = {
   frames: FRAMES,
   cloudcompute: CLOUDCOMPUTE,
   radiant: RADIANT,
+  laserdance: LASERDANCE,
+  neutron: NEUTRON,
+  particles: PARTICLES,
+  bloxels: BLOXELS,
+  juice: JUICE,
+  lapse: LAPSE,
+  launch: LAUNCH,
+  quasar2: QUASAR2,
 };
 
 const FEEDBACK = new Set<BgEffectId>(['frames']);
