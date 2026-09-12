@@ -3,7 +3,7 @@
 import book from '@/lib/book-toc-data.json';
 import type { BookTocData, TocAudience, TocChapter, TocVolume } from '@/lib/book-toc';
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 const data = book as BookTocData;
 
@@ -15,10 +15,6 @@ const AUDIENCE: Record<TocAudience, string> = {
   fan: '爱好者',
   dev: '开发者',
 };
-
-function chapterCount(v: TocVolume) {
-  return v.parts.reduce((n, p) => n + p.chapters.length, 0);
-}
 
 function matchesFilter(ch: TocChapter, filter: Filter) {
   if (filter === 'written') return ch.written;
@@ -38,37 +34,10 @@ export function BookToc() {
   const [filter, setFilter] = useState<Filter>('all');
   const [query, setQuery] = useState('');
   const q = query.trim().toLowerCase();
-
-  const totals = useMemo(() => {
-    const chapters = data.volumes.reduce((n, v) => n + chapterCount(v), 0);
-    const parts = data.volumes.reduce((n, v) => n + v.parts.length, 0);
-    const written = data.volumes.reduce(
-      (n, v) => n + v.parts.reduce((m, p) => m + p.chapters.filter((c) => c.written).length, 0),
-      0,
-    );
-    return { volumes: data.volumes.length, parts, chapters, written };
-  }, []);
-
   const active = data.volumes.find((v) => v.id === tab);
 
   return (
-    <div className="not-prose">
-      <p className="text-fd-muted-foreground mb-6 text-[0.9375rem] leading-7">{data.thesis}</p>
-
-      <dl className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {[
-          [String(totals.volumes), '卷（含序与附录）'],
-          [String(totals.parts), '部'],
-          [String(totals.chapters), '章'],
-          [`${totals.written}/${totals.chapters}`, '已成稿'],
-        ].map(([value, label]) => (
-          <div key={label} className="rounded-xl border border-fd-border px-4 py-3">
-            <dt className="text-xs text-fd-muted-foreground">{label}</dt>
-            <dd className="mt-1 text-xl font-semibold tracking-tight">{value}</dd>
-          </div>
-        ))}
-      </dl>
-
+    <div className="not-prose mt-10">
       <div className="mb-4 flex flex-wrap gap-2">
         <TabPill active={tab === 'overview'} onClick={() => setTab('overview')}>
           总览
@@ -149,7 +118,6 @@ function Overview({ filter }: { filter: Filter }) {
               <tr>
                 <th className="px-4 py-2.5 font-medium">卷</th>
                 <th className="px-4 py-2.5 font-medium">命题</th>
-                <th className="px-4 py-2.5 font-medium whitespace-nowrap">章</th>
               </tr>
             </thead>
             <tbody>
@@ -160,7 +128,6 @@ function Overview({ filter }: { filter: Filter }) {
                     <div className="text-xs text-fd-muted-foreground">{v.english}</div>
                   </td>
                   <td className="px-4 py-3 text-fd-muted-foreground leading-6">{v.thesis}</td>
-                  <td className="px-4 py-3 tabular-nums">{chapterCount(v)}</td>
                 </tr>
               ))}
             </tbody>
