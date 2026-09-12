@@ -317,8 +317,9 @@ const GAMMA = twigl(`
 // Gradient4 — @XorDev https://x.com/XorDev/status/1929554778893271246
 const GRADIENT4 = twigl(`
   vec2 p = (FC.xy * 2.0 - r) / r.y;
-  o = (sin(p.y / 0.4 + fract(cos(dot(tan(p), r)) * 4e4) - p.x + p.y * cos(p / 0.2 + cos(p / 0.3)).x - vec4(0, 0.6, 1, 0)) + 1.5)
-    / (2.5 + abs(cos(p.x / 0.1)));
+  vec2 u = p - vec2(t * 0.02, 0.0);
+  o = (sin(p.y / 0.4 + fract(cos(dot(tan(p), r)) * 4e4) - u.x + p.y * cos(u / 0.2 + t * 0.12 + cos(u / 0.3)).x - vec4(0, 0.6, 1, 0) + t * 0.3) + 1.5)
+    / (2.5 + abs(cos(u.x / 0.1)));
 `);
 
 // Frames — @XorDev https://x.com/XorDev/status/2016904976174317637
@@ -956,6 +957,36 @@ const LILY = twigl(`
   o = tanh(o / 3e5);
 `);
 
+// Thermal — @XorDev https://x.com/XorDev/status/1976028322363834762
+const THERMAL = twigl(`
+  float z = 0.0;
+  float d = 0.0;
+  float s = 0.0;
+  for (float i = 0.0; i++ < 3e1; o += (cos(s - t + vec4(0, 1, 8, 0)) + 1.0) / d) {
+    vec3 p = z * normalize(FC.rgb * 2.0 - r.xyy);
+    vec3 a = p;
+    p.z += 5.0;
+    for (d = 2.0; d++ < 7.0; )
+      a -= sin(ceil(a * d + t)).yzx / d;
+    z += d = abs(max(p = abs(p), max(p.y, p.z)).x - 2.0) * 0.4 + 0.2 * abs(cos(s = a.y + t));
+  }
+  o = tanh(o / 3e2);
+`);
+
+// Ripples — @XorDev https://x.com/XorDev/status/1929917731719065836
+const RIPPLES = twigl(`
+  float z = 0.0;
+  float d = 0.0;
+  for (float i = 0.0; i++ < 1e2; o += (cos(z + vec4(3, 4, 5, 0)) + 2.0) / d / z) {
+    vec3 p = z * normalize(FC.rgb * 2.0 - r.xyy);
+    p.z += 2.0;
+    d = max(-p.y, 0.0);
+    p.y += d + d;
+    z += d = 0.2 * (0.01 + 0.1 * d + length(cos(p.yz / dot(p, p) / 0.1 - t / 4.0)) / (d + 1.0));
+  }
+  o = tanh(o / 8e2);
+`);
+
 export const BG_EFFECTS = [
   { id: 'sunset', label: 'Sunset', credit: 'https://www.shadertoy.com/view/Wf3SWn' },
   { id: 'orb', label: 'Orb', credit: 'https://x.com/XorDev/status/1953620412648014334' },
@@ -1011,6 +1042,8 @@ export const BG_EFFECTS = [
   { id: 'orb2', label: 'Orb 2', credit: 'https://x.com/XorDev/status/1920508035954249883' },
   { id: 'accelerator', label: 'Accelerator', credit: 'https://x.com/XorDev/status/1970220265360765203' },
   { id: 'lily', label: 'Lily', credit: 'https://x.com/XorDev/status/1992664828411007418' },
+  { id: 'thermal', label: 'Thermal', credit: 'https://x.com/XorDev/status/1976028322363834762' },
+  { id: 'ripples', label: 'Ripples', credit: 'https://x.com/XorDev/status/1929917731719065836' },
 ] as const;
 
 export type BgEffectId = (typeof BG_EFFECTS)[number]['id'];
@@ -1070,6 +1103,8 @@ const FRAGS: Record<BgEffectId, string> = {
   orb2: ORB2,
   accelerator: ACCELERATOR,
   lily: LILY,
+  thermal: THERMAL,
+  ripples: RIPPLES,
 };
 
 const FEEDBACK = new Set<BgEffectId>(['frames']);
