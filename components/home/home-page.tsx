@@ -76,6 +76,7 @@ function CardCopy({
 
 export function HomePage() {
   const [effect, setEffect] = useState<BgEffectId>('sunset');
+  const activeEffect = BG_EFFECTS.some((item) => item.id === effect) ? effect : 'sunset';
 
   useEffect(() => {
     const root = document.documentElement;
@@ -94,7 +95,7 @@ export function HomePage() {
 
   return (
     <div className="relative min-h-screen overflow-x-hidden font-sans text-white">
-      <HomeBackground key={effect} effect={effect} />
+      <HomeBackground key={activeEffect} effect={activeEffect} />
 
       <section className="relative flex min-h-[min(86svh,52rem)] flex-col items-center justify-center px-6 pb-16 pt-20 text-center">
         <h1 className="home-text-glow bg-gradient-to-r from-white via-white to-white/55 bg-clip-text text-5xl font-extrabold tracking-tight text-transparent sm:text-6xl md:text-7xl">
@@ -153,7 +154,7 @@ export function HomePage() {
         <p className="mt-3 text-xs text-white/35">Aether · 沙盒游戏《以太效应》开发者</p>
       </footer>
 
-      <BackgroundPicker value={effect} onChange={onEffectChange} />
+      <BackgroundPicker value={activeEffect} onChange={onEffectChange} />
     </div>
   );
 }

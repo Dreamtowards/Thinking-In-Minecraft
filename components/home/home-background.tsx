@@ -9,12 +9,14 @@ void main() {
 }
 `;
 
-const TWIGL = `#version 300 es
+const TWIGL_HEAD = `#version 300 es
 precision highp float;
 
 uniform vec3 iResolution;
 uniform float iTime;
 out vec4 fragColor;
+
+const float PI = 3.141592653589793;
 
 float fsnoise(vec2 c) {
   return fract(sin(dot(c, vec2(12.9898, 78.233))) * 43758.5453);
@@ -41,23 +43,20 @@ mat3 rotate3D(float angle, vec3 axis) {
     a.z * a.z * rc + c
   );
 }
+`;
 
+function twigl(body: string, extras = '') {
+  return `${TWIGL_HEAD}
+${extras}
 void main() {
   vec2 r = iResolution.xy;
   vec4 FC = gl_FragCoord;
   float t = iTime;
   vec4 o = vec4(0.0);
-`;
-
-const TWIGL_TAIL = `
+${body}
   fragColor = vec4(o.rgb, 1.0);
 }
 `;
-
-function twigl(body: string) {
-  return `${TWIGL}
-${body}
-${TWIGL_TAIL}`;
 }
 
 // "Sunset" by @XorDev — https://www.shadertoy.com/view/Wf3SWn
@@ -217,6 +216,126 @@ const DISPERSION = twigl(`
   o = tanh(o / 2e2);
 `);
 
+// Paradise 3 — @XorDev https://x.com/XorDev/status/1958193141573353887
+const PARADISE3 = twigl(`
+  float z = 0.0;
+  float f = 0.0;
+  vec3 c = vec3(0.0);
+  vec3 p = vec3(0.0);
+  for (float i = 0.0; i++ < 5e1; p += c, z += f = length(cos(p / p.y) / 8.0 + sin(p.y / 7.0) * 0.4), o += (cos(c.y / 14.0 - vec4(7, 2, 3, 0)) + 1.0) * z * z / (0.9 + p.y * f) / max(length(c.xy / z - 0.6) - 0.1, 0.1)) {
+    p = z * (FC.rgb / 0.4 - r.xyy) / r.y;
+    p.y = abs(p.y + 2.0);
+    c = p;
+    p.x *= f = 0.2;
+    for (; f++ < 9.0; p += cos(p.yzx * f - t / 4.0) / f);
+  }
+  o = tanh(o / 1e4);
+`);
+
+// Graycloud — @XorDev https://x.com/XorDev/status/1918698128204517712
+const GRAYCLOUD = twigl(`
+  float z = 0.0;
+  float d = 0.0;
+  for (float i = 0.0; i++ < 1e2; ) {
+    vec3 p = z * normalize(FC.rgb * 2.0 - r.xyy);
+    p.z -= t * PI / 10.0;
+    for (d = 1.0; d < 64.0; d += d)
+      p += 0.5 * sin(p.yzx * d - t * d * PI / 10.0) / d;
+    z += d = 0.03 + 0.1 * abs(abs(p.y) - 1.5);
+    o += (cos(p.y / 0.4 - vec4(0, 1, 2, 3) - 3.0) + 1.5) / d;
+  }
+  o = tanh(o / 5e3);
+`);
+
+// Church1 — @XorDev https://x.com/XorDev/status/1918756104785277081
+const CHURCH1 = twigl(`
+  float z = 0.0;
+  float d = 0.0;
+  for (float i = 0.0; i++ < 1e2; ) {
+    vec3 p = z * normalize(FC.rgb * 2.0 - r.xyy);
+    p.z -= t * PI / 10.0;
+    p.xy *= rotate2D(z * 0.2);
+    for (d = 1.0; d < 64.0; d += d)
+      p += 0.7 * cos(p.yzx * d) / d;
+    z += d = 0.03 + 0.1 * max(d = dot(cos(p), sin(p.yzx)) + 5.0 - z * 0.2 - length(p.xy), -d * 0.2);
+    o += (cos(z - vec4(6, 1, 2, 3)) + 1.4) / d / z;
+  }
+  o = tanh(o * o / 3e5);
+`);
+
+// Gamma — @XorDev https://x.com/XorDev/status/1938254250372374690
+const GAMMA = twigl(`
+  float z = 0.0;
+  float d = 0.0;
+  for (float i = 0.0; i++ < 4e1; ) {
+    vec3 P = z * normalize(FC.rgb * 2.0 - r.xyx);
+    P.z += 9.0;
+    vec3 p = vec3(atan(P.z, P.x + 0.1) * 2.0 - 0.3 * P.y, 0.6 * P.y - t, length(P.xz) - 4.0);
+    for (d = 1.0; d < 9.0; d++)
+      p += sin(p.yzx * d - t + 0.4 * i) / d;
+    z += d = 0.2 * length(vec4(cos(p + P.y * 0.2) - 1.0, p.z));
+    o += vec4(4.0, z, 2.0, 0.0) / d / d / z;
+  }
+  o = tanh(o / 4e2);
+`);
+
+// Gradient4 — @XorDev https://x.com/XorDev/status/1929554778893271246
+const GRADIENT4 = twigl(`
+  vec2 p = (FC.xy * 2.0 - r) / r.y;
+  o = (sin(p.y / 0.4 + fract(cos(dot(tan(p), r)) * 4e4) - p.x + p.y * cos(p / 0.2 + cos(p / 0.3)).x - vec4(0, 0.6, 1, 0)) + 1.5)
+    / (2.5 + abs(cos(p.x / 0.1)));
+`);
+
+// Frames — @XorDev https://x.com/XorDev/status/2016904976174317637
+const FRAMES = twigl(
+  `
+  vec2 p = (FC.xy * 2.0 - r) / r.y / 0.4;
+  vec2 v;
+  float l;
+  for (float i = 0.0; i++ < 9.0; o += 0.04 / abs(l = length(v) - 1.0) * (cos(i * 0.3 + 0.1 / l + vec4(0, 1, 2, 3)) + 1.0)) {
+    v = p;
+    for (float f = 0.0; f++ < 7.0; )
+      v = (v + sin(v * f / 0.6 + i * 0.3 + cos(i + vec2(0, 2) + t / 2.0)) / f).yx;
+  }
+  vec4 prev = texture(b, (FC.xy + r.y * 0.02 * sin(FC.xy + FC.yx / 0.6)) / r);
+  o = max(tanh(o + prev * prev), 0.0);
+`,
+  'uniform sampler2D b;',
+);
+
+// Cloud Compute — @XorDev https://x.com/XorDev/status/1918680610127659112
+const CLOUDCOMPUTE = twigl(`
+  float z = 0.0;
+  float d = 0.0;
+  for (float i = 0.0; i++ < 8e1; ) {
+    vec3 p = z * normalize(FC.rgb * 2.0 - r.xxy);
+    p.xz -= t;
+    p.y = 4.0 - abs(p.y);
+    for (d = 0.7; d < 2e1; d /= 0.5)
+      p += cos(round(p.yzx * d) - 0.2 * t) / d;
+    z += d = 0.01 + abs(p.y) / 15.0;
+    o += (cos(vec4(0, 1, 2, 0) - p.y * 2.0) + 1.1) / z / d;
+  }
+  o = tanh(o / 7e2);
+`);
+
+// Radiant — @XorDev https://x.com/XorDev/status/1947652770393153850
+const RADIANT = twigl(`
+  vec3 p;
+  vec3 v;
+  float z = 0.0;
+  float d = 0.0;
+  for (float i = 0.0; i++ < 5e1; o += vec4(z, 2, 1, 1) / d / z) {
+    p = z * normalize(FC.rgb * 2.0 - r.xyy);
+    p.z += 6.0;
+    v = normalize(cos(t / 4.0 + vec3(0, 2, 4)));
+    p = abs(dot(v, p) * v + cross(v, p));
+    v = p + sin(min(p, 2.0) * 6.0);
+    z += d = 0.1 * abs(max(p.x, max(p.y, p.z)) - 2.0) + 0.1 * length(min(v, v.yzx) - 1.0);
+  }
+  o = tanh(o / 4e2);
+`);
+
 export const BG_EFFECTS = [
   { id: 'sunset', label: 'Sunset', credit: 'https://www.shadertoy.com/view/Wf3SWn' },
   { id: 'orb', label: 'Orb', credit: 'https://x.com/XorDev/status/1953620412648014334' },
@@ -225,6 +344,14 @@ export const BG_EFFECTS = [
   { id: 'led', label: 'LED', credit: 'https://x.com/XorDev/status/1540071403185127426' },
   { id: 'topology', label: 'Topology', credit: 'https://x.com/XorDev/status/1903091482904478140' },
   { id: 'dispersion', label: 'Dispersion', credit: 'https://x.com/XorDev/status/1978091803262783504' },
+  { id: 'paradise3', label: 'Paradise 3', credit: 'https://x.com/XorDev/status/1958193141573353887' },
+  { id: 'graycloud', label: 'Graycloud', credit: 'https://x.com/XorDev/status/1918698128204517712' },
+  { id: 'church1', label: 'Church1', credit: 'https://x.com/XorDev/status/1918756104785277081' },
+  { id: 'gamma', label: 'Gamma', credit: 'https://x.com/XorDev/status/1938254250372374690' },
+  { id: 'gradient4', label: 'Gradient4', credit: 'https://x.com/XorDev/status/1929554778893271246' },
+  { id: 'frames', label: 'Frames', credit: 'https://x.com/XorDev/status/2016904976174317637' },
+  { id: 'cloudcompute', label: 'Cloud Compute', credit: 'https://x.com/XorDev/status/1918680610127659112' },
+  { id: 'radiant', label: 'Radiant', credit: 'https://x.com/XorDev/status/1947652770393153850' },
 ] as const;
 
 export type BgEffectId = (typeof BG_EFFECTS)[number]['id'];
@@ -237,7 +364,17 @@ const FRAGS: Record<BgEffectId, string> = {
   led: LED,
   topology: TOPOLOGY,
   dispersion: DISPERSION,
+  paradise3: PARADISE3,
+  graycloud: GRAYCLOUD,
+  church1: CHURCH1,
+  gamma: GAMMA,
+  gradient4: GRADIENT4,
+  frames: FRAMES,
+  cloudcompute: CLOUDCOMPUTE,
+  radiant: RADIANT,
 };
+
+const FEEDBACK = new Set<BgEffectId>(['frames']);
 
 function compile(gl: WebGL2RenderingContext, type: number, source: string) {
   const shader = gl.createShader(type);
@@ -250,6 +387,22 @@ function compile(gl: WebGL2RenderingContext, type: number, source: string) {
     return null;
   }
   return shader;
+}
+
+function makeTarget(gl: WebGL2RenderingContext, w: number, h: number) {
+  const tex = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+  const fbo = gl.createFramebuffer();
+  gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+  gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
+  gl.clearColor(0, 0, 0, 1);
+  gl.clear(gl.COLOR_BUFFER_BIT);
+  return { tex, fbo };
 }
 
 export function HomeBackground({ effect }: { effect: BgEffectId }) {
@@ -286,11 +439,26 @@ export function HomeBackground({ effect }: { effect: BgEffectId }) {
     gl.bindVertexArray(vao);
     const resolutionLoc = gl.getUniformLocation(program, 'iResolution');
     const timeLoc = gl.getUniformLocation(program, 'iTime');
+    const backLoc = gl.getUniformLocation(program, 'b');
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const scale = reduced ? 0.4 : 0.55;
+    const feedback = FEEDBACK.has(effect);
+    let targets: { tex: WebGLTexture; fbo: WebGLFramebuffer }[] | null = null;
+    let read = 0;
+    let fboW = 0;
+    let fboH = 0;
     let frame = 0;
     let running = true;
     let start = performance.now();
+
+    const destroyTargets = () => {
+      if (!targets) return;
+      for (const item of targets) {
+        gl.deleteTexture(item.tex);
+        gl.deleteFramebuffer(item.fbo);
+      }
+      targets = null;
+    };
 
     const resize = () => {
       const w = Math.max(1, Math.floor(canvas.clientWidth * scale));
@@ -299,17 +467,55 @@ export function HomeBackground({ effect }: { effect: BgEffectId }) {
         canvas.width = w;
         canvas.height = h;
       }
+      if (feedback && (fboW !== w || fboH !== h)) {
+        destroyTargets();
+        targets = [makeTarget(gl, w, h), makeTarget(gl, w, h)];
+        fboW = w;
+        fboH = h;
+        read = 0;
+      }
     };
 
     const draw = (now: number) => {
       if (!running) return;
       resize();
+      const write = 1 - read;
       gl.viewport(0, 0, canvas.width, canvas.height);
       gl.useProgram(program);
       gl.bindVertexArray(vao);
       gl.uniform3f(resolutionLoc, canvas.width, canvas.height, 1);
       gl.uniform1f(timeLoc, reduced ? 8 : (now - start) / 1000);
+
+      if (feedback && targets && backLoc) {
+        gl.bindFramebuffer(gl.FRAMEBUFFER, targets[write].fbo);
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, targets[read].tex);
+        gl.uniform1i(backLoc, 0);
+      } else {
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      }
+
       gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+      if (feedback && targets) {
+        gl.bindFramebuffer(gl.READ_FRAMEBUFFER, targets[write].fbo);
+        gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, null);
+        gl.blitFramebuffer(
+          0,
+          0,
+          canvas.width,
+          canvas.height,
+          0,
+          0,
+          canvas.width,
+          canvas.height,
+          gl.COLOR_BUFFER_BIT,
+          gl.NEAREST,
+        );
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        read = write;
+      }
+
       if (!reduced) frame = requestAnimationFrame(draw);
     };
 
@@ -331,6 +537,7 @@ export function HomeBackground({ effect }: { effect: BgEffectId }) {
       cancelAnimationFrame(frame);
       window.removeEventListener('resize', resize);
       document.removeEventListener('visibilitychange', onVisibility);
+      destroyTargets();
       gl.deleteProgram(program);
       gl.deleteShader(vert);
       gl.deleteShader(frag);
