@@ -456,7 +456,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 #### `history/08` 两条产品线：Java 与 Bedrock · 枢纽
 
-- 文件：`docs/history/java-bedrock.mdx` · 两类 · ▤
+- 文件：`docs/history/java-bedrock.mdx` · 两类 · ✎
 - **简介**：从 Pocket Edition 到 Bedrock，跨平台是产品逻辑，功能分裂是品牌债。Marketplace 把 UGC 商业化，同时把模组文化排除在外。两个 Minecraft 不是两个皮肤。
 - **要回答**：为何存在两个 Minecraft，分裂如何变成债？
 - **交叉**：`impl/15`、`appendix/java-bedrock`、`design/07`
