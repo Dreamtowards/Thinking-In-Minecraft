@@ -30,7 +30,7 @@ const cards = [
     href: '/history/infiniminer',
     kicker: '卷一',
     title: '历史与商业',
-    detail: '从原型到产业。这套规则如何变成媒介。',
+    detail: '从一个人的原型，长成模组与服务器，最终席卷全球的文化现象',
     tint: 'rgba(251, 146, 60, 0.18)',
   },
   {
@@ -44,14 +44,14 @@ const cards = [
     href: '/impl/data-model',
     kicker: '卷三',
     title: '技术实现',
-    detail: '一个能跑的原型，如何被拖进不可能的规模。',
+    detail: '刨析引擎与算法、体素系统、PCG、Mod系统、渲染、多人网络与优化',
     tint: 'rgba(52, 211, 153, 0.16)',
   },
   {
     href: '/toc',
     kicker: '卷四',
     title: '重写',
-    detail: '把偶然从本质里剥开。考试，不是开工令。',
+    detail: '以更现代的方式实现，把偶然从本质里剥开',
     tint: 'rgba(192, 132, 252, 0.18)',
   },
 ];
