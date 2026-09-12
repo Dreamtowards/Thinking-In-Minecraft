@@ -11,8 +11,8 @@ export function BackgroundPicker({
 }) {
   return (
     <label className="home-bg-picker">
-      <span>背景</span>
       <select
+        aria-label="背景"
         value={value}
         onChange={(event) => onChange(event.target.value as BgEffectId)}
       >
