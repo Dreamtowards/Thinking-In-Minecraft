@@ -41,15 +41,10 @@ export function getPageTitle(page: (typeof source)['$inferPage']): string {
   return page.slugs.at(-1) ?? page.url;
 }
 
-function nodeName(node: { name?: unknown }): string {
-  return typeof node.name === 'string' ? node.name : '';
-}
-
-function folderKey(node: Folder): string {
-  const sample = node.index?.url ?? node.children.find((child) => child.type === 'page')?.url;
-  if (!sample) return nodeName(node);
-  const parts = sample.split('/').filter(Boolean);
-  return parts[0] ?? nodeName(node);
+function volumeFolderTitle(node: Folder): string | undefined {
+  const folderPath = node.$ref?.folder;
+  if (!folderPath || folderPath.includes('/')) return undefined;
+  return folderTitles[folderPath];
 }
 
 function decoratePage(node: Item): Item {
@@ -62,10 +57,9 @@ function decorateNode(node: Node): Node {
   if (node.type === 'page') return decoratePage(node);
 
   if (node.type === 'folder') {
-    const key = folderKey(node);
     return {
       ...node,
-      name: folderTitles[key] ?? node.name,
+      name: volumeFolderTitle(node) ?? node.name,
       index: node.index ? decoratePage(node.index) : undefined,
       children: node.children.map(decorateNode),
     };
