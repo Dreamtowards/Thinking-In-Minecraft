@@ -726,6 +726,183 @@ const V2 = twigl(`
   o = tanh(0.01 * p.y * vec4(0, 1, 2, 3) + o * o / 1e4);
 `);
 
+// Vectors — @XorDev https://x.com/XorDev/status/1972423422711111894
+const VECTORS = twigl(`
+  float z = 0.0;
+  float d = 0.0;
+  for (float i = 0.0; i++ < 7e1; ) {
+    vec3 p = z * normalize(FC.rgb * 2.0 - r.xyy);
+    vec3 a = normalize(sin(t / 4.0 + vec3(0, 2, 4)));
+    vec3 v;
+    p.z += 7.0;
+    v = a = dot(a, p) * a + cross(a, p);
+    for (d = 2.0; d++ < 9.0; )
+      a += sin(ceil(a * d) - t).yzx / d;
+    z += d = 0.1 * length(sin(a * a)) * sqrt(length(v * sin(v.yzx)));
+    o += vec4(9, i, z, 1) / d;
+  }
+  o = tanh(o / 6e4);
+`);
+
+// Voxel AO — @XorDev https://x.com/XorDev/status/1787594538514632849
+const VOXELAO = twigl(`
+  #define M (dot(cos(v.zxy * 0.1), sin(v * FC.xyz)) - v.y * 0.1)
+  vec3 R = normalize(r.x * 0.51 - FC.xyz);
+  vec3 d = sign(R);
+  vec3 p = vec3(cos(r + t) - 2e1, t / 0.1);
+  vec3 v = round(p);
+  vec3 l = (v - p + 0.5 * d) / R;
+  vec3 i = vec3(0.0);
+  vec3 A;
+  vec3 P;
+  for (; i.x < 2e2 && M > 0.3; i++) {
+    A = step(P = l, min(l.yzx, l.zxy));
+    v += d * A;
+    l += d / R * A;
+  }
+  v = p + dot(P, A) * R;
+  o.rgb = mix(M * A / 0.4, i /= 2e2, i);
+`);
+
+// Bricks — @XorDev https://x.com/XorDev/status/1718731726434824357
+const BRICKS = twigl(`
+  int j;
+  vec2 u = round(FC.xy) - r * 0.5;
+  vec2 p;
+  vec2 z = p + 2e1;
+  vec2 c;
+  for (; z.x < 1e2 && (j = int(p) ^ int(p.y) ^ int(z)) % 93 % 43 < 32; p = u * z / r.y + t * vec2(2, 9)) {
+    c = min(fract(-p * sign(u)) / abs(u) * r.y, fract(-z)) + 2e-5;
+    z += min(c, c.yx);
+    o.rgb = (1e2 - z.x) * (2.0 - cos(vec3(j /= 3, j + 5, j + 4)));
+  }
+  o /= 2e2 + fwidth(o.g) * 5e2;
+`);
+
+// Cyberspace 2 — @XorDev https://x.com/XorDev/status/1986182095614406664
+const CYBERSPACE2 = twigl(`
+  float z = 0.0;
+  float d = 0.0;
+  for (float i = 0.0; z + i++ < 7e1; ) {
+    vec3 p = abs(z * normalize(FC.rgb * 2.0 - r.xyy));
+    p.z += t * 5.0;
+    p += sin(p + p);
+    for (d = 0.0; d++ < 9.0; )
+      p += 0.4 * cos(round(0.2 * d * p) + 0.2 * t).zxy;
+    z += d = 0.1 * sqrt(length(p.xyy * p.yxy));
+    o += vec4(z, 1, 9, 1) / d;
+  }
+  o = tanh(o / 7e3);
+`);
+
+// Circuits — @XorDev https://x.com/XorDev/status/1654498670270640129
+const CIRCUITS = twigl(`
+  for (float s = 8.0; s < 1e3 && sin(o.g * 1e2) < 0.5; s += s)
+    o.g = snoise2D(floor(FC.xy / r.y * s) + t / 1e3);
+  o = fwidth(o) + o * 0.1;
+`);
+
+// Church 3 — @XorDev https://x.com/XorDev/status/1918759537323933895
+const CHURCH3 = twigl(`
+  float z = 0.0;
+  float d = 0.0;
+  for (float i = 0.0; i++ < 1e2; ) {
+    vec3 p = z * normalize(FC.rgb * 2.0 - r.xyy);
+    p.yz *= rotate2D(0.5);
+    p.xz *= rotate2D(0.8);
+    for (d = 5.0; d < 2e2; d += d)
+      p += 0.5 * sin(p.yzx * d + t * PI / 10.0) / d;
+    z += d = 0.005 + 0.2 * abs(0.3 - abs(p.y));
+    o += (cos(p.y / 0.05 + p.x * 2.0 + t * PI / 10.0 - vec4(0, 1, 2, 3) - 3.0) + 1.5) / d / z;
+  }
+  o = tanh(o * o / 2e8);
+`);
+
+// Heavenly 2 — @XorDev https://x.com/XorDev/status/1917591780746240394
+const HEAVENLY2 = twigl(`
+  float z = 0.0;
+  float d = 0.0;
+  for (float i = 0.0; i++ < 1e2; o += (cos(z + t + vec4(0, 1, 2, 3)) + 1.1) / d) {
+    vec3 p = z * normalize(FC.rgb * 2.0 - r.xyy);
+    p.z -= t;
+    for (d = 1.0; d < 9.0; d /= 0.7)
+      p += cos(p.yzx * d + z * 0.2 - t * 0.1) / d;
+    z += d = 0.02 + 0.1 * abs(p.y + 1.0);
+  }
+  o = tanh(o / 2e3);
+`);
+
+// Pivotal — @XorDev https://x.com/XorDev/status/1961130223531090414
+const PIVOTAL = twigl(`
+  vec2 p = (FC.xy * 2.0 - r) / r.y / 0.2;
+  vec2 c = fract(p) - 0.5 - p * 0.2;
+  o = cos(atan(c.y, c.x) + vec4(0, 1, 2, 0) + t);
+`);
+
+// Solar — @XorDev https://x.com/XorDev/status/1937896448391069797
+const SOLAR = twigl(`
+  vec2 p = (FC.xy * 2.0 - r) / r.y;
+  float l = 2.0 - length(p - 1.0);
+  o = tanh(vec4(1, 0.4, 0.2, 0) / max(l, -l * 1e1) / exp(mod(dot(FC, sin(FC.yxyx)) + t, 2.0) + sin(t + sin(t / 0.6 + p.y))));
+`);
+
+// Dust — @XorDev https://x.com/XorDev/status/1944159853145944210
+const DUST = twigl(`
+  vec3 p;
+  float z = 0.0;
+  float d = 0.0;
+  for (float i = 0.0; i++ < 2e1; o += (cos(p.y / (0.1 + 0.05 * z) + vec4(6, 5, 4, 0)) + 1.0) * d / z / 7.0) {
+    p = z * normalize(FC.rgb * 2.0 - r.xyy);
+    p.x -= t;
+    p.xy *= 0.4;
+    z += d = dot(cos(p / 0.6), sin(p + sin(p * 7.0) / 4.0).zyx) * 0.4 + p.y / 0.7 + 0.7;
+  }
+  o = tanh(o * o);
+`);
+
+// Horizon — @XorDev https://x.com/XorDev/status/1956752377849037274
+const HORIZON = twigl(`
+  vec3 c;
+  vec3 p;
+  float z = 0.1;
+  float f = 0.0;
+  for (float i = 0.0; i++ < 1e2; o += vec4(9, 4, 2, 0) / f / length(c.xy / z)) {
+    p = c = z * normalize(FC.rgb * 2.0 - r.xyy);
+    for (p.x *= f = 0.6; f++ < 9.0; p += sin(p.yzx * f + 0.5 * z - t / 4.0) / f);
+    z += f = 0.03 + 0.1 * max(f = 6.0 - 0.2 * z + min(f = (p + c).y, -f * 0.2), -f * 0.6);
+  }
+  o = tanh(o * o / 9e8);
+`);
+
+// Reef — @XorDev https://x.com/XorDev/status/2021258388038943162
+const REEF = twigl(`
+  float z = 0.0;
+  float d = 0.0;
+  for (float i = 0.0; i++ < 5e1; z += d, o += (0.9 + sin(i * 0.1 - vec4(6, 1, 2, 0))) / d / d / z + d * z / vec4(4, 2, 1, 0)) {
+    vec3 p = z * normalize(FC.rgb * 2.0 - r.xyx);
+    for (d = 0.0; d++ < 9.0; )
+      p += 0.4 * sin(p.yzx * d - z + t + i) / d + 0.5;
+    d = length(vec4(abs(p.y + p.z * 0.5), sin(p - z) / 7.0)) / (4.0 + z * z / 1e2);
+  }
+  o = tanh(o / 2e3);
+`);
+
+// ATC — @XorDev https://x.com/XorDev/status/1951031020909895817
+const ATC = twigl(`
+  vec3 p;
+  vec3 v = vec3(1, 2, 6);
+  float z = 0.0;
+  float d = 0.0;
+  float f = 0.0;
+  for (float i = 0.0; i++ < 5e1; o.rgb += (cos((p.x + z + v) * 0.1) + 1.0) / d / f / z) {
+    p = z * normalize(FC.rgb * 2.0 - r.xyy);
+    p.xz *= mat2(cos((p + sin(p)).y * 0.4 + vec4(0, 33, 11, 0)));
+    p.x += t / 0.2;
+    z += d = length(cos(p / v) * v + v.zxx / 7.0) / (f = 2.0 + d / exp(p.y * 0.2));
+  }
+  o = tanh(0.2 * o);
+`);
+
 export const BG_EFFECTS = [
   { id: 'sunset', label: 'Sunset', credit: 'https://www.shadertoy.com/view/Wf3SWn' },
   { id: 'orb', label: 'Orb', credit: 'https://x.com/XorDev/status/1953620412648014334' },
@@ -765,6 +942,19 @@ export const BG_EFFECTS = [
   { id: 'digitalvortex', label: 'Digital Vortex', credit: 'https://x.com/XorDev/status/1930633822715990114' },
   { id: 'bits2', label: 'Bits 2', credit: 'https://x.com/XorDev/status/1930600792899125680' },
   { id: 'v2', label: 'V2', credit: 'https://x.com/XorDev/status/1880357157289501093' },
+  { id: 'vectors', label: 'Vectors', credit: 'https://x.com/XorDev/status/1972423422711111894' },
+  { id: 'voxelao', label: 'Voxel AO', credit: 'https://x.com/XorDev/status/1787594538514632849' },
+  { id: 'bricks', label: 'Bricks', credit: 'https://x.com/XorDev/status/1718731726434824357' },
+  { id: 'cyberspace2', label: 'Cyberspace 2', credit: 'https://x.com/XorDev/status/1986182095614406664' },
+  { id: 'circuits', label: 'Circuits', credit: 'https://x.com/XorDev/status/1654498670270640129' },
+  { id: 'church3', label: 'Church 3', credit: 'https://x.com/XorDev/status/1918759537323933895' },
+  { id: 'heavenly2', label: 'Heavenly 2', credit: 'https://x.com/XorDev/status/1917591780746240394' },
+  { id: 'pivotal', label: 'Pivotal', credit: 'https://x.com/XorDev/status/1961130223531090414' },
+  { id: 'solar', label: 'Solar', credit: 'https://x.com/XorDev/status/1937896448391069797' },
+  { id: 'dust', label: 'Dust', credit: 'https://x.com/XorDev/status/1944159853145944210' },
+  { id: 'horizon', label: 'Horizon', credit: 'https://x.com/XorDev/status/1956752377849037274' },
+  { id: 'reef', label: 'Reef', credit: 'https://x.com/XorDev/status/2021258388038943162' },
+  { id: 'atc', label: 'ATC', credit: 'https://x.com/XorDev/status/1951031020909895817' },
 ] as const;
 
 export type BgEffectId = (typeof BG_EFFECTS)[number]['id'];
@@ -808,6 +998,19 @@ const FRAGS: Record<BgEffectId, string> = {
   digitalvortex: DIGITALVORTEX,
   bits2: BITS2,
   v2: V2,
+  vectors: VECTORS,
+  voxelao: VOXELAO,
+  bricks: BRICKS,
+  cyberspace2: CYBERSPACE2,
+  circuits: CIRCUITS,
+  church3: CHURCH3,
+  heavenly2: HEAVENLY2,
+  pivotal: PIVOTAL,
+  solar: SOLAR,
+  dust: DUST,
+  horizon: HORIZON,
+  reef: REEF,
+  atc: ATC,
 };
 
 const FEEDBACK = new Set<BgEffectId>(['frames']);
