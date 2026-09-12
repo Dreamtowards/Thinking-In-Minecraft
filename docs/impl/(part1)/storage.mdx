@@ -1,0 +1,278 @@
+---
+title: 存储与序列化
+description: Region / Anvil / MCA、NBT、玩家数据与结构文件。扁平化与组件化证明一次格式改革的成本。世界必须比引擎活得更久。存档兼容是对玩家时间的伦理。
+---
+
+> **本章命题**：存档是玩家时间的载体，不是客户端的缓存。格式必须能被下一代引擎读懂；每一次扁平化、加高、组件化，都按「每一格、每一件物品、每一个第二作者 ID」计费。读旧档不是特性开关。读不起，就是宣布过去作废。
+
+## 问题
+
+硬盘上的 `world` 往往比启动器里那一格版本号活得更久。十年前的家、箱子里的剑、漏斗跨过的那条绿线，并不住在 jar 里。它们住在区域文件、`level.dat`、有时还住在一份已经停更的模组还认识的数字 ID 里。[《作为文化遗产的 Minecraft》](/history/heritage) 把这件事写成伦理。本章写成格式。
+
+上一章把格子收成状态、实体和空气。[《体素世界的数据模型》](/impl/data-model) 模型若不落盘，无限只是一次进程。落盘之后，进程可以死，柱子还在。可被证伪的说法是：存档跟着客户端走，升级等于换皮，旧世界打不开只是用户没备份。只要还存在「必须转换」的黄字、只要扁平化让工业模组变成未知方块、只要商店页写明 Java 与 Bedrock 互不兼容，这句话就不成立。[^store]
+
+要回答：世界为什么必须比引擎活得更久？不是情怀。是这套规则把居住写进磁盘——家不是关卡进度，是一份可以脱离今晚这个二进制的地址堆。卷四会把「能读旧档是伦理还是特性」再考一次。本章不代答转换器该怎么写。本章把账单钉死：迁一次，贵在哪里。
+
+<Cards>
+  <Card title="空气也要落盘" href="/impl/data-model" description="柜子装的是带着空气的格子。" />
+  <Card title="存档是记忆" href="/history/heritage" description="伦理在遗产章。格式在这里。" />
+  <Card title="两套柜子" href="/history/java-bedrock" description="Anvil 对 LevelDB。买一份迁不走。" />
+</Cards>
+
+## 世界比客户端活得长
+
+客户端是解释器。存档是文本。解释器可以换语言、换版本、换公司。文本若换一次就不可读，居住会塌成「请开始新游戏」。
+
+这和普通游戏的存档槽不一样。关卡游戏的存档是进度指针：第几关、几条命、哪把枪。指针短，迁移便宜，赛季清空在商业上说得通。Minecraft 的存档是世界本身：哪一格是你家的墙，哪一只漏斗还衔着昨天的物品。指针可以作废。墙不可以——墙是玩家的时间凝成的对象。[《可迁移原则清单》](/design/transferable) 第十一条在设计层写过。实现层的对应句是：`DataVersion` 必须跟着每一份 NBT 走，升级是翻译，不是覆盖。
+
+Java 把这份文本切成许多文件。Bedrock 把许多记录塞进一个数据库。两边都拒绝「世界等于这一次运行时的堆」。拒绝的姿势不同，合同相同：进程死了，地址还在。Java 的世界目录大致长这样：
+
+<Files>
+  <Folder name="saves/my_world" defaultOpen>
+    <File name="level.dat" />
+    <File name="session.lock" />
+    <Folder name="region" defaultOpen>
+      <File name="r.0.0.mca" />
+      <File name="r.0.-1.mca" />
+    </Folder>
+    <Folder name="entities">
+      <File name="r.0.0.mca" />
+    </Folder>
+    <Folder name="poi">
+      <File name="r.0.0.mca" />
+    </Folder>
+    <Folder name="playerdata">
+      <File name="&lt;uuid&gt;.dat" />
+    </Folder>
+    <Folder name="generated">
+      <File name="house.nbt" />
+    </Folder>
+  </Folder>
+</Files>
+
+`level.dat` 是世界的户口本：种子、游戏规则、`DataVersion`、单机玩家的一份快照。`region/` 是地形法律。Java 1.17 起，完全生成后的实体另住 `entities/`，兴趣点另住 `poi/`——同一把 16×16 的刀，三套柜子，免得一只鸡把整节方块状态一起锁上。[^entities] `playerdata/` 是人。结构模板是可搬运的世界切片。Bedrock 没有这张树：等价物收进 `db/` 里的 LevelDB，外加一份带 8 字节头的 `level.dat`。[^be-level]
+
+<Files>
+  <Folder name="minecraftWorlds/&lt;id&gt;" defaultOpen>
+    <File name="level.dat" />
+    <File name="levelname.txt" />
+    <Folder name="db" defaultOpen>
+      <File name="CURRENT" />
+      <File name="MANIFEST-*" />
+      <File name="*.ldb" />
+    </Folder>
+  </Folder>
+</Files>
+
+可被证伪的说法是：把世界做成单一数据库或单一 JSON，迁移会更便宜。单一文件可以很好维护。Minecraft 的选择是：按区块随机访问，让「只加载你站着的那几根柱子」在磁盘上也成立。便宜发生在运行时。贵发生在你改了「一格是什么」的那一天——那一天，所有柜子里的所有格子都要重读。
+
+## 区域文件简史
+
+无限若按格写成一个巨大数组，保存会变成重写地球。Infdev / Alpha 已经按区块落盘，可那时一块一个文件：目录按 Base36 切开，机械硬盘和文件系统先被几百万个 inode 打死。Beta 1.3 的答案不是取消区块，是把 32×32 个区块打进一个区域文件。文件名 `r.<rx>.<rz>.mcr` 就是收据。Anvil 改的是区块内部（节、高度 256），区域这一层的信封几乎没换，只是把后缀换成 `.mca`。[^region] [^anvil]
+
+信封故意简陋。前 8 KiB 是目录：1024 个位置项，1024 个时间戳。每一项对应区域内一个区块。位置项的高 24 位是以 4 KiB 扇区计的偏移，低 8 位是占用几个扇区。两项都是 0，表示这块还没生成——磁盘上的「空气柱」可以不占地方，直到生成器第一次把它写成法律。
+
+```java
+static final int SECTOR = 4096;
+
+/** 区域内区块的目录下标：32×32，X 先走。 */
+static int directoryIndex(int chunkX, int chunkZ) {
+  return (chunkX & 31) + (chunkZ & 31) * 32;
+}
+
+record Location(int sectorOffset, int sectorCount) {
+  static Location unpack(int bigEndianU32) {
+    return new Location(bigEndianU32 >>> 8, bigEndianU32 & 0xFF);
+  }
+
+  boolean exists() {
+    return sectorOffset != 0 && sectorCount != 0;
+  }
+
+  long byteOffset() {
+    return (long) sectorOffset * SECTOR;
+  }
+}
+```
+
+读到一个存在的项，后面是 5 字节的区块头：4 字节大端长度 + 1 字节压缩方案，再跟压缩过的 NBT。方案 1 是 gzip，2 是 zlib（实践里几乎总是它），3 是未压缩，4 是 LZ4。Java 1.20.5 起，专用服务器可在 `server.properties` 里把 `region-file-compression` 改成 `lz4`；改了不会重写旧区块，只有新写入的柱子换算法。[^lz4] 长度字段含压缩方案那一字节，不含它自己。解压之后，你拿到的不是网格，是上一章的节、调色板、方块实体和 `DataVersion`。
+
+<Impl title="为什么按 4 KiB 对齐">
+区域文件允许原地更新：新压缩后的区块若仍装得进原来的扇区，不必重写整个 `r.0.0.mca`。装不下，就在文件末尾另开扇区，目录改一个整数。碎片会涨。涨的是文件，不是「整颗地球重写」。扇区计数只有一字节，一块最多 255 个扇区，大约 1 MiB。再大，Java 1.15 起把压缩数据另写到旁边的 `c.<x>.<z>.mcc`，压缩类型字节的最高位表示「在外面」。[^mcc] 这是 2011 年能在机械硬盘上活下来的随机访问，不是 2020 年的列存分析库。对齐是代价单位泄漏到磁盘上的那一刀：和 16×16 同一类决策。简陋的信封在 1 MiB 这里露馅。
+</Impl>
+
+Java 1.16 起以同步方式打开这些文件，减少崩溃后的半截写入。[^sync] 半截写入是存档伦理的反面：引擎死了，文本也死了。dsync 不能消灭所有损坏。它承认：文本比这一帧珍贵。
+
+Bedrock 不走这封信封。子区块是 LevelDB 里的一条记录，键里带着区块坐标、维度和标签。随机访问交给 LSM 树，压缩交给数据库。你得到更像手机的 I/O：许多小记录、一次打开一个 `db/`。你失去的是「用十六进制编辑器打开 `r.0.0.mca`、按偏移跳到那一节」这种能被工具作者口述的信封。转换器必须同时懂两套柜子。懂地形映射，仍不懂准连接。[^store]
+
+```mermaid
+flowchart LR
+  Disk["区域 / LevelDB"] --> NBT["NBT 记录"]
+  NBT --> Ver["DataVersion"]
+  Ver --> Fix["翻译 / DFU"]
+  Fix --> Mem["运行时节与实体"]
+```
+
+## NBT 作为通用层
+
+格子的法律、箱子的库存、玩家的位置、结构模板，共用一种树：Named Binary Tag。节点有类型、有名字、有载荷。不是 JSON。JSON 没有 `1b` 和 `1` 的区别，没有 `int[]`，命令里也没法把「这一格的水位」说成带类型的字面量。NBT 的文本面叫 SNBT，是 Java 命令和数据包的口语。[^nbt]
+
+树很小：字节、短整、整、长整、浮点、双精度、字符串、列表、复合、字节数组、整数组、长数组。复合是字典。列表要求元素同类型——这条约束让「任意 JSON」进不来，也让老存档里空列表的类型字段会写出奇怪的数。设计含义是：存档是带模式的树，不是文档数据库。模式可以演进。演进必须可指。
+
+两端的二进制口径不同。Java 的 NBT 多是大端；Bedrock 的 level 与许多记录走小端，`level.dat` 前面还先有 8 字节头（工具版本 + 后面载荷长度）。[^endian] 同一棵「复合里有一个 int」，两边的字节序可以反过来。工具作者若把 NBT 听成一份代码，会在第一份跨产品线存档上翻车。
+
+```js
+// SNBT：一格法律 + 一只另开账户的箱子（示意）
+{
+  DataVersion: 4189,
+  xPos: 0,
+  zPos: 0,
+  yPos: -4,
+  block_entities: [
+    {
+      id: "minecraft:chest",
+      x: 8,
+      y: 64,
+      z: 8,
+      Items: [
+        { Slot: 0b, id: "minecraft:diamond_sword", count: 1 }
+      ]
+    }
+  ]
+}
+```
+
+数字是示意。真存档里还有节、调色板、高度图。要点是：方块状态走节，箱子内容走 `block_entities` 列表。上一章的两层账户，在磁盘上仍是两层。NBT 不替你合并它们。你若把库存塞进状态，调色板会炸；你若把朝向塞进实体，每一扇门都要交一份对象税。
+
+同一把钻石剑，Java 存档里至少换过三次护照。三次都不是改名。每一次，翻译器都要走进每一个箱子、每一个掉落物、每一个玩家口袋。
+
+```js
+// 扁平化前：数字 ID。Damage 兼作耐久与子类型
+{ id: 276s, Damage: 12s, Count: 1b }
+
+// 1.13–1.20.4：名字 + 非结构化 tag
+{
+  id: "minecraft:diamond_sword",
+  Count: 1b,
+  tag: { Damage: 12 }
+}
+
+// 1.20.5+：结构化 components
+{
+  id: "minecraft:diamond_sword",
+  count: 1,
+  components: {
+    "minecraft:damage": 12,
+    "minecraft:custom_data": { quest: "bridge" }
+  }
+}
+```
+
+扁平化把 `276s` 收成名字；组件化把那团非结构化 `tag` 收成有模式的字段。校验发生在加载时。任意模组乱塞的键，官方给的逃生口是 `minecraft:custom_data`。[^flat] [^comp] 命令从 `/give @s stick{foo:1}` 变成必须声明组件。Bedrock 的同一把剑仍常走 `Name` / `Count` / `Damage`，额外数据另在复合标签里——和 Java 的 `components` 不是同一份 schema。第一次改革的对象是方块 ID。第二次是物品 NBT。两次都让旧命令、旧数据包、旧模组过一遍翻译器。
+
+NBT 当通用层的好处是：区块、玩家、结构、命令、数据包说话用同一套叶子类型。坏处是：全世界的迁移函数都要认识这套叶子。Mojang 把翻译器开源成 DataFixerUpper——按 schema 版本把一棵树改写成另一棵。[^dfu] 库可以抄。抄不走的是：二十年版本号编成的那张修复表，以及表上每一行都可能扫过你箱子里的每一格。
+
+<Note>
+NBT 是序列化形态。运行时仍是对象字段。模组若只往 NBT 里塞私货、不在对象上留字段，世界一读一写，私货会丢。磁盘不是你的堆。
+</Note>
+
+## 世界 / 玩家 / 结构
+
+三份文本不要写成一个「存档」。寿命不同，主人不同，迁移时死法也不同。
+
+**世界**是柱子。`region/` 里的 NBT 带着地形、方块实体、计划刻、结构引用。实体从 1.17 起可以不住在同一份区块复合里，但仍按同一套区域信封切。兴趣点是村民床、下界门这一类「要被系统按格查询」的索引，不是第二套物理。世界文件的主人是这份维度。维度可以没有玩家——空服务器、结构农场、超平坦摄影棚，柱子照样合法。
+
+**玩家**是可移交的那一袋物加上坐标、生成点、能力。服务器把每个人写成 `playerdata/<uuid>.dat`；1.7.6-pre1 起文件名从用户名改成 UUID。改名不再等于丢档；在 Windows 上叫 `CON`、`AUX` 也不再等于无法落盘。[^player] 单机的 `level.dat` 里还有一份 `Player`，加载时可以盖过磁盘上的同名 `.dat`。人几乎透明，强在物上——这句话在物品章是设计。在这里是：物品组件一改，所有玩家文件、所有箱子、所有掉落物一起排队。人的 NBT 不重，人的口袋重。
+
+**结构**是可搬运的世界切片。结构方块、数据包里的模板、`generated/` 下的 `.nbt`，存的是相对坐标上的状态和实体。它不代替存档。它让家的一段可以离开种子，变成另一张图的零件。[《命令、数据包与地图》](/design/commands-datapacks) 作者席在世界里。结构文件是这张席的便携格式。便携的代价是：模板里的 ID 同样要过翻译器；翻译失败，展览会变成未知方块走廊。
+
+```java
+enum SaveOwner {
+  WORLD,   // 柱子：region / entities / poi
+  PLAYER,  // 口袋与坐标：playerdata
+  STRUCTURE // 相对切片：*.nbt 模板
+}
+
+/** 迁移必须按主人分开跑。混成一次「升级存档」，口袋和山会绑死。 */
+record UpgradeJob(SaveOwner owner, int fromVersion, int toVersion) {}
+```
+
+Bedrock 同样有这三种职责，只是物理文件不同：玩家记录在数据库里，结构走自己的模板与附加包，世界仍是子区块键。转换器若只搬柱子，会留下没有口袋的人，或没有人的柱子。商店页写不兼容，有一半是诚实：两套 schema，不是两个皮肤。
+
+<Constraint name="世界必须比引擎活得更久" verdict="地基" chain="居住写进磁盘 → 进程可死 → 翻译代替覆盖">
+赛季清空对关卡游戏是运营。对这份规则是焚城。引擎可以换。地址上的法律必须还能被下一只解释器念出来。
+</Constraint>
+
+## 版本迁移成本
+
+贵，不是因为 NBT 难读。贵，是因为改革的作用域是**已经写下的全部时间**。
+
+扁平化要扫每一格的数字 ID，变成名字加状态。加高要给旧柱子补空气节，再决定要不要在底下接新的深板岩。组件化要扫每一件物品的 `tag`，能识别的收成组件，不能识别的塞进 `custom_data` 或丢掉。DataFixerUpper 的工作方式是：输入一棵带 `DataVersion` 的树，按 schema 阶梯走到当前版本。库公开的构件就叫 `Schema` 和 `DataFix`：前者声明这一级关心哪些类型，后者是类型之间的改写规则。[^dfu] 游戏里的那张表按版本号把规则串成梯子。梯子必须按级走，不能跳——1.12 的数字 ID 不能直接理解 1.21 的组件，中间每一级都可能改过字段名、容器形状、或「这件东西还算不算同一对象」。
+
+```java
+CompoundTag upgrade(CompoundTag nbt, int target, List<DataFix> ladder) {
+  int v = nbt.getInt("DataVersion");
+  for (DataFix fix : between(ladder, v, target)) {
+    nbt = fix.rewrite(nbt); // 可能走进每一个物品、实体、方块实体
+  }
+  nbt.putInt("DataVersion", target);
+  return nbt;
+}
+```
+
+示意不是源码。它要说明的复杂度是：`对象数 × 跨越的级数`，不是「玩家今晚玩了几小时」。一张十年生存服的世界，升级的墙时钟可以按小时计——不是磁盘慢，是翻译器在付已经写下的全部时间。单机暂停菜单里的「优化世界」、专用服务器的 `forceUpgrade` / `recreateRegionFiles`，只是把这笔税改成立刻付清。不点，税摊在每个区块第一次被加载的那一刻，玩家觉得卡；点了，税变成一次几小时的墙时钟。两种都证明：格式改革的成本不在客户端启动，在已经写下的对象。[^upgrade] 模组还不在官方阶梯上：数字号曾经被工业和魔法抢着写，名字冲突从「87 号是谁的」变成「这个命名空间是谁的」。官方翻译成功，你得到原版近似。模组翻译失败，你得到未知方块——机器还在坐标上，语义断了。[《作为文化遗产的 Minecraft》](/history/heritage)
+
+<Alternative title="若每次大更新都宣布旧档作废">
+客户端会轻，测试会少，schema 可以每年推倒。你得到更好看的内部。你失去的是十年种子、十年漏斗、十年「三高五宽」还站在原位的墙。居住会塌成通行证。通行证可以很赚钱。赚钱的对象，不再是这本书写的那个。
+</Alternative>
+
+Java 与 Bedrock 之间没有官方的无损翻译。有的是社区转换器，做的是近似：方块能对上的对上，红石因果对不上的丢掉，模组方块实体直接消失。近似证明需求真实——人们想把记忆搬过河。近似也证明产品拒绝共用一份文本。伦理在单条产品线内部更硬：Java 读 Java 的旧档，Bedrock 读 Bedrock 的旧档，必须尽量翻译而不是覆盖。跨过产品线，伦理变成政治：谁有义务维护那座桥。官方的答案写在商店页上。
+
+卷四会问兼容策略：仿真层还是新语义，协议适配还是世界转换器。本章只给实现者一条能被证伪的操作句：若你的引擎加了一条新法律，却不能指出旧树里哪一种节点要改、改完 `DataVersion` 怎么走，你就还没有格式，只有这一次运行时的堆。堆不是世界。
+
+<Callout type="warning" title="DataVersion 不是装饰">
+每一份 NBT 都要能回答「我是哪一种 schema」。没有版本号的树，翻译器只能猜。猜错，墙会变成另一种方块，口袋会变成空气。版本号是伦理的句柄。
+</Callout>
+
+<Memoir title="Must be converted!">
+1.2 把 McRegion 收成 Anvil 时，选世界的屏幕会先喊一句。喊的不是新丛林。喊的是：你的柱子要换内部布局，上面会多出一截空气。点下去，才是翻译。翻译完，旧 `.mcr` 还躺在旁边。[^anvil] 官方不敢立刻烧掉上一份文本。不敢，是因为文本比这一次更新珍贵。
+</Memoir>
+
+所以开发者不能只抄「我们也有存档」。要抄的是：随机访问的代价单位、带类型的树、跟在每棵树上的版本、以及改革时按对象计数的翻译器。抄成「JSON 加 gzip」可以开工。开工之后第一次改物品 schema，你会看见为什么他们愿意养一个专门的 fixer 库。库能抄。二十年阶梯、两套柜子、模组抢过的号，抄不走。
+
+下一章把这些柱子从磁盘里叫醒：噪声、阶段、多线程。种子相同却有时不同——确定性的边界，从格式交到管线。
+
+## 这一章留下什么
+
+- **爱好者**：你的家不在启动器里。它在一堆叫 `.mca` 或 `db/` 的文件里。版本更新若把它们当成缓存清掉，清掉的是你已经住过的时间，不是旧贴图。
+- **开发者**：能抄走的是四件套——按区块随机访问的区域（或等价 LSM）、带类型的 NBT/SNBT、每棵树上的 `DataVersion`、按 schema 阶梯走的翻译器。物品从 `tag` 收到 `components`，方块从数字 ID 收到名字，都是同一类账单：作用域等于已写下的全部对象。抄不走的是 Java 的 Anvil 信封对 Bedrock 的 LevelDB、二十年 fixer 表、以及模组号曾经被抢过这件事。你若把存档当关卡指针，会加入每年清空的那一页。你若读不起旧树，就是宣布玩家的过去作废。
+
+[^store]: Xbox / Microsoft Store 商品页注明：「Worlds/saves from Minecraft: Java Edition are not compatible with Minecraft: Bedrock Edition。」见 <https://www.xbox.com/en-us/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj>。
+
+[^entities]: Java Edition 1.17（快照 20w45a）把已完成区块的实体从地形区块 NBT 里拆到维度目录下的 `entities/`，仍用区域文件信封。见 [Java Edition 1.17](https://minecraft.wiki/w/Java_Edition_1.17)、[Entity format](https://minecraft.wiki/w/Entity_format)。
+
+[^be-level]: Bedrock 世界主体在 `db/` 的 LevelDB 里；`level.dat` 为未压缩小端 NBT，前 8 字节是小端文件版本与载荷长度。见 [Bedrock Edition level format](https://minecraft.wiki/w/Bedrock_Edition_level_format)。
+
+[^region]: Infdev / Alpha 按区块各写一个文件；Java Edition Beta 1.3（2011 年 2 月 22 日）引入 Region 格式（`.mcr`），每文件 32×32 区块，扇区 4 KiB，目录下标为 `(x & 31) + (z & 31) * 32`。Anvil 沿用该信封，只改区块内部并把后缀改为 `.mca`。见 [Region file format](https://minecraft.wiki/w/Region_file_format)、[Anvil file format](https://minecraft.wiki/w/Anvil_file_format)。
+
+[^anvil]: Java Edition 1.2.1（2012 年 3 月 1 日）引入 Anvil：可建造高度 128→256，区块改用节；转换时保留旧 `.mcr` 与 `level.dat_mcr`。见 [Java Edition 1.2.1](https://minecraft.wiki/w/Java_Edition_1.2.1)、[Anvil file format](https://minecraft.wiki/w/Anvil_file_format)。
+
+[^lz4]: Java Edition 1.20.5 为专用服务器增加 `region-file-compression`（`deflate` / `lz4` / `none`）；更改不会自动重写旧区块。见 Mojang，《Minecraft Java Edition 1.20.5》，<https://www.minecraft.net/en-us/article/minecraft-java-edition-1-20-5>。
+
+[^sync]: Java Edition 1.16（快照 20w14a）起以同步方式打开区域文件，降低崩溃后损坏。见 [Anvil file format](https://minecraft.wiki/w/Anvil_file_format) 历史表。
+
+[^nbt]: NBT 是带名字与类型的二进制树；文本面为 SNBT。见 [NBT format](https://minecraft.wiki/w/NBT_format)。
+
+[^endian]: Java 版 NBT 为大端；Bedrock 的 `level.dat` 与多数世界记录为小端 NBT。见 [NBT format](https://minecraft.wiki/w/NBT_format)、[Bedrock Edition level format](https://minecraft.wiki/w/Bedrock_Edition_level_format)。
+
+[^flat]: Java Edition 1.13（Update Aquatic，2018 年 7 月 18 日）扁平化：去掉多数数字 ID，改为命名空间标识符与方块状态。钻石剑的数字 ID 276 见扁平化前数据值表。见 Mojang，《Update Aquatic is out on Java!》，<https://www.minecraft.net/en-us/article/update-aquatic-out-java>；[Java Edition Flattening](https://minecraft.wiki/w/Java_Edition_Flattening)。
+
+[^comp]: Java Edition 1.20.5 用结构化 `components` 替换物品上的非结构化 `tag`；自定义数据进入 `minecraft:custom_data`。见 Mojang，《Minecraft Java Edition 1.20.5》，<https://www.minecraft.net/en-us/article/minecraft-java-edition-1-20-5>；[Data component format](https://minecraft.wiki/w/Data_component_format)。
+
+[^dfu]: Mojang 开源库 DataFixerUpper：用 `Schema` 与 `DataFix` 在版本之间改写游戏数据。README 写明其用途是转换 Java 版存档。见 <https://github.com/Mojang/DataFixerUpper>。
+
+[^player]: Java Edition 1.7.6-pre1 起玩家文件按 UUID 命名，不再用用户名；单机 `level.dat` 的 `Player` 可覆盖同名 `.dat`。用户名时代在 Windows 上会撞上 `CON`、`AUX` 等保留名。见 [player.dat format](https://minecraft.wiki/w/Player.dat_format)、[Java Edition level format](https://minecraft.wiki/w/Java_Edition_level_format)。
+
+[^mcc]: 区域目录项的扇区计数为 1 字节，一块至多约 1 MiB；压缩类型加 128 表示数据在外部文件 `c.<x>.<z>.mcc`。见 [Region file format](https://minecraft.wiki/w/Region_file_format)。
+
+[^upgrade]: Java 专用服务器可用 `--forceUpgrade` 在启动时升级全部区块；1.20.5 另加 `recreateRegionFiles`，会重写区域文件以整理碎片并可按新压缩算法重压。见 Mojang，《Minecraft Java Edition 1.20.5》，<https://www.minecraft.net/en-us/article/minecraft-java-edition-1-20-5>。
