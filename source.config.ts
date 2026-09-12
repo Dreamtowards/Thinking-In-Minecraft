@@ -36,6 +36,10 @@ export default defineConfig({
 
     return {
       remarkPlugins: [remarkMath, remarkMdxMermaid],
+      remarkRehypeOptions: {
+        footnoteLabel: '注释',
+        footnoteBackLabel: '返回正文',
+      },
       rehypePlugins: (v) => [
         rehypeStyleToObject,
         [rehypeKatex, { throwOnError: false, strict: false }],
