@@ -1018,8 +1018,8 @@
                 "民间官方实现"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/tech-debt",
+              "written": true
             },
             {
               "id": "impl/18",
@@ -1037,8 +1037,8 @@
               "tags": [
                 "结语"
               ],
-              "href": null,
-              "written": false
+              "href": "/impl/modifiable-engine",
+              "written": true
             }
           ]
         }
