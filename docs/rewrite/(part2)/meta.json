@@ -1,4 +1,4 @@
 {
-  "title": "第二部 · 架构提案",
+  "title": "架构提案",
   "pages": ["world-rep", "scheduler", "scripting", "network-perms", "render-tools"]
 }
