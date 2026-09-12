@@ -43,8 +43,14 @@ export default function HomePage() {
         <p className="text-lg text-fd-muted-foreground mb-8">{appDescription}</p>
         <div className="flex flex-wrap items-center justify-center gap-3">
           <Link
-            href="/prelude"
+            href="/toc"
             className="inline-flex items-center justify-center rounded-lg bg-fd-primary px-6 py-3 text-sm font-medium text-fd-primary-foreground hover:opacity-90 transition-opacity"
+          >
+            全书目录
+          </Link>
+          <Link
+            href="/prelude"
+            className="inline-flex items-center justify-center rounded-lg border px-6 py-3 text-sm font-medium hover:bg-fd-accent transition-colors"
           >
             序
           </Link>

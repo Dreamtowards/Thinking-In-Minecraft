@@ -2,6 +2,7 @@ import defaultMdxComponents from 'fumadocs-ui/mdx';
 import type { MDXComponents } from 'mdx/types';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 import { Alternative, Constraint, Impl, Memoir, Note } from '@/components/mdx/blocks';
+import { BookToc } from '@/components/book-toc';
 import { Mermaid } from '@/components/mdx/mermaid';
 
 function nodeText(node: ReactNode): string {
@@ -76,6 +77,7 @@ export function getMDXComponents(components?: MDXComponents) {
     Constraint,
     Memoir,
     Alternative,
+    BookToc,
     ...components,
   };
 
