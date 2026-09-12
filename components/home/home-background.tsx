@@ -503,6 +503,229 @@ const QUASAR2 = twigl(`
   o = tanh(o / 2e3);
 `);
 
+// Port — @XorDev https://x.com/XorDev/status/2021248551678849313
+const PORT = twigl(`
+  vec3 w = vec3(0.0);
+  vec3 p = vec3(0.0);
+  float z = 0.0;
+  float d = 0.1;
+  float f;
+  for (float i = 0.0; i++ < 1e2; o += 0.03 / abs(mix(p, w, 0.1).y + vec4(0, 1, 2, 3) / 1e2) * d, z += d = 0.3 * (length(cos(p.xz)) - 0.4)) {
+    p = z * (FC.rgb * 2.0 - r.xyy) / r.y + 1.0;
+    w = p;
+    for (f = 0.0; f++ < 5.0; )
+      w += sin(w.zxy * f - 9.0 * exp(-d / 0.1) + t) / f;
+  }
+  o = tanh(o);
+`);
+
+// Who? — @XorDev https://x.com/XorDev/status/1915755845473706361
+const WHO = twigl(`
+  float z = 0.0;
+  float d = 0.0;
+  vec3 c = vec3(1, 2, 3);
+  for (float i = 0.0; i++ < 5e1; ) {
+    vec3 p = z * normalize(FC.rgb * 2.0 - r.xyy);
+    vec3 v = p;
+    v.z += exp(3.0 - sin(t));
+    p.xy *= mat2(cos(p.z * 0.3 + vec4(0, 33, 11, 0)));
+    for (d = 1.0; d < 9.0; d /= 0.4)
+      p += cos((p - t * c * c).yzx * d) / d;
+    v *= rotate3D(t, c);
+    vec3 rotated = v;
+    v = sin(round(rotated / 0.3));
+    v = abs(rotated) - c.xxy + 0.3 * abs(v.yxx * v.zzy);
+    z += d = 0.01 + min(abs(length(p.xy) - 6.0) * 0.6, abs(max(v, max(v.y, v.z)).x) - 0.01 / length(v)) / 4.0;
+    o.rgb += exp(c * z * 0.1) / d;
+  }
+  o /= o + 3e3;
+`);
+
+// CUBE — @XorDev https://x.com/XorDev/status/1920505484206895334
+const CUBE = twigl(`
+  float z = 0.0;
+  float d = 0.0;
+  float s = 0.0;
+  for (float i = 0.0; i++ < 1e2; ) {
+    vec3 p = z * normalize(FC.rgb * 2.0 - r.xyy);
+    p.z += 2.0;
+    p.zx *= mat2(cos(0.5 * t + vec4(0, 11, 33, 0)));
+    vec3 v = p;
+    for (d = 1.0; d < i; d += d)
+      p += sin(p.yzx * d) / d;
+    z += d = 0.2 * max(0.02 + abs(s = cos(p.y * 3.0)) / 7.0, length(v - clamp(v, -1.0, 1.0)));
+    o += (cos(p.y / 0.5 + s + s - vec4(9, 4, 5, 0)) + 1.5) / d;
+  }
+  o = tanh(o * o / 2e8);
+`);
+
+// Roadway — @XorDev https://x.com/XorDev/status/1936894143029981434
+const ROADWAY = twigl(`
+  vec2 p = (FC.xy * 2.0 - r) / r.y / 0.1;
+  o = tanh(0.4 / abs(min(p.y, p.y / 0.3) / cos(p.x + cos(p.x * 0.6 - t) + vec4(0, 0.3, 0.6, 1)) / sin(p.x * 0.4 - t)));
+`);
+
+// Digital Angel — @XorDev https://x.com/XorDev/status/1915101233989234999
+const DIGITALANGEL = twigl(`
+  float z = 0.0;
+  float d = 0.0;
+  float j;
+  for (float i = 0.0; i++ < 5e1; o += (cos(z + vec4(0, 1, 2, 0)) + 1.1) / d) {
+    vec3 p = z * normalize(FC.rgb * 2.0 - r.xyy);
+    p.z += 6.0;
+    p.xz *= mat2(cos(p.y * 0.5 + vec4(0, 33, 11, 0)));
+    for (j = 1.0; j < 9.0; j /= 0.8)
+      p += cos(ceil(p.yzx - t * vec3(3, 1, 0)) * j) / j;
+    z += d = 0.01 + abs(length(p.xz) - 0.5) / 7.0;
+  }
+  o = tanh(o / 1e3);
+`);
+
+// Paradise — @XorDev https://x.com/XorDev/status/1957906463793328462
+const PARADISE = twigl(`
+  float z = 0.0;
+  float f = 0.0;
+  vec3 c = vec3(0.0);
+  vec3 p = vec3(0.0);
+  for (float i = 0.0; i++ < 1e2; p += c, z += f = length(cos(p / 6.0 + z) * 0.1 + sin(p.y / 9.0) * 0.4), o += (cos(c.y / z / 0.6 + vec4(6, 1, 2, 0)) + 1.1) * f * f) {
+    p = z * (FC.rgb / 0.4 - r.xyy) / r.y;
+    p.y = abs(p.y + 7.0);
+    c = p;
+    p.x *= f = 0.3;
+    for (; f++ < 6.0; p += cos(p.yzx * f - t) / f);
+  }
+  o = tanh(o / 4e1 / length(c.xy / p.z + 0.3));
+`);
+
+// IGNITE — @XorDev https://x.com/XorDev/status/1953128872435745272
+const IGNITE = twigl(`
+  float z = 0.0;
+  float d = 0.0;
+  float f = 0.0;
+  for (float i = 0.0; i++ < 1e2; o += (3.0 + vec4(9, 4, f, 0)) * d / z / f) {
+    vec3 p = z * normalize(FC.rgb * 2.0 - r.xyy);
+    p.z += 7.0;
+    vec3 c = p;
+    for (f = 1.0; f++ < 9.0; )
+      c += sin(c.zxy * f + f + t) / f;
+    f = 0.1 + length(c) + c.y;
+    z += d = min(f, min(length(p.xz) + tanh(0.6 * p.y - 2.0), length(max(c = sin(p * 5.0), c.yzx) - 1.2 + p.x / 8.0))) / 6.0;
+  }
+  o = tanh(o * o / 2e2);
+`);
+
+// Lens — @XorDev https://x.com/XorDev/status/1936080043681120406
+const LENS = twigl(`
+  vec2 p = (FC.xy * 2.0 - r) / r.y;
+  float l = 0.8 - length(p);
+  o = tanh((3.0 + sin((p.x + p.y) * max(l / 0.1, 1.0 + l / 0.3) + t + vec4(0, 1, 2, 0))) * 0.2 * (0.1 / max(l, -l / 0.2) + 0.1 / length(p * l - 0.1)));
+  o *= o;
+`);
+
+// Depth — @XorDev https://x.com/XorDev/status/1983553936159314148
+const DEPTH = twigl(`
+  vec3 p;
+  vec3 v = vec3(1, 2, 1);
+  float d = 0.0;
+  float z = 0.0;
+  for (float i = 0.0; i++ < 4e1; o += (cos(i / 4.0 + vec4(2, 1, 6, 0)) + 1.0) / d / d) {
+    p = z * normalize(FC.rgb * 2.0 - r.xyy);
+    d = abs(z - 3.0 + cos(t) / 0.7) / 2e1;
+    z += d = 0.6 * max(d, length(abs(fract(p / v) - 0.5) * v - 0.1) - d);
+  }
+  o = tanh(o / 3e4);
+`);
+
+// Spinner — @XorDev https://x.com/XorDev/status/1942746323440062613
+const SPINNER = twigl(`
+  float z = 0.0;
+  float d = 0.0;
+  float s = 0.0;
+  for (float i = 0.0; i++ < 1e2; o += (cos(i * 0.4 + vec4(0, 1, 2, 0)) + 1.0) / d) {
+    vec3 p = z * normalize(FC.rgb * 2.0 - r.xyy);
+    vec3 a = normalize(cos(vec3(0, 1, 4) + t - 0.4 * s - i / 1e2));
+    p.z += 9.0;
+    a = abs(a * dot(a, p) - cross(a, p));
+    s = length(a);
+    z += d = 0.1 * (abs(sin(s * 4.0 - t)) + a.y);
+  }
+  o = tanh(o / 1e3);
+`);
+
+// Facility — @XorDev https://x.com/XorDev/status/1934380431173947533
+const FACILITY = twigl(`
+  vec3 p;
+  vec3 q;
+  float z = 0.0;
+  float d = 0.0;
+  float i;
+  for (float l = 0.0; l++ < 3e1; z += d, o += 0.1 * pow(d * d * exp(p.yyyy), vec4(0.7, 0.6, 0.5, 1))) {
+    p = z * normalize(FC.rgb * 2.0 - r.xyy);
+    p.z -= t;
+    p += 1.0;
+    q = p;
+    d = -9.0;
+    for (i = 4.0; i > 0.01; i *= 0.3) {
+      q = i * 0.7 - abs(mod(q + i, i + i) - i);
+      d = max(d, min(min(q, q.y).x, q.z)) / (1.0 + z / 3e1);
+      q.zy *= rotate2D(2.0);
+    }
+  }
+  o = tanh(o * o);
+`);
+
+// Vortex — @XorDev https://x.com/XorDev/status/1930594981963505793
+const VORTEX = twigl(`
+  float z = fract(dot(FC, sin(FC)));
+  float d = 0.0;
+  for (float i = 0.0; i++ < 1e2; o += (sin(z - t + vec4(6, 2, 4, 0)) + 1.5) / d) {
+    vec3 p = z * normalize(FC.rgb * 2.0 - r.xyy);
+    p.z += 6.0;
+    for (d = 1.0; d < 9.0; d /= 0.8)
+      p += cos(p.yzx * d - t) / d;
+    z += d = 0.002 + abs(length(p) - 0.5) / 4e1;
+  }
+  o = tanh(o / 7e3);
+`);
+
+// Digital Vortex — @XorDev https://x.com/XorDev/status/1930633822715990114
+const DIGITALVORTEX = twigl(`
+  float z = fract(dot(FC, sin(FC)));
+  float d = 0.0;
+  for (float i = 0.0; i++ < 1e2; o += (sin(z - t + vec4(6, 2, 4, 0)) + 1.5) / d) {
+    vec3 p = z * normalize(FC.rgb * 2.0 - r.xyy);
+    p.z += 6.0;
+    for (d = 1.0; d < 9.0; d /= 0.8)
+      p += cos(ceil(p.yzx * d - t)) / d;
+    z += d = 0.002 + abs(length(p) - 0.5) / 4e1;
+  }
+  o = tanh(o / 7e3);
+`);
+
+// Bits 2 — @XorDev https://x.com/XorDev/status/1930600792899125680
+const BITS2 = twigl(`
+  float z = 0.0;
+  float d = 0.0;
+  for (float i = 0.0; i++ < 1e2; ) {
+    vec3 p = z * normalize(FC.rgb * 2.0 - r.xyy);
+    p.y += t;
+    for (d = 0.6; d < 9.0; d /= 0.7)
+      p += cos(round(p.zxy * d) - 0.5 * t) / d;
+    z += d = 0.002 + abs(abs(p.z + 8.0) - 0.5) / 4e1;
+    o += (sin(z + p.y + vec4(0, 1, 3, 0)) + 1.5) / d;
+  }
+  o = tanh(o / 9e3);
+`);
+
+// V2 — @XorDev https://x.com/XorDev/status/1880357157289501093
+const V2 = twigl(`
+  vec2 p = (FC.xy - r * 0.5) / r.y * mat2(8, -6, 6, 8);
+  for (float i = 0.0; i < 50.0; o += (cos(sin(i) * vec4(1, 2, 3, 0)) + 1.0) * exp(sin(i + i * t * 0.1)) / length(max(p, p * vec2((3.0 + snoise2D(p + vec2(t / 0.1, i))) * 0.02, 0.5)))) {
+    p += cos(++i * i + t * 0.2 + p.x * 0.02 + i * vec2(11, 9)) * 2.0;
+  }
+  o = tanh(0.01 * p.y * vec4(0, 1, 2, 3) + o * o / 1e4);
+`);
+
 export const BG_EFFECTS = [
   { id: 'sunset', label: 'Sunset', credit: 'https://www.shadertoy.com/view/Wf3SWn' },
   { id: 'orb', label: 'Orb', credit: 'https://x.com/XorDev/status/1953620412648014334' },
@@ -527,6 +750,21 @@ export const BG_EFFECTS = [
   { id: 'lapse', label: 'Lapse', credit: 'https://x.com/XorDev/status/1975230424982183956' },
   { id: 'launch', label: 'LAUNCH', credit: 'https://x.com/XorDev/status/1950699117367189854' },
   { id: 'quasar2', label: 'Quasar 2', credit: 'https://x.com/XorDev/status/1968828619435782446' },
+  { id: 'port', label: 'Port', credit: 'https://x.com/XorDev/status/2021248551678849313' },
+  { id: 'who', label: 'Who?', credit: 'https://x.com/XorDev/status/1915755845473706361' },
+  { id: 'cube', label: 'CUBE', credit: 'https://x.com/XorDev/status/1920505484206895334' },
+  { id: 'roadway', label: 'Roadway', credit: 'https://x.com/XorDev/status/1936894143029981434' },
+  { id: 'digitalangel', label: 'Digital Angel', credit: 'https://x.com/XorDev/status/1915101233989234999' },
+  { id: 'paradise', label: 'Paradise', credit: 'https://x.com/XorDev/status/1957906463793328462' },
+  { id: 'ignite', label: 'IGNITE', credit: 'https://x.com/XorDev/status/1953128872435745272' },
+  { id: 'lens', label: 'Lens', credit: 'https://x.com/XorDev/status/1936080043681120406' },
+  { id: 'depth', label: 'Depth', credit: 'https://x.com/XorDev/status/1983553936159314148' },
+  { id: 'spinner', label: 'Spinner', credit: 'https://x.com/XorDev/status/1942746323440062613' },
+  { id: 'facility', label: 'Facility', credit: 'https://x.com/XorDev/status/1934380431173947533' },
+  { id: 'vortex', label: 'Vortex', credit: 'https://x.com/XorDev/status/1930594981963505793' },
+  { id: 'digitalvortex', label: 'Digital Vortex', credit: 'https://x.com/XorDev/status/1930633822715990114' },
+  { id: 'bits2', label: 'Bits 2', credit: 'https://x.com/XorDev/status/1930600792899125680' },
+  { id: 'v2', label: 'V2', credit: 'https://x.com/XorDev/status/1880357157289501093' },
 ] as const;
 
 export type BgEffectId = (typeof BG_EFFECTS)[number]['id'];
@@ -555,6 +793,21 @@ const FRAGS: Record<BgEffectId, string> = {
   lapse: LAPSE,
   launch: LAUNCH,
   quasar2: QUASAR2,
+  port: PORT,
+  who: WHO,
+  cube: CUBE,
+  roadway: ROADWAY,
+  digitalangel: DIGITALANGEL,
+  paradise: PARADISE,
+  ignite: IGNITE,
+  lens: LENS,
+  depth: DEPTH,
+  spinner: SPINNER,
+  facility: FACILITY,
+  vortex: VORTEX,
+  digitalvortex: DIGITALVORTEX,
+  bits2: BITS2,
+  v2: V2,
 };
 
 const FEEDBACK = new Set<BgEffectId>(['frames']);
