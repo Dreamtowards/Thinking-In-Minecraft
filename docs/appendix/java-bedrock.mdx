@@ -1,0 +1,42 @@
+---
+title: Java / Bedrock 对照表
+description: 世界格式、红石、战斗、模组与附加包、市场、平台能力。逐项列表。解释在正编，不在本表展开。
+---
+
+> **本章命题**：对照只列分叉。删掉表里的「Java」或「Bedrock」，句子对另一边仍成立的，本表不单列。要因果，去卷一第 8 章或卷三第 15 章。
+
+## 问题
+
+收银台捆过。世界没有捆。查「两边差在哪」时，最容易把本表读成卷三缩写，或读成「哪边才是正作」。两边都是产品。本表只回答：同一项合同，两边各写了什么。
+
+每行链到史实或实现。史实：[《两条产品线：Java 与 Bedrock》](/history/java-bedrock)。实现：[《Bedrock 作为另一次实现》](/impl/bedrock)。机制细节仍在各专题章，本表不重写。
+
+## 逐项表
+
+| 项 | Java | Bedrock | 正编 |
+| --- | --- | --- | --- |
+| 世界格式 | Anvil 区域文件（`.mca`）+ NBT；大端为主 | LevelDB（`db/`）+ 小端 NBT；`level.dat` 另有 8 字节头 | [史实](/history/java-bedrock) [实现](/impl/bedrock) |
+| 存档互通 | 与 Bedrock 互不兼容（商店页写明） | 同上；PC 捆绑只焊收银台 | [史实](/history/java-bedrock) [实现](/impl/bedrock) |
+| 网络协议 | TCP 包；1.7 起 Netty；协议号当 ABI | 基于 RakNet 的 UDP；不是 wiki.vg 那张表的译本 | [史实](/history/java-bedrock) [实现](/impl/bedrock) |
+| 单人权威 | 1.3.1 起内置服务端；暂停是礼貌 | 从第一天更像主机权威；好友列表近默认入口 | [史实](/history/java-bedrock) [实现](/impl/bedrock) |
+| 红石指令表 | 准连接等词活在这一边；MC-108 标 WAI | 无准连接；红石可与主循环分班 | [史实](/history/java-bedrock) [实现](/impl/bedrock) |
+| 活塞与方块实体 | 通常推不走带方块实体的方块 | 可以推走 | [实现](/impl/bedrock) |
+| 近战 | 1.9 起攻击冷却、盾、双持 | 无同一根冷却条；长期分叉 | [史实](/history/java-bedrock) [实现](/impl/bedrock) |
+| 扩展：内容 | 数据包、资源包；停在新交互之前 | 行为包、资源包、脚本 API（沙盒 JS） | [史实](/history/java-bedrock) [实现](/impl/bedrock) |
+| 扩展：系统 | Forge / Fabric / Mixin：可加动词 | 审核墙内；切不进活塞检查那种切口 | [史实](/history/java-bedrock) [实现](/impl/bedrock) |
+| 服务器立法 | 任意 IP；插件河；主机可填地址 | 游戏内浏览器、合作服、常要企业与账号 | [史实](/history/java-bedrock) [实现](/impl/bedrock) |
+| 内容货架 | 无同等官方模组商城；EULA 限制出售模组 | Marketplace：可审核、可定价、跟账号走 | [史实](/history/java-bedrock) [实现](/impl/bedrock) |
+| 消费名 | 2017 年后称 Java Edition | 可联机设备上占用光秃秃的「Minecraft」 | [史实](/history/java-bedrock) |
+| 平台 | Windows / macOS / Linux | 手机、主机、Windows 商店端等 | [史实](/history/java-bedrock) [实现](/impl/bedrock) |
+| 账号 | 已迁微软账号；聊天签名与举报在 1.19.1 | Xbox 账号、家长控制更早是默认 | [史实](/history/java-bedrock) |
+| 教育 | 旧 MinecraftEdu 是 Java 模组 | Education 建在 Bedrock；旧课室世界迁不入 | [史实](/history/java-bedrock) |
+| 渲染栈 | LWJGL / OpenGL 一路；民间 Sodium 等 | 自研栈（含 RenderDragon）；不是同一栋楼 | [实现](/impl/bedrock) |
+
+<Note>
+「Parity」对齐的常常是内容清单（同一只生物、同一张木头），不是未定义行为宪法。灯不亮时，先看本表「红石指令表」再看跑分。
+</Note>
+
+## 这一章留下什么
+
+- **爱好者**：买一份仍然不是全部。能联机的那条线占用了本名；模组河、准连接、十年存档各在各的护照上。
+- **开发者**：能抄走的是分叉清单：柜子、协议、红石词、战斗手、扩展面、货架。抄不走的是两套测试集。本表不是合并规格。合并没有共同的怪癖宪法。

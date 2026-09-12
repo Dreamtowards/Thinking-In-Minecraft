@@ -1290,8 +1290,8 @@
                 "三轨表——产品 / 社区 / 商业。只记事件，不议论。"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/appendix/timeline",
+              "written": true
             },
             {
               "id": "appendix/people",
@@ -1303,8 +1303,8 @@
                 "每人 / 组织 3–6 行；链回正编。"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/appendix/people",
+              "written": true
             },
             {
               "id": "appendix/java-bedrock",
@@ -1316,8 +1316,8 @@
                 "逐项表；每行链到 `history/08` 或 `impl/15`。"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/appendix/java-bedrock",
+              "written": true
             },
             {
               "id": "appendix/glossary",
@@ -1329,8 +1329,8 @@
                 "每词 40–80 字。禁止在此展开论证。"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/appendix/glossary",
+              "written": true
             },
             {
               "id": "appendix/references",
@@ -1342,8 +1342,8 @@
                 "只收录正编用过或推荐的源。"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/appendix/references",
+              "written": true
             },
             {
               "id": "appendix/exercises",
@@ -1355,8 +1355,8 @@
                 "每题写目标、约束、对应哪一章、何为通过。不给标准实现。"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/appendix/exercises",
+              "written": true
             }
           ]
         }
