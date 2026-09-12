@@ -746,7 +746,8 @@ const VECTORS = twigl(`
 
 // Voxel AO — @XorDev https://x.com/XorDev/status/1787594538514632849
 const VOXELAO = twigl(`
-  #define M (dot(cos(v.zxy * 0.1), sin(v * FC.xyz)) - v.y * 0.1)
+  #define F4 0.309016994374947451
+  #define M (dot(cos(v.zxy * 0.1), sin(v * F4)) - v.y * 0.1)
   vec3 R = normalize(r.x * 0.51 - FC.xyz);
   vec3 d = sign(R);
   vec3 p = vec3(cos(r + t) - 2e1, t / 0.1);
@@ -903,6 +904,58 @@ const ATC = twigl(`
   o = tanh(0.2 * o);
 `);
 
+// Orb 2 — @XorDev https://x.com/XorDev/status/1920508035954249883
+const ORB2 = twigl(`
+  float z = 0.0;
+  float d = 0.0;
+  float s = 0.0;
+  for (float i = 0.0; i++ < 1e2; ) {
+    vec3 v;
+    vec3 p = z * normalize(FC.rgb * 2.0 - r.xyy);
+    p.z += 2.0;
+    p.zx *= mat2(cos(p.y + t + vec4(0, 11, 33, 0)));
+    v = p;
+    for (d = 1.0; d < i; d += d)
+      p += sin(p.yzx * d) / d;
+    z += d = 0.2 * max(0.03 + abs(s = cos(3.0 * p.y)) * 0.1, length(v) - 1.0);
+    o += (cos(s / 0.4 + p.y + vec4(6, 1, 3, 0)) + 1.5) / d / z;
+  }
+  o = tanh(o / 1e4);
+`);
+
+// Accelerator — @XorDev https://x.com/XorDev/status/1970220265360765203
+const ACCELERATOR = twigl(`
+  float z = 0.0;
+  float d = 0.0;
+  float s = 0.0;
+  for (float i = 0.0; i++ < 8e1; o += vec4(s, 2, z, 1) / s / d) {
+    vec3 p = z * normalize(FC.rgb * 2.0 - r.xyy);
+    vec3 a = vec3(0.0);
+    p.z += 9.0;
+    a += 0.57;
+    a = dot(a, p) * a * cross(a, p);
+    s = sqrt(length(a.xz - a.y - 0.8));
+    for (d = 2.0; d++ < 9.0; )
+      a += sin(round(a * d) - t).yzx / d;
+    z += d = length(sin(a / 0.1)) * s / 2e1;
+  }
+  o = tanh(o / 4e3);
+`);
+
+// Lily — @XorDev https://x.com/XorDev/status/1992664828411007418
+const LILY = twigl(`
+  float z = 0.0;
+  float d = 0.0;
+  for (float i = 0.0; i++ < 6e1; o += vec4(z, 9, 1, 1) / d / d) {
+    vec3 p = round(z * normalize(FC.rgb * 2.0 - r.xyy) / 0.1) * 0.1;
+    p.z -= 9.0;
+    for (d = 0.0; d++ < 9.0; )
+      p += 0.2 * sin(p * d - t + z).yzx;
+    z += d = length(cos(p) - 1.0) / 20.0;
+  }
+  o = tanh(o / 3e5);
+`);
+
 export const BG_EFFECTS = [
   { id: 'sunset', label: 'Sunset', credit: 'https://www.shadertoy.com/view/Wf3SWn' },
   { id: 'orb', label: 'Orb', credit: 'https://x.com/XorDev/status/1953620412648014334' },
@@ -955,6 +1008,9 @@ export const BG_EFFECTS = [
   { id: 'horizon', label: 'Horizon', credit: 'https://x.com/XorDev/status/1956752377849037274' },
   { id: 'reef', label: 'Reef', credit: 'https://x.com/XorDev/status/2021258388038943162' },
   { id: 'atc', label: 'ATC', credit: 'https://x.com/XorDev/status/1951031020909895817' },
+  { id: 'orb2', label: 'Orb 2', credit: 'https://x.com/XorDev/status/1920508035954249883' },
+  { id: 'accelerator', label: 'Accelerator', credit: 'https://x.com/XorDev/status/1970220265360765203' },
+  { id: 'lily', label: 'Lily', credit: 'https://x.com/XorDev/status/1992664828411007418' },
 ] as const;
 
 export type BgEffectId = (typeof BG_EFFECTS)[number]['id'];
@@ -1011,6 +1067,9 @@ const FRAGS: Record<BgEffectId, string> = {
   horizon: HORIZON,
   reef: REEF,
   atc: ATC,
+  orb2: ORB2,
+  accelerator: ACCELERATOR,
+  lily: LILY,
 };
 
 const FEEDBACK = new Set<BgEffectId>(['frames']);
