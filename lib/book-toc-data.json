@@ -378,8 +378,8 @@
               "tags": [
                 "先写"
               ],
-              "href": null,
-              "written": false
+              "href": "/design/voxel-primitive",
+              "written": true
             },
             {
               "id": "design/02",
