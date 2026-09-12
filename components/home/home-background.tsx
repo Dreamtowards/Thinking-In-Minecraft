@@ -218,13 +218,13 @@ const DISPERSION = twigl(`
 `);
 
 export const BG_EFFECTS = [
-  { id: 'sunset', label: 'Sunset' },
-  { id: 'orb', label: 'Orb' },
-  { id: 'cyclone', label: 'Cyclone' },
-  { id: 'heavenly', label: 'Heavenly' },
-  { id: 'led', label: 'LED' },
-  { id: 'topology', label: 'Topology' },
-  { id: 'dispersion', label: 'Dispersion' },
+  { id: 'sunset', label: 'Sunset', credit: 'https://www.shadertoy.com/view/Wf3SWn' },
+  { id: 'orb', label: 'Orb', credit: 'https://x.com/XorDev/status/1953620412648014334' },
+  { id: 'cyclone', label: 'Cyclone', credit: 'https://x.com/XorDev/status/2097409639054733531' },
+  { id: 'heavenly', label: 'Heavenly', credit: 'https://x.com/XorDev/status/1917268381616534000' },
+  { id: 'led', label: 'LED', credit: 'https://x.com/XorDev/status/1540071403185127426' },
+  { id: 'topology', label: 'Topology', credit: 'https://x.com/XorDev/status/1903091482904478140' },
+  { id: 'dispersion', label: 'Dispersion', credit: 'https://x.com/XorDev/status/1978091803262783504' },
 ] as const;
 
 export type BgEffectId = (typeof BG_EFFECTS)[number]['id'];

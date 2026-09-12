@@ -49,14 +49,53 @@ html.home-page {
   filter: drop-shadow(0 22px 28px rgba(0, 0, 0, 0.5));
 }
 
-.home-bg-picker {
+.home-bg-dock {
   position: fixed;
   right: 1.25rem;
   bottom: 1.1rem;
   z-index: 40;
   display: flex;
   align-items: center;
-  gap: 0;
+}
+
+.home-bg-credit {
+  position: absolute;
+  right: calc(100% + 0.7rem);
+  bottom: 0.32rem;
+  color: rgba(255, 255, 255, 0.32);
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-decoration: none;
+  opacity: 0;
+  transform: translateX(0.4rem);
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease,
+    color 0.2s ease;
+  pointer-events: none;
+}
+
+.home-bg-dock::before {
+  content: '';
+  position: absolute;
+  inset: -1.4rem 0 -0.6rem -4.2rem;
+}
+
+.home-bg-dock:hover .home-bg-credit,
+.home-bg-dock:focus-within .home-bg-credit {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.home-bg-credit:hover,
+.home-bg-credit:focus-visible {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.home-bg-picker {
+  display: flex;
+  align-items: center;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.16);
   background: rgba(10, 8, 12, 0.45);
@@ -93,6 +132,11 @@ html.home-page {
 @media (prefers-reduced-motion: reduce) {
   .home-cover {
     transition: none;
+  }
+
+  .home-bg-credit {
+    transform: none;
+    transition: opacity 0.01s, color 0.2s ease;
   }
 
   .home-cover:hover,
