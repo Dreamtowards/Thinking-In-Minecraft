@@ -17,7 +17,8 @@ export const folderTitles: Record<string, string> = {
   design: '卷二 · 游戏设计',
   impl: '卷三 · 技术实现',
   rewrite: '卷四 · 重写',
+  extras: '番外',
   appendix: '附录',
 };
 
-export const folderOrder = ['prelude', 'history', 'design', 'impl', 'rewrite', 'appendix'] as const;
+export const folderOrder = ['prelude', 'history', 'design', 'impl', 'rewrite', 'extras', 'appendix'] as const;

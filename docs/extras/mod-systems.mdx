@@ -1,0 +1,224 @@
+---
+title: 模组系统对照：作者席开在哪一层
+description: 强弱不看能改多少，看作者席开在哪一层。资产、数据、沙箱、API、注入、服务端立法是六种合同；把它们收成名单，会看丢能抄走的东西。
+---
+
+> **本章命题**：模组系统强不强，不取决于它能改世界的百分比，而取决于作者席开在哪一层、那一层有没有可继承的合同。皮、数据、沙箱、宿主 API、注入、服务端立法是六把不同的钥匙；把它们收成「最强模组」名单，会看丢真正能抄走的东西。
+
+## 问题
+
+两个人都说自己在做模组。一个把苦力怕换成自己画的皮，世界定律一条没动。一个把引擎里的战斗收成另一款游戏：买枪、回合、阵营，原作的关卡甚至不必再打开。两份劳动都叫 mod。钥匙完全不是一把。
+
+正编已经写过 Minecraft 自己的河：客户端改物理，服务端改法律，资源包改皮；官方后来用命令和数据包把关卡作者请回客厅，把加系统的人留在院子里。[《模组作为第二作者》](/history/mods-as-authors) [《命令、数据包与地图》](/design/commands-datapacks) 本篇是番外，不承担三卷的证明。它把镜头拉开：别的游戏也开过作者席。有的开在资源覆盖上，活了三十年。有的开在官方编辑器里，孵出了新类型。有的故意不给 API，社区就在二进制上私自接电。有的把沙箱做成正作本身。
+
+要回答的不是「哪些模组最神」。神作名单每年换，Wiki 比这本书勤快。要回答的是：最著名、也最能把游戏变成媒介的那些**模组系统**，合同到底写在哪一层？用法看起来像脚本、像数据包、像命令、像 DLL，其实是不同的权限。可被证伪的说法是：只要改动面够大，生态就会自己长出来。只要还看见《魔兽世界》插件改得了界面改不了战场规则、看见 Bedrock 货架卖得动附加包却长不出 Forge 那种立法权，这句话就不成立。改得多，不等于坐得住。
+
+<Cards>
+  <Card title="三条河不是市场" href="/history/mods-as-authors" description="Minecraft 的作者席从一开始就分物理、法律、皮。" />
+  <Card title="收编挑的是动词" href="/design/mods-as-method" description="好模组不自动进正作。完整往往是留在加载器里的理由。" />
+  <Card title="平台化对游戏化" href="/history/competition" description="Roblox 不是更强的模组系统，是另一种产品。" />
+</Cards>
+
+## 作者席开在哪一层
+
+「强大」如果只量能替换百分之几的资产，Doom 的 PWAD、Minecraft 的资源包、上古卷轴的贴图包会排在一起。它们不在一层。一层决定三件事：你能发明新动词吗，你的作品别人能不能叠在上面，版本更新时桌子会不会被掀。
+
+```mermaid
+flowchart TB
+  L1[皮：覆盖资产]
+  L2[数据：改内容表]
+  L3[沙箱：脚本 / 命令]
+  L4[API：宿主语言事件]
+  L5[注入：补丁当接口]
+  L6[法律：服务端立法]
+  L1 --> L2 --> L3 --> L4 --> L5
+  L3 --> L6
+```
+
+**皮。** 引擎认一套档案格式，后加载的同名资源盖住先加载的。Doom 的 PWAD、Quake 的 PAK、Minecraft 的资源包、Source 的 VPK 替换，走这一层。你换的是看见和听见的世界，不是世界里可以发生什么。官方最愿意承认它，因为它最不像在抢笔。
+
+**数据。** 配方、掉落、单位数值、任务阶段、科技树写成表。Minecraft 数据包的 JSON、RimWorld 的 XML Def、上古卷轴插件里的记录、Paradox 的文本脚本、Factorio 原型阶段的表，走这一层。内容可变，动词表往往还是引擎的。官方也爱它：可审核、可热更、崩溃域小。
+
+**沙箱。** 引擎露出一套受管语言：QuakeC、Lua、Papyrus、JASS、命令函数、Bedrock 的脚本 API。你能写逻辑，通常写不出新的底层原语。沙箱的政治是：作者席被请进来，钥匙还在引擎口袋里。
+
+**宿主语言 API。** 官方或准官方把事件、注册、生命周期做成模块：Half-Life 的游戏 DLL、Forge 的事件总线、SMAPI 的模组入口、Cities: Skylines 的 ICities、Factorio 运行时的 `script.on_event`。你用和正作同一类语言写系统。合同若稳定，叠模变成立法问题，而不是每次合 jar。
+
+**注入。** 没有钩子的地方，社区自己挖：Mixin、Harmony、SKSE 的原生插件、各类脚本钩子。注入能加沙箱不肯给的动词。代价是：可执行文件一改，全体第二作者加班。注入即 API 时，升级变成政治。
+
+**法律。** 改这台服务器上的规则，尽量不强迫每个人改装客户端。Bukkit / Paper、GoldSrc 与 Source 上的 AMX / SourceMod、大量 GTA 多人框架的服务端资源，走这一层。玩家进门用原版眼睛，进的已经不是原版宪法。
+
+六层经常叠在同一个生态里。Minecraft Java 几乎全开：资源包是皮，数据包是数据，命令是沙箱，Forge / Fabric 是 API 加注入，Bukkit 是法律。[《规则由谁制定》](/design/who-makes-rules) Bedrock 把皮和数据收成附加包，把脚本收进官方 API，把加系统的河收成货架。同一品牌，合同不同。删掉句中的「Java」或「Bedrock」，句子对另一边就不成立——所以必须分述。
+
+<Note>
+Workshop、Marketplace、模组门户是分发层。分发可以养活作者，也可以把作者席收成 SKU。分发不是第六种钥匙之上的第七种，它是收银台开不开的问题。
+</Note>
+
+## 样本：合同比名单重要
+
+下面不是强度榜。每个样本只证明一种合同为什么能活、活成什么。证明失败的方式很具体：如果某种合同并没有长出可叠加的第二作者，而只是多了一批换皮，它就不该被叫成「强大的模组系统」。
+
+### 覆盖：Doom 的 WAD
+
+1993 年的 Doom 把引擎和数据拆开。`DOOM.EXE` 负责显示和输入，`DOOM.WAD` 装着几乎全部图形、声音和关卡。档案是扁平的 lump 表：十二字节头，目录里每条十六字节，名字只有八个字符。IWAD 是能独自启动的内部包；PWAD 是补丁包，加载时按名字覆盖同名 lump。原版命令行 `-file` 就能叠一张新图上去，不必改可执行文件。[^wad]
+
+这看起来只是换皮加换关。它其实是一份**覆盖合同**：后到的同名数据胜过先到的，分发物可以很小，引擎保持同一份。狼穴 3D 时代的社区往往直接改游戏资源文件；Doom 把「改」收成「叠」。叠，才能把别人的关卡再叠一层，而不必每人发一份完整 IWAD。Matt Fell 1994 年的非官方规格书从外部把这张表写清，早期编辑器靠的就是这份外溢的合同，不是 id 先开了现代意义上的模组 API。[^uds]
+
+后来的 ZDoom / GZDoom 家族在覆盖之上加了沙箱：ACS、DECORATE、再后来的 ZScript，PK3 用 zip 代替扁平 WAD。那是第二代。第一代的力量更朴素——承认数据可以在引擎外面活。三十年后还打得开的社区关卡，靠的是这张覆盖表比引擎版本更稳。
+
+### 逻辑可替换：从 QuakeC 到 GMod
+
+Quake 把游戏规则从引擎里再拆一截。John Carmack 做了 QuakeC：`.qc` 编成 `progs.dat` 字节码，引擎解释它。武器、触发器、一部分 AI，走这份字节码而不是写死在 C 里。1996 年 id 连同编译器放出原版 QC 源码，Capture the Flag 这类改规则的模组有了桌子。[^qc]
+
+Half-Life 把这一层从解释型字节码换成 C++ 游戏 DLL。Hammer 做图，SDK 给示例源码，模组可以编出另一套战斗。Counter-Strike 起先就是这样一份模组：Minh Lê 与 Jess Cliffe 在 GoldSrc 上改规则，2000 年才被收成可单卖的产品。[^cs] 合同的含义变了：第二作者写的不是覆盖资源，是**可替换的游戏模块**。成功的模组可以变成正作的下一款游戏。这是 Valve 那一代模组生态的核心许诺，不是「皮肤商城」。
+
+Source 继续这条河，也分出法律那条支流：服务端插件用 SourcePawn 之类语言改这台服务器，客户端可以仍是原版。Garry's Mod 则把许诺做成产品本身。它不是「在半条命 2 上再做一个模组」，是把 Lua 沙箱当成正作来卖：游戏模式、脚本武器、脚本实体、工具枪，作者席默认打开。[^gmod] 官方 Wiki 就是 API。这时模组系统强到一个悖论：没有这份沙箱，这款游戏几乎不存在。
+
+<Alternative title="若逻辑层不开放，只开放皮">
+你会得到很繁荣的材质社区，很难得到 Counter-Strike，也很难得到 GMod 那种「游戏即模组宿主」。皮能换氛围。规则模块才能换类型。Valve 后来的商城和创意工坊证明分发可以很强；分发代替不了当年那份「游戏 DLL 是给你编的」的合同。
+</Alternative>
+
+### 官方编辑器加民间动词：上古卷轴
+
+Bethesda 把世界做成可编辑的数据库。Creation Kit 与游戏共用同一套记录：主文件 ESM、插件 ESP、后来的轻量 ESL，资产打进 BSA / BA2。插件格式是二进制记录流，头里登记自己依赖哪些 master；加载顺序决定谁覆盖谁的 FormID。脚本是 Papyrus：创作套件里写 `.psc`，运行时吃编译过的 `.pex`，挂在记录的 VMAD 上。[^ck] Steam 页上的句子很满：新任务、环境、人物、对话、武器。这是官方承认的数据加沙箱。
+
+它不够。Papyrus 到不了的动词——输入、引擎事件、内存里那一层——由 SKSE 补。Silverlock 上的说明写得很干净：扩展脚本能力，并且不改磁盘上的游戏可执行文件；插件另有 C/C++ 的 PluginAPI。[^skse] 于是出现叠层：Creation Kit 做世界与任务，Papyrus 做官方允许的逻辑，SKSE 做官方没开的钩子，再上面才是具体模组。玩家口中「没 SKSE 玩不了」不是口味，是合同裂开的证据：官方编辑器给了内容作者席，没给系统作者席。系统作者席靠社区在每次更新后把钩子重新焊上。
+
+Fallout 的 GECK / Creation Kit 加 F4SE、后来的星空 SFSE，是同一张图换皮。强大在叠层完整：数据记录真的就是游戏。脆弱也在叠层：扩展器绑死具体 EXE 版本，商店版、主机版往往直接没有这把钥匙。
+
+### 地图即模组：魔兽争霸 III
+
+《魔兽争霸 III》把编辑器打进零售盒。World Editor 改地形、物件、技能，触发器是事件–条件–动作；保存时 GUI 编成 JASS，也可以手写。地图是一份能嵌入模型、贴图、声音的档案。别人要玩你的规则，下载地图即可，不必换客户端。[^dota-pm]
+
+Defense of the Ancients 从这张桌子上长出来。Eul 在 2002 年末到 2003 年用编辑器做出第一代；资料片《冰封王座》加厚编辑器之后变体爆发，Allstars 经 Guinsoo、后来 IceFrog 之手，把英雄、出装、肉山做成能在 Battle.net 上被一晚上万人同时打开的规则。[^dota-pm][^dota-wiki] 逻辑越来越从 GUI 迁到手写 JASS。一款类型——后来被叫做 MOBA——的原型，是一张不能脱离《魔兽》客户端的地图。
+
+合同是：**地图即可分发的游戏**。作者席不在加载器里，在编辑器和 Battle.net 的自定义房间里。Blizzard 给了工具，没有把自定义地图的知识产权事先收走；后来的诉讼说明，这张合同在法律上曾经是空的，在玩法上已经孵出了新品类。空，有时是生态的条件。
+
+### 三条河：Minecraft
+
+Java 版的三条河，卷一写过，这里只对照合同。客户端模组改程序：早期手工合 class，ModLoader 收钩子，Forge 把兼容做成政治，Fabric 把 Mixin 写成默认的注入风格。模组是 JAR：`fabric.mod.json` 或 Forge 的 `mods.toml` 声明入口、依赖、Mixin 配置，代码是 Java，资源仍按资源包的命名空间躺在 jar 里。服务端插件是另一份 JAR、另一份 `plugin.yml`，改法律不改每个人的客户端。数据包和资源包是世界目录里的 zip：`pack.mcmeta` 加 `data/` 或 `assets/`。命令是沙箱里最像运营口令的那种。
+
+Bedrock 不是这三条河的 C++ 翻译。附加包用 `manifest.json` 登记 UUID、模块类型（资源 / 数据 / 脚本）、依赖；行为包改实体、掉落、生成，资源包改皮，脚本模块走 JavaScript / TypeScript 和 `@minecraft/server`。[^bp] Marketplace 是分发和审核。你得到可上架的内容包和受管脚本，得不到 Java 那种对游戏类的注入式立法权。功能看起来都叫「模组」，作者席的崩溃域和商业合同完全不同。
+
+<CodeBlockTabs items={['Java', 'Bedrock']}>
+  <CodeBlockTab value="Java">
+
+```json
+{
+  "schemaVersion": 1,
+  "id": "example",
+  "version": "1.0.0",
+  "entrypoints": { "main": ["com.example.Mod"] },
+  "mixins": ["example.mixins.json"]
+}
+```
+
+  </CodeBlockTab>
+  <CodeBlockTab value="Bedrock">
+
+```json
+{
+  "format_version": 2,
+  "header": {
+    "name": "example",
+    "uuid": "00000000-0000-0000-0000-000000000000",
+    "version": [1, 0, 0]
+  },
+  "modules": [
+    { "type": "data", "uuid": "00000000-0000-0000-0000-000000000001", "version": [1, 0, 0] }
+  ]
+}
+```
+
+  </CodeBlockTab>
+</CodeBlockTabs>
+
+左边这份声明的是：我要进进程，我可能改类。右边这份声明的是：我是一个可被引擎识别的包，模块类型已经先帮你选好能走多远。JSON 都叫清单，权限不是一回事。Java 的数据包清单 `pack.mcmeta` 更接近右边——所以数据包是温和模组，不是 Forge。[《模组作为设计方法》](/design/mods-as-method)
+
+### 设计出来的双层：Factorio
+
+Wube 没有把模组当成事后破解。模组是 zip（或目录），强制文件是 `info.json`：内部名、版本、依赖。其余按阶段进场。设置阶段写 `settings.lua` 三轮；原型阶段写 `data.lua`、`data-updates.lua`、`data-final-fixes.lua` 三轮，所有模组先各自添加，再互相改，再最终修补；运行时才加载 `control.lua`，而且原型表已经冻结。[^factorio]
+
+这不是「用 Lua 写一切」的浪漫。这是崩溃域被设计过：改配方和改皮带上正在发生的事，不共用一个全局可变宇宙。三轮更新让模组改别人的原型时，不必把加载顺序赌成唯一接口。运行时事件再管工厂还活着的那一段。官方文档把生命周期写到可以当引擎课来读。模组门户是第一公民，不是论坛附件。
+
+对照 Minecraft：数据包接近 Factorio 的原型阶段，Forge / Fabric 接近把原型和运行时焊在同一份 Java 里，再靠事件总线和 Mixin 补官方没留的缝。Factorio 证明双层可以是产品决策。Minecraft 证明双层缺席时，社区会用三条河和注入把双层仿出来，仿出来的版本账单在每个大版本上。
+
+<Impl title="Factorio 的阶段不是目录习惯">
+`data:extend({...})` 往共享原型表里塞东西；`data.raw[type][name]` 改别人已经声明的原型。这一阶段没有 `game`，没有正在跑的存档。`control.lua` 里相反：没有 `data`，有事件、命令、storage。存档加载时，新模组走 `on_init`，旧模组走 `on_load`，配置变了才走 `on_configuration_changed`。多人加入只重放加载，不重放迁移。这些限制看起来烦。烦的是在保护确定性：工厂回放和多人同步，不能让「改配方」的代码在运行时偷偷改完原型。
+</Impl>
+
+### 闭源上的第二运行时
+
+游戏没打算当模组平台时，社区会把平台焊在外面。GTA 单机一侧是 ASI、Script Hook、各种脚本钩子；多人一侧 FiveM 把资源做成服务器上的一等单位——`fxmanifest.lua` 声明客户端 / 服务端 / 共享脚本，扩展名决定走 Lua、JavaScript 还是 .NET。[^fivem] 这不是 Rockstar 给你的编辑器。这是另一份运行时寄宿在原作资产上：进门仍要有正作，玩的已经是资源清单里的法律。
+
+Stardew 的 SMAPI 给 C# 模组入口和事件，必要时再让 Harmony 去补丁原方法；RimWorld 则是 XML Def 加程序集，缺的钩子同样常落到 Harmony。BepInEx 一类加载器把这套做法搬到大量 Unity 游戏上：先闯进 Mono / IL2CPP 进程，再谈 API。它们著名，是因为正作把作者席关了，需求没有关。强大，是对「没有合同」的补偿。补偿很贵。EXE 一换，河就断。TES 那一节的 SKSE 是同一家族里最老的样本：官方编辑器给内容，扩展器给动词，扩展器绑死构建号。
+
+## 代码、脚本、命令、数据不是同一把钥匙
+
+用法之所以看起来五花八门，是因为钥匙被做成了不同的文具。文具可以学。权限不能靠学语法拿到。
+
+**数据文件**是声明。JSON、XML、TOML、cfg、WAD lump、ESP 记录、数据包函数旁边的战利品表，都在说「世界里有什么」。好的数据层有命名空间、有加载顺序、有「后写覆盖先写」或「三轮修补」这类冲突法。坏的数据层是每人改一份全局表，两个模组改同一行就炸。Doom 的同名覆盖、TES 的 master 列表、Factorio 的三轮、Minecraft 的 `namespace:path`，解决的是同一件事：第二作者必须能叠，不能靠发邮件合并。
+
+**命令**是运行时的口。Minecraft 的 `/function`、Factorio 的自定义命令、服务器控制台、部分引擎的 cvar，把权限交给此刻能说话的人。命令看起来像脚本，合同更像钥匙：谁能说，说完是否写进世界，是否在下次加载还在。命令方块把口焊在格子上，运营者才变成关卡设计师。口令大全解决不了作者席；权限模型才解决。
+
+**沙箱脚本**是受管逻辑。Lua 出现在 GMod、Factorio、WoW 插件、Don't Starve、Luanti、FiveM 里，不是因为 Lua 魔法，是因为它嵌得进引擎、崩溃通常死在脚本层。Papyrus、JASS、QuakeC、Bedrock 的 JS 同职。沙箱能做很深的玩法——DotA 证明了——默认仍到不了「新的碰撞形状、新的网络包、新的世界表示」。WoW 插件是反向证据：TOC 加 Lua 加 XML 能把界面改成另一个操作系统，战场规则仍是暴雪的。[^wow] 文件很多，不等于立法权很大。
+
+**宿主语言代码**是和引擎同桌。Java 模组、C# 的 SMAPI / RimWorld / Cities、GoldSrc 的 C++ DLL，能注册新系统。官方若给事件总线，你走门；不给，你就打洞。打洞的现代形式叫字节码补丁：Fabric 的 Mixin 用 JSON 列出要混入的类，Harmony 用前缀 / 后缀 / 转写器改方法。它们是实现，不是产品承诺。产品承诺必须另写：哪些面保证跨版本，哪些面只是这次构建碰巧能补上。
+
+<Impl title="同一句话，四层写法">
+「给铁锭换一种掉落」可以是数据包 JSON，可以是命令执行战利品表，可以是 Lua 里 `data.raw` 改原型，可以是 Java 里注册一个战利品修改器，也可以是 Mixin 改掉原版生成函数。五种都能在演示里成功。只有前几种能在不碰进程的情况下分发给原版客户端。最后一种能做前几种做不到的事，也最不能指望下个版本还活着。选哪一种，是在选崩溃域，不是在选谁更「硬核」。
+</Impl>
+
+资源格式跟着权限走，不跟着审美走。覆盖型生态爱单一档案和扁平名字（WAD、早期 PAK）。数据库型生态爱记录 ID 和 master 链（ESM/ESP）。命名空间型生态爱文件夹约定（Minecraft 的 `assets/` `data/`、Factorio 的 `__modname__/`、GMod 的 `lua/weapons`）。清单型生态爱一份元数据加一堆入口（`fabric.mod.json`、`info.json`、`fxmanifest.lua`、`manifest.json`）。清单看起来像官僚。官僚是叠模的前提：没有内部名和依赖，加载器不知道先请谁进门。
+
+<Callout type="warning" title="不要把加载器品牌当成方法">
+Forge、Fabric、NeoForge、Bukkit、SMAPI、BepInEx、SKSE 是特定引擎上的桌子。桌子可以换。方法是：皮、数据、沙箱、API、注入、法律各管什么，冲突时谁让谁。抄品牌会抄到明年的迁移公告。抄分层，才抄到合同。
+</Callout>
+
+## 稳定合同与注入即 API
+
+所有著名系统最后都撞上同一堵墙：正作还在更新。更新是第一作者的权利。第二作者要的是桌子别每季拆一次。
+
+稳定合同长这样：覆盖规则写明、数据 schema 有版本、沙箱 API 有弃用期、事件在文档里而不是在某个 private 方法的签名里。Factorio 的阶段、Creation Kit 的记录类型、GMod 的 hook 名、数据包的命名空间，都在尝试当这种合同。合同越稳，模组越像可以继承的财产，世界才比引擎活得更久——这是正编里反复出现的伦理，不是技术偏好。
+
+注入合同长这样：我们今晚能钩到这个函数。Mixin 配置、SKSE 的版本号绑死 1.9.32 或 AE 某一构建、Harmony 补丁打在混淆名或这次更新的 IL 上。它极强。它不是财产，是租约。每次启动器静默更新，都是一次可能的驱逐。Minecraft Java 每个大版本像末日，不是因为模组作者懒，是因为第一作者从未把「可替换的游戏模块」写成和 Half-Life SDK 同级的许诺；社区用 MCP、Forge、Fabric 把许诺仿出来，仿出来的东西比引擎难养。Bedrock 用官方脚本 API 换了一种稳：稳在可审核，窄在新动词。两条产品线不是同一种债。
+
+还有一种「稳」是假的。创意工坊和 Marketplace 让安装变稳，让作者席变窄：能上架的往往是皮和数据，偶及沙箱，几乎不到注入。Roblox 把编辑器、分成、上架做成正作，模组这个词不再适用——那是平台，第二作者从一开始就在收银台里。[《竞争、模仿与产业影响》](/history/competition) 假稳很诱人。它解决了分发。它没有解决「谁能发明新动词」。
+
+<Constraint name="分层合同" verdict="地基" chain="覆盖 / 数据 / 沙箱 → 可叠的第二作者 → 注入只补缺口">
+先写清六层各自能承诺什么。能用覆盖和数据解决的，不要请注入来炫技。沙箱要有冻结的原型阶段和活的运行时，两段不要抢同一份可变全局。宿主 API 负责新动词。注入是缺口的补丁，不能当唯一的公共接口。服务端法律单独成河，免得每个居民为了领地去改装客户端。
+</Constraint>
+
+可被证伪的说法是：官方 API 一旦存在，注入就会消失。只要还看见有了数据包仍要写 Java、有了 Papyrus 仍要装 SKSE、有了 Bedrock 脚本仍有人要原生附加能力，这句话就不成立。注入消失的条件不是「有 API」，是 API 把第二作者真正要的动词开到不必打洞。开不到，洞就是生态。把洞封死又不给门，得到的是干净的客户端，不是完整的产品。
+
+开发者容易抄错的部分在这里。抄 GMod，抄到的应是「沙箱就是产品」，不是抄 Lua。抄 Creation Kit，抄到的应是「游戏数据与编辑器共用记录」，不是抄 ESP 二进制。抄 Factorio，抄到的应是「原型冻结、运行时事件、三轮冲突法」，不是抄 `data:extend` 这几个词。抄 Minecraft，抄到的应是三条河的分工和收编筛子——加动词不加文明——以及 Java / Bedrock 已经证明的：同一品牌可以签两份完全不同的作者合同。抄不走的是：二十年无偿第二作者替你把注入养成像 API 的东西，并且玩家已经会说那套口语。
+
+## 这一章留下什么
+
+- **爱好者**：你装过的「模组」可能根本不在一层。换皮、改表、写脚本、打补丁、改服务器法律，成功的手感可以相似，失败时崩的东西完全不同。下次有人说某款游戏「不能模组」，先问他指的是哪一把钥匙。
+- **开发者**：能抄走的是分层合同——覆盖如何叠、数据如何冲突、沙箱如何冻结原型、API 如何登记新动词、注入只补缺口、法律走服务端。抄不走名单上的加载器，也抄不走别人已经替你活了三十年的河。你若只开商城、只开脚本、只开换皮，你会得到 UGC。你不会得到第二条作者席。
+
+[^wad]: Doom Wiki，「WAD」：IWAD / PWAD、lump 目录、原版 `-file` 加载；并记狼穴 3D 时代直接改资源、Doom 改为可叠补丁包的动机。见 <https://doomwiki.org/wiki/WAD>。
+
+[^uds]: Matt Fell，《The Unofficial Doom Specs》v1.666（1994）：从外部写清 WAD 头与目录，早期编辑工具依赖这份规格。文本见 <https://www.gamers.org/dEngine/doom/spec/uds.1666.txt>。
+
+[^qc]: QuakeC 由 John Carmack 设计，`.qc` 经 `qcc` 编成 `progs.dat`；id Software 于 1996 年放出编译器与原版 QC 源码。综述见 Wikipedia，[QuakeC](https://en.wikipedia.org/wiki/QuakeC)。
+
+[^cs]: Counter-Strike 起先为 Half-Life 模组，Minh Lê 与 Jess Cliffe 开发，Valve 随后介入并在 2000 年 11 月作为零售产品放出。见 Wikipedia，[Counter-Strike](https://en.wikipedia.org/wiki/Counter-Strike)。GoldSrc 相对 Quake 的游戏逻辑改用 C++ DLL，见 Valve 时代公开说明的转述：TWHL Wiki，[Half-Life's Code Basis](https://twhl.info/wiki/page/VERC:_Half-Life%27s_Code_Basis)。
+
+[^gmod]: Facepunch，《Garry's Mod Wiki》：Lua（GLua）为插件与游戏模式的宿主语言，官方 API 与钩子文档即产品界面。见 <https://wiki.facepunch.com/gmod/>。
+
+[^ck]: Creation Kit Wiki，「Data file」：ESM 主文件与 ESP 插件是同一套记录数据库，Creation Kit 与游戏共用；Skyrim 起 Papyrus 源码为 `.psc`、运行时为 `.pex`。见 <https://ck.uesp.net/wiki/Data_file>。记录头与 master 列表见 UESP，[Mod File Format](https://en.uesp.net/wiki/Tes5Mod:Mod_File_Format)。Steam 上的官方 Creation Kit 页称与制作组使用同一套工具：<https://store.steampowered.com/app/1946180/Skyrim_Special_Edition_Creation_Kit/>。
+
+[^skse]: SKSE 官方说明：扩展 Papyrus 与原生插件能力，不修改磁盘上的游戏可执行文件；仅跟进 Steam 上的特定版本，不支持商店锁死的发行。见 <https://skse.silverlock.org/> 及随附 `skse_readme.txt`。
+
+[^dota-pm]: Steve 「Guinsoo」 Feak 团队，《Postmortem: Defense of the Ancients》，Gamasutra / Game Developer：用《冰封王座》World Editor 制作；触发器 GUI 编成 JASS，亦可手写。见 <https://www.gamedeveloper.com/design/postmortem-i-defense-of-the-ancients-i->。
+
+[^dota-wiki]: Wikipedia，[Defense of the Ancients](https://en.wikipedia.org/wiki/Defense_of_the_Ancients)：Eul 在 Reign of Chaos 上做出第一代，资料片后变体与 Allstars 的传承。时间线细节另见 Liquipedia，[Development Eras](https://liquipedia.net/dota2/Defense_of_the_Ancients/Development_Eras)。
+
+[^bp]: Microsoft Learn，Bedrock 附加包 `manifest.json`：`format_version`、header、modules（资源 / 数据 / 脚本）。见 [Add-on manifest](https://learn.microsoft.com/en-us/minecraft/creator/reference/content/addonsreference/examples/addonmanifest)。模块类型见 [minecraft:module](https://learn.microsoft.com/en-us/minecraft/creator/reference/content/manifestreference/module)。Java 侧 Fabric 清单见 [fabric.mod.json](https://docs.fabricmc.net/develop/loader/fabric-mod-json)。
+
+[^factorio]: Wube，Factorio 官方 API，《Data lifecycle》：settings / prototype 三轮与 `control.lua` 运行时分离，原型阶段结束后 `data` 不可再用。见 <https://lua-api.factorio.com/latest/auxiliary/data-lifecycle.html>。包结构见 [Mod structure](https://lua-api.factorio.com/latest/auxiliary/mod-structure.html)。
+
+[^fivem]: Cfx.re Docs，《Resource manifest》：`fxmanifest.lua` 声明 `fx_version`、游戏、客户端 / 服务端脚本；扩展名决定 Lua、JS 或 .NET 运行时。见 <https://docs.fivem.net/docs/scripting-reference/resource-manifest/>。
+
+[^wow]: 魔兽世界插件以 `.toc` 清单加载 Lua 与 XML 界面；模拟规则不在插件权限内。格式见 Warcraft Wiki，[TOC format](https://warcraft.wiki.gg/wiki/TOC_format)。
