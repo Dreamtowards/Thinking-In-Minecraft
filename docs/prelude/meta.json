@@ -1,7 +1,4 @@
 {
-  "pages": [
-    "index",
-    "thesis",
-    "method"
-  ]
+  "title": "序",
+  "pages": ["index", "thesis", "method"]
 }
