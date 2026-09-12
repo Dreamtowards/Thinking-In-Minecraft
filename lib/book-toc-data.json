@@ -459,8 +459,8 @@
                 "反 RPG：选择而非缺失"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/design/crafting-inventory",
+              "written": true
             },
             {
               "id": "design/06",
@@ -476,8 +476,8 @@
                 "「找不到」作为探索燃料"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/design/worldgen",
+              "written": true
             },
             {
               "id": "design/07",
@@ -495,8 +495,8 @@
               "tags": [
                 "枢纽"
               ],
-              "href": null,
-              "written": false
+              "href": "/design/redstone",
+              "written": true
             },
             {
               "id": "design/08",
@@ -512,8 +512,8 @@
                 "极限：何时必须写出新系统"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/design/commands-datapacks",
+              "written": true
             },
             {
               "id": "design/09",
@@ -529,8 +529,8 @@
                 "不能做成动作游戏的原因"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/design/mobs-combat",
+              "written": true
             },
             {
               "id": "design/10",
@@ -546,8 +546,8 @@
                 "玩家后期：冰道、工厂、服务器活动"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/design/dimensions-endgame",
+              "written": true
             }
           ]
         },
