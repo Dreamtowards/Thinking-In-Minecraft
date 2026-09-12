@@ -1075,8 +1075,8 @@
                 "本卷是考试，不是开工令"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/rewrite/what-to-rewrite",
+              "written": true
             },
             {
               "id": "rewrite/02",
@@ -1090,8 +1090,8 @@
                 "交给下一章的「非不变量」"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/rewrite/invariants",
+              "written": true
             },
             {
               "id": "rewrite/03",
@@ -1106,8 +1106,8 @@
                 "特例与未定义行为如何安置"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/rewrite/accidents",
+              "written": true
             }
           ]
         },
