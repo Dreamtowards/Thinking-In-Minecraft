@@ -74,23 +74,57 @@ function CardCopy({
   );
 }
 
+const FX_QUERY = 'fx';
+const FX_STORAGE = 'tim-home-bg';
+
+function isEffectId(value: string | null | undefined): value is BgEffectId {
+  return BG_EFFECTS.some((item) => item.id === value);
+}
+
+function parseFxParam(raw: string | null): BgEffectId | 'rnd' | null {
+  if (!raw) return null;
+  const key = raw.trim().toLowerCase();
+  if (key === 'rnd') return 'rnd';
+  return isEffectId(key) ? key : null;
+}
+
+function randomEffect(): BgEffectId {
+  return BG_EFFECTS[Math.floor(Math.random() * BG_EFFECTS.length)].id;
+}
+
+function writeFxQuery(id: string) {
+  const url = new URL(window.location.href);
+  if (url.searchParams.get(FX_QUERY) === id) return;
+  url.searchParams.set(FX_QUERY, id);
+  window.history.replaceState(window.history.state, '', url);
+}
+
 export function HomePage() {
   const [effect, setEffect] = useState<BgEffectId>('sunset');
-  const activeEffect = BG_EFFECTS.some((item) => item.id === effect) ? effect : 'sunset';
+  const activeEffect = isEffectId(effect) ? effect : 'sunset';
 
   useEffect(() => {
     const root = document.documentElement;
     root.classList.add('home-page');
-    const saved = window.localStorage.getItem('tim-home-bg');
-    if (BG_EFFECTS.some((item) => item.id === saved)) {
-      setEffect(saved as BgEffectId);
+    const parsed = parseFxParam(new URLSearchParams(window.location.search).get(FX_QUERY));
+    if (parsed === 'rnd') {
+      const id = randomEffect();
+      setEffect(id);
+      window.localStorage.setItem(FX_STORAGE, id);
+    } else if (parsed) {
+      setEffect(parsed);
+      window.localStorage.setItem(FX_STORAGE, parsed);
+    } else {
+      const saved = window.localStorage.getItem(FX_STORAGE);
+      if (isEffectId(saved)) setEffect(saved);
     }
     return () => root.classList.remove('home-page');
   }, []);
 
   const onEffectChange = (id: BgEffectId) => {
     setEffect(id);
-    window.localStorage.setItem('tim-home-bg', id);
+    window.localStorage.setItem(FX_STORAGE, id);
+    writeFxQuery(id);
   };
 
   return (
