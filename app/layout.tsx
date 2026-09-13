@@ -17,6 +17,9 @@ export const metadata: Metadata = {
     template: `%s | ${appName}`,
   },
   description: appDescription,
+  icons: {
+    icon: '/favicon.png',
+  },
 };
 
 export default function Layout({ children }: LayoutProps<'/'>) {
