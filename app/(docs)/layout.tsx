@@ -4,7 +4,7 @@ import { baseOptions } from '@/lib/layout.shared';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <DocsLayout tree={getDecoratedPageTree()} {...baseOptions()}>
+    <DocsLayout tree={getDecoratedPageTree()} {...baseOptions()} sidebar={{ prefetch: false }}>
       {children}
     </DocsLayout>
   );
