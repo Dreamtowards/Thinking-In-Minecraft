@@ -1,5 +1,6 @@
 {
   "title": "卷一 · 历史与商业",
   "description": "Minecraft 如何成为一种可被再开发的媒介",
-  "pages": ["index", "(part1)", "(part2)", "(part3)", "(part4)"]
+  "pages": ["(part1)", "(part2)", "(part3)", "(part4)"],
+  "defaultOpen": true
 }
