@@ -1,7 +1,7 @@
 import { loader } from 'fumadocs-core/source';
 import { lucideIconsPlugin } from 'fumadocs-core/source/lucide-icons';
-import type { Folder, Item, Node, Root } from 'fumadocs-core/page-tree';
-import { docsContentRoute, docsImageRoute, docsRoute, folderTitles } from './shared';
+import type { Item, Node, Root } from 'fumadocs-core/page-tree';
+import { docsContentRoute, docsImageRoute, docsRoute } from './shared';
 import { defineDocs } from 'fumadocs-mdx/macro';
 import { metaSchema, pageSchema } from 'fumadocs-core/source/schema';
 import { z } from 'zod';
@@ -41,12 +41,6 @@ export function getPageTitle(page: (typeof source)['$inferPage']): string {
   return page.slugs.at(-1) ?? page.url;
 }
 
-function volumeFolderTitle(node: Folder): string | undefined {
-  const folderPath = node.$ref?.folder;
-  if (!folderPath || folderPath.includes('/')) return undefined;
-  return folderTitles[folderPath];
-}
-
 function decoratePage(node: Item): Item {
   const page = source.getPage(node.url.replace(docsRoute, '').split('/').filter(Boolean));
   if (!page) return node;
@@ -59,7 +53,6 @@ function decorateNode(node: Node): Node {
   if (node.type === 'folder') {
     return {
       ...node,
-      name: volumeFolderTitle(node) ?? node.name,
       index: node.index ? decoratePage(node.index) : undefined,
       children: node.children.map(decorateNode),
     };
