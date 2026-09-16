@@ -1,8 +1,10 @@
 # 《Minecraft设计思想》
 
-面向 MC 资深爱好者与游戏开发者。任务源是根目录 `PLAN.md`：一次只写一章，按任务卡的标题、简介、大纲执行；不要改 `PLAN.md` 的状态。口径见 `docs/prelude/method.mdx`，组件细节见 `.cursor/skills/fumadocs-mdx/SKILL.md`。回复用简体中文。
+面向 MC 资深爱好者与游戏开发者。任务源是根目录 `PLAN.md`：按任务卡的标题、简介、大纲执行。
+口径见 `docs/prelude/method.mdx`，组件细节见 `.cursor/skills/fumadocs-mdx/SKILL.md`。回复用简体中文。
 
-总命题：Minecraft 不是被消费的关卡，而是一套允许被**居住、误用、再开发**的规则。
+总命题：Minecraft 不是通关即弃的内容，而是一套能住进去、能玩出设计之外、还能被再开发的系统。  
+Minecraft is not disposable content, but a system you can inhabit, play beyond its design, and redevelop through mods and servers.
 
 ## 写章节
 
@@ -25,7 +27,7 @@ description: 简介（40–80 字）
 
 结尾：**爱好者一句 + 开发者一句**。开发者章必须写清能抄走 / 抄不走。篇幅：卷导读 800–1500 字；普通章 4000–8000 字；枢纽章 8000–12000 字。
 
-纪律：问「为什么」不问「有什么」；结论可被资深玩家证伪；Java 与 Bedrock 分述；模组 / 服务器 / 影像是正文。不写图鉴、攻略、开服手册、反编译清单。不要拿 `docs/` 旧草稿当论点。卷四不要提前写成定论。
+纪律：问「为什么」不问「有什么」；结论可被资深玩家证伪；Java 与 Bedrock 分述；模组 / 服务器 / 影像是正文。不写图鉴、攻略、开服手册、反编译清单。卷四不要提前写成定论。
 
 ## 脚注
 
