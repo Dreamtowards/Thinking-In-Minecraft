@@ -183,7 +183,7 @@ export function HomePage() {
 
       <footer className="relative mx-auto w-full max-w-5xl px-6 pb-16">
         <p className="border-t border-white/10 pt-6 text-sm leading-relaxed text-white/55">
-          Minecraft 不是被消费的关卡，而是一套允许被居住、误用、再开发的规则。这本书写它的历史、设计与实现。
+          Minecraft 不是通关即弃的内容，而是一套能住进去、能玩出设计之外、还能被再开发的系统。这本书写它的历史、设计与实现。
         </p>
         <p className="mt-3 text-xs text-white/35">Aether · 沙盒游戏《以太效应》开发者</p>
       </footer>

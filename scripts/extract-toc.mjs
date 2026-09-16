@@ -221,7 +221,7 @@ const meta = {
     short: '序',
     english: 'Preface',
     color: 'gray',
-    payoffFan: '先立约：这书要证明规则不是关卡。读命题，再决定跳哪一卷。',
+    payoffFan: '先立约：这书要证明系统不是通关即弃的内容。读命题，再决定跳哪一卷。',
     payoffDev: '原则必须带不可迁移条件。不要从卷四起笔。',
   },
   v1: {
