@@ -55,7 +55,7 @@ description: 简介（40–80 字）
 | 流程 | mermaid（节点写短，细节放 prose） |
 | Java / Bedrock 代码 | `<CodeBlockTabs>` |
 
-未在 `components/mdx.tsx` 注册的组件不要直接用（如 `Tabs`、`Steps`）。
+未在 `components/mdx.tsx` 注册的组件不要直接用。`Tabs` / `Tab`、`Steps` / `Step`、`Accordions` / `Accordion` 已注册。
 
 <!-- BEGIN:nextjs-agent-rules -->
 

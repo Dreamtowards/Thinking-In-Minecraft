@@ -149,6 +149,39 @@ description: 一句话摘要，用于 SEO 与卡片预览
 
 普通 fenced code block 自动获得语法高亮与复制按钮，无需额外包装。
 
+**Tabs / Tab** — 方案并列（已注册）：
+
+```mdx
+<Tabs items={['MDA', 'Rational Game Design', '二阶设计']} groupId="sky-island">
+  <Tab value="MDA">从规则走到体验。</Tab>
+  <Tab value="Rational Game Design">把难度和教学排进表。</Tab>
+  <Tab value="二阶设计">规则是你的，玩是玩家的。</Tab>
+</Tabs>
+```
+
+**Steps / Step** — 分步方法（已注册）：
+
+```mdx
+<Steps>
+  <Step>
+
+### 第一步
+
+钉住场面。
+
+  </Step>
+  <Step>
+
+### 第二步
+
+写出你在问的那一句。
+
+  </Step>
+</Steps>
+```
+
+**Accordions / Accordion** — 词条或可跳过的对照（已注册）。`Impl` 内部也走这一套。
+
 ### Mermaid
 
 ````mdx
@@ -187,26 +220,12 @@ $$
 
 | 组件 | 导入路径 | 典型用途 |
 |------|----------|----------|
-| Tabs, Tab | `fumadocs-ui/components/tabs` | 方案对比、并列内容 |
-| Steps, Step | `fumadocs-ui/components/steps` | 分步教程 |
-| Accordions, Accordion | `fumadocs-ui/components/accordion` | 通用 FAQ 折叠 |
 | TypeTable | `fumadocs-ui/components/type-table` | API / 参数表 |
-| Files, File, Folder | `fumadocs-ui/components/files` | 目录树 |
 | InlineTOC | `fumadocs-ui/components/inline-toc` | 长文页内目录 |
 
+`Tabs` / `Steps` / `Accordions` / `Files` 已在 `components/mdx.tsx` 注册，直接用。
+
 注册方式 — 在 `components/mdx.tsx` 的 `getMDXComponents` 中 spread 或逐项加入。
-
-**Steps 免注册替代**：用 Tailwind 工具类：
-
-```mdx
-<div className="fd-steps [&_h3]:fd-step">
-
-### 第一步
-
-### 第二步
-
-</div>
-```
 
 ## 写作风格（本书特有）
 

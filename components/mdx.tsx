@@ -3,6 +3,8 @@ import type { MDXComponents } from 'mdx/types';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
 import { File, Files, Folder } from 'fumadocs-ui/components/files';
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 import { Alternative, Constraint, Figure, Impl, Memoir, Note } from '@/components/mdx/blocks';
 import { BookToc } from '@/components/book-toc';
 import { Mermaid } from '@/components/mdx/mermaid';
@@ -85,6 +87,10 @@ export function getMDXComponents(components?: MDXComponents) {
     File,
     Files,
     Folder,
+    Steps,
+    Step,
+    Tabs,
+    Tab,
     BookToc,
     ...components,
   };
