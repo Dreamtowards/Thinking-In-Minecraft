@@ -267,12 +267,12 @@ const meta = {
 };
 
 const book = {
-  thesis: 'Minecraft 不是一套被消费的关卡，而是一套允许被居住、误用、再开发的规则。',
+  thesis: 'Minecraft 不是通关即弃的内容，而是一套能住进去、能玩出设计之外、还能被再开发的系统。',
   volumes: volumes.map((v) => ({
     ...meta[v.id],
     id: v.id,
     heading: v.heading,
-    thesis: v.thesis || (v.id === 'prelude' ? '划定读者、禁止误读、说明三卷分工。第四卷写在不变量冻结之后。' : v.id === 'appendix' ? '查阅用，不承担论证。' : ''),
+    thesis: v.thesis || (v.id === 'prelude' ? 'Minecraft 未必诞生于完整理论，却在开发与玩家参与中形成了可以被理解的设计思想。' : v.id === 'appendix' ? '查阅用，不承担论证。' : ''),
     parts: v.parts.map((p) => ({
       title: p.title,
       span: p.span,
