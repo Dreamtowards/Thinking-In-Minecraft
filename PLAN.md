@@ -141,7 +141,7 @@ docs/
 ├── extras/                    # 番外 · 不承担三卷论证
 │   ├── meta.json
 │   ├── mod-systems.mdx        # 模组系统对照
-│   └── design-theories.mdx    # 分析用哪套词
+│   └── design-theories.mdx    # 游戏设计理论简介
 └── appendix/
     ├── meta.json
     ├── timeline.mdx
@@ -1280,21 +1280,21 @@ Minecraft 的设计有一半发生在玩家之间的契约里。
 - **要回答**：最著名的模组系统，合同到底写在哪一层？
 - **大纲**：六层作者席；Doom / Quake / 上古卷轴 / 魔兽地图 / Minecraft 三条河；稳定合同与注入即 API。
 
-### `extras/design-theories` 分析用哪套词
+### `extras/design-theories` 游戏设计理论简介
 
-- 文件：`docs/extras/design-theories.mdx` · 两类 · ✔
-- **简介**：游戏设计没有统一理论，只有透镜。MDA、Rational Game Design、心流回答不同问题；拿错一套，会把 Minecraft 读成没做完的关卡。
-- **要回答**：分析游戏时该先问什么，再选哪一套词？
+- 文件：`docs/extras/design-theories.mdx` · 番外
+- **简介**：MDA、Rational Game Design、心流、技能原子等常用框架各自说什么、从哪来、适合用来想哪类问题。
+- **口径**：介绍，不承担三卷论证；不写命题 / 问题 / 留下什么。
 - **大纲**：
-  1. 透镜不是定律：分析词汇 / 生产方法 / 动机模型
-  2. 先问问题，再选词
-  3. MDA 与二阶设计：规则如何变成体验
-  4. Rational Game Design：把体验排进表
+  1. 地图：分析词汇 / 生产方法 / 动机模型
+  2. 玩的哲学：魔圈、Caillois、Suits
+  3. MDA 与亲戚、二阶设计
+  4. Rational Game Design
   5. 技能原子、动词、手感
   6. 心流与 PENS
   7. 涌现与半真实
-  8. 同一场面（空岛）三套透镜
-- **验收**：不写成理论百科；每套词写清照不见什么；空岛例必须让 RGD 与二阶设计打架
+  8. 同一场面（移动平台）三套词
+  9. 词条速查与阅读入口
 
 ## 附录
 
