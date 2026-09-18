@@ -1,14 +1,8 @@
 import { RootProvider } from 'fumadocs-ui/provider/next';
 import 'katex/dist/katex.css';
 import './global.css';
-import { Noto_Sans_SC } from 'next/font/google';
 import { appDescription, appName } from '@/lib/shared';
 import type { Metadata } from 'next';
-
-const notoSansSC = Noto_Sans_SC({
-  subsets: ['latin'],
-  weight: ['400', '500', '700'],
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://elytra.dev/thinking-in-minecraft'),
@@ -17,6 +11,9 @@ export const metadata: Metadata = {
     template: `%s | ${appName}`,
   },
   description: appDescription,
+  openGraph: {
+    images: ['/og.png'],
+  },
   icons: {
     icon: '/favicon.png',
   },
@@ -24,7 +21,7 @@ export const metadata: Metadata = {
 
 export default function Layout({ children }: LayoutProps<'/'>) {
   return (
-    <html lang="zh-CN" className={notoSansSC.className} suppressHydrationWarning>
+    <html lang="zh-CN" suppressHydrationWarning>
       <body className="flex flex-col min-h-screen">
         <RootProvider>{children}</RootProvider>
       </body>

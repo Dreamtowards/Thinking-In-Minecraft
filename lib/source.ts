@@ -1,7 +1,7 @@
 import { loader } from 'fumadocs-core/source';
 import { lucideIconsPlugin } from 'fumadocs-core/source/lucide-icons';
 import type { Item, Node, Root } from 'fumadocs-core/page-tree';
-import { docsContentRoute, docsImageRoute, docsRoute } from './shared';
+import { docsContentRoute, docsRoute } from './shared';
 import { defineDocs } from 'fumadocs-mdx/macro';
 import { metaSchema, pageSchema } from 'fumadocs-core/source/schema';
 import { z } from 'zod';
@@ -69,12 +69,10 @@ export function getDecoratedPageTree(): Root {
   };
 }
 
-export function getPageImageUrl(page: (typeof source)['$inferPage']) {
-  const segments = [...page.slugs, 'image.png'];
-
+export function getPageImageUrl(_page: (typeof source)['$inferPage']) {
   return {
-    segments,
-    url: '/' + [page.locale, ...docsImageRoute.split('/'), ...segments].filter(Boolean).join('/'),
+    segments: ['og.png'],
+    url: '/og.png',
   };
 }
 
