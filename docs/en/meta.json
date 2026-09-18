@@ -4,6 +4,7 @@
   "root": "edition",
   "pagesIndex": "index",
   "pages": [
+    "toc",
     "prelude",
     "history",
     "design",

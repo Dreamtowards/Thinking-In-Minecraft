@@ -1,19 +1,139 @@
 'use client';
 
-import book from '@/lib/book-toc-data.json';
+import bookEn from '@/lib/book-toc-data-en.json';
+import bookZh from '@/lib/book-toc-data.json';
 import type { BookTocData, TocAudience, TocChapter, TocVolume } from '@/lib/book-toc';
 import Link from 'next/link';
 import { useState } from 'react';
 
-const data = book as BookTocData;
-
+type Locale = 'zh' | 'en';
 type Tab = 'overview' | TocVolume['id'];
 type Filter = 'all' | 'fan' | 'dev' | 'written';
 
-const AUDIENCE: Record<TocAudience, string> = {
-  both: '两类',
-  fan: '爱好者',
-  dev: '开发者',
+const DATA: Record<Locale, BookTocData> = {
+  zh: bookZh as BookTocData,
+  en: bookEn as BookTocData,
+};
+
+type Labels = {
+  overview: string;
+  allReaders: string;
+  fanFocus: string;
+  devFocus: string;
+  writtenOnly: string;
+  searchPlaceholder: string;
+  fourVolumes: string;
+  volumeCol: string;
+  thesisCol: string;
+  howToRead: string;
+  youAre: string;
+  route: string;
+  skippable: string;
+  fanPayoff: string;
+  devPayoff: string;
+  blurbOutline: string;
+  answers: string;
+  written: string;
+  draft: string;
+  audience: Record<TocAudience, string>;
+  volumeTab: (v: TocVolume) => string;
+  volumeHeading: (v: TocVolume) => string;
+  readingRoutes: { you: string; route: string; skip: string }[];
+};
+
+const LABELS: Record<Locale, Labels> = {
+  zh: {
+    overview: '总览',
+    allReaders: '全部读者',
+    fanFocus: '爱好者侧重',
+    devFocus: '开发者侧重',
+    writtenOnly: '只看已写',
+    searchPlaceholder: '按章名、简介或节标题筛选',
+    fourVolumes: '四卷对照',
+    volumeCol: '卷',
+    thesisCol: '命题',
+    howToRead: '怎么读',
+    youAre: '你更像',
+    route: '顺序',
+    skippable: '可跳过',
+    fanPayoff: '爱好者带走：',
+    devPayoff: '开发者带走：',
+    blurbOutline: '简介与节大纲',
+    answers: '要回答：',
+    written: '已写',
+    draft: '未写',
+    audience: { both: '两类', fan: '爱好者', dev: '开发者' },
+    volumeTab: (v) => (v.roman ? `卷${v.roman} ${v.short}` : v.short),
+    volumeHeading: (v) => (v.roman ? `第 ${v.roman} 卷 · ${v.short}` : v.short),
+    readingRoutes: [
+      {
+        you: '设计师 / 玩法程序',
+        route: '序 → 卷二全部 → 卷一 04–06、12 → 卷三 17–18',
+        skip: '卷三实现细节',
+      },
+      {
+        you: '引擎 / 技术程序',
+        route: '序 → 卷二 01–02、07 → 卷三全部 → 卷四',
+        skip: '卷一影像章可略',
+      },
+      {
+        you: '制作人 / 商业',
+        route: '卷一全部 → 卷二 11–16 → 卷三 15–17',
+        skip: '红石实现、渲染',
+      },
+      {
+        you: '资深玩家通读',
+        route: '按卷顺序；每章先读简介与「要回答」',
+        skip: '开发者侧重章可读命题与结尾',
+      },
+    ],
+  },
+  en: {
+    overview: 'Overview',
+    allReaders: 'All readers',
+    fanFocus: 'Fan focus',
+    devFocus: 'Dev focus',
+    writtenOnly: 'Written only',
+    searchPlaceholder: 'Filter by title, blurb, or section',
+    fourVolumes: 'Four volumes',
+    volumeCol: 'Volume',
+    thesisCol: 'Thesis',
+    howToRead: 'How to read',
+    youAre: 'You are',
+    route: 'Route',
+    skippable: 'Skippable',
+    fanPayoff: 'Fans take away: ',
+    devPayoff: 'Devs take away: ',
+    blurbOutline: 'Blurb & outline',
+    answers: 'Answers: ',
+    written: 'Written',
+    draft: 'Draft',
+    audience: { both: 'Both', fan: 'Fans', dev: 'Devs' },
+    volumeTab: (v) => (v.roman ? `Vol. ${v.roman} ${v.short}` : v.short),
+    volumeHeading: (v) => (v.roman ? `Volume ${v.roman} · ${v.short}` : v.short),
+    readingRoutes: [
+      {
+        you: 'Designer / gameplay programmer',
+        route: 'Preface → Vol. II all → Vol. I 04–06, 12 → Vol. III 17–18',
+        skip: 'Vol. III implementation detail',
+      },
+      {
+        you: 'Engine / tech programmer',
+        route: 'Preface → Vol. II 01–02, 07 → Vol. III all → Vol. IV',
+        skip: 'Vol. I video chapter',
+      },
+      {
+        you: 'Producer / business',
+        route: 'Vol. I all → Vol. II 11–16 → Vol. III 15–17',
+        skip: 'Redstone impl, rendering',
+      },
+      {
+        you: 'Veteran player (full read)',
+        route: 'Volume order; read each chapter blurb first',
+        skip: 'Dev-heavy chapters: thesis + closing',
+      },
+    ],
+  },
 };
 
 function matchesFilter(ch: TocChapter, filter: Filter) {
@@ -29,7 +149,9 @@ function matchesQuery(ch: TocChapter, q: string) {
   return blob.includes(q);
 }
 
-export function BookToc() {
+export function BookToc({ locale = 'zh' }: { locale?: Locale }) {
+  const data = DATA[locale];
+  const L = LABELS[locale];
   const [tab, setTab] = useState<Tab>('overview');
   const [filter, setFilter] = useState<Filter>('all');
   const [query, setQuery] = useState('');
@@ -40,40 +162,40 @@ export function BookToc() {
     <div className="not-prose mt-10">
       <div className="mb-4 flex flex-wrap gap-2">
         <TabPill active={tab === 'overview'} onClick={() => setTab('overview')}>
-          总览
+          {L.overview}
         </TabPill>
         {data.volumes.map((v) => (
           <TabPill key={v.id} active={tab === v.id} onClick={() => setTab(v.id)}>
-            {v.roman ? `卷${v.roman} ${v.short}` : v.short}
+            {L.volumeTab(v)}
           </TabPill>
         ))}
       </div>
 
       <div className="mb-8 flex flex-wrap items-center gap-2">
         <TabPill active={filter === 'all'} onClick={() => setFilter('all')} quiet>
-          全部读者
+          {L.allReaders}
         </TabPill>
         <TabPill active={filter === 'fan'} onClick={() => setFilter('fan')} quiet>
-          爱好者侧重
+          {L.fanFocus}
         </TabPill>
         <TabPill active={filter === 'dev'} onClick={() => setFilter('dev')} quiet>
-          开发者侧重
+          {L.devFocus}
         </TabPill>
         <TabPill active={filter === 'written'} onClick={() => setFilter('written')} quiet>
-          只看已写
+          {L.writtenOnly}
         </TabPill>
         {tab !== 'overview' ? (
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="按章名、简介或节标题筛选"
+            placeholder={L.searchPlaceholder}
             className="ml-auto min-w-[12rem] flex-1 rounded-lg border border-fd-border bg-fd-card px-3 py-1.5 text-sm outline-none focus:border-fd-primary"
           />
         ) : null}
       </div>
 
-      {tab === 'overview' ? <Overview filter={filter} /> : null}
-      {active ? <VolumeTree volume={active} filter={filter} query={q} /> : null}
+      {tab === 'overview' ? <Overview data={data} filter={filter} labels={L} /> : null}
+      {active ? <VolumeTree volume={active} filter={filter} query={q} labels={L} /> : null}
     </div>
   );
 }
@@ -107,17 +229,25 @@ function TabPill({
   );
 }
 
-function Overview({ filter }: { filter: Filter }) {
+function Overview({
+  data,
+  filter,
+  labels: L,
+}: {
+  data: BookTocData;
+  filter: Filter;
+  labels: Labels;
+}) {
   return (
     <div className="space-y-10">
       <section>
-        <h2 className="mb-3 text-lg font-semibold">四卷对照</h2>
+        <h2 className="mb-3 text-lg font-semibold">{L.fourVolumes}</h2>
         <div className="overflow-x-auto rounded-xl border border-fd-border">
           <table className="w-full text-left text-sm">
             <thead className="bg-fd-muted/50 text-fd-muted-foreground">
               <tr>
-                <th className="px-4 py-2.5 font-medium">卷</th>
-                <th className="px-4 py-2.5 font-medium">命题</th>
+                <th className="px-4 py-2.5 font-medium">{L.volumeCol}</th>
+                <th className="px-4 py-2.5 font-medium">{L.thesisCol}</th>
               </tr>
             </thead>
             <tbody>
@@ -137,9 +267,7 @@ function Overview({ filter }: { filter: Filter }) {
 
       {data.volumes.map((v) => (
         <section key={v.id}>
-          <h2 className="mb-1 text-lg font-semibold">
-            {v.roman ? `第 ${v.roman} 卷 · ${v.short}` : v.short}
-          </h2>
+          <h2 className="mb-1 text-lg font-semibold">{L.volumeHeading(v)}</h2>
           <p className="mb-4 text-sm text-fd-muted-foreground leading-6">{v.thesis}</p>
           <ul className="space-y-3">
             {v.parts.map((p) => {
@@ -176,37 +304,24 @@ function Overview({ filter }: { filter: Filter }) {
       ))}
 
       <section>
-        <h2 className="mb-3 text-lg font-semibold">怎么读</h2>
+        <h2 className="mb-3 text-lg font-semibold">{L.howToRead}</h2>
         <div className="overflow-x-auto rounded-xl border border-fd-border">
           <table className="w-full text-left text-sm">
             <thead className="bg-fd-muted/50 text-fd-muted-foreground">
               <tr>
-                <th className="px-4 py-2.5 font-medium">你更像</th>
-                <th className="px-4 py-2.5 font-medium">顺序</th>
-                <th className="px-4 py-2.5 font-medium">可跳过</th>
+                <th className="px-4 py-2.5 font-medium">{L.youAre}</th>
+                <th className="px-4 py-2.5 font-medium">{L.route}</th>
+                <th className="px-4 py-2.5 font-medium">{L.skippable}</th>
               </tr>
             </thead>
             <tbody className="text-fd-muted-foreground">
-              <tr className="border-t border-fd-border">
-                <td className="px-4 py-3">设计师 / 玩法程序</td>
-                <td className="px-4 py-3">序 → 卷二全部 → 卷一 04–06、12 → 卷三 17–18</td>
-                <td className="px-4 py-3">卷三实现细节</td>
-              </tr>
-              <tr className="border-t border-fd-border">
-                <td className="px-4 py-3">引擎 / 技术程序</td>
-                <td className="px-4 py-3">序 → 卷二 01–02、07 → 卷三全部 → 卷四</td>
-                <td className="px-4 py-3">卷一影像章可略</td>
-              </tr>
-              <tr className="border-t border-fd-border">
-                <td className="px-4 py-3">制作人 / 商业</td>
-                <td className="px-4 py-3">卷一全部 → 卷二 11–16 → 卷三 15–17</td>
-                <td className="px-4 py-3">红石实现、渲染</td>
-              </tr>
-              <tr className="border-t border-fd-border">
-                <td className="px-4 py-3">资深玩家通读</td>
-                <td className="px-4 py-3">按卷顺序；每章先读简介与「要回答」</td>
-                <td className="px-4 py-3">开发者侧重章可读命题与结尾</td>
-              </tr>
+              {L.readingRoutes.map((row) => (
+                <tr key={row.you} className="border-t border-fd-border">
+                  <td className="px-4 py-3">{row.you}</td>
+                  <td className="px-4 py-3">{row.route}</td>
+                  <td className="px-4 py-3">{row.skip}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -219,10 +334,12 @@ function VolumeTree({
   volume,
   filter,
   query,
+  labels: L,
 }: {
   volume: TocVolume;
   filter: Filter;
   query: string;
+  labels: Labels;
 }) {
   let n = 0;
   return (
@@ -231,18 +348,16 @@ function VolumeTree({
         <p className="text-xs tracking-wide text-fd-muted-foreground uppercase">
           {volume.english}
         </p>
-        <h2 className="mt-1 text-2xl font-semibold tracking-tight">
-          {volume.roman ? `第 ${volume.roman} 卷 · ${volume.short}` : volume.short}
-        </h2>
+        <h2 className="mt-1 text-2xl font-semibold tracking-tight">{L.volumeHeading(volume)}</h2>
         <p className="mt-3 max-w-3xl text-[0.9375rem] leading-7 text-fd-muted-foreground">
           {volume.thesis}
         </p>
         <p className="mt-3 max-w-3xl text-sm leading-6">
-          <span className="text-fd-muted-foreground">爱好者带走：</span>
+          <span className="text-fd-muted-foreground">{L.fanPayoff}</span>
           {volume.payoffFan}
         </p>
         <p className="mt-1 max-w-3xl text-sm leading-6">
-          <span className="text-fd-muted-foreground">开发者带走：</span>
+          <span className="text-fd-muted-foreground">{L.devPayoff}</span>
           {volume.payoffDev}
         </p>
       </header>
@@ -276,7 +391,7 @@ function VolumeTree({
                   if (!matchesFilter(ch, filter) || !matchesQuery(ch, query)) return null;
                   return (
                     <li key={ch.id}>
-                      <ChapterRow chapter={ch} num={num} />
+                      <ChapterRow chapter={ch} num={num} labels={L} />
                     </li>
                   );
                 })}
@@ -289,7 +404,15 @@ function VolumeTree({
   );
 }
 
-function ChapterRow({ chapter, num }: { chapter: TocChapter; num: number }) {
+function ChapterRow({
+  chapter,
+  num,
+  labels: L,
+}: {
+  chapter: TocChapter;
+  num: number;
+  labels: Labels;
+}) {
   const title = (
     <span className="font-medium">
       <span className="mr-2 tabular-nums text-fd-muted-foreground">{String(num).padStart(2, '0')}</span>
@@ -311,11 +434,13 @@ function ChapterRow({ chapter, num }: { chapter: TocChapter; num: number }) {
         </div>
         <div className="flex shrink-0 flex-wrap gap-1.5 text-xs">
           {chapter.written ? (
-            <span className="rounded-md border border-fd-border px-1.5 py-0.5">已写</span>
+            <span className="rounded-md border border-fd-border px-1.5 py-0.5">{L.written}</span>
           ) : (
-            <span className="rounded-md px-1.5 py-0.5 text-fd-muted-foreground">未写</span>
+            <span className="rounded-md px-1.5 py-0.5 text-fd-muted-foreground">{L.draft}</span>
           )}
-          <span className="rounded-md px-1.5 py-0.5 text-fd-muted-foreground">{AUDIENCE[chapter.audience]}</span>
+          <span className="rounded-md px-1.5 py-0.5 text-fd-muted-foreground">
+            {L.audience[chapter.audience]}
+          </span>
           {chapter.tags.map((t) => (
             <span key={t} className="rounded-md bg-fd-muted px-1.5 py-0.5 text-fd-muted-foreground">
               {t}
@@ -325,13 +450,13 @@ function ChapterRow({ chapter, num }: { chapter: TocChapter; num: number }) {
       </div>
       <details className="mt-2 group">
         <summary className="cursor-pointer text-sm text-fd-muted-foreground hover:text-fd-foreground [&::-webkit-details-marker]:hidden">
-          简介与节大纲
+          {L.blurbOutline}
         </summary>
         <div className="mt-3 max-w-3xl pb-1">
           <p className="text-sm leading-6 text-fd-muted-foreground">{chapter.desc}</p>
           {chapter.question ? (
             <p className="mt-2 text-sm leading-6">
-              <span className="text-fd-muted-foreground">要回答：</span>
+              <span className="text-fd-muted-foreground">{L.answers}</span>
               {chapter.question}
             </p>
           ) : null}
