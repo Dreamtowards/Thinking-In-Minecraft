@@ -205,6 +205,22 @@ function resolveChapterHref(ch, slugMap) {
   return ch.href ?? slugMap[ch.id] ?? null;
 }
 
+const BOILERPLATE_SECTION = /^(?:问题|The problem|这一章留下什么|What this chapter leaves behind)$/i;
+
+function extractSections(body) {
+  return body
+    .split(/\r?\n/)
+    .map((line) => line.match(/^##\s+(.+)$/)?.[1]?.trim())
+    .filter((section) => section && !BOILERPLATE_SECTION.test(section));
+}
+
+function resolveSections(ch, doc, locale) {
+  if (locale === 'zh') return ch.sections;
+  if (!doc) return ch.sections;
+  const fromMdx = extractSections(doc.body);
+  return fromMdx.length > 0 ? fromMdx : ch.sections;
+}
+
 function enrichChapter(ch, slugMap, locale) {
   const baseHref = resolveChapterHref(ch, slugMap);
   const doc = resolveDoc(baseHref, locale);
@@ -217,6 +233,7 @@ function enrichChapter(ch, slugMap, locale) {
     desc: doc?.description || ch.desc,
     question: doc && locale === 'en' ? '' : ch.question,
     href,
+    sections: resolveSections(ch, doc, locale),
     written: Boolean(doc),
     tags: locale === 'en' ? ch.tags.map((tag) => TAG_EN[tag] ?? tag) : ch.tags,
   };

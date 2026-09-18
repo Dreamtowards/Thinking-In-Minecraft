@@ -27,8 +27,7 @@
                 "What this book is not",
                 "Two audiences, two routes",
                 "Why the book starts from the voxel",
-                "Where to start",
-                "What this chapter leaves behind"
+                "Where to start"
               ],
               "tags": [],
               "href": "/en/prelude",
@@ -44,8 +43,7 @@
                 "\"Best-selling\" explains nothing",
                 "One sentence, three verbs",
                 "How the volumes divide the work",
-                "If you only have ten minutes",
-                "What this chapter leaves behind"
+                "If you only have ten minutes"
               ],
               "tags": [
                 "priority"
@@ -60,15 +58,13 @@
               "desc": "Why this book deserves trust: phenomena first, falsifiable claims, the two-editions rule, a ranking of sources, and an explicit list of what it will not cover. Method comes before opinions.",
               "question": "",
               "sections": [
-                "The problem",
                 "Three ways to fail",
                 "Phenomena first",
                 "What \"falsifiable\" means",
                 "Two Minecrafts",
                 "Where the material comes from",
                 "What this book does not cover",
-                "Five confusable words",
-                "What this chapter leaves behind"
+                "Five confusable words"
               ],
               "tags": [],
               "href": "/en/prelude/method",
@@ -101,14 +97,12 @@
               "desc": "Infiniminer was abandoned and open-sourced less than a month after release; its \"clone\" became the best-selling game of all time. This chapter digs into the prehistory of destructible space — what Cave Game threw away, and how \"unfinished\" let it live as a product.",
               "question": "",
               "sections": [
-                "The problem",
                 "Why \"it copied Infiniminer\" does not explain enough",
                 "Prehistory: destructible space already existed — always with a goal attached",
                 "How Notch worked",
                 "Cave Game: dig, place, look",
                 "What it discarded",
-                "\"Unfinished\" as a product strategy",
-                "What this chapter leaves behind"
+                "\"Unfinished\" as a product strategy"
               ],
               "tags": [],
               "href": "/en/history/infiniminer",
@@ -121,13 +115,11 @@
               "desc": "From Survival Test to Infdev, the world went from finite to infinite. The paid Alpha turned players into co-authors through weekly updates — and turned trust into a promise that had to be repaid continuously.",
               "question": "",
               "sections": [
-                "The problem",
                 "Why anyone would pay for an unfinished game",
                 "Survival Test → Indev → Infdev: from finite to infinite",
                 "The feedback loop: forums, YouTube, word of mouth — not advertising",
                 "Early multiplayer: living in the same world as others",
-                "The paid Alpha: trust and lock-in happen together",
-                "What this chapter leaves behind"
+                "The paid Alpha: trust and lock-in happen together"
               ],
               "tags": [],
               "href": "/en/history/alpha",
@@ -140,13 +132,11 @@
               "desc": "When a personal project becomes a studio, design authority moves from intuition to organization. Beta 1.8 was the first convergence toward a game; 1.0 completed a ceremony, not a system; and buy-once pricing set the ground note of every later revenue conflict.",
               "question": "",
               "sections": [
-                "The problem",
                 "Did the game actually finish on release day?",
                 "Becoming a studio: roles, promises, MineCon",
                 "Beta 1.8: hunger, the Adventure Update, a split player base",
                 "The ethics of the price tag: buy once",
-                "Ceremony, not system: 1.0 did not end design",
-                "What this chapter leaves behind"
+                "Ceremony, not system: 1.0 did not end design"
               ],
               "tags": [],
               "href": "/en/history/mojang-beta",
@@ -166,13 +156,11 @@
               "desc": "Mods grew up alongside the game itself — Forge took the client seat, Bukkit the server, resource packs the skin. This chapter traces how the second authorship formed, and why Mojang absorbed the piston but left industry outside.",
               "question": "",
               "sections": [
-                "The problem",
                 "\"Vanilla Minecraft\" was never a finished product",
                 "Three rivers: ModLoader/Forge, Bukkit, and resource packs",
                 "What industry, magic, and RPG mods filled in",
                 "Selective absorption: the piston gets in, industry does not",
-                "Credit and governance: should Mojang have managed mods?",
-                "What this chapter leaves behind"
+                "Credit and governance: should Mojang have managed mods?"
               ],
               "tags": [
                 "hub"
@@ -187,13 +175,11 @@
               "desc": "Players buy the client but play a different game living on a server. Creative, survival, and minigame servers are three societies on one engine; Hypixel and 2b2t are its two extremes — and the infrastructure beneath it all is more fragile than the game itself.",
               "question": "",
               "sections": [
-                "The problem",
                 "You buy the client, you play the server",
                 "Three societies: creative, survival, minigame",
                 "Two extreme samples: Hypixel and 2b2t",
                 "Players become operators: admins, economies, rules",
-                "The Bukkit crisis: fragile infrastructure",
-                "What this chapter leaves behind"
+                "The Bukkit crisis: fragile infrastructure"
               ],
               "tags": [
                 "hub"
@@ -208,13 +194,11 @@
               "desc": "Let's Plays, tutorials, animations, and parody songs wrote Minecraft into the shared language of children and families, and Education Edition carried it into classrooms. Once \"how to play\" lives in video, what the base game should still teach becomes a late design question.",
               "question": "",
               "sections": [
-                "The problem",
                 "Most people learned to play in videos",
                 "The genres: Let's Plays, tutorials, animations, song parodies",
                 "Children, families, and the safe creation seen by parents",
                 "Education Edition: the classroom sandbox rewrote whose game it is",
-                "What the base game still teaches: advancements and the recipe book as late make-up lessons",
-                "What this chapter leaves behind"
+                "What the base game still teaches: advancements and the recipe book as late make-up lessons"
               ],
               "tags": [],
               "href": "/en/history/media-education",
@@ -229,20 +213,20 @@
           "chapters": [
             {
               "id": "history/07",
-              "title": "微软收购",
+              "title": "The Microsoft Acquisition",
               "audience": "both",
-              "desc": "25 亿美元买下的是游戏、平台，还是一代人的入口。Notch 离场后，真正变量是分发、账号、合规与跨平台，不是「还能不能加方块」。",
-              "question": "这笔交易买下的到底是什么？",
+              "desc": "What $2.5 billion bought was not \"can we still add blocks\" but distribution, accounts, compliance, and cross-platform reach. This chapter checks the community's fears from 2014 against what actually happened, item by item, to see what the deal really bought.",
+              "question": "",
               "sections": [
-                "「卖身」叙事为什么太浅",
-                "交易：结构、动机、时间线（可查）",
-                "「保护 Minecraft」保护了谁",
-                "Jeb 时代的风格转变（点到设计，不写人事）",
-                "产品线扩张：教育、Dungeons、Legends、电影——作为 IP 第二曲线的入口"
+                "Why the \"selling out\" narrative is too shallow",
+                "The deal: structure, motive, timeline",
+                "Who did \"protecting Minecraft\" actually protect?",
+                "The Jeb era: a change in style",
+                "Expanding the product line: Education, Dungeons, Legends, and the movie"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/en/history/acquisition",
+              "written": true
             },
             {
               "id": "history/08",
@@ -251,13 +235,11 @@
               "desc": "From Pocket Edition to Bedrock, cross-platform was the product logic; feature divergence is brand debt. The Marketplace commercialized player creations and shut modding culture outside the gate. Two Minecrafts, not two skins.",
               "question": "",
               "sections": [
-                "The problem",
                 "Why \"buy one, play it all\" does not work",
                 "PE to Bedrock: the cross-platform logic",
                 "Marketplace: monetization and community backlash",
                 "The feature divergence table: redstone, combat, world format, modding capability",
-                "How accounts and distribution shape the design back",
-                "What this chapter leaves behind"
+                "How accounts and distribution shape the design back"
               ],
               "tags": [
                 "hub"
@@ -267,20 +249,20 @@
             },
             {
               "id": "history/09",
-              "title": "版本政治与更新哲学",
+              "title": "Version Politics and the Philosophy of Updates",
               "audience": "both",
-              "desc": "从「Notch 随手加」到主题版本。快照、实验玩法、数据包成为官方共创接口。洞穴与山崖证明生成系统可以当版本卖点。「原版纯度」是被更新不断改写的执念。",
-              "question": "官方如何与社区抢定义权？",
+              "desc": "From Notch tossing things in to themed versions: snapshots, experimental toggles, and datapacks turned the development process itself into an interface the community co-writes — while vanilla purity and the mob vote expose the real fight over who gets to define Minecraft.",
+              "question": "",
               "sections": [
-                "为什么系统更深了，仍有人觉得「不是以前那个游戏」",
-                "共创接口：快照、实验玩法、数据包",
-                "主题版本：下界、洞穴与山崖",
-                "「原版纯度」从何而来",
-                "投票与失败实验：治理替代作者直觉"
+                "Why a deeper game still hears \"not the game it used to be\"",
+                "The co-creation interface: snapshots, experimental toggles, datapacks",
+                "Themed versions: the Nether Update and Caves & Cliffs",
+                "Where \"vanilla purity\" comes from",
+                "Votes and failed experiments: governance replaces authorial instinct"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/en/history/version-politics",
+              "written": true
             }
           ]
         },
@@ -291,73 +273,73 @@
           "chapters": [
             {
               "id": "history/10",
-              "title": "收入结构",
+              "title": "The Revenue Structure",
               "audience": "dev",
-              "desc": "买断客户端之后，钱来自 Realms、Marketplace、IP 第二曲线、教育授权与区域发行。中国版证明同一品牌可以是不同合同。买断形象能维持，是因为变现被拆到周边层。",
-              "question": "钱从哪里来、不能从哪里来？",
+              "desc": "The one-time purchase is only the first layer. This chapter takes Minecraft's money apart into three layers — client and subscriptions, IP licensing, access and regional publishing — then asks the reverse question: where the money cannot come from, and why \"a cut of mods\" never stood on Java Edition.",
+              "question": "",
               "sections": [
-                "「只卖一次」早已不是全貌",
-                "第一层：客户端、Realms、Marketplace",
-                "第二层：周边、电影、出版、主题公园",
-                "第三层：教育、企业、区域发行权",
-                "不能从哪里来：为何模组抽成失败（细节见第 11 章）"
+                "\"Sell it once\" stopped being the whole story long ago",
+                "Layer one: the client, Realms, and the Marketplace",
+                "Layer two: merchandise, film, publishing, theme parks",
+                "Layer three: education, corporate, and regional publishing rights",
+                "Where it cannot come from: why \"a cut of mods\" never stood"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/en/history/revenue",
+              "written": true
             },
             {
               "id": "history/11",
-              "title": "模组、服务器与灰色经济",
+              "title": "The Grey Economy",
               "audience": "both",
-              "desc": "模组作者靠捐赠；服务器靠 Rank。盗版、第三方启动器、私人服务端与 Marketplace 并行。它同时是最开放、又最难被平台抽成的 UGC。Marketplace 卖商品，模组卖的是作者席。",
-              "question": "为何最开放又最难抽成？",
+              "desc": "Free mods sell the paid game, and the biggest server networks take millions a year without paying Mojang a cent. This chapter explains why Minecraft's community creation is at once gaming's most open ecosystem and the one platforms find hardest to take a cut from.",
+              "question": "",
               "sections": [
-                "免费模组养活了付费游戏",
-                "模组劳动：无偿、捐赠、打赏",
-                "服务器变现与 Pay-to-win",
-                "灰色层作为生态事实（不教唆）",
-                "两种 UGC：Marketplace vs 模组"
+                "Free mods sell the paid game",
+                "Mod labor: unpaid, donated, tipped",
+                "Server monetization and pay-to-win",
+                "The grey layer: an ecosystem fact, not a how-to",
+                "Two kinds of UGC: the Marketplace sells goods, mods sell the authorship"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/en/history/grey-economy",
+              "written": true
             },
             {
               "id": "history/12",
-              "title": "竞争、模仿与产业影响",
+              "title": "Competition, Imitation, and Industry Influence",
               "audience": "both",
-              "desc": "Terraria、Vintage Story、Minetest、Hytale 是谱系对照。Roblox 才是真正的品类分叉：平台化对游戏化。「下一个 Minecraft」难，因为时机、工具链和一代人的入口不可复制。",
-              "question": "「下一个 Minecraft」为什么很难出现？",
+              "desc": "Terraria, Vintage Story, Luanti, and Hytale each carried off one layer of Minecraft, and Roblox turned creation itself into a platform. Imitators arrive year after year, yet the successor never comes — because the circumstances cannot be copied.",
+              "question": "",
               "sections": [
-                "每年都有 Minecraft-like",
-                "谱系：各继承了哪一层",
-                "Roblox：平台化 vs 游戏化",
-                "对开放世界、生存、沙盒、UGC 的具体影响",
-                "不可复制条件"
+                "Every year brings a Minecraft-like",
+                "The lineage: which layer each inherited",
+                "Roblox: platform versus game",
+                "Concrete effects on open worlds, survival, sandboxes, and UGC",
+                "The conditions that cannot be copied"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/en/history/competition",
+              "written": true
             },
             {
               "id": "history/13",
-              "title": "作为文化遗产的 Minecraft",
+              "title": "Minecraft as Cultural Heritage",
               "audience": "fan",
-              "desc": "版本、存档、服务器和模组比引擎更难保存。当童年变成 IP，品牌管理、审查与创作自由开始摩擦。媒介一旦停止被再开发，就只剩 IP。",
-              "question": "谁来保存世界、模组与服务器？",
+              "desc": "Versions, saves, servers, and mods are all harder to preserve than the engine. Java has the launcher as a backstop; Bedrock has almost no way back. Brand safety and creative freedom have begun to chafe — who preserves a world people actually live in?",
+              "question": "",
               "sections": [
-                "一个旧模组世界现在还打得开吗",
-                "保存对象：版本、存档、服务器、模组",
-                "博物馆与研究（点到为止）",
-                "品牌、审查、家庭友好 vs 创作自由",
-                "卷一结语：卖的是可居住的媒介"
+                "Does an old modded world still run today?",
+                "The four preservation targets: versions, saves, servers, mods",
+                "Museums and research",
+                "Brand, moderation, family-friendly vs. creative freedom",
+                "Volume I closing: what was sold was an inhabitable medium"
               ],
               "tags": [
                 "closing"
               ],
-              "href": null,
-              "written": false
+              "href": "/en/history/heritage",
+              "written": true
             }
           ]
         }
@@ -386,13 +368,11 @@
               "desc": "The one-meter cube serves building, walking, fighting, and redstone at once because space is discrete, breakable, placeable, and countable. The world is the inventory; the voxel is not an art style — it is a system of measurement.",
               "question": "",
               "sections": [
-                "The problem",
                 "Why \"blocky game\" is not an insult",
                 "Discrete space: trading precision for language",
                 "The world is the inventory",
                 "One system of measure across four ways to play",
-                "The comparison: what continuous-space sandboxes gain and lose",
-                "What this chapter leaves behind"
+                "The comparison: what continuous-space sandboxes gain and lose"
               ],
               "tags": [
                 "priority"
@@ -407,13 +387,11 @@
               "desc": "Look, walk, dig, place, craft, attack, use — seven verbs carry a whole game. This chapter explains why shipping without a build mode or a skill tree was the right call, and how tools amplify verbs instead of adding keys.",
               "question": "",
               "sections": [
-                "The problem",
                 "Why modern sandboxes love an \"editor mode\"",
                 "Seven verbs, and the ones deliberately missing",
                 "Tools are verb amplifiers",
                 "Feel is rules, not wrapping",
-                "The action lever: simple input, complex output",
-                "What this chapter leaves behind"
+                "The action lever: simple input, complex output"
               ],
               "tags": [
                 "priority"
@@ -428,13 +406,11 @@
               "desc": "Hunger, night, and death are not a difficulty curve but rhythm devices: they hand out no goals, only moments that demand a response. The wood-stone-iron-diamond ladder is false progress, real teaching; home and safety are self-built; death drops, but does not destroy.",
               "question": "",
               "sections": [
-                "The problem",
                 "With the monsters off, is it still Survival?",
                 "The resource ladder: false progress, real teaching",
                 "Self-built safety: home, bed, chest",
                 "Death's restraint: it drops, but does not destroy",
-                "The world breathes: day-night and weather",
-                "What this chapter leaves behind"
+                "The world breathes: day-night and weather"
               ],
               "tags": [
                 "priority"
@@ -449,13 +425,11 @@
               "desc": "Survival, Creative, Adventure, and Spectator are four permission configurations on one physics, not four games. Creative is parasitic on Survival's blocks, scale, and physics; infinite resources change the builder's social identity, not the world's rules.",
               "question": "",
               "sections": [
-                "The problem",
                 "Why Creative still feels like playing Minecraft",
                 "Parasitic on Survival's rules",
                 "What infinite resources change: social identity",
                 "The permission table: four modes, one spectrum",
-                "Comparison: Studio, GMod, and the real level editor",
-                "What this chapter leaves behind"
+                "Comparison: Studio, GMod, and the real level editor"
               ],
               "tags": [
                 "priority"
@@ -477,13 +451,11 @@
               "desc": "Depth is not added to the character but to things: grid crafting makes recipe knowledge a community dialect, items are portable slices of the world, and durability and enchanting build growth into objects. Anti-RPG was a choice, not an absence.",
               "question": "",
               "sections": [
-                "The problem",
                 "How do you get \"stronger\" without a skill tree?",
                 "Grid crafting: spatial memory instead of a lookup menu",
                 "Items as slices of the world",
                 "Growth on things: durability, enchanting, smithing",
-                "Anti-RPG: a choice, not an absence",
-                "What this chapter leaves behind"
+                "Anti-RPG: a choice, not an absence"
               ],
               "tags": [],
               "href": "/en/design/crafting-inventory",
@@ -496,13 +468,11 @@
               "desc": "Noise, biomes, and structures each mind one layer, and what they produce is not content but difference; the seed is infinity's rhetoric, the Far Lands its crack, and \"not finding\" is exploration's fuel. The design contract of procedural content is explorable, not completable.",
               "question": "",
               "sections": [
-                "The problem",
                 "Why the same mountains can be looked at for a lifetime",
                 "The division of labor: noise, biomes, structures",
                 "The rhetoric of infinity: seeds, the Far Lands, the border",
                 "Generation as the selling point: what Caves & Cliffs proves",
-                "\"Not finding\" as exploration's fuel",
-                "What this chapter leaves behind"
+                "\"Not finding\" as exploration's fuel"
               ],
               "tags": [],
               "href": "/en/design/worldgen",
@@ -515,13 +485,11 @@
               "desc": "The electricity metaphor failed, yet logic circuits grew out of the wreckage. The game teaches nothing, so the community wrote the textbook; gates, clocks, flying machines, and computers are computation invented by players. This chapter erects the \"misusable system\": designers deliver physics, not a play list.",
               "question": "",
               "sections": [
-                "The problem",
                 "Redstone on the Wiki and \"redstone\" in the game are not the same thing",
                 "It is not electricity: why the metaphor failed",
                 "What \"the officials don't teach\" means",
                 "Invented computation: gates, clocks, flying machines, computers",
-                "Three ways to be programmable: mechanism / circuit / script — which one Minecraft chose",
-                "What this chapter leaves behind"
+                "Three ways to be programmable: mechanism / circuit / script — which one Minecraft chose"
               ],
               "tags": [
                 "hub"
@@ -536,13 +504,11 @@
               "desc": "The command block turns the operator into the level designer, and the datapack is the officially sanctioned data-driven mod. Four map genres parasitize one and the same physics — and where data-driven design meets its limit is exactly where mods begin.",
               "question": "",
               "sections": [
-                "The problem",
                 "Can vanilla make an RPG?",
                 "The command block: the operator becomes the level designer",
                 "Datapacks: the official mild mods",
                 "Type parasitism: how map genres ride one physics",
-                "The limits: when you must write a new system",
-                "What this chapter leaves behind"
+                "The limits: when you must write a new system"
               ],
               "tags": [],
               "href": "/en/design/commands-datapacks",
@@ -555,13 +521,11 @@
               "desc": "Mobs are rhythm devices and a movement tax, not the main act of content; bosses stay few and each holds one job; PvP is an arena the community invented. Combat was deliberately kept at \"good enough,\" ceding depth to building and survival.",
               "question": "",
               "sections": [
-                "The problem",
                 "Why the attack cooldown tore the community apart",
                 "Rhythm devices: night, creepers, and the undead",
                 "Boss restraint: the dragon, the wither, and the warden hold different jobs",
                 "PvP is an arena the community invented",
-                "Why it cannot be an action game",
-                "What this chapter leaves behind"
+                "Why it cannot be an action game"
               ],
               "tags": [],
               "href": "/en/design/mobs-combat",
@@ -574,13 +538,11 @@
               "desc": "The Nether and the End are rule variants, not levels; advancements are suggestions, not quests; the official late game ships levers, not endpoints. The real endgame is player-built — a game with no ending stays alive on voluntary goals that regenerate.",
               "question": "",
               "sections": [
-                "The problem",
                 "\"Beating Minecraft\" is an empty phrase",
                 "Dimensions are rule variants",
                 "Advancements are suggestions",
                 "The official late game: villagers, beacons, and elytra",
-                "The players' late game: ice roads, factories, and server civilizations",
-                "What this chapter leaves behind"
+                "The players' late game: ice roads, factories, and server civilizations"
               ],
               "tags": [],
               "href": "/en/design/dimensions-endgame",
@@ -600,13 +562,11 @@
               "desc": "Singleplayer worlds are full of design prepared for others — doors, beds, chests, signs. LAN, Realms, and public servers are three social radii; seeds, mods, and video reconnect a singleplayer save to society, with delay. Multiplayer is the default state, not an add-on mode.",
               "question": "",
               "sections": [
-                "The problem",
                 "Why the singleplayer world is full of social metaphors",
                 "Three social radii",
                 "Grief, trust, and territory: the politics of an open world",
                 "Cooperative building: rare and precious",
-                "Delayed multiplayer: seeds, mods, and video",
-                "What this chapter leaves behind"
+                "Delayed multiplayer: seeds, mods, and video"
               ],
               "tags": [],
               "href": "/en/design/multiplayer",
@@ -614,37 +574,37 @@
             },
             {
               "id": "design/12",
-              "title": "规则由谁制定",
+              "title": "Who Makes the Rules",
               "audience": "both",
-              "desc": "游戏规则、难度、命令权限是引擎立法。插件是服务器立法。不成文宪法是不破坏、不作弊、审美共识。2b2t 是无规则的极限实验。设计师不只坐在 Mojang。",
-              "question": "谁才是真正的设计师？",
+              "desc": "Engine legislation (official code), server legislation (plugins and their operators), and an unwritten constitution (community convention) — all three layers can genuinely change \"what this game is.\" The designer is plural, and even a world with no rules grows a constitution.",
+              "question": "",
               "sections": [
-                "关掉怪物掉落之后，还是不是同一款游戏",
-                "引擎立法：gamerule、难度、权限",
-                "插件立法",
-                "不成文宪法",
-                "2b2t：极限实验，不是猎奇"
+                "Turn off mob drops — is it still the same game?",
+                "Engine legislation: switches for sale, no verdicts",
+                "Server legislation: local government and case law",
+                "The unwritten constitution: rules with no code",
+                "2b2t: take two layers away and see whether the third grows"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/en/design/who-makes-rules",
+              "written": true
             },
             {
               "id": "design/13",
-              "title": "模组作为设计方法",
+              "title": "Mods as Design Method",
               "audience": "both",
-              "desc": "加系统与加内容是模组成功的两种模式。整合包是策展即设计。工业 / 魔法 / RPG 在补结构空洞。正作收编应增加动词或可误用物理，而不是增加内容包。",
-              "question": "正作该吸收什么、不该吸收什么？",
+              "desc": "\"Why isn't this great mod in the game?\" asks the wrong question — the standard for absorption is type, not quality: verbs and formats can enter vanilla, while systems and industries stay with the community. Modpacks prove that curation is design, and structural holes are the official side's restraint list.",
+              "question": "",
               "sections": [
-                "「好模组为什么不直接进游戏」",
-                "加系统 vs 加内容",
-                "整合包：策展即设计",
-                "结构空洞：工业 / 魔法 / RPG",
-                "收编原则 + 反例（至少四条）"
+                "Where \"why isn't this great mod in the game?\" goes wrong",
+                "Adding systems, adding content: two kinds of mods, two fates",
+                "Modpacks: curation is design",
+                "Structural holes: the official restraint list",
+                "Absorption principles and counter-examples"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/en/design/mods-as-method",
+              "written": true
             }
           ]
         },
@@ -655,70 +615,57 @@
           "chapters": [
             {
               "id": "design/14",
-              "title": "留白、涌现与玩家作者性",
+              "title": "Blank Space, Emergence, and Player Authorship",
               "audience": "both",
-              "desc": "目标外包：游戏提供动词，玩家提供叙事。涌现是约束下的必然，不是意外。玩具 vs 游戏之争在此被终结。建造、红石、地图、影像是同一作者权利。",
-              "question": "涌现是意外还是必然？",
+              "desc": "The review line \"I don't know what this game wants me to do\" can be the highest praise — goal outsourcing, emergence as necessity under constraint, four kinds of player authorship. Emergence is not an easter egg but a design output; a single emergence is an accident, emergence as a class is inevitable.",
+              "question": "",
               "sections": [
-                "「我不知道这游戏要干什么」为何可以是好评",
-                "目标外包",
-                "涌现 = 约束下的必然",
-                "对照：《旷野之息》《动物森友会》《Dwarf Fortress》——各说明「不像」的那一点",
-                "同一权利：建造 / 红石 / 地图 / 影像"
+                "Goal outsourcing: a division-of-labor contract",
+                "Emergence is necessity under constraint",
+                "Three comparisons: where each great game is \"not like\" Minecraft",
+                "The same right: building, redstone, maps, video"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/en/design/emergence",
+              "written": true
             },
             {
               "id": "design/15",
-              "title": "约束即深度",
+              "title": "Constraints Are Depth",
               "audience": "dev",
-              "desc": "不真实的物理（重力例外、水与岩浆）往往更好玩。现代化更新的风险是填满留白。特例方块可能是深度也可能是债。停手原则：新系统必须增加动词，而不是增加菜单。",
-              "question": "设计者何时该停手？",
+              "desc": "Unreal physics is a concession sold to the player; whether a special case is depth or debt is judged by teachability, composability, and counter-intuitive cost; and the stop-hand principle — a new system must add verbs, not menus.",
+              "question": "",
               "sections": [
-                "「更真实」为什么常常更不好玩",
-                "不真实的物理：重力例外、流体",
-                "现代化风险：填满留白的版本",
-                "特例方块：深度还是债务（列 5–8 条，判定标准写明）",
-                "停手原则：增加动词 vs 增加菜单"
+                "Why \"more realistic\" is usually less fun",
+                "Unreal physics: the concession list",
+                "Special-case blocks: depth or debt",
+                "The risk of modernization: filling in the blank space",
+                "The stop-hand principle: verbs, not menus"
               ],
               "tags": [
                 "hub"
               ],
-              "href": null,
-              "written": false
+              "href": "/en/design/constraints",
+              "written": true
             },
             {
               "id": "design/16",
-              "title": "可迁移原则清单",
+              "title": "A Checklist of Transferable Principles",
               "audience": "dev",
-              "desc": "十二条可带走原则，加上不可复制条件，加上 Minecraft-like 反面教材。卷二收束：能住进去的系统，不是通关即弃的内容。",
-              "question": "开发者到底能拿走什么？",
+              "desc": "Twelve take-away design principles, each with its premise of application; four non-transferable circumstances listed on their own; four anti-patterns that copy the skin and lose the bone. Volume II's close — a system you can inhabit, not disposable content.",
+              "question": "",
               "sections": [
-                "为什么 Minecraft-like 总是「像但不长」",
-                "十二条原则（必须用这十二条，可改表述不可换核）：",
-                "最小动词，深度来自组合",
-                "世界即库存",
-                "目标外包",
-                "可误用系统",
-                "成长附着于物",
-                "程序内容合同 = 可探索",
-                "约束即深度；不真实可以更好玩",
-                "模式是权限，不是四个游戏",
-                "社会契约是设计的一半",
-                "模组 / 数据驱动是第一公民",
-                "世界比引擎活得更久",
-                "新系统必须增加动词，不增加菜单",
-                "不可复制条件：时机、媒介窗口、二十年工具链、未定义行为被收编为 API",
-                "反面教材：至少三种「抄了皮、丢了骨」的机制类型",
-                "卷二结语"
+                "Why Minecraft-likes are \"alike but never alive\"",
+                "The twelve principles",
+                "The non-transferable conditions (they are not principles)",
+                "Anti-patterns: the skin copied, the bone lost",
+                "Volume II in closing"
               ],
               "tags": [
                 "closing"
               ],
-              "href": null,
-              "written": false
+              "href": "/en/design/transferable",
+              "written": true
             }
           ]
         }
@@ -742,71 +689,70 @@
           "chapters": [
             {
               "id": "impl/01",
-              "title": "体素世界的数据模型",
+              "title": "The Data Model of a Voxel World",
               "audience": "dev",
-              "desc": "方块状态、元数据、方块实体。区块是空间与 I/O 单位。节、调色板、压缩。空气也是数据。高度上限从 256 到 384，是数据模型对设计的限制被改写。区块不是实现细节，是「无限」的代价单位。",
-              "question": "空气为什么也是数据？区块意味着什么？",
+              "desc": "The one block a player sees is several entries to the machine — kind, state, and a dossier hung alongside. Chunks, sections, palettes, and compression fit an infinite world into finite memory; air is data too, which is why the height limit is a foundation, not a parameter.",
+              "question": "",
               "sections": [
-                "玩家看到的方块 vs 内存里的方块",
-                "方块状态、元数据、方块实体",
-                "区块、节、调色板、压缩",
-                "稀疏与稠密",
-                "高度上限事件：数据模型如何限制设计"
+                "The block players see vs. the block in memory",
+                "Block states, data values, and block entities",
+                "Chunks, sections, palettes, and compression",
+                "Sparse and dense",
+                "The height-limit event: how the data model constrains design"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/en/impl/data-model",
+              "written": true
             },
             {
               "id": "impl/02",
-              "title": "存储与序列化",
+              "title": "Storage and Serialization",
               "audience": "dev",
-              "desc": "Region / Anvil / MCA、NBT、玩家数据与结构文件。扁平化与组件化证明一次格式改革的成本。世界必须比引擎活得更久。存档兼容是对玩家时间的伦理。",
-              "question": "世界为什么必须比引擎活得更久？",
+              "desc": "How Region and Anvil pack chunks, why NBT has held the universal layer for over a decade, and how world, player, and structure data divide the labor — plus why a single version migration costs so much: save compatibility is an ethic toward player time.",
+              "question": "",
               "sections": [
-                "世界比客户端活得长",
-                "区域文件简史",
-                "NBT 作为通用层",
-                "世界 / 玩家 / 结构",
-                "版本迁移成本"
+                "The world outlives the client",
+                "A short history of the region file",
+                "NBT as the universal layer",
+                "World, player, structure: three bodies of data, three jobs",
+                "The cost of version migration: what the engine does when it upgrades a world"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/en/impl/storage",
+              "written": true
             },
             {
               "id": "impl/03",
-              "title": "世界生成管线",
+              "title": "The World Generation Pipeline",
               "audience": "dev",
-              "desc": "噪声、分层、特征、结构。区块生命周期与多线程。结构与地形冲突常被「假装没发生」。同样种子有时不同，因为确定性有边界。",
-              "question": "同样的种子为何有时会不同？",
+              "desc": "From noise to structures, how a pipeline makes good on the design contract of \"explorable\"; chunk lifecycles and multithreading; conflicts between structures and terrain patched over and pretended away; the seed's determinism is a contract with boundaries.",
+              "question": "",
               "sections": [
-                "生成是设计合同的实现",
-                "管线阶段图",
-                "区块生命周期",
-                "结构与地形的冲突",
-                "确定性、可复现、实验性生成器"
+                "Generation is the design contract implemented",
+                "Pipeline stages: one process, one world concept",
+                "The life of a chunk: lifecycle and multithreading",
+                "Structures and terrain: a conflict pretended not to happen",
+                "The boundary of determinism: the seed contract's exemption clause"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/en/impl/worldgen-pipeline",
+              "written": true
             },
             {
               "id": "impl/04",
-              "title": "光照、流体与方块更新",
+              "title": "Light, Fluids, and Block Updates",
               "audience": "both",
-              "desc": "天空光 / 方块光与光照重写史。有限水 vs 无限水是设计与实现耦合。方块更新、计划刻、随机刻。连锁更新是隐式图计算，也是卡顿与杜普的漏口。",
-              "question": "卡顿、杜普、连锁更新从哪来？",
+              "desc": "Light propagation, blockified fluids, and three kinds of ticks — invisible infrastructure decides the game feel you can see; the cascade update is an implicit graph computation, and both lag and item-duplication exploits grow out of its scale.",
+              "question": "",
               "sections": [
-                "从玩家能感到的现象进入",
-                "光照传播与重写史",
-                "流体：设计与实现耦合",
-                "三类刻",
-                "连锁更新即图计算"
+                "Light: how far a single dig reaches",
+                "Fluids: design and implementation, deeply coupled",
+                "Three kinds of ticks: the simulation's timetable",
+                "Cascade updates: an implicit graph computation"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/en/impl/light-fluid-updates",
+              "written": true
             }
           ]
         },
@@ -817,73 +763,74 @@
           "chapters": [
             {
               "id": "impl/05",
-              "title": "游戏循环与刻",
+              "title": "The Game Loop and the Tick",
               "audience": "both",
-              "desc": "20 TPS 是契约。随机刻、计划刻、方块刻、实体刻、红石刻会错位。TPS 下降时失去的是因果，不是帧率。时间是多人世界的共享真实。",
-              "question": "TPS 下降时 Minecraft 在失去什么？",
+              "desc": "Twenty TPS is the world's contract of time — when TPS drops, what you lose is not framerate but the timeliness of cause and effect. The kinds of ticks, redstone's second clock, the watchdog, and why \"time\" in a multiplayer world is a shared reality.",
+              "question": "",
               "sections": [
-                "卡顿时「世界变慢」到底是什么",
-                "20 TPS 契约与客户端 tick",
-                "刻的种类",
-                "红石刻与游戏刻的错位（细节在第 8 章）",
-                "看门狗与玩家可感知的时间"
+                "What \"the world slows down\" actually means",
+                "The 20 TPS contract and the client's time",
+                "Kinds of ticks: one clock, several ledgers",
+                "Redstone and the tick, misaligned: one beat is not one tick",
+                "The watchdog and player-perceptible time"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/en/impl/tick",
+              "written": true
             },
             {
               "id": "impl/06",
-              "title": "实体与碰撞",
+              "title": "Entities and Collision",
               "audience": "dev",
-              "desc": "实体、方块实体、展示实体。AABB、步进、船与矿车特例。AI 是目标选择与寻路。实体预算和农场是性能崩溃的经典路径。方块便宜，实体昂贵。",
-              "question": "为什么实体才是真正的税？",
+              "desc": "Blocks are static data; entities are continuous computation — every tick, every one of them has to think, move, and collide. The three classes of objects, AABBs and stepped movement, the AI bill, and farms as crash paths: why entities are the real tax.",
+              "question": "",
               "sections": [
-                "为什么生物多了比方块多了更卡",
-                "三类对象",
-                "碰撞与特例物理",
-                "AI：目标、寻路、村民日程",
-                "农场与崩溃路径"
+                "Blocks are cheap, entities are expensive: two cost structures",
+                "Three classes of objects: entities, block entities, display entities",
+                "Collision and special-case physics",
+                "AI: targeting, pathfinding, and the villager schedule",
+                "Farms and crashes: players bargain with the tax table"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/en/impl/entities",
+              "written": true
             },
             {
               "id": "impl/07",
-              "title": "物品、库存与合成",
+              "title": "Items, Inventory, and Crafting",
               "audience": "dev",
-              "desc": "物品栈、NBT、组件化。配方数据驱动。库存同步与点击窗口协议。从硬编码到 JSON，技术追随模组文化。物品是玩家财产的主要载体，所以迁移是兼容地狱。",
-              "question": "技术如何追随模组文化？",
+              "desc": "Item stacks, NBT baggage, and the road to components — every architectural upgrade of the item system was dragged along by community usage. Recipes went from hardcoded to data-driven, inventory sync keeps a server-side authority ledger, and item migration is compatibility hell.",
+              "question": "",
               "sections": [
-                "物品为什么难迁",
-                "栈、NBT、组件化",
-                "配方数据驱动",
-                "窗口协议",
-                "迁移地狱"
+                "Why items are hard to migrate",
+                "Stacks, NBT, and the era of free parking",
+                "Componentization: from free parking lot to named slots",
+                "Data-driven recipes: following once more",
+                "The window protocol: the inventory interface's authority ledger",
+                "Migration hell: the add-only interpreter"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/en/impl/items",
+              "written": true
             },
             {
               "id": "impl/08",
-              "title": "红石的实现",
+              "title": "Redstone's Implementation",
               "audience": "both",
-              "desc": "信号强度、弱充能、准连接。活塞、BUD、更新顺序。未定义行为被社区当成稳定 API。红石是隐式虚拟机。兼容性高于正确性时，怪癖会变成平台。",
-              "question": "「未定义行为」如何成为社区 API？",
+              "desc": "Signal strength, strong and weak power, and what causes quasi-connectivity; pistons and update order; how \"undefined behavior\" came to be relied on by the community, frozen by the officials, and finally turned into an API — redstone is an implicit virtual machine with no spec sheet.",
+              "question": "",
               "sections": [
-                "为什么「修 bug」会引发红石革命",
-                "信号模型：强度、充能、准连接",
-                "活塞与更新顺序；BUD 作为社会 API",
-                "未定义行为变成接口的社会过程",
-                "隐式虚拟机的工程现实"
+                "Why fixing a bug triggers a redstone revolution",
+                "The signal model: strength, power, and what causes quasi-connectivity",
+                "Pistons and update order: within one tick, who moves first",
+                "How undefined behavior becomes an API: a four-step social process",
+                "The engineering reality of an implicit virtual machine"
               ],
               "tags": [
                 "hub"
               ],
-              "href": null,
-              "written": false
+              "href": "/en/impl/redstone",
+              "written": true
             }
           ]
         },
@@ -894,54 +841,54 @@
           "chapters": [
             {
               "id": "impl/09",
-              "title": "客户端与渲染",
+              "title": "The Client and Rendering",
               "audience": "dev",
-              "desc": "从即时模式到批处理。区块网格、剔除、透明。资源包是官方模组。原版不用贪婪网格是历史与复杂度选择。优化模组证明了原版债，它们是民间官方实现的一部分。",
-              "question": "原版为何不用贪婪网格，模组如何改写这一层？",
+              "desc": "The assembly line that turns blocks into triangles; the trade-offs among meshing, culling, and transparency; resource packs as proof that representation is swappable; and optimization mods whose multiplied framerates prove vanilla carries debt — the folk have been carrying half the official implementation.",
+              "question": "",
               "sections": [
-                "看得见的世界如何被拼出来",
-                "渲染简史",
-                "网格、剔除、透明",
-                "资源包作为官方模组",
-                "优化模组作为证据"
+                "How the visible world gets assembled",
+                "A short history of rendering: a line a decade behind the industry",
+                "Meshing, culling, and the trade-offs of transparency",
+                "Resource packs: the official interface of the representation layer",
+                "Optimization mods: the folk official implementation"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/en/impl/client-render",
+              "written": true
             },
             {
               "id": "impl/10",
-              "title": "网络协议",
+              "title": "The Network Protocol",
               "audience": "dev",
-              "desc": "客户端–服务器权威；单人即本地服务器。区块传输、实体同步、延迟与预测。反作弊先天困难。协议是未承认的公共 API，于是成为模组兼容瓶颈。",
-              "question": "协议为何成为模组兼容瓶颈？",
+              "desc": "How the client and the server talk: singleplayer as a local server, authority on the server side, how chunks, entities, and inventories each stay in sync, why anticheat is difficult by birth, and how the protocol became the unacknowledged public API.",
+              "question": "",
               "sections": [
-                "单人游戏为什么要有「服务器」",
-                "权威模型",
-                "同步什么：区块、实体、库存",
-                "延迟、预测、反作弊为什么难",
-                "协议版本与多版本服务器"
+                "Why singleplayer needs a \"server\"",
+                "The authority model: who holds the truth",
+                "What gets synced: chunks, entities, inventories",
+                "Latency, prediction, and anticheat's congenital difficulty",
+                "Protocol versions and multi-version servers: the unacknowledged public API"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/en/impl/protocol",
+              "written": true
             },
             {
               "id": "impl/11",
-              "title": "音频、粒子与手感谎言",
+              "title": "Audio, Particles, and the Lies of Feel",
               "audience": "both",
-              "desc": "位置音频是空间信息。粒子是反馈不是电影。挖掘、受伤、GUI 大量客户端预测。无障碍是设计还是债，单独成节。",
-              "question": "手感有多少是模拟，有多少是反馈？",
+              "desc": "Positional audio is spatial information, particles are feedback not decoration, and digging and taking damage are largely the client acting first and confessing later — of what game feel is made, how much is simulation and how much performance? Whether accessibility is design or debt gets its own section.",
+              "question": "",
               "sections": [
-                "挖一下、挨一下，服务器还没说话",
-                "位置音频",
-                "粒子是反馈",
-                "客户端预测",
-                "无障碍"
+                "A dig, a hit — and the server hasn't spoken yet",
+                "Positional audio: space you can hear",
+                "Particles are feedback, not cinema",
+                "Client prediction: hiding latency inside the feel",
+                "Accessibility: the exception clause of performance"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/en/impl/feel-client",
+              "written": true
             }
           ]
         },
@@ -952,88 +899,88 @@
           "chapters": [
             {
               "id": "impl/12",
-              "title": "模组与插件架构",
+              "title": "Mod and Plugin Architecture",
               "audience": "dev",
-              "desc": "字节码、Mixin、Forge / Fabric / NeoForge。Bukkit / Paper 是另一条河。没有稳定 API 时，注入即 API，升级变成政治。兼容矩阵：版本 × 加载器 × 模组。模组比引擎更难维护。",
-              "question": "为什么模组比引擎更难维护？",
+              "desc": "Officially, no interface for mods was ever provided; the community's answer was injection. This chapter takes apart the architecture of two rivers: the loading philosophies of Forge and Fabric, Bukkit's split between interface and implementation, and the compatibility matrix across version, loader, and mod.",
+              "question": "",
               "sections": [
-                "为什么每个大版本都是模组的末日",
-                "客户端模组河",
-                "服务端插件河",
-                "类加载、事件、生命周期",
-                "兼容矩阵"
+                "Why every major version is doomsday for mods",
+                "The client-mod river: from bytecode surgery to Mixin",
+                "The server-plugin river: the interface layer and the implementation layer",
+                "Class loading, events, lifecycles: what the loader actually solves",
+                "The compatibility matrix: the three-dimensional explosion of version × loader × mod"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/en/impl/mod-architecture",
+              "written": true
             },
             {
               "id": "impl/13",
-              "title": "数据包、资源包与数据驱动",
+              "title": "Datapacks, Resource Packs, and Data-Driven Design",
               "audience": "dev",
-              "desc": "扁平化之后的命名空间世界。数据包能改什么、不能改什么。资源包与数据分工。官方扩展面故意停在「新动词」之前。数据驱动是温和模组的政治。",
-              "question": "官方扩展面的边界在哪？",
+              "desc": "The namespace world, the registry's closed club, the table of what can be done versus what must be coded, and the division of labor between resources and data — the official extension surface is a precisely drawn political boundary, not a technical limit.",
+              "question": "",
               "sections": [
-                "为什么有了数据包还是要写 Java",
-                "命名空间世界",
-                "能做 / 必须写代码 对照表",
-                "资源 vs 数据",
-                "政治含义"
+                "Why datapacks still leave you writing Java",
+                "A world of namespaces: the door-plate system",
+                "Can do versus must write code: one table",
+                "Resources and data: two faces of one coin",
+                "The political meaning: why the border sits here"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/en/impl/datapacks",
+              "written": true
             },
             {
               "id": "impl/14",
-              "title": "Java 版运行时",
+              "title": "The Java Edition Runtime",
               "audience": "dev",
-              "desc": "2009 年选 Java 证明了可移植与模组性，也卡住了性能与发布。GC、JIT、启动器、版本隔离。性能史从「能跑」到各类优化模组。语言是历史偶然，不是设计本质。",
-              "question": "Java 证明了什么、卡住了什么？",
+              "desc": "What choosing Java in 2009 bought (portability, decompilability) and what it cost (GC pauses, memory, startup); the repayment history of the runtime tax; LWJGL and the native border; the language was an accident — and the ecosystem the accident grew has become essence.",
+              "question": "",
               "sections": [
-                "2009 年的正确选择",
-                "运行时税：GC、热路径、启动",
-                "性能史",
-                "原生库与渲染后端",
-                "偶然 vs 本质"
+                "The right choice in 2009",
+                "The runtime tax: GC, the hot path, and startup",
+                "The performance record: how one tax was repaid",
+                "Native libraries and the render backend: the border of the Java world",
+                "Accident versus essence: a two-sided verdict"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/en/impl/java-runtime",
+              "written": true
             },
             {
               "id": "impl/15",
-              "title": "Bedrock 作为另一次实现",
+              "title": "Bedrock as a Second Implementation",
               "audience": "both",
-              "desc": "C++、跨平台、独立渲染栈。行为包、附加包、脚本 API。红石 / 战斗 / 世界格式的语义分叉比性能差异更致命。Marketplace 技术反过来塑造能做什么。换语言重写之后，分叉会变成两个游戏。",
-              "question": "语义差异为何比性能差异更致命？",
+              "desc": "The whole game re-implemented from zero in C++ — an extension model built on its own terms, rule semantics that grew apart on each side, and capability circumscribed jointly by APIs and review. This chapter explains why semantic divergence is deadlier than performance gaps.",
+              "question": "",
               "sections": [
-                "另一次实现不是移植",
-                "技术栈与扩展模型",
-                "语义分叉表（至少五行）",
-                "Marketplace 的反向约束",
-                "两个游戏的工程现实"
+                "Another implementation, not a port",
+                "The tech stack and the extension model",
+                "The semantic divergence table",
+                "The Marketplace's reverse constraint",
+                "The engineering reality of two games"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/en/impl/bedrock",
+              "written": true
             },
             {
               "id": "impl/16",
-              "title": "服务端与规模",
+              "title": "Servers and Scale",
               "audience": "dev",
-              "desc": "原版服务端、Paper、分片实验。视距 vs 模拟距离。代理、群组、反作弊、备份。万人网络已经是另一种引擎用法。原版没有把兴趣管理当成一等公民。",
-              "question": "同一内核如何同时服务单人档与万人网络？",
+              "desc": "From the vanilla kernel to Paper's patch set to proxy networks — a ten-thousand-player network shares its code with a singleplayer save yet is no longer the same species; interest management is implicit in vanilla, and the community rebuilt it as an explicit first-class citizen.",
+              "question": "",
               "sections": [
-                "单人档和万人服真的是同一个程序吗",
-                "服务端谱系",
-                "距离与分片",
-                "运维栈：代理、反作弊、回滚",
-                "大型服务器作为另一种引擎用法"
+                "A singleplayer save and a mega-server: really the same program?",
+                "The server genealogy: a river of ever-thicker patches",
+                "Distance and sharding: the two levers of scale",
+                "The ops stack: another game nobody sees",
+                "Large servers: another way to use the engine"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/en/impl/servers",
+              "written": true
             }
           ]
         },
@@ -1049,13 +996,11 @@
               "desc": "\"Release first, fix later\" held in Minecraft only because four external conditions held at once — growth masking the debt, cash flow buying the windows, the community carrying the debt, compatibility locking the semantics. The account of the refactoring windows, the tacit terms of the folk official implementations, and the parts of the myth ordinary projects cannot reuse.",
               "question": "",
               "sections": [
-                "The problem",
                 "The myth of \"if it runs, sell it\"",
                 "The refactoring windows: loans bought with trust",
                 "When compatibility must outrank correctness",
                 "What the indie developer cannot copy",
-                "Folk official implementations: the socialized repayment of debt",
-                "What this chapter leaves behind"
+                "Folk official implementations: the socialized repayment of debt"
               ],
               "tags": [],
               "href": "/en/impl/tech-debt",
@@ -1068,13 +1013,11 @@
               "desc": "Volume III's close: kernel, protocol, data plane, toolchain, and community implementations form one inseparable composite product; which debts are in fact assets; and the five-item minimal kernel — the first answer sheet for the rewrite exam.",
               "question": "",
               "sections": [
-                "The problem",
                 "A Minecraft that cannot be redeveloped is only a client",
                 "Measured against Volume II: how implementation illuminates design",
                 "Which debts are actually assets",
                 "The minimal kernel: five items",
-                "The close of Volume III",
-                "What this chapter leaves behind"
+                "The close of Volume III"
               ],
               "tags": [
                 "closing"
@@ -1109,14 +1052,12 @@
               "desc": "\"Rewrite Minecraft\" packs at least four undertakings that cannot substitute for one another. This chapter separates the vanilla experience, the mod platform, the server platform, and the creation tools; draws the line between the compatibility road and the inheritance road; and declares that this volume sets exam questions, not answers.",
               "question": "",
               "sections": [
-                "The problem",
                 "First, a ban on \"doing Minecraft again\"",
                 "The four-product matrix",
                 "Compatibility vs. inheritance: two roads",
                 "The failure specimen",
                 "Partial rewrites have already happened",
-                "This volume is the exam, not the work order",
-                "What this chapter leaves behind"
+                "This volume is the exam, not the work order"
               ],
               "tags": [],
               "href": "/en/rewrite/what-to-rewrite",
@@ -1129,11 +1070,9 @@
               "desc": "The one-meter grid, the breakable world, the minimal verb set, outsourced goals, misusable physics, a world that outlives the engine, redevelopment as a first-class citizen — seven invariants examined one by one, each with its degradation scenario and its criterion for being falsified.",
               "question": "",
               "sections": [
-                "The problem",
                 "Which part of the \"Minecraft feel\" is rules",
                 "Seven invariants, examined one by one",
-                "What this chapter strikes off",
-                "What this chapter leaves behind"
+                "What this chapter strikes off"
               ],
               "tags": [],
               "href": "/en/rewrite/invariants",
@@ -1146,12 +1085,10 @@
               "desc": "The Java runtime, the one global 20-TPS clock, the dual-edition split, the semantic freeze on parts of the implementation — every one of these accidents can be discarded, but each must first prove that the invariant it hosted has somewhere new to live.",
               "question": "",
               "sections": [
-                "The problem",
                 "The language runtime: discard Java, re-house portability and reversibility",
                 "The one global clock: discard the unified 20-TPS beat, re-house causal discipline",
                 "The dual-edition split: discard the second implementation, re-house cross-platform and the business model",
-                "The semantic freeze on implementation details: discard the \"quirks\", pay off the dependence first",
-                "What this chapter leaves behind"
+                "The semantic freeze on implementation details: discard the \"quirks\", pay off the dependence first"
               ],
               "tags": [],
               "href": "/en/rewrite/accidents",
@@ -1171,14 +1108,12 @@
               "desc": "Sparse voxels, componentized state, the world as an object, deterministic replay, old saves as first-class citizens — the rewritten world representation must serve, at once, one big world housing tens of thousands and tens of thousands of small worlds each their own.",
               "question": "",
               "sections": [
-                "The problem",
                 "Sparsity and palettes: making emptiness free",
                 "State and components: moving behavior onto the data plane too",
                 "The world as an object: from the process's fate to operations on data",
                 "Deterministic replay: making the past computable too",
                 "Old saves: first-class citizenship is not a slogan",
-                "The comparison table",
-                "What this chapter leaves behind"
+                "The comparison table"
               ],
               "tags": [],
               "href": "/en/rewrite/world-rep",
@@ -1191,14 +1126,12 @@
               "desc": "Interest as a first-class citizen, causality-tiered settlement, explicit entity budgets, reproducible time travel — a scheduling design in which singleplayer and ten-thousand-player servers share one kernel, and how redstone causality keeps from being torn apart.",
               "question": "",
               "sections": [
-                "The problem",
                 "The limits of the global 20 TPS",
                 "Interest management and sharding: the first step of explicitness",
                 "Causal tiers: redstone, fluids, and entities each in their place",
                 "Entity budgets and LOD: writing the tax into the institution",
                 "Time-travel debugging: causal explainability's final form",
-                "Redstone causality, unshattered: the acceptance test",
-                "What this chapter leaves behind"
+                "Redstone causality, unshattered: the acceptance test"
               ],
               "tags": [],
               "href": "/en/rewrite/scheduler",
@@ -1211,13 +1144,11 @@
               "desc": "The sandbox layer and the native layer each fail alone — two single-layer designs and the exact ways they die, the separation of blast radii, three lines of stable API, hot reload and versioned schemas, and author experience as a formal part of the product.",
               "question": "",
               "sections": [
-                "The problem",
                 "The failure modes of all-script and all-native",
                 "The two-layer model and the separation of blast radii",
                 "The stable API surface: three lines",
                 "Hot reload and schemas: author productivity is ecosystem productivity",
-                "Author experience is the product",
-                "What this chapter leaves behind"
+                "Author experience is the product"
               ],
               "tags": [],
               "href": "/en/rewrite/scripting",
@@ -1230,13 +1161,11 @@
               "desc": "Land claims, backups, rollbacks, replay arbitration, permission tiers — the \"standard legal code\" every server owner legislates over and over should sink into the engine as first-class functions; ownership becomes a first-class concept, anticheat becomes system structure, and the four modes generalize into a continuous permission matrix.",
               "question": "",
               "sections": [
-                "The problem",
                 "Every server owner rewrites the same law",
                 "Authority, synchronization, and ownership",
                 "Anticheat as system design",
                 "Sinking the social checklist: primitives, not a platform",
-                "Generalizing the permission model: from four notches to one matrix",
-                "What this chapter leaves behind"
+                "Generalizing the permission model: from four notches to one matrix"
               ],
               "tags": [],
               "href": "/en/rewrite/network-perms",
@@ -1249,13 +1178,11 @@
               "desc": "The hand-feel is still the product, and rendering debt should be cleared natively along directions the community has already validated; structure editing, function debugging, and data inspection should be built in as the author seat's basic infrastructure — and tools and runtime must share one world model.",
               "question": "",
               "sections": [
-                "The problem",
                 "The hand-feel is still the product",
                 "Four rendering principles, not a shopping guide",
                 "Built-in tools: the author seat's infrastructure, nationalized",
                 "From resource packs to the asset graph",
-                "Tools and runtime: one world model",
-                "What this chapter leaves behind"
+                "Tools and runtime: one world model"
               ],
               "tags": [],
               "href": "/en/rewrite/render-tools",
@@ -1275,13 +1202,11 @@
               "desc": "Old saves and the old ecosystem are the rewrite's ticket of admission: this chapter argues why reading old saves is an obligation rather than a feature, lays out three channels for reading them and the two-path plan for redstone, and shows how namespace discipline and the costs of compatibility get written into the product's scope.",
               "question": "",
               "sections": [
-                "The problem",
                 "Player time lives in the save",
                 "Converters and protocol adaptation",
                 "Redstone's two paths: the simulation layer and the new semantics",
                 "The long-term compatibility of namespaces",
-                "Writing the costs into scope",
-                "What this chapter leaves behind"
+                "Writing the costs into scope"
               ],
               "tags": [],
               "href": "/en/rewrite/compat",
@@ -1294,13 +1219,11 @@
               "desc": "Protocol, assets, and brand are habitually conflated. This chapter takes the three apart, inventories what community projects, the officials, and open source can each promise — and are fated never to promise — and swaps the acceptance standard from \"more alike\" back to \"the invariants still hold.\"",
               "question": "",
               "sections": [
-                "The problem",
                 "Three things that must not be conflated",
                 "What the three subjects can promise",
                 "The different needs of three kinds of users",
                 "The limits of open source",
-                "The acceptance standard: the invariants still hold",
-                "What this chapter leaves behind"
+                "The acceptance standard: the invariants still hold"
               ],
               "tags": [],
               "href": "/en/rewrite/who-rewrites",
@@ -1313,12 +1236,10 @@
               "desc": "The book's closing word: the finalized list of essential properties, the three verb claims collected and one amendment confessed; and an answer to the most important question — if no one ever rewrites, why this volume was still worth writing.",
               "question": "",
               "sections": [
-                "The problem",
                 "The answer sheet, finalized",
                 "Back to the opening thesis: accepting the three claims",
                 "If no one ever rewrites, why it is still worth writing",
-                "The book's closing word: three verbs",
-                "What this chapter leaves behind"
+                "The book's closing word: three verbs"
               ],
               "tags": [
                 "closing"
