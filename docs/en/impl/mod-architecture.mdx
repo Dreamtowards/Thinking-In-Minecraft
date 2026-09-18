@@ -1,6 +1,6 @@
 ---
 title: Mod and Plugin Architecture
-description: Officially, no interface for mods was ever provided; the community's answer was injection. This chapter takes apart the architecture of two rivers: the loading philosophies of Forge and Fabric, Bukkit's split between interface and implementation, and the compatibility matrix across version, loader, and mod.
+description: "Officially, no interface for mods was ever provided; the community's answer was injection. This chapter takes apart the architecture of two rivers: the loading philosophies of Forge and Fabric, Bukkit's split between interface and implementation, and the compatibility matrix across version, loader, and mod."
 ---
 
 > **This chapter's thesis**: the ground mods survive on is not an official interface but injection — what a mod depends on is the internal implementation of official code, so a mod's maintenance cost is not decided by its own features but recalculated with every official update; this is why mods are harder to maintain than the engine itself. If mods could live long-term on nothing more than an official public interface promised to be stable, this thesis would not hold.

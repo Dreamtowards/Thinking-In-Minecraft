@@ -1,6 +1,6 @@
 ---
 title: The World Generation Pipeline
-description: From noise to structures, how a pipeline makes good on the design contract of "explorable"; chunk lifecycles and multithreading; conflicts between structures and terrain patched over and pretended away; the seed's determinism is a contract with boundaries.
+description: "From noise to structures, how a pipeline makes good on the design contract of \"explorable\"; chunk lifecycles and multithreading; conflicts between structures and terrain patched over and pretended away; the seed's determinism is a contract with boundaries."
 ---
 
 > **This chapter's thesis**: the seed's determinism is a contract with boundaries — the generator promises "same version + same seed = same world," and honors it only for chunks already generated; once the version changes, unexplored regions are reinterpreted by the new algorithm. What players experience as "an old save growing new terrain" is not a bug; it is the contract's boundary clause taking effect. If, after some version update, an old save's unexplored regions went on generating exactly as they would have before the update, this thesis would be false.

@@ -1,6 +1,6 @@
 ---
 title: Entities and Collision
-description: Blocks are static data; entities are continuous computation — every tick, every one of them has to think, move, and collide. The three classes of objects, AABBs and stepped movement, the AI bill, and farms as crash paths: why entities are the real tax.
+description: "Blocks are static data; entities are continuous computation — every tick, every one of them has to think, move, and collide. The three classes of objects, AABBs and stepped movement, the AI bill, and farms as crash paths: why entities are the real tax."
 ---
 
 > **This chapter's thesis**: blocks and entities have fundamentally different cost structures — a block is static data (stored once, read a thousand times, spends computation only when changed), while an entity is continuous computation (every tick, every one of them has to decide, move, and run collision queries); the number of entities therefore eats into the 20 TPS budget directly, making them the server's first tax. If a server carrying tens of thousands of entities performed on par with one carrying a few hundred blocks, this thesis would be wrong.
