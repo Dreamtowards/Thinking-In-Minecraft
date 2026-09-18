@@ -1,0 +1,55 @@
+---
+title: Java and Bedrock Compared
+description: An item-by-item comparison of the two product lines across four layers: gameplay rules, data formats, the extension ecosystem, and business and platform. Each row links to the full argument in the main edition.
+---
+
+> **How to use this page**: the tables compare item by item; for the full argument, follow each row's links.
+
+For how the two editions split and rejoined, and why each grew into its present shape, see the main chapters [Two Product Lines: Java and Bedrock](/history/java-bedrock) and [Bedrock as a Second Implementation](/impl/bedrock). This page is a quick reference only and carries no argument.
+
+## Gameplay rules
+
+| Item | Java Edition | Bedrock Edition | Details |
+| --- | --- | --- | --- |
+| Redstone quasi-connectivity | Pistons, dispensers, and droppers can be activated by a signal in the block space directly above them, even when the signal never touches the component itself; officially recorded as "works as intended" (MC-108) | No such behavior; the signal must act on the component itself | [Redstone: Physics as Programming](/design/redstone), [Bedrock as a Second Implementation](/impl/bedrock) |
+| Redstone component timing | Pistons, observers, and hoppers have an update order of their own, with advanced instant-pulse techniques within a single tick | A different update order, with different instant-pulse behavior; plain wire, torches, and other low-speed circuits largely transfer | [Redstone's Implementation](/impl/redstone), [Bedrock as a Second Implementation](/impl/bedrock) |
+| Combat pace | From 1.9 (February 29, 2016) onward, attacks have a cooldown; damage climbs from twenty percent to full as the charge builds, swords gained a sweep attack, and the offhand was added | Click-spam combat is kept: no cooldown, and no damage discount for spamming | [Two Product Lines: Java and Bedrock](/history/java-bedrock), [The Microsoft Acquisition](/history/acquisition) |
+| Random tick range | Crops and the like grow by random ticks in loaded chunks; since 1.18 there is a "simulation distance" setting, default 12 chunks, range 5–32 | Simulation distance defaults to 4 chunks, measured in Manhattan distance; beyond the range, crops and ores stop random-growing | [The Game Loop and the Tick](/impl/tick), [Bedrock as a Second Implementation](/impl/bedrock) |
+| Mob spawning and despawning | Spawning and despawning work off a fixed radius; mobs roughly 128 blocks away vanish instantly | Tied to simulation distance: at the default tier, mobs vanish beyond 44 blocks, and the spawning window is narrower | [Entities and Collision](/impl/entities), [Bedrock as a Second Implementation](/impl/bedrock) |
+| Villager trading details | One shared trading economy; behavioral details differ between the editions | Same as the Java column | [Entities and Collision](/impl/entities), [Dimensions, Advancements, and the Endgame](/design/dimensions-endgame) |
+
+## Data formats
+
+| Item | Java Edition | Bedrock Edition | Details |
+| --- | --- | --- | --- |
+| World saves | Anvil region files (suffix .mca), in use since 1.2.1 in March 2012 | A modified LevelDB key-value database | [Storage and Serialization](/impl/storage), [Two Product Lines: Java and Bedrock](/history/java-bedrock) |
+| Copying saves across editions | Does not recognize Bedrock saves | Does not recognize Java saves; community converters exist, but complex worlds often come through with something broken | [Two Product Lines: Java and Bedrock](/history/java-bedrock), [Bedrock as a Second Implementation](/impl/bedrock) |
+| Byte order | Multi-byte integers are written big-endian (high byte first) | Written little-endian (low byte first) | [Two Product Lines: Java and Bedrock](/history/java-bedrock), [Storage and Serialization](/impl/storage) |
+| Old versions and old saves | The launcher can reinstall historical versions from the public version manifest; old saves upgrade step by step through DataFixerUpper, a backward compatibility kept for over a decade | Saves have essentially no way back to being opened on an older version | [Storage and Serialization](/impl/storage), [Minecraft as Cultural Heritage](/history/heritage) |
+
+## Extension ecosystem
+
+| Item | Java Edition | Bedrock Edition | Details |
+| --- | --- | --- | --- |
+| Extension form | Mods: compiled, arbitrary code injected into the game process | Add-ons: resource packs + behavior packs + restricted scripts (JavaScript; modules and versions must be declared in the manifest file) | [Mod and Plugin Architecture](/impl/mod-architecture), [Bedrock as a Second Implementation](/impl/bedrock) |
+| Capability ceiling | In principle unbounded — close to "whatever the engine can do can be changed" | What the API does not expose cannot be done; the second version of the Script API can register custom components and custom commands | [Mod and Plugin Architecture](/impl/mod-architecture), [Bedrock as a Second Implementation](/impl/bedrock) |
+| Toolchain | Three loader lines coexist: Forge (around November 2011), Fabric (December 2018), and NeoForge (split from Forge in July 2023) | The Script API is exposed module by module; the officials hold the exposed surface | [Mod and Plugin Architecture](/impl/mod-architecture), [Bedrock as a Second Implementation](/impl/bedrock) |
+| Content distribution | Free circulation on community sites such as CurseForge (over 200,000 mods as of March 2025) and Modrinth; no official cut | Marketplace signed access with item-by-item review, settled in the Minecoin token; external add-ons cannot be imported on consoles | [The Grey Economy](/history/grey-economy), [The Revenue Structure](/history/revenue) |
+| Official rental servers (Realms) | One tier: $7.99 per month for up to 10 players; no mod support, officially curated maps only | Two tiers: Core at $3.99 per month for 2 players; Plus at $7.99 per month for 10 players, Marketplace content included | [The Revenue Structure](/history/revenue), [Servers and Scale](/impl/servers) |
+| Third-party multiplayer servers | Anyone can run a server; free server software such as Paper grew into the mainstay of the ecosystem | Certified "Featured Servers" and Realms are the only official multiplayer channels | [Servers and Scale](/impl/servers), [The Server Is the New Game](/history/servers) |
+
+## Business and platform
+
+| Item | Java Edition | Bedrock Edition | Details |
+| --- | --- | --- | --- |
+| How it is bought | Once sold separately; from June 7, 2022, one PC price includes both editions | Same as Java; on consoles and phones, bought once per platform | [Two Product Lines: Java and Bedrock](/history/java-bedrock) |
+| Account system | Migration to Microsoft accounts announced in 2020 and carried out in batches from 2021; unmigrated accounts were then locked out one after another (wrap-up into autumn 2023); progress lives in the save and follows the world | Born inside the Xbox account: gamertag, friends list, achievements, and Minecoin balance; achievements live in the account and follow the gamertag | [The Microsoft Acquisition](/history/acquisition), [Two Product Lines: Java and Bedrock](/history/java-bedrock) |
+| Cross-platform play | Cannot connect directly to Bedrock; community protocol-translation gateways (Geyser, for one) fill the gap on their own | All platforms play together since "Better Together" in 2017; PlayStation joined in December 2019 | [Bedrock as a Second Implementation](/impl/bedrock), [Two Product Lines: Java and Bedrock](/history/java-bedrock) |
+| Where monetization sits | No official content store; the base game, Realms, and the third-party server ecosystem each charge on their own, with no official cut of mods or servers | Marketplace in-app purchases plus Realms subscriptions; the store and the certified servers are the official content and multiplayer channels | [The Revenue Structure](/history/revenue), [The Grey Economy](/history/grey-economy) |
+| Mainland China operation | The Java Edition publishing agreement was added in October 2016; the Windows client launched in August 2017 | Included in the overall operating rights granted to NetEase in May 2016; mobile launched in September 2017 (iOS) and October 2017 (Android); free to download, monetized through in-app purchases | [The Revenue Structure](/history/revenue) |
+
+<Note>These comparison rows evolve with the versions; what counts is what you verify on the current one.</Note>
+
+The facts in each row come from the footnotes of the relevant main-edition chapters, sourced mainly from the pages of minecraft.wiki; see the general note[^total-note].
+
+[^total-note]: Facts on this page come from the chapters Two Product Lines: Java and Bedrock, Bedrock as a Second Implementation, Storage and Serialization, Mod and Plugin Architecture, The Revenue Structure, and Servers and Scale, together with their footnotes; the primary original sources are minecraft.wiki, retrieved 2026-09-18. The villager-trading row was not verified item by item across the two editions in the main edition, so it is marked only as "differences exist."

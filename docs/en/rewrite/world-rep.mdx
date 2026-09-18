@@ -1,0 +1,80 @@
+---
+title: World Representation
+description: Sparse voxels, componentized state, the world as an object, deterministic replay, old saves as first-class citizens — the rewritten world representation must serve, at once, one big world housing tens of thousands and tens of thousands of small worlds each their own.
+---
+
+> **This chapter's thesis**: the rewritten world representation must serve two kinds of product at once — survival (one enormous, persistent, frequently remodeled world) and minigames (thousands upon thousands of short-lived, template-based, highly concurrent worlds); vanilla's equation "one save equals one world equals one process" is the reason both have had to share one representation, and it is the first relation worth rewriting. If some representation could elegantly serve both scenarios under the vanilla architecture, this chapter's argument for the necessity of a rewrite would be wrong.
+
+## The problem
+
+In this volume's opening four-product matrix, the "survival world" and the "minigame world" sit under the same product, "the vanilla experience", enjoying the same representation. But their needs are opposite on almost every axis: the survival world must be large (a scale of tens of millions of cells), persistent (a save that stays open for ten years), and able to carry high-frequency remodeling (every player is digging); the minigame world must be small (one arena map), short-lived (a match of ten-odd minutes), and highly concurrent (hundreds of matches running at once). Vanilla's representation — the world is the save, the save is bound to the process — serves the former in its native costume; for the latter it leans on the "multiworld" patch: cram several worlds into one process, rotate maps by restarting the whole save.
+
+This chapter is the architecture proposal's first question: if the rewrite happens, how should the world be represented so that neither scenario has to make do? The chapter keeps the volume-wide discipline: **principles and trade-offs, never languages and pseudocode.** The deliverable is a "vanilla / proposal" comparison table.
+
+First lay out what "making do" concretely looks like — the posture today's minigame server admins live in. The lifecycle of one Bed Wars match: copy a map save out of a template directory, mount it on the server as a "new world", play, and ten-odd minutes later delete the whole save and remount.
+
+```mermaid
+flowchart LR
+    A["Template directory"] --> B["Copy the map save"]
+    B --> C["Mount as a new world"]
+    C --> D["The match runs"]
+    D --> E["Delete the save, remount"]
+    E --> B
+```
+
+In this loop the world is not an object; it is a folder to be hauled by hand. "Hundreds of matches at once" means hundreds of folders, hundreds of world configurations, and a scheduling plugin that does the hauling and the cleaning — and that plugin itself is infrastructure hand-forged by admins on the plugin interfaces the implementation volume took apart, something the officials never envisaged. Every "world reset" is a process-level heavy operation: unload the world, release the chunks, rebuild the configuration. Only with these details in focus can you see what the proposals below are actually solving.
+
+## Sparsity and palettes: making emptiness free
+
+The implementation volume's opening chapter took vanilla's representation apart: chunks, sections (16³), palettes, bit packing ([The Data Model of a Voxel World](/impl/data-model)). It runs at high efficiency under "dense world" conditions (an underground that is full, a surface that is full). But its sparsity only reaches down to the section — a nearly empty section (high sky, deep sea) still pays the floor price of one "empty table".
+
+The proposal pushes sparsity all the way down: **nothing by default; only the non-empty enters the ledger.** An all-empty world costs nearly zero; a region with content is entered as "voxel block + palette"; more radical forms (spatial trees, content-addressed voxel maps) let "a snowfield" and "a continent of tens of millions of cells" share one and the same representation — scale stops being a "loading-strategy problem" and becomes a "data-volume problem". This direction serves both products at once: the big world grows on demand (survival), and small worlds exist in droves at near-zero cost (minigames). Vanilla's palette idea was right, and the rewrite merely promotes it from "an optimization of sections" to "the world's ontology": **the world is not a big painted plot but records of many small occupied patches.**
+
+Sparsification has an advanced payoff too: **the deduplication and distribution that content addressing brings**. If every piece of voxel data is located by a content hash (identical content stored once, globally), then "two identical buildings" are, in storage, one reference; a minigame map's template distribution changes from "copy the whole folder" to "cite a few blocks"; when players share structures, they share a pointer, not luggage. This model's implications for cheating and privacy also need thinking through first (content that can be referenced from outside can be enumerated from outside) — the proposal, as usual, offers trade-offs and no verdict. But for this chapter's core problem (small worlds at massive counts), content addressing is close to mandatory: it compresses the storage cost of "hundreds of parallel matches" from hundreds of maps down to "one template plus hundreds of deltas".
+
+## State and components: moving behavior onto the data plane too
+
+The implementation volume told the story of item componentization (1.20.5: named components replacing free-form tags). The proposal carries the same revolution over to blocks and the world[^worldgen]: **block = prototype + set of components** — "chest" is the prototype, "facing" is a component, "contents" is a component, and "custom interaction" ought to be available as a component too.
+
+The payoff lands on the implementation end of the data plane (the design volume's slot argument): if a new behavior can be expressed as a component, content creators can finish in the slots what today takes Java — of the four "must write code" signals the implementation volume adjudicated, the two named "new state" and "new interaction" could be retired in large part. The costs get listed just as honestly: deterministic design of behavior gets harder (combining components needs an engine-level execution model, not everyone writing their own callbacks), and the performance budget gets harder to predict (the combinatorial explosion of components needs scheduling discipline — the tick contract of [The Game Loop and the Tick](/impl/tick) would have to be re-audited). The proposal's attitude is "worth trying, and precedent exists" — item componentization proved that "named lists beat free-form fields" holds on players' real data; there is no reason blocks are the exception.
+
+One concrete example to feel the difference. Suppose a creator wants "a half slab that glows and stands vertically". The vanilla path: this is a new block — write Java to register the block type, write its light-emitting property, register its model — the data plane cannot help. The component-model path: there is no type called "glowing vertical half slab"; there is one configuration of "brick prototype + glow component + half-height component + vertical-placement component" — done by the creator on the data plane, and the engine never even needs to know this block exists. The difference is not saved effort; it is **where the power sits**: in the former the engine is the gatekeeper (every new combination needs its approval); in the latter the engine is a grammar book (any combination that parses is automatically legal). It is the design volume's "verbs, not menus" principle projected onto the data layer: what the component model gives creators is not more menus but the movement of **definition rights** from the engine into the slots.
+
+## The world as an object: from the process's fate to operations on data
+
+This is the chapter's central proposal, and a direct amendment to vanilla's equation: **demote "the world" from a leviathan bound to a process into a data object that can be created, destroyed, snapshotted, and cloned.** Opening a minigame map should be like opening a file; ending a match should be like closing a file; hundreds of parallel matches should be hundreds of objects coexisting, not hundreds of restarts.
+
+The preconditions for this demotion are the two sections above: sparse representation makes "one world" small enough to run many at once; componentization makes "one world's" state self-describing enough. The downstream payoff goes far beyond minigames: world snapshots turn "backup and rollback" (the admin's regret medicine from [Servers and Scale](/impl/servers)) from an ops craft into a basic operation; world cloning makes "test a map" and "hand every new player an initial world" natural syntax; and the boundary problems of coexisting worlds (cross-world interaction) should be designed as explicit interfaces rather than accidental breeding grounds for bugs — the "reservation system" lesson the generation pipeline taught has a chance, under the new representation, of being promoted from patch to protocol.
+
+## Deterministic replay: making the past computable too
+
+The implementation volume established the seed's determinism contract: same seed, same version, same world (the seed's rhetoric runs through [World Generation as Content Production](/design/worldgen)). The proposal pushes that contract one step further: **if the simulation itself is deterministic (same state + same input sequence = same result), then "the world's history" can be recorded and replayed in full as "initial snapshot + input log".**
+
+Vanilla does not have this property (its simulation teems with nondeterministic sources: random numbers, the timing of concurrency, the freedom of players), and the list of what the property would be worth is startlingly long: anticheat arbitration could move from "guess who is lying" to "replay and see who broke the rules"; tracing a grief incident could move from "interview the witnesses" to "pull the footage"; a server could move from "forward only" to owning a limited time machine (the final form of the servers chapter's monitoring dashboards). The engineering price of getting there must be stated just as honestly: every step of the simulation must eliminate nondeterministic sources (every random number seeded, every concurrency ordered) — an across-the-board tightening of the tick contract's causal clauses, and both performance and freedom will pay for it. The proposal is therefore conditional: **replay for at least the marked contested regions**, with global determinism as a long-term goal rather than a launch requirement.
+
+Ground it in a scene every server admin knows. One morning a player appeals: the warehouse was looted overnight. Today's procedure: read the logs (who entered the region), interview witnesses, judge by experience — the conclusion is often "insufficient evidence". With replay: pull the region's input log for that window, replay the five minutes from the snapshot — who broke the first wall, who picked up what, whether this person's movement was physically possible — plain at a glance, and the replay is itself court-ready evidence (anyone rerunning it gets the same result). Arbitration moves from "a contest of trust" to "a check by computation" — for the design volume's account of server legislation, this is equipping the local courts with surveillance footage: the jurisdictional dispute is unchanged; the cost of evidence collection has collapsed.
+
+## Old saves: first-class citizenship is not a slogan
+
+The chapter's last proposal and the [Compatibility Strategy](/rewrite/compat) point at each other: **read support for old saves must be listed as a 1.0 feature on the new representation's project charter, not a 2.0 plan.** At the implementation layer this means: readers for the old formats (Region/Anvil, NBT, item components) are built in permanently, living alongside the new representation — the new engine can open fifteen years of worlds from the day it is born.
+
+The implementation volume's storage chapter made the ethical argument (the world must outlive the engine — [Storage and Serialization](/impl/storage)); this chapter adds the architectural ledger: reading old saves is not a "migration tool"; it is **the new representation's own import interface**. A project that treats it as a bolt-on tool will hit, within its first decade, the cold-start deadlock of "the veterans can't get in"; a project that treats it as a core feature ships with the whole of Minecraft's fifteen years of accumulated world assets as its launch content library. The history volume said it: open source can copy the rules; it cannot copy twenty years of saves. This chapter's proposal is the technical solution to that "cannot": save replication does not travel the open-source road; it travels the compatibility road.
+
+## The comparison table
+
+| Dimension | Vanilla | Proposed direction | Scenarios served |
+| --- | --- | --- | --- |
+| Sparsity | Palette per section, dense within a section | Nothing by default, the non-empty entered in the ledger; scale becomes data volume | Big worlds growing / small worlds in droves |
+| State model | Block states + block entities | Block = prototype + named components | The data plane expands; creators write no Java |
+| World and process | One save = one world = one process | The world as an object: create / destroy / snapshot / clone | Minigame concurrency, backup and rollback, testing |
+| Computable history | Determinism confined to generation (the seed) | Event sourcing: snapshot + input log, replayable | Anticheat arbitration, grief tracing |
+| Old saves | Official converter (DataFixerUpper) | Old-format readers built in as a 1.0 feature | Fifteen years of world assets walk in with you |
+
+The declaration beneath the table keeps the volume-wide discipline: what stands above are principle-level directions and trade-offs, not an implementation plan; every row admits multiple legal implementations, and the choice is left to whoever sits the exam.
+
+## What this chapter leaves behind
+
+- **For players**: put into plain words, in the rewritten world "starting a new map" costs about as much as "placing a new bed", and your old save is a first-class citizen of the new world.
+- **For developers**: what you can take away is the trade-off table of five directions, and the single criterion running through them — **the representation must serve at once the biggest world and the most worlds**; any proposal that optimizes only one end is handing the other end's product form to someone else. What you cannot take away is the ecosystem understanding these trade-offs demand: knowing "old saves are the entry ticket" is easy; knowing "which of the things inside fifteen years of saves must be preserved faithful to the last detail" takes three full volumes of reading.
+
+[^worldgen]: Minecraft Wiki, "World generation" (experimental datapacks can customize world generation; a status-quo reference for this chapter's data-plane expansion proposal), minecraft.wiki, retrieved 2026-09-18: see https://minecraft.wiki/w/World_generation .

@@ -1,0 +1,127 @@
+---
+title: What Exactly Are We Rewriting
+description: "Rewrite Minecraft" packs at least four undertakings that cannot substitute for one another. This chapter separates the vanilla experience, the mod platform, the server platform, and the creation tools; draws the line between the compatibility road and the inheritance road; and declares that this volume sets exam questions, not answers.
+---
+
+> **This chapter's thesis**: "rewriting Minecraft" is at least four goals that cannot substitute for one another; a rewrite that cannot say which of them it is rewriting has already failed before any work begins.
+
+## The problem
+
+The first three volumes finished the understanding: Volume I told where it came from, Volume II told why it is fun, Volume III told how it got implemented. Between understanding and doing, though, lies a boundary that has to be drawn first — and a single phrase keeps covering it up: "rewrite Minecraft."
+
+That phrase has at least four meanings. Wanting steadier server software is rewriting the server implementation. Wanting mods to install more smoothly is rewriting the mod platform. Wanting a voxel engine of one's own is rewriting the engine. Merely missing the afternoon you punched your first tree with your bare hands — that fourth thing, nobody can rewrite for you. Four meanings map to four products serving four user populations, and none of them can stand in for another.
+
+So the questions this chapter answers are narrow: can these four products substitute for one another? Why are "compatible with Minecraft" and "inherits its ideas" two different roads? Why is the clone the specimen of failure? And one declaration of stance: why this volume is the exam, not the work order.
+
+## First, a ban on "doing Minecraft again"
+
+The volume introduction carries a warning: every few months, another technical proposal for "rewriting Minecraft" appears online, and it usually does not survive its own comment section. The cause of death is seldom insufficient engineering; more often, the very first sentence failed to say what was being rewritten. So this volume opens with a ban: you may not say "do Minecraft over again." What is banned is not ambition; it is vagueness.
+
+In that sentence, "Minecraft" is a collective noun standing in for four products, which the next section takes apart. The collective noun produces three specific failures.
+
+**The acceptance criterion becomes "alike."** "Alike" has no scale. Every time the officials ship a version, the passing line moves forward a notch on its own, and the chaser is forever redoing what it just finished. Volume I, chapter 12 watched where these products ended up: they did not lose to some opponent — they lost to a passing line that moves itself.
+
+**The effort gets spread thin.** Each of the four products receives a quarter of the investment, and none of them reaches the point where anyone would actually switch. Substitution only holds when one layer is made visibly better.
+
+**It has no users of its own.** Each of the four rows has a living user base; the "do it over again" product occupies none of them. Its users are merely the shadow of "people who want the original, but cheaper or better" — and the first thing these people do upon opening it is remember that the original still exists.
+
+<Note>The ban does not forbid anyone from making a voxel game — it only asks you to finish one sentence first: of the four products, which one are you rewriting?</Note>
+
+## The four-product matrix
+
+Take the collective noun apart. The redevelopment space hanging under the name "Minecraft" today holds at least four products, with different assets, different users, and different substitutability:
+
+| Product | Core asset | Primary users | Substitutability |
+| --- | --- | --- | --- |
+| The vanilla experience | Verbs, constraints, feel — the game players actually play | All players | Cannot be substituted by the other three rows; it is their host |
+| The mod platform | Loaders, mappings, mod interfaces (Java Edition) | Mod authors and mod players | Swappable within its layer; irreplaceable across layers |
+| The server platform | Server implementations, the plugin interface, the operations ecosystem | Server owners and plugin developers | Swappable within its layer; irreplaceable across layers |
+| The creation tools | Datapacks, resource packs, commands, and the editors around them | Map makers and content creators | Renewed generation by generation within its layer; irreplaceable across layers |
+
+Read the four rows together: **swappable within a layer, irreplaceable across layers.** Now row by row.
+
+The vanilla experience is the host. It is what players buy, and everything Volume II analyzed — verbs, constraints, emergence — lives on this layer. Mods, plugins, and datapacks all presuppose that "this game is worth modifying"; replacing it is not called a rewrite, it is called making a new game.
+
+The mod platform has already changed blood: what Forge and Fabric have fought over was never "who is the better game" but "who lets mods install more stably and track versions faster." Players install a loader to play the original after it has been modified, not to leave the original.
+
+The server platform changed hands even earlier: most large servers today run on third-party server software, with servers online numbering in the hundreds of thousands[^w-bukkit] (see [Servers and Scale](/impl/servers)). Plugins amend "the law on this one server," not the game itself; when a server owner swaps out the server implementation, most players never notice.
+
+The creation tools see the most frequent generational turnover: datapacks let authors change world rules without touching the program, and the quality of the tools sets how high the barrier to creation sits. But however low the barrier, the gameplay produced still has to be caught by the vanilla rules; a tool cannot replace the game, any more than a pen can replace the novel.
+
+Now a test in the other direction — knock out any one row, and the remaining three cannot stand. Without the vanilla experience, the mod platform has no host. Without the server platform, large-multiplayer gameplay collapses back onto the LAN. Without the mod platform, the second-author community built up over a decade evaporates. Without the creation tools, map makers fall back into the grey zone of third-party editors. The four rows are one mutually parasitic whole, not a set menu you can order from à la carte.
+
+How this table could be wrong: if a product appeared that satisfied all four rows' users with one and the same set of assets, at no discount on any row, "irreplaceable to one another" would be wrong. To date, none has — even Roblox, the nearest object of comparison in Volume I chapter 12, occupies only the tools and distribution layers, and pays for it by no longer being a game.
+
+<Constraint name="The four rows cannot substitute for one another" verdict="groundwork" chain="the goal written as one collective noun → no layer done thoroughly → the project cannot converge">
+In any rewrite proposal, "entire Minecraft" should never appear as the object. The review's first question is not "how" — it is "which three rows are you deleting."</Constraint>
+
+## Compatibility vs. inheritance: two roads
+
+Once you know which one you are rewriting, the next fork asks: how is the relationship to the old world to be settled? Both roads are legitimate, but they are two roads.
+
+<Alternative title="The compatibility road: new implementation, old definition">
+Protocols, save formats, mod and plugin interfaces, player-perceivable behavior — aligned item by item with the existing ecosystem, so that old saves still open, old mods still install, old clients still connect. The gain is the entire downstream ecosystem, inherited on day one. The bill is that other people's decade-plus of accidents must be accepted as delivered — some old version's save format, some defect gameplay has come to depend on, each automatically becomes your "requirement." Fits the case where your target users already live inside the old ecosystem and the implementation is all you want to swap. Paper took this road.
+</Alternative>
+
+<Alternative title="The inheritance road: old ideas, new implementation">
+Carry off the principles that transfer — verbs kept few, constraints interlocking, goals outsourced to the player — and set down the implementation, the assets, and the accidents. The gain is freedom from historical baggage: the very first block may differ from 2009. The bill is an ecosystem zeroed out: users, mods, and tutorials all accumulated from scratch. Fits the case where what you want has no place in the old ecosystem. Luanti took this road.
+</Alternative>
+
+The inheritance road carries one more question that must be answered: inherit what? [A Checklist of Transferable Principles](/design/transferable), Volume II chapter 16, is the methodology list; if the inheritance lands on the engine, [An Engine That Can Be Modded Is the Complete Product](/impl/modifiable-engine), Volume III chapter 18, sets five thresholds — a one-block ledger, a deterministic clock, a referee, a form, several swinging doors. Fall short by any one of the five, and the product loses a floor to stand on: without the ledger, the world is no longer the player's property; without the deterministic clock, player engineering loses its foundation; without the authoritative referee, singleplayer and multiplayer fork into two products; without a form that carries promises, creation collapses into a geek monopoly or a marketplace's vassal; without the swinging doors, progress on any layer must wait for a monolithic version bump.
+
+The fatal error on these roads is walking them mixed. Claim compatibility while quietly drifting on player-perceivable behavior, and saves and mods will sooner or later crash; claim inheritance while smuggling over assets and accidents, and you have signed a bill you never intended to pay. Telling the roads apart takes one question: which ecosystem do your users live in today? If they live inside it, the compatibility road means something; if not, inheritance is the only honest road.
+
+How the "two roads" claim could be wrong: if some project managed to be compatible for one population of users and an inheritor for another, with both holding at the same time, the two roads would merge into one. No known specimen has managed it; why it is hard is the special subject of this volume's later chapter on compatibility strategy.
+
+## The failure specimen
+
+Volume I, chapter 12 already delivered this section's main conclusion: the wholesale clone's chosen competitive dimension is "alike," and on that dimension the original cannot be overtaken — the more your blocks resemble the original's, the more the player thinks: identical anyway, so why not play the original? The better the clone, the harder it advertises the original (see [Competition, Imitation, and Industry Influence](/history/competition)). This section says it once more in this chapter's vocabulary, because the matrix makes the cause of death easier to see.
+
+The clone's first cause of death is that it never answered this chapter's question. It claims all four rows; in practice it copies a gameplay checklist for the first row and then discovers that the other three — the ecosystems and authors wired into loaders, server software, and creation tools — cannot be copied at all. Of the four rows, it in fact occupies none.
+
+The second is that it copies results, not causes. Volume II made the point: the fun comes from constraint systems interlocking — light limits gave rise to the whole scholarship of building and mob farms, and the block-update order raised an entire discipline of redstone engineering (see [Constraints Are Depth](/design/constraints)). A clone can copy away the verb list; it cannot copy the tacit understanding that a decade of mutual calibration between constraints produced. As for that part of the history where "defects were annexed by gameplay," there is nothing to copy at all — it is a conspiracy accumulated over a dozen years of players and officials agreeing not to prosecute.
+
+The third is the acceptance criterion that moves by itself — covered in the previous section, not repeated here. Taken together, the three expose not an engineering shortfall but an unanswered question: engineering can be reworked; an unanswered question cannot. Set the clone against the lineage members who appear in the same Volume I chapter 12 — Terraria carried off the loop, Vintage Story carried off realism, Luanti carried off the engine — and not one of them survived by being "more alike." What has always failed is not rewriting itself but the rewrite that refuses to answer "rewriting what."
+
+How this section could be wrong: if a wholesale clone took the original's mainstream player base by being "more alike," this section falls together with Volume I, chapter 12. The criterion carries over from that chapter: so far, it has not happened.
+
+## Partial rewrites have already happened
+
+If "rewriting Minecraft" were doomed to hardship, the three projects below should not exist. Not only do they exist; each is doing well. What they share: each rewrote exactly one row of the matrix.
+
+**Paper rewrote the server platform.** It forked from Spigot in June 2014 — at the time, Spigot had declined community contributions — patching the official server program and exposing a plugin interface upward.[^w-bukkit] It never touched the client and never touched gameplay; it lifted "the server layer" out of the official implementation and rewrote it on its own. By mid-2025, more than 130,000 servers were running it online, the lion's share of this ecosystem.[^w-bukkit] The whole world of large servers — economies, land claims, minigames — grows on this layer. A player who lands on such a server barely feels the switch, until the furnace stops lagging half a beat behind.
+
+**Fabric rewrote loading and mappings.** Released in December 2018, it is positioned as a modular, lightweight loader, paired with a community-maintained set of open mappings.[^w-modding] The problem it solves is not "is the game fun" but "how do mods keep up with every official update" — as Volume III wrote, every major version is a doomsday for mod authors. Fabric made this layer light, driving down the cost for mod authors of chasing versions. It did not rewrite the game, and it never touched the river of server-side plugins.
+
+**Luanti rewrote the engine.** In October 2010 the Finnish programmer Perttu Ahola started Minetest; in October 2024 the project renamed itself Luanti.[^w-minetest] It took the pure inheritance road described above: voxels, modifiability, open source — all present; saves, protocols, official assets — none wanted. The reason for the rename is an honest one: the maintainers worried that new players would mistake it for a Minecraft clone, when it is an engine — the official distribution does not even ship a default game, and every bit of content comes from the community. In the matrix's terms, it rewrote the bottommost foundation layer, and then changed its name from "some game" to "a kind of engine."
+
+Only the three specimens together complete the verification of "rewriting is feasible."
+
+First, every layer can be rewritten independently. Server software, loading, engine — three rows, each carried off by somebody, and not one required "tear it all down first" as a premise. "Rewrite the whole game first" has never been a condition of any layer's success.
+
+Second, each success serves one row's users. Paper's users are server owners, Fabric's are mod authors, Luanti's are people who want an engine. None of the three succeeded across rows: Paper did not swap out your loader, Fabric did not let a server hold another thousand players, and Luanti never intended to poach the vanilla player base in the first place.
+
+Third, their existence confirms, in reverse, the "irreplaceable" column. Each project achieved excellence in its own layer, and none of them filled in the other three rows — not for lack of wanting, but because those rows have their own assets and their own users, and one row cannot stand in for another. Feasibility and irreplaceability each got proved once over, inside the same three facts.
+
+<Note>All three specimens grow on the Java Edition side; Bedrock's extension story runs through add-ons and the official marketplace — another river that forked long ago, covered in Volume I chapter 8 and in Volume III respectively.</Note>
+
+## This volume is the exam, not the work order
+
+Last, the nature of this volume. The earlier volumes said "how it is"; this volume says "what you would do if it were yours" — a design review, not a project proposal, and still less a work order.
+
+No answers are given, because answers depend on two decisions that belong to the respondent alone: which of the four rows you pick, and whether you walk compatibility or inheritance. The same "world representation" question can have opposite correct answers on the two roads; without settling those premises first, any technology choice is reciting someone else's answer. What this volume can do is set the questions properly and write the grading rubric clearly. So the chapters that follow have a fixed shape: thesis first, then the question, then "how this would count as wrong." Languages, frameworks, and performance plans appear nowhere — those are pens; bring your own.
+
+There are three exam papers. The first has already been handed out: this chapter's four-product matrix and two roads are every question's part one. The second is [A Checklist of Transferable Principles](/design/transferable), Volume II chapter 16 — the methodology rubric. The third is [An Engine That Can Be Modded Is the Complete Product](/impl/modifiable-engine), Volume III chapter 18 — the architecture rubric. The next two chapters pin down "what must not move" and "what can be thrown out" respectively; after that come the five long questions — world representation, simulation scheduling, scripting and mods, network and authority, rendering and creation tools — one per chapter; the final three chapters handle compatibility, the author's seat, and the volume's closing word.
+
+Back to the thesis. "Rewriting Minecraft" is four goals that cannot substitute for one another, and a rewrite that cannot say which one it is rewriting has already failed before any work begins. If that sentence holds, every question in this volume ought to begin from the same one. It is left with you: of the four, which are you rewriting?
+
+## What this chapter leaves behind
+
+- **For players**: the next time you want to say "someone should rewrite Minecraft," first work out which of the four things you actually want — most arguments are four groups of people using one word to mean four different things.
+- **For developers**: what you can take away is this matrix and the two roads' test for telling them apart; what you cannot take away is the choice for your own project, and the bill that arrives with it.
+
+[^w-bukkit]: Wikipedia, "Bukkit," retrieved 2026-09-18, https://en.wikipedia.org/wiki/Bukkit (Spigot renamed from Bukkit in January 2013; Paper forked on June 23, 2014 after Spigot declined community contributions; in June 2025 bStats recorded more than 130,000 Paper servers online, over sixty percent of the ecosystem)
+
+[^w-modding]: Wikipedia, "Minecraft modding," retrieved 2026-09-18, https://en.wikipedia.org/wiki/Minecraft_modding (Fabric released December 2018, positioned as a modular, lightweight loader; Yarn is the openly licensed set of Minecraft mappings maintained by FabricMC)
+
+[^w-minetest]: Wikipedia, "Minetest," retrieved 2026-09-18, https://en.wikipedia.org/wiki/Minetest (Perttu Ahola, online name celeron55, started the free, open-source voxel game engine in October 2010; the rename to Luanti was announced October 13, 2024; the official distribution ships no default game)

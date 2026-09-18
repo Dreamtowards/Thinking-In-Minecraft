@@ -1,0 +1,71 @@
+---
+title: The Game Loop and the Tick
+description: Twenty TPS is the world's contract of time — when TPS drops, what you lose is not framerate but the timeliness of cause and effect. The kinds of ticks, redstone's second clock, the watchdog, and why "time" in a multiplayer world is a shared reality.
+---
+
+> **This chapter's thesis**: TPS — ticks per second — is the shared clock contract of a multiplayer world: framerate belongs to your eyes, ticks belong to the world itself; when a server drops TPS, the picture stays perfectly smooth while the world's cause and effect slows down as a whole — the furnace really slows, the crops really slow, the redstone clock really slows. If any implementation could keep cause and effect timely while TPS drops — by skipping or fast-forwarding the simulation — without players noticing, this thesis is wrong.
+
+## The problem
+
+When a server lags, veteran players will tell you something a newcomer finds hard to believe: **the furnace really slows down.** Not "feels slow" — the smelting progress bar crawls forward at a visibly slower rate. Meanwhile your framerate has not changed at all: the view stays silky, the camera stays glued to your hand.
+
+A world whose picture flows smoothly, with a furnace inside it running in slow motion — how? The answer hides in the first-principles fact of Minecraft's architecture, one of the three sentences at the door of Volume III: **singleplayer is a local server.** What you took for a single-player game is a client and a server process talking to each other; the picture you see belongs to the client, the world's time belongs to the server. The two run on two independent clocks. This chapter takes those two clocks apart: what kind of contract 20 TPS is, what work the world has to finish inside one tick, why ticks come in several kinds, why redstone keeps a small clock of its own, and — when the world freezes solid — what the last fuse on duty looks like.
+
+## What "the world slows down" actually means
+
+First, put each clock in its place.
+
+**Framerate (FPS)** is the client's clock: how many pictures per second it paints of the world. It is decided by your graphics card, your resolution, your render settings — it is "the frequency at which you see the world."
+
+**TPS (ticks per second)** is the server's clock: how many steps per second it advances the world. In every step — every **tick** — the server does one full round of the world's chores: did the crops grow, where did the water flow, what are the mobs thinking, what percentage has your furnace burned through — all of it settled tick by tick. It is "the world's own time."
+
+Ordinarily the two clocks run so close together that you never notice there are two. But their workloads come from entirely different places: the framerate's bill is "painting the world" (it varies with view distance and shaders), while the TPS bill is "computing the world" (it varies with entity count, machine complexity, and the scale of your redstone). When a server lags, it is the computing that lags — a tick's work overruns its fifty-millisecond budget (where that number comes from is the next section), so the tick stretches; when ticks stretch, the world's clock slows; and everything hung on the world's clock — furnaces, crops, mobs, redstone — slows **in sync**. The clock hung on your graphics card keeps normal time, so the picture doesn't stutter.
+
+"The world slows down" is not a figure of speech here. It is the literal description of a mechanism.
+
+The feel of dropping TPS comes in clear grades, and they are worth handing to enthusiasts as a self-diagnosis table. **Mild** (ticks slightly over budget): the echo of your block-breaking slows, the crack animation of a block drags behind the beat — the world still mostly follows your hand. **Moderate**: entities start "catching up on arrears" — other players skip across your screen in steps, mobs snap from position to position, because the server's snapshots arrive at longer intervals and the interpolation has nothing to chew on. **Severe**: interaction goes queue-based — you mine a block and the server admits it seconds later; the block vanishes and then comes back (your client's prediction was overruled by the authority and rolled back); a thrown item hangs in midair. The three grades trace back to a single pointer: what fraction of the tick budget has been encroached upon. One common misunderstanding can be cleared up while we're here: **turning render distance down does not directly raise TPS** — what it trims is the rendering and chunk-loading bill; only when that bill crowds out the simulation's budget — chunk-loading stalls dragging on the main thread, say — does lowering it "incidentally" relieve the world's slowdown. Two ledgers, two medicines.
+
+## The 20 TPS contract and the client's time
+
+Twenty TPS means each server tick has a budget of fifty milliseconds — one twentieth of a second.[^tick] Inside those fifty milliseconds the server has to run a full round of simulation over the entire perceptible world: the scheduled ticks of every loaded chunk, the random ticks (chapter 4's appointment calendar — [Light, Fluids, and Block Updates](/impl/light-fluid-updates)), the AI and physics of every entity, block updates, redstone signals. Fifty milliseconds is a budget ceiling, not an average — in ordinary times the round finishes comfortably within a few tens of milliseconds, and the headroom exists to absorb a player's sudden large gestures (blowing the top off a mountain, a few thousand items dropping at once). The moment the headroom runs out is the moment TPS drops.
+
+More parties have signed this contract than it appears. **To the client**, it promises the world's beat: the client receives server snapshots at the 20 TPS rhythm and interpolates between them (filling in smooth transitions between two states); the fluid animation you see is render frames lubricating discrete ticks. **To players**, it defines the unit of time: a day in game is twenty minutes, because 24,000 ticks divided by 20 TPS is exactly 1,200 seconds; a player's "one second" is twenty ticks, and so is redstone's "one beat" (Volume II, chapter 7). **To gameplay**, it promises discipline of cause and effect: the order of events within one tick is fixed and reproducible, and redstone machines dare to build on "every third beat" precisely because the contract guarantees that beats are equal.
+
+While we're here, take up a question the rewrite volume will face head-on (see [Simulation Scheduling](/rewrite/scheduler)): why 20, and not the 60 the smoothness crowd wants? The 2009 answer was pragmatic — for Notch's home machine to run the whole world's simulation twenty times a second was already what could be sustained, and 20 was the compromise point between "can be simulated" and "doesn't look sluggish." But once gameplay invests in a compromise, the compromise becomes a standard: fifteen years of redstone timing, server budgets, and community jargon all grew on top of 20, and the cost of moving it today stopped being a technical question long ago. A number casually jotted down grew into one of this world's physical constants — technical debt and design asset transmuting into each other, the cleanest single sample of it in this book.
+
+The client, for its part, runs a loop of its own, but its ticks are not the world's ticks: every frame the client predicts (you press W and you move first), renders, samples input, then sends "here is what I did" to the server for adjudication. Chapter 10 does the accounting of prediction versus adjudication; this chapter needs only the dividing line: **client time is for watching and anticipating; server time is for adjudicating and keeping the books.** The two clocks run in parallel — roommates on one machine in singleplayer, separated by a network in multiplayer — but the contract does not change.
+
+## Kinds of ticks: one clock, several ledgers
+
+In community speech, "tick" has at least four or five uses. Here is the ledger (each line item gets its own chapter later):
+
+**The game tick** is the master ledger — the great 20 TPS clock against which every other "tick" is measured.
+
+**The chunk tick** is a matter of jurisdiction: the simulation run only for loaded chunks inside the simulation distance (chapter 3 told the story of simulation distance splitting from render distance). The world far away does not cease to exist; it is "paused."
+
+**The scheduled tick and the random tick** are two kinds of schedule inside the world — chapter 4's appointment calendar and its spot lottery, both subordinate to the game tick. (Chapter 4 is also where the storm of recomputation lives, when those schedules chain into one another.)
+
+**The entity tick** is every entity's private account: each mob's AI decisions, physical movement, and health regeneration settled on their own cycles. It is the fattest line in the TPS budget — chapter 6, "entities are the tax," spends a whole chapter on it.
+
+**The redstone tick** is community jargon, not an official clock. Redstone players are used to calling one signal-propagation cycle "a beat," and what the beat actually measures is game ticks (the repeater's delay settings are 2, 4, 6, and 8 game ticks, with a historical misunderstanding sitting at the halfway mark — [The Implementation of Redstone](/impl/redstone) tells it in detail). All that needs to be established here is the awareness: **one world, several ledgers; when the community says "tick," first ask which ledger.**
+
+## Redstone and the tick, misaligned: one beat is not one tick
+
+Redstone earns its own small section because it is the TPS contract's most demanding customer. All redstone design stands on "integer-tick delays": add two beats at the repeater, a piston extends in one beat — players build timing machines on top of this. While the contract is honored, these machines keep time like clockwork; when the contract breaks (TPS drops), redstone does not go "chaotic," it only goes "slow" — every delay stretches proportionally, and the machine's causal order stays unchanged to the last detail. This is the most remarkable property of the 20 TPS contract: **slow, but never out of order.** The order of cause and effect is engraved in the world, not hung on actual elapsed time — a world dropping TPS is a play in which the entire cast moves in slow motion, not a melee in which every actor steals everyone else's scenes.
+
+The "misalignment" is at the layer of language. The community's "redstone tick" and the official game tick went through a historical half-beat conversion misunderstanding, and "tick" also carries a second sense of update order (chapter 4's neighbor updates), so beginners lose themselves easily among the small clocks. This book's normative usage is settled: **the time base is always called the game tick; "beat" in a redstone context defaults to the game tick; update notifications are not called ticks.** By the time chapter 8's engineering details unfold, the reader already holds this ruler.
+
+## The watchdog and player-perceptible time
+
+Last, the contract's violence clause. If a server freezes solid inside a tick — a mod's infinite loop, a bug locking the main thread — the world can no longer manage even "slow"; it has stopped. The mechanism that steps in here is the **watchdog**: a fuse on the server side which, on detecting the main thread timed out and unresponsive, rules the server unrecoverable, force-saves and closes it (or restarts it), and leaves a "server crash report" on the players' screens.[^watchdog] The name is honest: the whole point of this mechanism is to keep the world from quietly rotting while nobody is watching the clock.
+
+The player's perception of time is this architecture's phenomenology, summarized. In singleplayer, a dropped TPS shows you "the world in slow motion" — with no network to mask it, the causal delay sits right on your face. In multiplayer, a dropped TPS shows you a double anomaly — lateness (network delay stacked on the server's queue) and slow motion (the world's clock stretched) — blocks take forever to crack, your own actions take forever to echo. Compare the shooter's handling of latency (all manner of compensation so that "pulling the trigger" takes effect instantly): Minecraft almost never does this kind of compensation — because it cannot afford to. Cause and effect is the very body of its gameplay; to compensate cause and effect would be to counterfeit the world. **Time is the shared reality of a multiplayer world** — that sentence stood at Volume III's door, and this chapter is its proof: the world may be slow; it may not be fake. The moment the adjudication of time is handed to any one client, the shared reality goes bankrupt.
+
+## What this chapter leaves behind
+
+- **For players**: the "lag" you complain about when a server stutters is two diseases in two components — a stuttering picture is the graphics card's affair, a slowing world is the CPU's; next time you file a report, say which one.
+- **For developers**: what you can take away is the separation of the two clocks — decouple render time from simulation time; when the simulation loses speed, preserve the causal order and sacrifice immediacy, and gameplay stays reproducible. Take the honest fuses too, like the watchdog: mechanisms that admit things can hang. What you cannot take away is the leisure of those fifty milliseconds: this budget was paid for by twenty years of discipline about content complexity — every system you add that "has to run every tick" is spending the same money.
+
+[^tick]: Minecraft Wiki, "Tick" (the Java Edition game tick runs 20 per second, with a 50-millisecond budget per tick; one in-game day is 24,000 ticks, i.e., 20 minutes), minecraft.wiki, retrieved 2026-09-18: see https://minecraft.wiki/w/Tick .
+
+[^watchdog]: Minecraft Wiki, "Server.properties" (the dedicated server's built-in watchdog: when the main thread times out without response it declares a crash and force-saves and shuts down the server), minecraft.wiki, retrieved 2026-09-18: see https://minecraft.wiki/w/Server.properties .

@@ -1,0 +1,80 @@
+---
+title: Method and Standards
+description: Why this book deserves trust: phenomena first, falsifiable claims, the two-editions rule, a ranking of sources, and an explicit list of what it will not cover. Method comes before opinions.
+---
+
+> **This chapter's thesis**: method comes before opinions. Every claim later in the book must be checkable with a tool defined here; a claim without a tool does not belong in the book.
+
+## The problem
+
+The following chapters will keep saying things like: Creative mode is not a level editor; redstone's quirks are a community interface; Bedrock is not "optimized Java." Why believe any of it?
+
+Game writing has one very slippery path: arrange familiar scenes into lists — everything reads true, nothing survives the closing of the book. Another path is slicker: promote the author's taste into a law of the world and answer every counterexample with "that's the Minecraft spirit." Neither path requires lying; neither is an argument. This chapter puts the book's standards on the table — any later chapter can be attacked with the tools defined here.
+
+## Three ways to fail
+
+**Encyclopedia.** What blocks exist, which version added what, how commands are written. The Minecraft Wiki does all of this faster and better. The encyclopedia fails not through factual error but by answering only "what is there" and never "why this and not something else" — a book organized around items can never explain why Creative mode must be parasitic on Survival.
+
+**Walkthrough.** How to survive night one, how to build an iron farm, how to speedrun. A walkthrough assumes the goal is given and compresses the system into steps. Minecraft's core design is precisely to outsource the goal to the player. Teaching steps turns "misuse" into "correct usage" and player invention into the standard answer. This book analyzes why mob farms can exist; it will not teach you to build one.
+
+**Nostalgia.** "That was our childhood." "Blocks are love." Nostalgia is a real phenomenon that deserves explanation; it cannot serve as an argument. Any sentence only a 2012 veteran would nod at is useless to developers and to players who missed that wave. Nostalgia has a stealthier variant, the indictment — casting Microsoft, the Marketplace, and chat reporting as a morality play. It feels good to read; the price is giving up on understanding how a series of individually defensible decisions accumulated into a strange outcome.
+
+Nostalgia may appear as material. It may not appear as a rule of inference.
+
+## Phenomena first
+
+Every chapter enters through a scene you have already seen, then condenses it into mechanism. "Leave a two-block doorway; a three-block pit you can't jump out of" comes before "the cognitive cost of discrete space." "When TPS drops, the furnace seems to slow down" comes before "the twenty-ticks-per-second contract." "Mojang fixed a redstone bug and every server's core machines stopped" comes before "undefined behavior became a community interface."
+
+The order is not just for readability — it is a falsification device. If you have never seen the opening scene, or it looks nothing like what you've seen, the chapter's thesis dies right there; no need to read on. An author has no right to invent principles first and then summon phenomena to endorse them.
+
+## What "falsifiable" means
+
+A sentence that explains every outcome is not a judgment. Claims in this book must carry "what would make me wrong." Three examples:
+
+- "Death drops your items but does not destroy the world — that is restraint." If some version wiped inventory, buildings, and terrain together, and the community called that purer survival, this sentence is wrong.
+- "Creative mode is not a level editor." If you removed Survival's blocks, scale, and physics from Creative and players still felt they were playing Minecraft, this sentence is wrong.
+- "Redstone is a misusable system." If Mojang "corrected" quasi-connectivity and the rest to match a clean spec and the community felt the game became more honest rather than mutilated, this sentence is wrong.
+
+The right of rebuttal belongs to people who have played. The book addresses veteran players and developers precisely to keep the rebuttal in the right hands: in a game this mechanically dense, outsiders easily mistake "I haven't seen it" for "it doesn't exist."
+
+## Two Minecrafts
+
+The book says so when it means **Java Edition** by default; where **Bedrock Edition** is discussed, Java experience is not smuggled in. This is not pedantry — they genuinely differ: redstone timing, combat feel, mod/add-on capability boundaries, world formats, Marketplace rules. Volume I chapter 8, Volume III chapter 15, and the appendix comparison table treat this at three different densities. Forbidden phrasings: "Bedrock is just Java in C++," "identical except optimization," "the mobile version can be ignored."
+
+A rule of thumb: delete "Java" or "Bedrock" from a sentence; if what remains holds for the other edition, the sentence may be merged. Otherwise, split it.
+
+## Where the material comes from
+
+Ranked by reliability, not reverence:
+
+1. **Reproducible mechanics.** Block updates, ticks, crafting, permissions, death drops — anything a reader can verify by launching the game. This is the floor.
+2. **Official material.** Release notes, official blogs, public interviews, stage talks. Used to recover intent and constraints at the time — without assuming intent equals outcome: designs routinely work outside their intent.
+3. **Stable community practice.** Conventions recorded on the Wiki, repeatedly stress-tested by updates, alive for a decade — families of redstone devices, server plugin traditions, mod-loader philosophy. One person's clever machine does not count; a ten-year convention does.
+4. **Decompilation and implementation detail.** Side evidence only, to explain why something is so — never a catalog. Whatever can be explained through observable behavior stays above the hood.
+
+Numbers — sales, concurrency, revenue shares — get a source where one exists; otherwise they are marked as orders of magnitude. No invented precision for decoration.
+
+## What this book does not cover
+
+Block catalogs, crafting tables, enchantment lists, changelog compilations; redstone tutorials, "survive your first night," speedrun routes; mod installation, server-hosting manuals, launcher reviews; mapping-name listings and large decompiled excerpts; YouTuber rankings, server ads, "greatest mods" lists.
+
+These are not unimportant — they have better homes. This book occupies different ground: why it is this way and not another, and what developers can actually take away, and what they cannot.
+
+## Five confusable words
+
+**Chunk.** The world's unit of spatial and I/O slicing, roughly a 16×16 column. The player saying "stuck on a chunk border" and the program saying "chunk unloaded" mean the same cut — one is experience, the other is bookkeeping.
+
+**Tick.** A step of simulation time; Java Edition runs 20 per second. Redstone ticks, scheduled ticks, random ticks, and render frames are different clocks. Unqualified "time" in this book means the game tick; redstone contexts are flagged separately.
+
+**Datapack.** The official data-layer extension: recipes, advancements, loot tables, generation rules. It cannot change the engine or add new mechanics. Not a synonym for mod.
+
+**Mod.** An extension that modifies the client and/or server program itself, usually via a loader. Can add whole systems as well as content.
+
+**Plugin.** An extension that modifies only the server, so that a vanilla client can join — the Bukkit/Spigot/Paper lineage. It rewrites the law of that server, not the game on your disk.
+
+Mods, plugins, and datapacks are all redevelopment, but their authorship, blast radius on crash, and compatibility politics differ. Conflate the three and Volume I and Volume III both fall into muddle.
+
+## What this chapter leaves behind
+
+- **For players**: every "thesis" box at a chapter's head can be hammered on with your own save. If the hammer lands, we wrote it wrong.
+- **For developers**: principles here come with standards — two editions, falsification conditions, non-transferable conditions. Without those three, what you copied is only the tone.

@@ -1,0 +1,79 @@
+---
+title: The Minimal Verb Set and Game Feel
+description: Look, walk, dig, place, craft, attack, use — seven verbs carry a whole game. This chapter explains why shipping without a build mode or a skill tree was the right call, and how tools amplify verbs instead of adding keys.
+---
+
+> **This chapter's thesis**: Minecraft's verb set is small enough to write on a single line, and it deliberately refuses to grow — because only when verbs are few and orthogonal can the combinatorics of input push the output beyond what was designed. A build mode is a letter of surrender from the verb set; a skill tree is a stand-in for amplified verbs; the absence of both is design, not corner-cutting.
+
+## The problem
+
+Any new player's first lesson takes under five minutes: left-click to dig, right-click to place, WASD to walk, space to jump, E for the inventory. That is the whole lesson. Ten-year veterans run on the same keys, not one more.
+
+Within the game industry this borders on scandal. Peer sandbox products point the opposite way: Roblox players play the client while creators open a separate Studio; Fortnite's creative mode has the entire Unreal Editor standing behind it; more ambitious sandboxes split "play" and "make" into two applications outright. Their consensus: building is expert work and demands professional tools. Minecraft refused that consensus — and refused it at the moment it had the least grounds to refuse: in 2009 it was too poor to afford any editor, and later, once it had money, it still never built one.
+
+So the chapter's questions: why is the minimal verb set right? Why is shipping without a build mode or a skill tree one of this game's most important decisions? And with verbs this few, what does "game feel" actually refer to — how much of it is rules, and how much is wrapping?
+
+## Why modern sandboxes love an "editor mode"
+
+First, let the other side make its full case. A dedicated editor for building has impeccable reasons: free-form creation needs fine tools; fine tools are necessarily complex; and complexity should not be forced on players who only want to play. Hence the industry's standard answer — play is play, make is make, with a wall in between; the wall has a door, but not everyone goes through it.
+
+The wall's cost hides in the structure: **the community splits into two kinds of people.** Those who play become audience and users; those who make become authors and professionals, the former consuming the latter's output. Roblox is the model's most successful executor — it even turned the play/make split into the business model itself: platform, creators, and players each occupy a layer, creators take a cut, players pay or watch ads. The model is not wrong — it simply makes a different choice, and every choice pays somewhere else. The split's payment: ordinary players are sealed off from creation, and creative ability is no longer something that grows out of playing. You must "enter Studio" to deserve to make things.
+
+Minecraft's alternative fits in one line: **the verbs you build with are the verbs you live by.** Dig it down, put it up — survival uses them to fell trees, architects use them to raise cities, redstone engineers use them to wire circuits. There is no act of "entering creation"; creation is not an identity but a part of play. This is the ground under everything that follows: mod authors, map makers, and video creators (the two protagonists of Chapters 4 and 6) all grew out of this "never split apart" — had making things required passing a tool boot camp first, the second author's seat would have shut out nearly everyone.
+
+With that fixed, the chapter's stance reads plainly: editor mode is not a feature left undone — it is a **refusal to admit the verb set failed**. A game that needs a separate toolkit before anything can be built has conceded that its play verbs were not enough. Minecraft bet: they are enough — and precisely because they are small, they stretch this far.
+
+## Seven verbs, and the ones deliberately missing
+
+Copy Minecraft's verb list out here: look, walk, jump, dig, place, craft, attack, plus one broad "use" (opening doors, boarding boats, trading with villagers all run on it). About seven — one hand can count them.
+
+The list is short, but every verb has surprising depth. Take "walk": it has two official amplifiers, sprint and sneak. Sprint trades hunger for speed; sneak trades speed for safety — you no longer fall off edges, and your nameplate stays hidden. Note that neither claims a new key: they are modifiers of "walk" — the same W held, a different bodily state. Now "use": one finger's right click governs opening doors, boarding boats, milking cows, applying enchantments, putting food in your mouth — the object decides the meaning; the verb itself never changes. Set that against the genre-standard "hold the interact key to open a radial menu of interaction options," and the virtue of restraint shows: the object is far richer than any radial menu, and it never needs teaching.
+
+The interesting thing is not the list but the list of absences.
+
+**No build mode.** The previous section made the case: dig and place already cover building; an editor is duplicate infrastructure. Here is its other side — building under survival carries cost and meaning: every block you place was dug, order paid for with scarcity. In an editor, blocks are free, and building slides from "labor" into "layout." Minecraft did think of this — it made the free layout into something else, creative mode — and what creative mode actually is, Chapter 4 handles in full (see [Creative Mode Is Not a Level Editor](/design/creative-mode)). Record only the conclusion: it is not a build mode; it is a permission variant of the same verbs.
+
+**No skill tree.** Players never "level up" here; nobody picks one of three talents. How, then, do you get stronger? Better tools, deeper mines, costlier enchantments — all attached to things, never to character attributes. Why is that right? Because a skill tree's essence is sorting players into "spec'd correctly" and "spec'd wrongly": it manufactures choice anxiety and moves growth out of the world and into a menu. Minecraft keeps growth in the world, where your progress is visible and touchable — a tower half-raised, a railway laid toward the far side of the mountain. How this system of "growth attached to things" operates, Chapter 5 details (see [Crafting, Items, and Inventory](/design/crafting-inventory)).
+
+**No automation verbs.** No one-key harvest, no auto-pickup by default, no "hold to keep crafting." Every labor-saving automation — hoppers, pistons, cobblestone generators — is something players assembled themselves out of the same verbs. The game would not even auto-skip its own cutscenes, and even recipe search arrived eight years late (Chapter 6 kept that ledger). The stance never wavered: saving effort is itself gameplay, and it should not be confiscated in advance by the designers.
+
+The absences share one trait: each leaves a "convenience the system could have carried" lying around for players to invent themselves. This is Volume I's subtraction carried forward on the same principle — cut the script, and leave the "how" to the people who live inside it.
+
+## Tools are verb amplifiers
+
+If the verbs never expand, where does expressiveness grow from? The answer: **tools amplify old verbs instead of issuing new keys.**
+
+The pickaxe is the cleanest example. Wooden, stone, iron, diamond — still the same "dig." Only two things change: how fast you dig, and what you can dig at all. Stone is a wall to the wooden pick and a door to the iron one. Obsidian pushes the design to its extreme: it answers only to diamond, so "upgrading your tool" stops being numeric growth and becomes **key growth** — the new tool does not hit harder; it lets you go where you could not go before.
+
+Consider a few subtler amplifiers. The bucket: a perfectly ordinary item that turns water and lava — two of the world's "terrains" — into portable items; liquid stops being scenery and becomes luggage. Flint and steel: ignition once belonged to fireballs and lava; this hands fire to the player. Shears: wool comes off the sheep intact, saplings come out of leaves — "harvest" gets split off and handed to a dedicated tool. Not one of these tools adds an operation; each swaps the verb's object, raises its efficiency, opens new territory.
+
+Why is this right? Because the learning cost is pressed to zero: pick up a new tool and you need no tutorial — one glance and you can guess what it works on, and a wrong guess costs you one try. Expressiveness, meanwhile, grows an order of magnitude. The many-keys plan runs in reverse: every new verb costs a key, a memory slot, a page of manual. Minecraft's inventory holds dozens of tools while the player's keymap has not changed in ten years — this economics of "add items, not keys" is the direct reason the game could keep stacking depth without bloating.
+
+## Feel is rules, not wrapping
+
+A small verb set forces every verb to run deep — that is what "game feel" genuinely means in Minecraft: not the frosting of screen shake, but rules expressed at the fingertips.
+
+Take "dig" apart. Its first layer is rules: every block has a hardness, and hardness decides how many seconds breaking it takes bare-handed or with a tool — a fraction of a second for dirt, a bit over a second for stone, ten-plus seconds for obsidian[^breaking]. The second layer is feedback: as you dig, cracks spread across the block's face, advancing through ten stages, so you read progress without watching a timer. The third layer is rhythm: digging proceeds while held and resets when released, so "digging through a wall" carries an even heartbeat. Three layers together turn "dig" from a click into an action that can set into muscle memory. Rules set the duration, feedback gives the readout, rhythm reaches the body — feel is the conspiracy of the three; lose a layer and what remains is wrapping.
+
+"Place" hides its feel in snapping. The ghost of the block in your hand snaps only to the grid; which face it hugs, which way it faces — the game draws the outline live for you to confirm. It is exactly this forced snapping that lets "place" inherit the integer language of the previous chapter: you cannot place a block crooked, which is why building can be discussed in callouts at all. The first-person view works the same way: your hand swings at the bottom right of the screen, and it swings back when you strike something — this is not pageantry; it is the rule "your body is present" said aloud. More can be dissected at the implementation layer: the client's "predictions" that act first and confirm later are what keep dig and place feeling attached to your hand in multiplayer (see [Audio, Particles, and the Lies of Feel](/impl/feel-client)). Here it is enough to concede: feel is a designed sense of rules, not a byproduct of the picture.
+
+Even "eat" has feel worth discussing. Eating is not a click; you hold the right button for about a second and a half while the character emits a string of chewing sounds and the food icon shakes and shrinks — "restore hunger," a numeric operation, made into a small action with a beginning, a middle, and an end. Why waste the player's time? Because eating is designed as part of combat's rhythm: for that second and a half you spend holding food mid-fight, you are a standing target. The time cost is not drag; it is part of the rule — the feel is slow on purpose.
+
+The 1.9 combat update proved the same thing from the negative side. Once attack cooldowns arrived, the fiercest protests were not about numbers getting stronger or weaker but that "the feel changed" — because the change's essence was fitting a new layer of rules onto the verb "attack," voiding ten years of muscle memory grown at players' fingertips overnight. That players defended the feel so fiercely is itself the proof that feel is not wrapping: it is the verb itself, shaped into the body.
+
+## The action lever: simple input, complex output
+
+Now gather the chapter into one portable sentence: **the input space is small, the output space is large, and the lever between them is combination.**
+
+Seven verbs, combined pairwise, landing on a breakable, placeable, countable world (the previous chapter's primitive) — the output is astronomical. One word, "place," with different blocks, is a wall, a trail marker, the lid of a trap, a pillar of firelight in the dead of night pointing a lost friend home. A bucket of water: the standard use irrigates a field; the extreme use is poured out one second before you hit the ground from a hundred meters up, canceling the fall — players call it the water-bucket clutch, and it appears in no manual; it grew on its own where the verbs fell into the physical rules. Speedrunners compress "jump, place, dig" into continuous underfoot engineering; architects wield "place" with a calligrapher's brush; redstone players use "place" as an assembly instruction. One verb, dozens of professions.
+
+The lever can be falsified: if "simple input, complex output" were only a nostalgia filter, the imitators that later piled on new verbs and new combos should have generally done better. The observed fact is the opposite: the tangles of complex keys imitators stacked up saved no product, while the improvements the community accepts as tasting like Minecraft — pistons, the elytra, enchanting — all take the "amplify the old verb" route. The reverse attempts exist too: the official cooldown on attacking (adding rules to a verb) kept the community arguing for a decade; an editor for building (a second verb set) — the community has never asked for one. On the lever's direction, players voted with their feet long ago.
+
+The small verb set pays one more unexpected dividend, and it goes to people off-screen: **you can learn this game from video.** The fewer the verbs, the lower the spectator's cost of understanding — someone who has never played watches ten minutes of a stream and calls every beat correctly: "he's digging, he's about to place, he's hungry so he's eating." Volume I, Chapter 6 covered how Minecraft grew into a video medium (see [Video, Education, and a Generation's Medium](/history/media-education)); that feat's technical premise is exactly this chapter's seven words: a verb set that can be retold is what makes play that can be retold. Every line the verb list grows, the audience's threshold drops another notch — the most practical rebuttal to "a few more verbs wouldn't hurt."
+
+## What this chapter leaves behind
+
+- **For players**: seven verbs live between your ten fingers, and you have never once used them up — this game's deepest resource is not diamond; it is "new uses for old verbs."
+- **For developers**: you can take verb economics — build new capability as an amplifier of existing verbs (new objects, higher efficiency) rather than as a new key; the test is simple: does the new thing need a manual. You cannot take the world physics that ships with the verb set — moves like the water-bucket clutch grow in the gaps of specific rules; change the rules and the moves have to grow back from scratch.
+
+[^breaking]: Minecraft Wiki, "Breaking" (breaking time is computed from block hardness and tool tier, not from the swing animation; cracks display progress in ten stages), minecraft.wiki, retrieved 2026-09-18; see https://minecraft.wiki/w/Breaking

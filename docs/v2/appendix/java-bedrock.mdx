@@ -1,0 +1,55 @@
+---
+title: Java 版与 Bedrock 版对照表
+description: 两条产品线在玩法规则、数据格式、扩展生态、商业模式四个层面的逐项对照。每行链接到正编的详细论证。
+---
+
+> **使用说明**：本表逐项对照，详细论证见每行链接。
+
+两个版本如何分合、为什么各自长成这样，见正编[《两条产品线：Java 与 Bedrock》](/history/java-bedrock)与[《Bedrock 作为另一次实现》](/impl/bedrock)。本页只做速查，不承担论证。
+
+## 玩法规则层
+
+| 项目 | Java 版 | Bedrock 版 | 详见 |
+| --- | --- | --- | --- |
+| 红石准连接性 | 活塞、发射器、投掷器可被其正上方一格空间的信号激活，哪怕信号没有接触元件本身；官方登记为「按设计工作」（MC-108） | 无此行为，信号必须作用到元件自身 | [红石：把物理做成编程](/design/redstone)、[Bedrock 作为另一次实现](/impl/bedrock) |
+| 红石元件时序 | 活塞、侦测器、漏斗的更新顺序自成体系，存在一刻之内瞬间脉冲的高级技巧 | 另一套更新时序，瞬间脉冲行为不同；纯导线、火把等低速电路大体通用 | [红石的实现](/impl/redstone)、[Bedrock 作为另一次实现](/impl/bedrock) |
+| 战斗节奏 | 1.9（2016 年 2 月 29 日）起攻击有冷却，伤害随充能从两成爬到满额，剑附带横扫，新增副手 | 保留连点战斗，无冷却，连点伤害不打折 | [两条产品线：Java 与 Bedrock](/history/java-bedrock)、[微软收购](/history/acquisition) |
+| 随机刻范围 | 作物等随机生长跟随加载的区块；1.18 起有「模拟距离」设置，默认 12 区块、范围 5–32 | 模拟距离默认 4 区块、按曼哈顿距离计算；范围外作物与矿物停止随机生长 | [游戏循环与刻](/impl/tick)、[Bedrock 作为另一次实现](/impl/bedrock) |
+| 生物生成与清除 | 生成与清除以固定半径为准，远离约 128 格的生物立即消失 | 与模拟距离挂钩：默认档位下 44 格外即消失，生成窗口也更窄 | [实体与碰撞](/impl/entities)、[Bedrock 作为另一次实现](/impl/bedrock) |
+| 村民交易细节 | 同一套交易经济，两版行为细节存在差异 | 同左 | [实体与碰撞](/impl/entities)、[维度、进度与终局](/design/dimensions-endgame) |
+
+## 数据格式层
+
+| 项目 | Java 版 | Bedrock 版 | 详见 |
+| --- | --- | --- | --- |
+| 世界存档 | Anvil 区域文件（后缀 .mca），2012 年 3 月的 1.2.1 起使用 | 改造版 LevelDB 键值数据库 | [存储与序列化](/impl/storage)、[两条产品线：Java 与 Bedrock](/history/java-bedrock) |
+| 跨版互拷 | 不识别 Bedrock 存档 | 不识别 Java 存档；社区转换工具存在，复杂世界转过去常有东西出错 | [两条产品线：Java 与 Bedrock](/history/java-bedrock)、[Bedrock 作为另一次实现](/impl/bedrock) |
+| 字节序 | 多字节整数按大端序（高位在前）写 | 按小端序（低位在前）写 | [两条产品线：Java 与 Bedrock](/history/java-bedrock)、[存储与序列化](/impl/storage) |
+| 旧版本与旧存档 | 启动器按公开的版本清单可回装历史版本；旧存档经 DataFixerUpper 逐级升级，向后兼容守了十几年 | 存档基本没有回到旧版本打开的余地 | [存储与序列化](/impl/storage)、[作为文化遗产的 Minecraft](/history/heritage) |
+
+## 扩展生态层
+
+| 项目 | Java 版 | Bedrock 版 | 详见 |
+| --- | --- | --- | --- |
+| 扩展形态 | 模组：编译后的任意代码注入游戏进程 | 附加包：资源包＋行为包＋受限脚本（JavaScript，模块与版本须在清单文件里声明） | [模组与插件架构](/impl/mod-architecture)、[Bedrock 作为另一次实现](/impl/bedrock) |
+| 能力上限 | 原则上无上限，接近「引擎能做的都能改」 | 接口没暴露的就做不到；第二版脚本 API 已能注册自定义组件与自定义命令 | [模组与插件架构](/impl/mod-architecture)、[Bedrock 作为另一次实现](/impl/bedrock) |
+| 工具链 | 加载器三线并存：Forge（约 2011 年 11 月）、Fabric（2018 年 12 月）、NeoForge（2023 年 7 月从 Forge 分裂） | 脚本 API 按模块逐步暴露，官方掌握暴露面 | [模组与插件架构](/impl/mod-architecture)、[Bedrock 作为另一次实现](/impl/bedrock) |
+| 内容分发 | CurseForge（2025 年 3 月模组超 20 万个）、Modrinth 等社区站点自由传播，官方不抽成 | Marketplace 签约准入、逐件审核，用 Minecoin 代币结算；主机上不可导入外部附加包 | [模组、服务器与灰色经济](/history/grey-economy)、[收入结构](/history/revenue) |
+| 官方租用服 Realms | 一档：每月 7.99 美元、最多 10 人；不支持模组，只有官方精选地图 | 两档：Core 每月 3.99 美元、2 人；Plus 每月 7.99 美元、10 人，内含 Marketplace 内容 | [收入结构](/history/revenue)、[服务端与规模](/impl/servers) |
+| 第三方联机服 | 任何人可开服；Paper 等免费服务端长成了生态主体 | 认证的「特色服务器」与 Realms 是仅有的正规联机通道 | [服务端与规模](/impl/servers)、[服务器即新游戏](/history/servers) |
+
+## 商业模式与平台层
+
+| 项目 | Java 版 | Bedrock 版 | 详见 |
+| --- | --- | --- | --- |
+| 购买方式 | 曾单独售卖；2022 年 6 月 7 日起 PC 端一份价格同时包含两版 | 同左；主机与手机端按平台各买一次 | [两条产品线：Java 与 Bedrock](/history/java-bedrock) |
+| 账号体系 | 2020 年宣布迁往微软账号，2021 年起分批迁移，未迁移账号此后陆续无法登录（收尾至 2023 年秋）；进度记在存档里，跟着世界走 | 出生即长在 Xbox 账号里：玩家代号、好友列表、成就、Minecoin 余额；成就在账号里，跟着玩家代号走 | [微软收购](/history/acquisition)、[两条产品线：Java 与 Bedrock](/history/java-bedrock) |
+| 跨平台联机 | 与 Bedrock 版不能直接互连；社区协议翻译网关（如 Geyser）自行补位 | 2017 年「Better Together」起全平台互通；PlayStation 端 2019 年 12 月加入 | [Bedrock 作为另一次实现](/impl/bedrock)、[两条产品线：Java 与 Bedrock](/history/java-bedrock) |
+| 商业化位置 | 无官方内容商城；本体、Realms 与第三方服务器生态各自收钱，官方对模组与服务器不抽成 | Marketplace 内购加 Realms 订阅；商店与官方认证服务器是正式的内容与联机通道 | [收入结构](/history/revenue)、[模组、服务器与灰色经济](/history/grey-economy) |
+| 中国大陆运营 | 2016 年 10 月补签 Java 版代理；2017 年 8 月 Windows 端上线 | 2016 年 5 月随整体运营权授予网易；手机端 2017 年 9 月（iOS）、10 月（Android）上线；免费下载、内购变现 | [收入结构](/history/revenue) |
+
+<Note>对照项随版本演进，以当前版本实测为准。</Note>
+
+本表各行事实出自正编相关章节的脚注，来源以 minecraft.wiki 各页为主，统一见总注[^total-note]。
+
+[^total-note]: 本页事实取自《两条产品线：Java 与 Bedrock》《Bedrock 作为另一次实现》《存储与序列化》《模组与插件架构》《收入结构》《服务端与规模》各章及其脚注；原始来源以 minecraft.wiki 为主，检索日期 2026-09-18。村民交易一行正编未逐项核验两版差异，故仅标注存在差异。

@@ -1,0 +1,129 @@
+---
+title: Commands, Datapacks, and Maps
+description: The command block turns the operator into the level designer, and the datapack is the officially sanctioned data-driven mod. Four map genres parasitize one and the same physics — and where data-driven design meets its limit is exactly where mods begin.
+---
+
+> **This chapter's thesis**: Through the command block and the datapack, the officials acknowledged that "the player is an author" — while handing over the data and withholding the systems. The boundary between vanilla and mods is blurred deliberately, because blur profits the officials more than any kind of clarity would.
+
+## The problem
+
+Most players first notice this layer of the world in some server's spawn lobby. The lobby is decorated to the nines; walk two steps and a welcome message fires, a title floats over your head, one click at the counter completes a trade. None of these behaviors appears anywhere in survival mode's rulebook. Lift the floor — you can't, of course; you just know what is under it — and there is a whole stratum of dark blocks set into the walls.
+
+They are called command blocks: think of them as vending machines buried in the world, executing a command once a condition is met. Commands are the game's own control statements, the ones ordinary players never touch in daily play; operators use them backstage to ban, to hand out rewards, to adjust the weather. What the command block does is turn that backstage power into objects inside the world: buried under the ground, wired to redstone (the game's in-world signaling system — see [Redstone: Physics as Programming](/design/redstone)), waiting for a player to step on the trigger.
+
+Another scene: you download an adventure map the whole community has passed around, unzip it, and find a save file plus one extra folder of configuration files — a datapack. The game loads it alongside the world; no third-party program gets installed.
+
+Both of these have an awkward identity. They are not official content — no designer ever built this level. And they are not mods — they change no game program. Players gave them a vague name: "things that run on vanilla." This vague boundary did not happen by itself. Why the officials deliberately refuse to draw "vanilla" and "modded" as distinct territories, and how map authors turned a mining game into a stage for puzzles, competitions, and role-play — those are the questions this chapter answers.
+
+## Can vanilla make an RPG?
+
+Half the answer first: the skin, yes; the skeleton, hardly.
+
+What a role-playing game needs — stats, dialogue, quests, shops, boss fights — the vanilla toolbox holds crude counterparts to every one. Two pieces do the heavy lifting: the scoreboard and NBT.
+
+The scoreboard arrived in Java Edition 1.5[^scoreboard]. Its job is to hang a placard on every player and every creature: a name, an integer. The number can rise and fall with game events — who died, who picked up what, who finished which objective — and it can do arithmetic. Health, money, levels, quest progress: whatever numbers role-play needs can land on some placard. The community has even built calculators out of it: one scoreboard as the display, a string of commands as the arithmetic unit.
+
+NBT is the other piece: the bundle of "luggage data" that items and creatures carry. A sword can be more than an iron sword — it can travel with a custom name, lore, enchantments, durability. Map authors use luggage data to counterfeit gear tiers: to the engine, this "rusty sword" and that "holy sword" are the same iron sword; the entire difference rides in the luggage.
+
+Add commands triggered by events, and the surface of role-play is complete: villager trades stand in for shops, named zombies for bosses, lines of colored text scrolled into chat for dialogue, and when the scoreboard hits zero the character drops dead on the spot. Vanilla role-play maps really exist, in large numbers, and plenty are excellent.
+
+But every one of these is pretend. Health is not an attribute; it is a scoreboard. Dialogue is not an interface; it is lines of text in a chat window. A boss fight is not a mechanic; it is a pile of conditioned reflexes — "player did a thing, run a command." Solo, slow-paced, with the author watching closely, the trick is seamless. More players, faster pace, and the fraying shows: the inventory tangles, two scoreboards stop reconciling, and the performance collapses mid-scene.
+
+So the answer is: vanilla can produce the look of role-play, not the system of it. That gap between "look" and "system" is the crack that reappears in every section that follows.
+
+## The command block: the operator becomes the level designer
+
+The command block shipped with Java Edition 1.4.2 in October 2012. When Jeb unveiled it, his stated purpose was: a new block built to extend adventure mode[^cmd-block]. Adventure mode had arrived earlier that same year: players can no longer break and place blocks freely, and the world turns from a mine into a stage set[^adventure]. Put the two facts together and the aim is unmistakable — this toolchain was made for map authors.
+
+Worth pressing on is the form: why make it a block instead of building a map editor? At least three design reasons.
+
+First, Minecraft's material language is blocks. Make the script a block and it inherits the entire existing grammar of blocks for free: it can be placed, copied, triggered by a redstone signal, packed up and hauled away with the structure around it. No new tool, no leaving the game — if you can play Minecraft, you can bury a command block.
+
+Second, the work and the save become the same object. A level made in an editor is a project file: export, publish, then wait for an engine to load it. A level made of blocks is the world itself; copy the save away and the work goes with it. Publishing a Minecraft creation has never had an "export" step, and the command block is the natural extension of that route.
+
+Third, and most important: the role changed. Until then, commands were the operator's tool for managing players — banning troublemakers, setting the server's time of day. The command block turned the same commands into a level designer's props: the operator's power shifted from "policing players" to "designing what players encounter." One command can hand an intruder a sword; another can delete the floor under his feet. The "invisible magic" of server lobbies is, at bottom, the work of an operator who turned author.
+
+The price has to be written down too. Writing complex logic in command blocks hurts: a single block holds a single command, and logic comes from chaining hundreds of blocks nose to tail — nest it deeply enough and even the author can no longer read it. In 2017 the game added functions: a list of commands written into a plain text file, invoked once, executed as a batch[^function]. Nominally a way to take the load off command blocks; directionally, it moved scripting out of the world and back into files. The power buried underground began migrating toward files on disk.
+
+<Note>A detail worth pinning: a single command inside a command block has a length cap, while lines in a function file can be longer. Moving the script from blocks into files freed the word count along the way.</Note>
+
+## Datapacks: the official mild mods
+
+In July 2018, Java Edition 1.13 turned the previous section's direction into an institution: the datapack formally joined the game, previewed in snapshot 17w43a, with an initial pack format of 4[^datapack]. A datapack is a set of folders placed inside the save directory. It can hold functions; loot tables — which govern what a mob drops when it dies and what a chest yields; recipes, advancements, custom world-generation rules. The game loads it alongside the world; delete the folder and everything reverts. Its loading-and-execution model is dissected in full in [Datapacks, Resource Packs, and Data-Driven Design](/impl/datapacks).
+
+One edition note: the command-block-and-datapack line is the backbone of the Java Edition ecosystem; Bedrock's counterpart is behavior packs plus the scripting API — equally official, equally constrained. The details belong to [Bedrock as a Second Implementation](/impl/bedrock); this chapter stops at the mention.
+
+Why call datapacks "mild mods"? Hold the mod ecosystem alongside and it becomes clear. Mods alter the game's program, depend on third-party loaders, and can break collectively at every game update. Datapacks touch no program: they use the official format, and if something goes wrong, deleting the folder saves you. The cost of mildness is written into the name: a datapack is data, nothing more. It can arrange existing blocks and mobs into endless combinations; it cannot produce anything behaviorally new. Functions look like programming — plain text, one command per line, runnable every game tick — but a verb the command list does not have is a verb no function can conjure.
+
+Line up the admission dates of the key tools and a trajectory appears: scoreboard 1.5 (2013), functions 1.12 (2017), datapacks 1.13 (2018). Not one step began as the officials' own idea. The command block was born for adventure-map authors; the scoreboard caught what map authors needed from a number system; functions moved the command-block array into text files; and the datapack simply admitted it — a map ought to carry its own data. All along, the officials were retroactively endorsing practices the community had already formed; that story in full is [Mods as the Second Author](/history/mods-as-authors).
+
+Now answer the question that runs through this chapter: why did the officials blur this boundary? Because nearly everything about blur benefits them.
+
+For the brand, blur means vanilla can forever promise "you can play wonders without installing a single mod." Vanilla is not the end of content; it is raw material for content. For control, blur pulls part of the community's creative energy back from the loader ecosystem into official formats: a map written in official syntax survives version upgrades, while a map written as a mod fends for itself at every update. Whoever holds the standard, the format decides. For cost, blur meant the officials never had to actually build a mod interface — an interface is a promise: promising compatibility, promising documentation, promising not to refactor the engine on a whim. The datapack bought the reputation of a "platform" while dodging the debts of one.
+
+<Constraint name="Data-driven design only recombines existing verbs" verdict="groundwork" chain="datapacks can recombine existing blocks and mobs but cannot create new behavior → the officials never need to vouch for new capabilities, and engine refactors stay unencumbered by compatibility promises → the cost falls on authors: needs past the limit can only walk out and become mods" />
+
+## Type parasitism: how map genres ride one physics
+
+Before datapacks, map authors held two things: blocks, and an ever-stronger command set. Look back over a decade of community maps and a curious fact emerges: puzzle, competitive, survival-challenge, and role-play maps are entirely different genres riding entirely the same physics. Not one map modified the engine. They took the same set of verbs — walk, dig, place, craft, dodge monsters — and swapped the goals. Type parasitism names exactly this relationship: same physics, different goals. The parasite does not modify the host; it changes what the host's behavior means.
+
+### Adventure maps
+
+The adventure map uses Minecraft as a stage. It depends on adventure mode, added in 1.3.1: players cannot break or place blocks freely unless the item in hand explicitly allows it, so the author's set cannot be dismantled with one swing of a pickaxe[^adventure]. The genre is older than the game mode: around 2011 communities were already passing homemade maps around, with no means of enforcement at all — the author could only open with one written line, "please don't break the blocks," and rely on player conscience. Adventure mode turned that conscience into engine rules — the officials retroactively endorsing community practice, a textbook case. The physics changes jobs inside the genre, too: a creeper's explosion is no longer a survival threat but an ambush in the story; a redstone contraption is no longer an automation tool but the lock on a hidden door.
+
+### CTM: Complete the Monument
+
+CTM (Complete the Monument) was established by Vechs's Super Hostile series. The rule fits in one sentence: in a treacherous custom world, gather all sixteen colors of wool plus a few rare blocks and place them into a "Victory Monument." What it parasitizes is survival mode's objective function: mob pressure, resource scarcity, and exploration risk are kept exactly as they were — the author even stages areas by hand using vanilla terrain-generation technique, planting ambushes right beside supply points. Only the finish line changes: the game goal of defeating the ender dragon is swapped for an architectural acceptance checklist. The player does precisely what a survival player does; the reason for the pounding heart is completely different.
+
+### Puzzle maps
+
+Puzzle maps turn the player's own verbs into the riddle. Why won't this door open? Which three things belong in the crafting grid? How do this machine's signal timings line up? What counted as engineering knowledge in survival mode — placement rules, signal timing, the behavior of light — is inverted here into puzzles. Adventure mode matters more in this genre than in any other: a puzzle only works if detours are forbidden. In survival, no puzzle however ingenious survives one pickaxe through the wall.
+
+### RPG maps
+
+Role-play maps parasitize most deeply. Not content with swapping goals, they simulate an entire system on top of the verb set: scoreboards as attributes, villager trades as shops, named mobs as bosses, chat lines as dialogue. As shown above, every one of these is pretend. That is also why this is the most command-technology-dependent of the four genres — and the one that falls apart most easily: its demands on vanilla press right up against the ceiling of data-driven design. Where exactly that ceiling is, the next section says.
+
+<Memoir title="Where a map hides its brain">
+Autopsying other people's saves is an established discipline in the player community: open the map, fly to where no player will ever go — above the Void, or deep under the bedrock — and you will usually find a room stuffed with command blocks, hundreds or thousands of them arrayed in ranks, from which the whole map's story, rewards, and machinery issue their orders. This "brain room" is no single author's invention; it is a folk convention the community converged on: logic should be centralized, and hidden at coordinates players cannot reach. The stratum beneath the spawn lobby's floor is its shadow on the surface.
+</Memoir>
+
+## The limits: when you must write a new system
+
+The limit of data-driven design is not mysticism. It can be listed, item by item.
+
+The first kind: new verbs. Datapacks cannot change how the player moves or how the player interacts. You want to give players a grappling hook, a dash, a moment of time reversal — any need of the form "one more action" lies outside the command list. The community will, of course, pretend: an invisible entity drags the player around, position corrected once per game tick, and from the outside it looks like a grappling hook. But that is a compensating performance running at every instant, not a verb — sooner or later performance and feel collapse together.
+
+The second kind: new interfaces. The screens a player can actually see are few: the inventory, chat, containers. A datapack cannot produce a real menu. The author's workaround is to make do with the container screen — rename the items in the slots, and a piece of paper called "next page" flips you to the next chest. Usable, but fake at a glance, and brittle: one version update that changes container behavior, and every menu in the map dies with it.
+
+The third kind: genuinely custom mechanics. A machine with fuel, heat, and a processing progress bar; a new liquid that flows on its own — these need their own state and their own per-tick logic. Simulating them with functions amounts to re-implementing the game, and each increment of complexity doubles the cost.
+
+One multiplayer scenario gathers all three limits. Say you want to run an eight-player real-time arena minigame on your own server: players queue up, the match starts automatically when the queue fills, players are split into two teams, results settle at the end, losers return to the queue, and a mid-match disconnect needs a substitute. Not one word of this requirement can be written as a loot table or a recipe — it is not data; it is a system. It has its own state machine (waiting, matching, running, settling), state shared across players, a life cycle of its own. You can brute-force it in scoreboards, certainly: hundreds of functions calling each other — change one line, break three places. Server plugins — the Bukkit and Spigot lineage of ecosystems — exist precisely to write this part for you (see [Servers and Scale](/impl/servers)).
+
+So there are four signals that say: write a system now. Two of them, and you should stop.
+
+One, the verb signal: you catch yourself assembling a nonexistent action out of three existing verbs, and the assembly has to run every game tick.
+
+Two, the interface signal: the interaction you need has all three elements — input, confirmation, state — and lines of chat text are carrying a flow longer than one screen.
+
+Three, the state signal: the state you need spans players, spans sessions, must persist, and has a life cycle of its own. Scoreboards hang numbers on individuals; they are not state machines.
+
+Four, the scale signal: functions in the hundreds, a call graph nobody can draw from memory anymore, and the cost of verifying a change exceeds the cost of the content being added.
+
+Two out of four, and what you are writing is no longer a map in nature — it is software parasitizing the map format. The right move then is not to endure but to switch tools: write the state and logic as a plugin or a mod, and leave story and numbers to the data layer. Datapacks and mods are not competitors; they are a division of labor.
+
+Finally, back to the officials. As of this writing, they have never provided a true mod interface: you cannot register new block behavior, cannot add new interfaces, cannot touch rendering. The datapack stops at the data layer because the officials stopped it there on purpose. So the author at the limit has two roads: cram the design into the data layer, cutting the foot to fit the shoe, or step across the official boundary and write a mod, handing the work's fate back to the loader ecosystem. And here the vague border between vanilla and mods finally comes into focus: the blur is not freedom granted to authors. It is a buffer zone for officials who have no interface.
+
+## What this chapter leaves behind
+
+- **For players**: every map you have ever played is a scene an author staged with the verbs the officials handed out. Next time you stumble on a room stuffed with command blocks out beyond the Void — that is the map's brain.
+- **For developers**: what you can take away is the layered judgment — data-driven for content, systems as the safety net for mechanics — plus the move of making author tools into objects that can be copied in-world. What you cannot take away is the confidence behind the blurred boundary: it rests on the officials' monopoly over the format and the update rhythm, a position an ordinary team does not hold — so you must know your interface before you ship. Which parts of the grammar transfer and which do not, the ["Checklist of Transferable Principles"](/design/transferable) takes up item by item.
+
+[^cmd-block]: Minecraft Wiki, "Command Block" (community wiki entry, accessed September 2026; the command block was added in snapshot 12w32a and shipped with Java Edition 1.4.2 in October 2012; in a tweet of July 27, 2012, Jeb described the block as built to extend adventure mode), minecraft.wiki, retrieved 2026-09-18: see https://minecraft.wiki/w/Command_Block .
+
+[^adventure]: Minecraft Wiki, "Adventure" (community wiki entry, accessed September 2026; adventure mode was added in snapshot 12w22a and shipped with Java Edition 1.3.1; the entry notes it is "designed for player-created maps, limiting some gameplay in Minecraft"), minecraft.wiki, retrieved 2026-09-18: see https://minecraft.wiki/w/Adventure .
+
+[^scoreboard]: Minecraft Wiki, "Scoreboard" (community wiki entry, accessed September 2026; the scoreboard was added in snapshot 13w04a and shipped with Java Edition 1.5, with team features appearing in 13w05a), minecraft.wiki, retrieved 2026-09-18: see https://minecraft.wiki/w/Scoreboard .
+
+[^function]: Minecraft Wiki, "Function (Java Edition)" (community wiki entry, accessed September 2026; functions were added in the first pre-release of Java Edition 1.12 and moved into datapacks as of snapshot 17w43a), minecraft.wiki, retrieved 2026-09-18: see https://minecraft.wiki/w/Function_(Java_Edition) .
+
+[^datapack]: Minecraft Wiki, "Data pack" (community wiki entry, accessed September 2026; the datapack was added in snapshot 17w43a and officially shipped with Java Edition 1.13 in July 2018, with an initial pack format version of 4), minecraft.wiki, retrieved 2026-09-18: see https://minecraft.wiki/w/Data_pack .

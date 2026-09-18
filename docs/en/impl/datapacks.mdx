@@ -1,0 +1,74 @@
+---
+title: Datapacks, Resource Packs, and Data-Driven Design
+description: The namespace world, the registry's closed club, the table of what can be done versus what must be coded, and the division of labor between resources and data — the official extension surface is a precisely drawn political boundary, not a technical limit.
+---
+
+> **This chapter's thesis**: the official extension surface — datapacks plus resource packs — is a boundary drawn with precision: representation and data fully open, behavior and engine fully closed. The line is not a technical limit (the officials possess every capability needed to cross it) but a political one: what is open moves under the official compatibility umbrella, what is closed stays in the mods' no-promise zone. If a datapack is ever shown to register genuinely new block behavior within an existing engine version, this thesis is wrong.
+
+## The problem
+
+Volume II, chapter 8 has already looked at datapacks from the design angle ([Commands, Datapacks, and Maps](/design/commands-datapacks) — the "mild mods," and when to admit that data-driven design has run its course). This chapter turns to the implementation layer and asks a sharper question: **the part of the engine the officials open to players — where exactly is its border drawn? What was it drawn with? And why there?**
+
+Pieced together, the answers to these three questions are the last block needed to understand this book's claim about "redevelopment": Volume I, chapter 4 gave the mods their historical authorization; Volume II covered the philosophy of the misusable system; this chapter covers the formal channel the officials built with their own hands — where it leads, where it deliberately does not, and the accounting behind the word "deliberately."
+
+## Why datapacks still leave you writing Java
+
+Start from an architectural fact. Everything a datapack can do happens through **registries**: at engine startup a row of "slots" is laid out — loot table slots, recipe slots, advancement slots, function slots, dimension slots, world-generation slots — each slot defining what its data may look like; the datapack submits content into the slots, and the engine loads it through one uniform pipeline.
+
+The slots carry an implied clause: **what a datapack can do is bounded by the slots' existence.** You may submit ten thousand new recipes (the recipe slot welcomes you), but you cannot invent "the 10,001st way to interact" — because a way to interact is not a slot; it is behavior code inside the engine, and the registry does not grant datapacks the right to "register new types." New behavior for a block, the AI of a new entity, a new interface — all of it requires registering a new household in the engine's type system, and the right of registration stays firmly on the Java side.
+
+So the implementation-layer answer to "why write Java when datapacks exist": **a datapack submits content into slots that already exist; Java adds new slots to the engine.** The former is filling in forms; the latter is legislation. The four signals from Volume II, chapter 8 that say "time to write a system" (verbs, interfaces, state, scale) correspond, at the implementation layer, to one and the same fact: your requirement has outgrown the slot's form.
+
+## A world of namespaces: the door-plate system
+
+The Flattening of 1.13 — chapter 7 covered its migration bill ([Storage and Serialization](/impl/storage)) — left behind one artifact more durable than the migration itself: **a global namespace**. After the Flattening, every item of content has a full name — `minecraft:stone`, `minecraft:oak_log` — while anything submitted by a third party begins with its own prefix: `yourpack:ruby_ore`.[^namespace]
+
+What deserves respect in this design is its plainness. A namespace is a door-plate system, a pure text convention, and it solves the oldest problem on every UGC platform: **colliding names**. A hundred datapacks can each define "ruby" without stepping on one another; a reference to official content always carries the official prefix, so who is overriding whom and who is citing whom is clear at a glance. And the rule that datapacks stack by priority, higher entries overriding lower same-named ones, turns "tweaking vanilla" into a one-line file edit.
+
+Better still is the system's political meaning: **the officials put their own territory on the same set of door plates** — the `minecraft:` prefix holds no privilege; it is simply one namespace among many. Official content and community content are perfectly equal in addressing. This detail is the architectural signature of the sentence "data-driven is an acknowledgment": the community no longer borrows a corner of the official courtyard; it settles on the same street.
+
+The door-plate system ships with two pieces of infrastructure, and together they make the datapack the fastest-iterating of all the extension routes. The first is **tags**: the engine turned even "grouping" into data — "which blocks count as mineable with an axe" and "which items count as wood" are appendable membership lists, and a datapack that registers its new block into an official tag such as `minecraft:mineable/axe` is automatically plugged into every vanilla rule that follows (tool tiers, burn checks, Looting behavior). Tags are an **access protocol**: without touching the engine, your content acquires a household registration in the official categories. The second is **hot reload**: one `/reload` command and datapack changes take effect at once, no world restart — the debug loop for functions, loot, and recipes compresses from "once every few minutes" to "once every few seconds." Datapack authors therefore iterate far faster than mod authors (for whom one changed line means restarting the whole game), and the speed gap feeds back into the two ecosystems' temperaments: the datapack community behaves like an improv scene, the mod community like an engineering firm.
+
+## Can do versus must write code: one table
+
+Draw the extension surface as a table. The left column is the datapack's legal territory; the right column is the land where Java is required — that is, where you cross the border and write a mod:
+
+| What a datapack can do | What requires Java (a mod) |
+| --- | --- |
+| Change recipes, loot tables, advancements | New block behavior (furnace-style interaction, custom tick logic) |
+| Write functions (command sequences) and timed scheduling | New entities and their AI |
+| Custom dimensions, experimental biomes, custom terrain | New interaction verbs (grappling hooks, spellcasting, new interfaces) |
+| Override or append tags (adding your own varieties to the "wood" family) | Registering new types (new block entities, new enchantment types) |
+| Data-driven structure placement and loot | Touching rendering and client-side presentation |
+| Limited tick schedules listened on with functions | Freely hooking into arbitrary events |
+
+Each column carries an adjective worth reading aloud. The left column's keyword is **filling in**: every entry is "submit content into an existing slot" — the submissions can vary without end, but the slots are fixed by the engine. The right column's keyword is **building**: every entry involves "growing the engine a new organ" — and organs do not fit on a slot's form. One sweep of the eye shows that the criterion of division is not difficulty (some datapack projects are more complex than small mods) but **whether the work demands that the engine acknowledge something it does not recognize**.
+
+The table has another reading: as a timeline. The left column keeps widening — every few versions, the officials demote some former "must write Java" to "filling in a form will do" (biomes and world generation moved into the left column only in recent years). That slowly rightward-advancing line is the officials' progressive loosening of the extension surface — a loosening whose pace the officials alone control, which is precisely the politics of the next section.
+
+## Resources and data: two faces of one coin
+
+Standing beside the datapack is the resource pack — Volume III, chapter 9 covered it as the official contract of the representation layer ([The Client and Rendering](/impl/client-render)). The division of labor between the two is cut, architecturally, strictly by **where the code runs**: **datapacks run on the server** — loot, recipes, functions: the "world rules" belong to the authority side and travel with the save; a map author stuffs the datapack into the save directory, and players install nothing at all. **Resource packs run on the client** — textures, sounds, models: the "world's looks" belong to the presentation side and are installed by each player individually (a server may recommend one; the client may refuse).
+
+Every detail of this division carries political accounting. That the datapack travels with the save means the "designer of the rules" fully controls the environment of the work — an adventure map's worldview cannot be tampered with by its players (chapter 8's map-author demand). That the resource pack rests on the client's consent means "looks" are the player's private territory — you may refuse anyone's aesthetics, and the officials will not force you. The enforcement level on each side maps precisely onto that side's content's bearing on fair play: rules affect fairness, so they must be uniform; looks do not affect fairness, so they are left alone.
+
+Bedrock Edition fused this two-pack system into a single thing, the add-on, and wired it into the Marketplace's reviewed distribution (see [Bedrock as a Second Implementation](/impl/bedrock)) — the same set of needs, two product lines, two institutional answers. Again.
+
+## The political meaning: why the border sits here
+
+The question "what was the border drawn with" can now be answered head-on: **with compatibility promises.**
+
+Recall the authorization structure of the whole redevelopment system (Volume I, chapters 4 and 11): the officials' stance toward the mod ecosystem is "permitted, not promised" — no promise of API stability, so mods must fend for themselves at every major version. Inside the datapack, the climate is entirely different: the officials promise backward compatibility of the data format (old datapacks mostly survive into new versions), promise stable slot semantics, promise a predictable loading pipeline. **In the datapack's world there are contracts; in the mods' world there are none.**
+
+And so the border is drawn: the officials fenced the share of expressive freedom they are willing to vouch for into data and representation, and left the share they will not vouch for — behavior, engine, rendering — in the no-promise zone. The line is not a capability line: the officials are entirely capable of building an open mod API (the community had asked for one for over a decade); they do not, because an API is debt (chapter 10 covered "an interface is a promise"): once promised, engine refactoring is locked down by compatibility clauses — precisely the price Mojang is least willing to pay. The datapack bought "the platform's reputation without the interface's debt" — Volume II, chapter 8's verdict finds its complete ledger here, at the implementation layer.
+
+The contract's grey small print deserves its own line. The datapack's compatibility promise is not monolithic: slots labeled "experimental" (world generation's custom parts have long lived there) may change shape at any time, and the officials explicitly guarantee nothing about the experimental zone; at version changes the datapack's format number quietly rises too, and a pack left too old must migrate like anything else. So the more precise statement is: **under the umbrella there are sunny and rainy districts** — the core slots (recipes, loot, functions) are the promised heartland; the fringe slots (experimental generation) are the front yard, where "there is an umbrella, but it may close at any moment." The front yard reminds us that this border is not a dead line drawn once and for all; it is a live line, fine-tuned on both sides every year and maintained unilaterally by the officials — and every move it makes is one more working session of the word in this chapter's title: politics.
+
+To close, string the book's related claims together: Volume I, chapter 4's absorption principle (verbs enter the main work), Volume II, chapter 13's design method ([Mods as Design Method](/design/mods-as-method)), and this chapter's extension surface — three layers, one governance philosophy: **the officials keep a monopoly on the power to define the system, and lease out "content and expression" in tiers.** Tenants may renovate (datapacks) and reskin (resource packs); they may not touch load-bearing walls (the engine). This philosophy grants the officials at once the reputation of an open ecosystem and the freedom of a centralized architecture — whether the community should keep renting is the question Volume IV, chapter 6, "who has the right to rewrite," will ask.
+
+## What this chapter leaves behind
+
+- **For players**: every datapack you write stays dry under the officials' umbrella — the umbrella is held over you in earnest, and its boundary is drawn around you in earnest too.
+- **For developers**: what you can take away is the extension surface's layered contract — data open (with a compatibility promise), behavior closed (without one). Draw the line at the boundary of your promises rather than at the boundary of the technically possible, and a platform keeps both the reputation of openness and the freedom of its architecture. What you cannot take away is the standing to draw the line at all: this line holds because outside it lies a prosperous no-promise zone catching the creators who overflow — without that sea, drawing the line becomes enclosure.
+
+[^namespace]: Minecraft Wiki, "Resource location" (the content full-name mechanism since 1.13: the `minecraft:` prefix and custom namespace prefixes, used to keep content from colliding), minecraft.wiki, retrieved 2026-09-18: see https://minecraft.wiki/w/Resource_location .

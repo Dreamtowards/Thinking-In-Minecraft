@@ -1,0 +1,113 @@
+---
+title: From Infiniminer to Cave Game
+description: Infiniminer was abandoned and open-sourced less than a month after release; its "clone" became the best-selling game of all time. This chapter digs into the prehistory of destructible space — what Cave Game threw away, and how "unfinished" let it live as a product.
+---
+
+> **This chapter's thesis**: Cave Game's decisive change to Infiniminer was subtraction — remove the competition goal, remove the heavy simulation, remove the ready-made levels, and leave behind a world of blocks that anyone could dig open. "What it copied" cannot explain what it became. "What it discarded" can.
+
+## The problem
+
+On April 29, 2009, Zach Barth released a multiplayer mining game called Infiniminer. It lived for less than a month: someone decompiled the source and passed it around, and Barth simply open-sourced it and stopped development. Two weeks later, on May 13, a Swedish programmer uploaded a video to his YouTube channel under a title that made no attempt to hide anything: "This is a very early test of an Infiniminer clone I'm making." [^unlikely]
+
+The "clone" was called Cave Game at the time, and it was renamed Minecraft a few days later. What followed needs no retelling: it became the best-selling video game in human history, then a genre, an industry, and a generation's shared memory. Infiniminer stayed outside most people's vocabulary.
+
+If the word "clone" explained this story, things would be simpler: copying late matters less than copying well. The trouble is that, at that moment, more hands than Notch's held Infiniminer's open-source code. The projects that followed mostly kept the match, the teams, and the score exactly as they were — and then stalled somewhere near "a more polished mining contest." Not one became the thing Minecraft became. The key to success or failure was not whether you copied. It was where you cut after copying.
+
+So this chapter answers two questions: where did it come from, formally? And what did it discard? The answer to the second matters more than the answer to the first.
+
+## Why "it copied Infiniminer" does not explain enough
+
+Start with the game that got copied. Infiniminer was written in C#, and the whole game was 1.45 MB. Two teams, red and blue; four classes — miner, prospector, engineer, sapper — digging gold and diamond ore out of procedurally generated terrain and hauling it back to the surface for team points; the first team to the score line wins. Blocks could be dug out and stacked up, and the wall-building blocks were mostly team-colored: they served as fortifications, not as decoration. [^infiniminer]
+
+The most telling entry in this rule sheet is one that was never written down: **placing blocks scores no points.** The designer treated building as a means — blocking paths, bridging gaps, guarding ore. Players treated it as something else. Not long after the first servers went up, some people set the match aside and built whatever they felt like building. The players voted with their behavior: the best thing in this space was not winning. It was changing.
+
+This is where Notch walked in. According to the official biography, when he tried Infiniminer he "nearly fell off the chair," thinking "oh my god, this is genius." His gift was not reflexes; it was translation. The behavior — players quietly stacking blocks — meant something, and Barth never stopped to interpret it; he had a more urgent fire to put out. Notch read the behavior as demand itself. If what players most want to do is stack blocks, cut the scoreline, and turn stacking from a violation into the point. [^unlikely]
+
+So "it copied Infiniminer" is an incomplete ledger. It records only the credits: first-person view, blocks, digging and placing. It does not record the debits: the match, the teams, the classes, the score, winning and losing — all of it dropped. Count only the credits and Cave Game is a degraded Infiniminer: no scoreline, no classes, and usable blocks you could count on one hand. Count the debits too, and it is Minecraft.
+
+Record Barth's attitude here as well. He never called Notch a thief; he said only that "borrowing ideas has always been part of the creative process." That was not pure courtesy. Infiniminer itself stood in other people's shadows: Barth's stated inspirations were Team Fortress 2 and the mining game Motherload. [^infiniminer] The real fork is not a moral one but a design judgment. Faced with the same phenomenon — players not playing by the rules — one author set it aside, and the other picked it up and made it the product.
+
+## Prehistory: destructible space already existed — always with a goal attached
+
+Infiniminer did not spring from a rock, and neither did Cave Game. Before 2009, "a space you can tear down and build up" had appeared in games many times. Every predecessor Notch named himself provided that kind of space, and every one of them had a firm goal tied to it. [^unlikely]
+
+**Dwarf Fortress (2006).** One man's work — Tarn Adams — and a roguelike by lineage: procedural generation, a grid, painful failure. It simulates the world as a machine that almost never stops — geology, water, the moods and needs of every dwarf. Destructible and buildable, both present; but the goal is hard: keep the fortress alive. The depth lives in the simulator itself, and players need hundreds of hours to learn to read that machine. The community saying "losing is fun" is about this game: failure stories are content. Minecraft took one direction from it — "the world gets into trouble on its own"; darkness, lava, and night were later its thin versions — but not the weight of the simulation. Notch's attitude toward Dwarf Fortress is on the record: he tried to build an "approachable Dwarf Fortress," the project later shelved as RubyDung. [^rubydung]
+
+**Dungeon Keeper (1997).** Bullfrog's dungeon-management game: you dig tunnels, fit out rooms, raise monsters, and heroes break in to stop you. Per the biography, what it gave Notch was atmosphere — torches, darkness, and the unease of walking deeper and deeper underground. The temperament of Minecraft's caves is kin to it. [^unlikely]
+
+**RollerCoaster Tycoon (1999).** Chris Sawyer's park-management game. What Notch liked was two things: getting something decent built fast, and watching his creation being used — by the little people inside the game. [^unlikely]
+
+**Wurm Online.** Strictly speaking not a predecessor but Notch's own earlier work: a persistent-world online game he built with Rolf Jansson, where terrain could genuinely be reshaped and there were almost no built-in quests — but skills had to be ground out and time put in. Notch left in the spring of 2007. [^unlikely] It proves he knew long before what "a world you can live in" looks like — and what it weighs.
+
+| Form | What the space gives you | Where the goal is tied |
+|------|--------------------------|------------------------|
+| Infiniminer (2009) | A diggable, stackable arena | Ore converts to points; the score decides |
+| Dwarf Fortress (2006) | A world that gets into trouble on its own | Keep the fortress alive; failure is content too |
+| Dungeon Keeper (1997) | A carvable underground dungeon | Run an underground empire; repel the heroes |
+| RollerCoaster Tycoon (1999) | A park you can remodel | Visitors satisfied, park profitable |
+| Wurm Online (2006) | A reshapeable persistent continent | Skill grinding and running a homestead |
+
+All of these forms share one sentence pattern: **space is the means; the goal is the end.** Destructible space was not new. What was new was deleting the second half of the sentence. Cave Game is exactly that deletion.
+
+## How Notch worked
+
+This section takes only the three points useful to the origin story. It is not a biography.
+
+**Reach for the tool that ships.** He had a day job in Stockholm, and Minecraft's first months were an after-work project. Choosing Java was not an aesthetic judgment; it was a schedule judgment: it was the language in which he could get a running 3D program done fastest, with the LWJGL library putting windows, input, and OpenGL within reach. Some people later called Java Minecraft's destiny. That takes 2009's convenience and writes it up as essence — keep the receipt; Volume IV will come back to settle it.
+
+**Small builds, fast laps.** He kept entering the Java 4K contest, where the entire game has to fit in 4 KB of code. His 2009 entry, Left 4K Dead, took the gold — a zombie shooter in the mold of Left 4 Dead compressed into a 4 KB top-down mini-game. [^java4k] Contests like that train one specific muscle: get a minimal loop fully turning first; everything else can wait. Cave Game kept the same rhythm — about two days from starting work to putting out a playable test. [^preclassic]
+
+**Unfinished old projects are warehouses.** RubyDung was his "approachable Dwarf Fortress," started around February 2009: isometric view, sloped terrain, and the same goal of letting players run a piece of land. The project was shelved quickly; he tried switching it to a first-person view and disliked how the textures went blurry up close. After he saw Infiniminer, the problem dissolved on the spot — blocks never needed "textures that hold up up close," because the block is a first-person shape to begin with. So he went back to the RubyDung code and kept working on it: the earliest Minecraft builds carry the version prefix `rd-` (short for RubyDung), the internal project was still named RubyDung, and the grass and cobblestone textures came straight out of RubyDung's old files. [^rubydung][^preclassic] The grass block you know today has its template in the texture folder of an abandoned game.
+
+Put these pieces side by side and the origin looks more like assembly than epiphany. The feel and the verbs came from Infiniminer. The atmosphere came from Dungeon Keeper and Dwarf Fortress. "Build something and watch it get used" came from RollerCoaster Tycoon. The obsession with "living in it" came from Wurm Online. The code and the textures came from RubyDung. The most expensive ingredient was "none of the above" — it came from nowhere. It came from deleting.
+
+## Cave Game: dig, place, look
+
+On May 13, 2009, the video went up; the game was called Cave Game. The next day he came up with a full name, Minecraft: Order of the Stone — that name lived about a day — and then it settled as Minecraft. The entire pre-Classic phase lasted under a week, and the players on record number two: Notch himself, and a forum user with the ID ez. [^preclassic]
+
+What you could actually play in that tech test is astonishingly little:
+
+- Six kinds of blocks: grass, dirt, stone, cobblestone, planks, saplings.
+- Humanoid creatures wandering the map, their model and texture reused from another shelved project of his, Zombie Town — they later became the player character's own model. Strictly speaking, what you play in Minecraft is a "zombie" from a game abandoned in 2009. [^preclassic]
+- Pressing G spawned a person out of thin air.
+- The **left mouse button placed blocks and the right button dug them** — the exact reverse of today. Go back from a modern version and you will demolish half a house you just built, out of pure habit. [^preclassic]
+- A dug-out block simply vanished. There were no item drops.
+
+Stop on that last item, because it shows this test build's loop was missing a link. What you could play was three verbs: **dig** — the terrain opens where you want; **place** — the block in your hand returns to the world; **look** — in first person, space is both scenery and an object you can work on. But dug blocks evaporated and placed blocks appeared from nowhere; the world and your hand were not yet keeping the same ledger. "The world is the inventory" — the blocks in your pack and the blocks in the hillside being two positions of the same thing — became literally true only after Survival Test added item drops. That is the next chapter's business. Here, one note is enough: the three verbs are the skeleton, and inventory and drops were the first flesh grown onto it.
+
+The character's transparency, on the other hand, was settled from day one: no skill tree, no levels, no attributes. The only way to get stronger was to have changed the terrain. This analytic frame — blocks as units of measure, verbs as levers — gets its full treatment in Volume II, chapters 1 and 2. At the origin it was not yet a theory; it was just already playable.
+
+## What it discarded
+
+Gather the sections above and Cave Game discarded three things, each worth naming on its own.
+
+**It discarded the goal.** Infiniminer's scoreline, Dwarf Fortress's fortress survival, the roguelike's "descend to the deepest floor," the theme park's profit and loss — not one of them came along. The consequence runs one way: from then on, this game could not be "beaten," could not be "lost"; it could only be lived in. Players did go on to set goals for themselves — survive, build a house, dig down to the bedrock — but those are tasks issued by players, not by the game. There is a handy test for this: in the Infiniminer clones that kept the scoreline, once a player wins a round there is no reason to stay. Minecraft players have no "finished winning," so they stay.
+
+**It discarded the heavy simulation.** Dwarf Fortress's depth lives in its simulator; you have to learn to read the machine to play well. Cave Game went the other way: it kept only a handful of rules you could fully learn in a week — most blocks ignore gravity, water flows, night falls, and when it gets dark something comes out. Few rules, so they can be memorized whole; memorized whole, so they can be played beyond. The depth does not live in the simulator; it lives in what players do with a small set of rules by misusing them. This thread later grew into redstone — the mechanism analysis is in Volume II, chapter 7. At the origin, one sentence is enough: the rules were kept few on purpose.
+
+**It discarded authored levels.** The generator produced terrain and caves, not levels: no designed route through, no exit hidden somewhere waiting to be found. The world was empty to begin with. An empty world has a property that often gets overlooked: it cannot be "consumed to completion." In 2009 the unit of completion for a mainstream game was "beaten through," and an empty world has no such move. This is the deepest difference between Cave Game and every other game of its moment.
+
+The three subtractions point at the same thing: the game refuses to answer "what are you supposed to do."
+
+<Constraint name="Leave space, not a script" verdict="groundwork" chain="destructible → placeable → the goal is outsourced to players → gameplay grows itself">
+The game not answering "what are you supposed to do" is where all three subtractions land. It made Cave Game look like a half-finished product in 2009, and it is why Minecraft, more than a decade later, still has no such move as "finishing the game." Take this away and Creative mode, redstone, and server culture all lose the open ground they grew on — when Volume IV asks "what must be kept," this is the first cornerstone.
+</Constraint>
+
+## "Unfinished" as a product strategy
+
+Scored against 2009's checklist of "what a game should have," Cave Game was missing a lot: an ending, levels, quests, a growth curve, win conditions — none present. By the checklist it is scrap. By the loop it is finished: three things closing into a circle, and already fun to play.
+
+Notch later explained why he threw a half-finished thing out the door: "I knew I would never think it was good enough to charge money for, so I charged money from the start." And more bluntly: "I released it that early because otherwise I would never finish it." [^unlikely] The first half belongs to the next chapter's business story. The second half already holds here: a half-finished product released in public attracts players, and players will fill empty rules with goals of their own. Infiniminer players stacking blocks on servers, uninvited, was the first rehearsal of this; Cave Game turned the rehearsal into an institution.
+
+"Unfinished as strategy" can be falsified too: if the blank were merely an unfinished defect, then filling it in should make players breathe easier. The opposite happened. The hunger bar, the advancement system, the Ender Dragon — every act of "completion" brought protests from part of the old players, in wording so uniform it is striking: "this isn't the game it used to be." If the blank were just an empty window, nobody should mind it being filled. The protest itself is the proof: players counted the blank as part of the game.
+
+## What this chapter leaves behind
+
+- **For players**: the game never told you what to do — not because it forgot to write that line, but because in those two origin weeks it deleted the line by hand. Your habit of "having to find something to do yourself" is the inheritance of that deletion.
+- **For developers**: what you can copy is the subtraction list — cut the goal, cut the heavy simulation, cut the authored levels, and back each cut with a substitute: destructible space, few enough rules, open development. What you cannot copy is the timing: a freshly open-sourced dead game, an empty genre nobody was contesting, and an industry that still tolerated after-work experiments. Seeing that "players queue up wherever they transgress" is the one cut Infiniminer actually teaches.
+
+[^infiniminer]: Minecraft Wiki, "Infiniminer", retrieved 2026-09-16, https://minecraft.wiki/w/Infiniminer
+[^preclassic]: Minecraft Wiki, "Java Edition pre-Classic", retrieved 2026-09-16, https://minecraft.wiki/w/Java_Edition_pre-Classic
+[^rubydung]: Minecraft Wiki, "RubyDung", retrieved 2026-09-16, https://minecraft.wiki/w/RubyDung (which quotes Notch's blog post "The Origins of Minecraft," October 30, 2009)
+[^unlikely]: Linus Larsson and Daniel Goldberg, *Minecraft: The Unlikely Tale of Markus "Notch" Persson and the Game That Changed Everything*, Bookmark, 2011; quotations from the book excerpt published on Wired (November 2013), https://www.wired.com/2013/11/minecraft-book/
+[^java4k]: Wikipedia, "Java 4K Game Programming Contest", retrieved 2026-09-16, https://en.wikipedia.org/wiki/Java_4K_Game_Programming_Contest

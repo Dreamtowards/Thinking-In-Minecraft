@@ -1,0 +1,32 @@
+---
+title: Volume III · Technical Implementation
+description: A working prototype successfully dragged into an impossible scale — in this technical history, architecture debt and design freedom share one origin. Five parts: how the world exists, how the simulation advances, presentation and interaction, extensibility and the two engines, engineering lessons.
+---
+
+> **This volume's thesis**: the technical history of Minecraft is the history of a working prototype successfully dragged into an impossible scale. Architecture debt and design freedom share one origin; this volume neither celebrates nor flogs the corpse — it reads the price lists, one by one.
+
+## Three claims at the door
+
+Volume III argues at high density, so its three most counter-intuitive conclusions stand at the entrance; the chapters that follow are their unpacking.
+
+**Singleplayer is a local server.** What you took for single-player is a client talking to a server running on your own machine — an architecture that decides a great deal, from the feel of latency (chapter 11) to why anticheat is difficult by birth (chapter 10).
+
+**The world must outlive the engine.** A save from ten years ago has to open in today's version — this one ethical demand (chapter 2, [Storage and Serialization](/impl/storage)) locks innumerable engineering decisions in return, and explains why some debts stay visible on the books for decades without ever being paid.
+
+**Entities are the tax.** Blocks are as cheap as air; the things that move — mobs, item drops, minecarts — are as expensive as a tax (chapter 6). The performance history of large servers is, for the most part, the history of wrestling with this bill.
+
+## The five-part map
+
+**Part One · How the world exists (chapters 1–4).** What a block looks like in memory, how the world gets [stored and serialized](/impl/storage), how the generation pipeline runs, how light and fluid updates propagate. Entry: [The Data Model of the Voxel World](/impl/data-model).
+
+**Part Two · How the simulation advances (chapters 5–8).** The tick and the game loop, entities and collision, the item system, the implementation of redstone. Twenty TPS is a contract; when it breaks, what the game loses is not framerate but the timeliness of cause and effect. Entry: [The Game Loop and the Tick](/impl/tick).
+
+**Part Three · Presentation and interaction (chapters 9–11).** Rendering, the network protocol, audio, particles, and the lies of game feel — much of what you call feel is the client's performance, and authority lives on the server, always. Entry: [The Client and Rendering](/impl/client-render).
+
+**Part Four · Extensibility and the two engines (chapters 12–16).** Mod and plugin architecture, datapacks, the Java runtime, Bedrock as a second implementation, [servers and scale](/impl/servers). An engine that can be modded is the complete Minecraft. Entry: [Mod and Plugin Architecture](/impl/mod-architecture).
+
+**Part Five · Engineering lessons (chapters 17–18).** Technical debt as product strategy, and the volume's closing line: "an engine that can be modded is the complete product." Entry: [Technical Debt as Product Strategy](/impl/tech-debt).
+
+## How to read this volume
+
+For the enthusiast on the main path, it is enough to understand "what this means": the hard formulas and packet structures are pressed into subsections or skippable components, out of the main argument's way. Enthusiasts in a hurry can skip the detail everywhere except chapters 4, 5, 8, 11, 15, and 17–18; engine-minded developers should read everything, in order — the order is the dependency order. On the division of labor with the first two volumes: Volume II said why these designs are good; Volume III says what price they paid, who paid it, and where the unpaid balance still hangs. Finish this volume and go back to Volume II, and many a "simple" design decision will show how expensive it really was.

@@ -1,0 +1,66 @@
+---
+title: Developer Exercises
+description: Eight hands-on exercises: a minimal voxel sandbox, a misusable system, a save migrator, a redstone semantics test suite, an interest-driven scheduler, a two-layer extension, a permission matrix, and event-sourcing replay. Each gives a goal, constraints, source chapters, and a passing standard — never an implementation.
+---
+
+> **How to use this page**: each exercise is a four-part set — goal, constraints, source chapters, passing standard. The exercises deliberately give no implementation: a standard answer kills the experiment. Every exercise can be done in any language, on any engine; the "passing standard" is not the grader's taste but the factual test of whether the experiment stands at all.
+
+## I. A Minimal Voxel Sandbox
+
+- **Goal**: implement a runnable three-dimensional voxel world: cell-by-cell addressing, breakable, placeable, saveable and reloadable.
+- **Constraints**: world data must not use "an object" as the unit of a cell (you need to feel the motivation for palettes and bit packing first-hand); it must survive at least one "data format changed, old save still readable" (even if only through a hand-written translation layer).
+- **Source chapters**: Volume II ch. 1 ([The Voxel as a Design Primitive](/design/voxel-primitive)); Volume III ch. 1–2 ([The Data Model of a Voxel World](/impl/data-model), [Storage and Serialization](/impl/storage)).
+- **Passing standard**: two client instances open the same save in turn and see exactly identical blocks; corrupt one byte by hand and the program reports it instead of silently producing a wrong world.
+
+## II. Designing a Misusable System
+
+- **Goal**: design and implement a system governed by "only three rules of physics", such that another group of players (who know nothing of your intent) discovers at least one way to play that you did not anticipate, within ten minutes.
+- **Constraints**: the rules must be orthogonal (none special-cases another); no built-in "gameplay guidance" of any kind (no hints, quests, or tutorials); no usage may be punished.
+- **Source chapters**: Volume II ch. 2 ([The Minimal Verb Set and Game Feel](/design/verbs-feel)), ch. 7 ([Redstone: Physics as Programming](/design/redstone)), ch. 14 ([Blank Space, Emergence, and Player Authorship](/design/emergence)).
+- **Passing standard**: among the plays the players discover, at least one gets named by them spontaneously and spreads within a small group — "emergence is the inevitable child of constraint" here receives one empirical test (or refutation).
+
+## III. A Save Migrator
+
+- **Goal**: write a migration chain spanning three versions for a single data format — v1→v2→v3 — and prove "additive only, never subtracting" when v4 arrives.
+- **Constraints**: every migration must pass a reversibility test (migrate up, migrate back down, compare semantics item by item); not one byte of old-format reading code may be deleted.
+- **Source chapters**: Volume III ch. 2 ([Storage and Serialization](/impl/storage)), ch. 7 ([Items, Inventory, and Crafting](/impl/items)).
+- **Passing standard**: a v1 save migrated to v3 keeps every piece of semantic information intact (checked against a semantic inventory, item by item); when a fourth version is added, the migration chain's new code is smaller than the feature code it enables.
+
+## IV. A Redstone Semantics Test Suite
+
+- **Goal**: build a behavioral test suite for a "redstone-like" signal system: turn ten contraptions that depend on order-sensitive behavior into automated tests.
+- **Constraints**: assertions must be about "player-observable behavior" (lamp on or off, piston extended or retracted), never about internal state; write the tests first and the implementation after — the implementation may be rewritten from scratch twice with the tests unchanged by a single line.
+- **Source chapters**: Volume III ch. 8 ([Redstone's Implementation](/impl/redstone)).
+- **Passing standard**: deliberately perform one "internal optimization" (change the settlement order or the data structures) and every test stays green; then make one "semantic change" and at least half the tests go red — the dividing line between the two outcomes is the "compatibility above correctness" you are meant to touch with your own hands.
+
+## V. An Interest-Driven Scheduler
+
+- **Goal**: implement a scheduler that allocates simulation frequency by "player interest radius": full speed nearby, a reduced rate in the middle ring, paused beyond it.
+- **Constraints**: the downgrade and the pause must be imperceptible to players (grass that left the radius returns with state identical to "never paused"); scheduling frequency must be declarable separately per content type.
+- **Source chapters**: Volume III ch. 3 ([The World Generation Pipeline](/impl/worldgen-pipeline)), ch. 16 ([Servers and Scale](/impl/servers)); Volume IV ch. 5 ([Simulation Scheduling](/rewrite/scheduler)).
+- **Passing standard**: shrink the interest radius tenfold and the system's total simulation cost drops by more than tenfold, while every observed object's state evolution remains tick-for-tick identical to before the shrink.
+
+## VI. A Two-Layer Extension Prototype
+
+- **Goal**: implement two extension interfaces for the same application: a sandbox layer (restricted scripts, hot reload, automatic disabling on error) and a native layer (full capability, installed per version).
+- **Constraints**: no error inside a sandboxed script may affect the host or the other scripts; both layers share one domain vocabulary (the same event names, the same state predicates); a sandbox work must have a path to "be declared native".
+- **Source chapters**: Volume III ch. 13 ([Datapacks, Resource Packs, and Data-Driven Design](/impl/datapacks)); Volume IV ch. 6 ([The Two Layers of Scripts and Mods](/rewrite/scripting)).
+- **Passing standard**: deliberately write an infinite loop and an out-of-bounds access in the sandbox layer — the host survives, the offending script is disabled and can be reloaded with one click; implement the same feature sandboxed first and native second, and the second pass changes only the engineering packaging, not the domain logic.
+
+## VII. The Permission Matrix
+
+- **Goal**: implement "who may do what to what" as an editable "subject × capability" matrix, and demote the four classic modes (Survival/Creative/Adventure/Spectator) into factory presets of that matrix.
+- **Constraints**: an edit to any cell takes effect immediately and persists with the world; mode switching must be strictly equivalent to "bulk-writing the preset cells", with no mode-private hidden logic.
+- **Source chapters**: Volume II ch. 4 ([Creative Mode Is Not a Level Editor](/design/creative-mode)); Volume IV ch. 7 ([Networking, Permissions, and the Sinking of Social Functions](/rewrite/network-perms)).
+- **Passing standard**: edit the matrix by hand to "visitors may fly, may not break blocks, may interact" — the effect is indistinguishable from any existing product's equivalent configuration; delete every mode preset and the system remains fully usable on the matrix alone.
+
+## VIII. Event-Sourcing Replay
+
+- **Goal**: make the world's "history" replayable: replace (or overlay) per-tick state saving with "initial snapshot + input log", supporting replay and forking from any point in time.
+- **Constraints**: the simulation must eliminate every nondeterministic source (seed the random number generator, order the concurrency); replay must reproduce the final state byte for byte; flagged suspicious periods must support slow, tick-by-tick re-enactment.
+- **Source chapters**: Volume III ch. 3 ([The World Generation Pipeline](/impl/worldgen-pipeline)); Volume IV ch. 4 ([World Representation](/rewrite/world-rep)), ch. 9 ([Compatibility Strategy](/rewrite/compat)).
+- **Passing standard**: replay the same log a hundred times and the final-state hash matches exactly; deliberately rewind to the tick before a "contested moment" and fork different worlds with different subsequent inputs — neither the fork nor the replay damages the mainline data.
+
+## Closing
+
+The eight exercises share one hidden thread, and it is the book's hidden thread too: **turn "I can feel that it matters" into "I can test why it matters."** Every passing standard above is a checkable criterion — and if, after finishing an experiment, you find you want to reread its source chapters, the experiment has succeeded.

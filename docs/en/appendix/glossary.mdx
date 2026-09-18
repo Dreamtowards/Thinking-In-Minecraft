@@ -1,0 +1,102 @@
+---
+title: Glossary
+description: A quick reference to the book's high-frequency terms, one sentence per word. Five groups — world and data, time and simulation, extension and ecosystem, editions and products, community and analysis — plus a handful of concepts coined by this book. The definition is all there is; for the arguments, see the main volumes.
+---
+
+> **How to use this page**: one definition per term, no argumentation. Terms marked (this book) are analytical concepts coined in this book; the rest are community or official usage.
+
+## World and data
+
+**Block**: the basic unit of the world, a cell of roughly one cubic meter; the object of all building, breaking, and interaction.
+
+**Voxel**: a three-dimensional "volume pixel"; this book uses the word for the manipulable integer grid, not for any rendering technique.
+
+**Air**: a real block. Empty space still occupies a cell of data — which is why the world can be recorded cell by cell.
+
+**Chunk**: the world's unit of spatial and read/write slicing, a 16×384×16 column; loading, saving, and simulation are all settled by it.
+
+**Section**: a 16×16×16 sub-cube inside a chunk, the unit of measurement for storage and palettes.
+
+**Palette**: each section keeps one "table of kinds" and blocks store only an index into it — the workhorse of same-kind compression.
+
+**Block state**: a block's mutable properties (facing, water level, lit or not); after the 1.13 Flattening it replaced the old numeric metadata.
+
+**Block entity**: a block that carries private data (chest, furnace, sign) — it has data, keeps accounts, and does not walk.
+
+**Entity**: anything "positioned in the world and moving by itself": mobs, dropped items, boats, arrows. Computed every tick — the first tax on performance (this book's usage).
+
+**Component**: a named, customizable property of an item or block; the landed form of "named lists beat free-form fields".
+
+**NBT**: Named Binary Tag, a tagged binary data format; the world's universal storage box.
+
+**Namespace**: the prefix of every piece of content's full name (`minecraft:` and your own) — the address-plate system that prevents collisions.
+
+**DataFixerUpper**: Mojang's open-source migration library: it translates old-version data to new versions layer by layer, additive only, never subtracting.
+
+**Obfuscation**: the release-time pass that replaces class and method names with gibberish; officially removed as of October 2025.
+
+**Far Lands**: terrain in old versions that shattered far from spawn when floating-point precision ran out — the engineering tell behind "infinite", enshrined by the community as a pilgrimage site.
+
+## Time and simulation
+
+**Tick**: the time step of simulation. Java Edition runs 20 ticks per second, each with a 50-millisecond budget — the world's clock.
+
+**TPS**: ticks per second. When TPS drops the frame rate doesn't stutter — the world slows down; the furnace genuinely runs slower.
+
+**Scheduled tick**: a block's reserved "must-do, on time" item: water flow, falling sand, fire spread.
+
+**Random tick**: every tick, blocks are sampled at random for growth and decay; the world's sense of being alive is supplied here.
+
+**Quasi-connectivity**: the implementation quirk by which a piston can be activated by a power source "one block above"; MC-108, closed as "works as intended" — the community has since treated it as bedrock (Java Edition only).
+
+**BUD**: Block Update Detector — a switch built on the suspended state of "powered but not notified"; later officially adopted as the observer block.
+
+**Cascading updates**: the graph computation where one cell's change triggers its neighbors and the neighbors trigger theirs; the common breeding ground of lag and duplication bugs alike.
+
+**Simulation distance / render distance**: the former governs how far away the world keeps "running", the latter how far away it stays "visible"; separated since 1.18.
+
+## Extension and ecosystem
+
+**Mod**: an extension that modifies the client and/or the server program itself; it can add new systems and usually requires a loader.
+
+**Plugin**: an extension that modifies only the server, so a vanilla client can join (the Bukkit/Spigot/Paper lineage); it rewrites "this server's law".
+
+**Datapack**: the official data-layer extension, travels with the save; it can fill registry slots but cannot build new mechanics. Java Edition only.
+
+**Resource pack**: the official layer that swaps appearance without touching rules: textures, sounds, models.
+
+**Add-on**: Bedrock Edition's data-extension format (resources + behavior + scripts), eligible for Marketplace review.
+
+**Loader**: the framework that manages mod installation and conflicts: the Forge, Fabric, NeoForge lineage.
+
+**Mixin**: a bytecode-weaving technique that stitches a small piece of logic into official methods; the foundation of lightweight mods.
+
+**Event listener**: the mechanism by which a plugin weighs in before events such as "block broken" actually fire; land claims, economies, and minigames all grow out of this one incision.
+
+**Modpack**: a curated work that tunes dozens of mods into a coherent whole; its author is called "the third layer of authorship".
+
+**Vanilla**: Minecraft with no modifications installed; the word had to be invented because the mod ecosystem flourished.
+
+## Editions and products
+
+**Snapshot**: the public test build preceding every Java Edition release; Bedrock's counterpart is called a Preview.
+
+**Bedrock Edition**: the C++ implementation shared by the non-Java platforms; unified step by step out of Pocket Edition.
+
+**Marketplace**: Bedrock's built-in official content store; partner-and-review based, settled in Minecoin.
+
+**Realms**: the official monthly-fee rental of small servers; a byword for peace of mind, deliberately weaker than third-party hosting.
+
+**Semantic fork**: the same mechanic behaving differently in the two editions (combat cooldown, say); brand debt more lethal than a performance gap (this book's usage).
+
+## Community and analysis (including this book's concepts)
+
+**Griefing**: destroying other people's work for pleasure; a product of the open world's default political state.
+
+**Pay-to-win**: buying advantages that distort balance with money; the red line drawn by the 2014 EULA.
+
+**Misusable system (this book)**: a system where three things hold at once — it delivers physics rather than a play list, correct usage is invented by the community and fed back into the rules, and misuse goes unpunished.
+
+**Interest management (this book)**: the institution that allocates simulation resources by "who is watching"; vanilla's outstanding debt, and the core question of the rewrite by which the community makes it up.
+
+**Causal unit (this book)**: a strict-order settlement region bounded by a connected graph; interest-driven parallelism must not come at its expense.

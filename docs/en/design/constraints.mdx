@@ -1,0 +1,81 @@
+---
+title: Constraints Are Depth
+description: Unreal physics is a concession sold to the player; whether a special case is depth or debt is judged by teachability, composability, and counter-intuitive cost; and the stop-hand principle — a new system must add verbs, not menus.
+---
+
+> **This chapter's thesis**: depth comes from constraint, not from simulation — every "unreal" choice is a deliberate concession. But constraints rot into debt over time, and the criteria are whether it can be narrated as one sentence of rule, whether it composes freely with the existing systems, and how much muscle memory abolishing it would zero out. From these, the designer's moment to stop hands can be read: adding verbs may proceed; adding menus, stop. If some version's "realism" update were broadly welcomed by the community while its gameplay was not flattened, this thesis would be wrong.
+
+## The problem
+
+Sand falls; stone does not. Why?
+
+The standard answer in a game-design class is "the physics engine's scope." But the player's answer is more honest: there is no why — the world is just like this. And precisely because stone does not fall, you can build bridges hanging in midair, roofs with no pillars, an entire castle perched on the lip of a cliff. Suppose the officials one day announced a "realism update": all blocks subject to gravity, every unsupported structure collapses unless mechanically propped. The game would be "more realistic" — and half its gameplay would die on the spot.
+
+This chapter fits in the last methodological piece of Volume II: **the relation between constraint and depth, and when to stop.** Earlier chapters kept running into mechanics that are "unreal but more fun" — floating blocks, infinite water, a system of measurement at one block per meter. This chapter gathers them onto a single scorecard and answers two questions: which "unrealities" are assets, and which special cases are turning into debts? And then, as a designer (or as a player drafting feedback to the officials), how do you judge that "nothing more should be added here"?
+
+## Why "more realistic" is usually less fun
+
+Simulation's account has three entries, and every one of them is negative.
+
+**Real is expensive to implement.** Real fluids, structural mechanics, the physics of light — each one is a famous engineering quagmire. Volume III will show how much labor Minecraft has already sunk into "pretend fluids," while true fluid simulation remains a bone this industry has never finished gnawing.
+
+**Real is expensive to learn.** The model a player must study becomes reality itself — how does mining work in reality? Get a drill rig, and take geology first. Every point of realism the game gains is another inch of prerequisite homework; the credit for Minecraft's five-minute onboarding belongs precisely to its willingness to disagree with reality at every turn.
+
+**Real is barren to design.** This is the entry that matters most: reality was not designed to be fun. Real mining is tedious, real building requires passing a structural exam, real travel is measured in months — the higher the realism, the closer the game sits to the un-fun domain it imitates. Simulation occasionally pays (immersion, transferable intuition), but for a game whose core is reshaping the world, simulation's default return is negative.
+
+So "unreal" should be read as **concession**: the floating block concedes the tuition of structural mechanics to the freedom of building; one block per meter concedes surveying precision to the convenience of spoken coordinates; instant dig-and-place concedes process and procedure to the instant feedback of creation. When the next "unreal" mechanic appears in front of you, the question worth asking is not "is it realistic?" but "what did it concede to me?"
+
+## Unreal physics: the concession list
+
+Put the most important "unrealities" on the table, and trace where each concession went.
+
+**The exception to gravity.** The overwhelming majority of blocks hover exactly where you place them; only a few — sand, gravel, concrete powder and their kin — fall[^gravity]. Where the concession went: building needs no structural mechanics. Cantilevers, domes, upside-down palaces are all legal — building stops being an engineering problem and becomes a purely combinatorial one. Note the shape of this rule: one universal rule (things stay put) plus a pinch of exceptions (the ones that fall), and the exceptions themselves are teachable — "loose stuff drops" says it in one sentence.
+
+**Fluids as blocks.** Water and lava are not fluid simulations; they are "things that flow" spreading under block rules, and they honor famous rules like infinite water: place two buckets correctly and the space between them produces water forever. Where the concession went: hydraulics can be planned. Farms, waterways, and cobblestone generators all stand on predictable fluids — under true fluid simulation, not one of those playstyles would hold steady.
+
+**Light is instant and discrete.** Light takes no time to travel and has only levels, 0 to 15 (chapter 1, [The Voxel as a Design Primitive](/design/voxel-primitive), covered how it entered the language of redstone and mob spawning). Where the concession went: lighting can be computed — "how many blocks between torches" becomes an engineering question with an exact answer.
+
+**Trees float.** Cut the trunk and the canopy hangs in the air, refusing to fall. Where the concession went: gathering need not destroy the forest — you can take only the wood you need; the intuition that a forest is a renewable resource stands on this rule, which also quietly shaped the cultural norm of logging in moderation.
+
+The common shape of the four concessions deserves attention: **every sentence of "unreal" can be narrated as one teachable rule**, and the rules do not fight one another. That is the first signal that an "unreality" is an asset: the concessions are deliberate, narratable, and interlocking. Now look at the other side.
+
+## Special-case blocks: depth or debt
+
+Not every special case wears its concession so well. A game that has run for over a decade accumulates special cases that can no longer be cleanly told apart — asset or baggage. This section supplies a set of criteria, then actually rules on a few cases.
+
+**Criterion one: teachability.** Can this special case be explained to a newcomer in one sentence? What can be said plainly is a rule ("sand falls," "torches stop spawning"); what cannot be said plainly, and has to lean on "you'll understand once you've played a while," is a suspect of debt.
+
+**Criterion two: composability.** Does it combine freely with existing systems into new gameplay? What composes is depth (the piston combines with redstone, with minecarts, with anything); what demands dedicated fittings and can only be used the vendor's preset way is debt.
+
+**Criterion three: counter-intuitive cost.** How deeply does it violate the intuition the community has already banked? If it is ever "corrected," how much muscle memory zeroes out? The 1.9 combat overhaul (chapter 9, [Mobs, Combat, and Threats](/design/mobs-combat)) is the standing precedent of counter-intuitive cost going off the chart.
+
+Run three real special cases through the hearing. **Creepers and endermen altering terrain**: teachable (one sentence), composable (the entire craft of defensive architecture grows on top of it), but the counter-intuitive cost has been field-tested — the ten-year argument ignited by the mobGriefing toggle (chapter 12, [Who Makes the Rules](/design/who-makes-rules)) shows the community's feelings about it are double-valued. Verdict: depth — but "depth with a switch," and the officials know it. **Beds explode in the Nether**: teachable (one sentence), but composability is near zero (its only use is "a reminder not to sleep in the Nether"), and the counter-intuitive cost is low. Verdict: odd, not in debt — a rule told through absurdity, and understood. **Redstone's quasi-connectivity**: unteachable — it cannot be derived from any first principle; it is pure leakage from an early implementation (Volume I, chapter 8, [Two Product Lines: Java and Bedrock](/history/java-bedrock), recorded its naturalization from bug to MC-108's "works as intended"). By the three criteria it is a textbook debt — and yet the observed outcome is that the community built an entire family of machines on top of it, narrated it into a rule, and its removal would zero out three hundred thousand tutorials. Verdict: **a former debt, cashed into an asset by the community.** The criteria are static; the criteria's conclusions are dynamic — and that is this section's most important finding: between debt and depth runs a channel the community can open unilaterally, on condition of time and narration.
+
+The scorecard also runs in reverse: when a new version introduces a special case, put it through the same hearing — teachable? composable? counter-intuitive? Three greens and it may be the next piston; two reds and a yellow, and it is the next debt the community will spend ten years digesting.
+
+## The risk of modernization: filling in the blank space
+
+With criteria in hand, that approaching risk can finally be discussed. Minecraft's fourteen years of update history trace a slow slope: the light engine has been rewritten, world generation torn down and rebuilt, mob behavior ever finer, every generation a little "richer." "Richer" is not itself the disease — chapter 6, [World Generation as Content Production](/design/worldgen), covered how generation rewrites became version selling points. The risk points the other way: **using realism and content to fill in the blank space chapter 14 described** ([Blank Space, Emergence, and Player Authorship](/design/emergence)).
+
+What is blank space? It is what the system declines to govern: no stamina bar (you can always run), no carry weight (you can always hold thirty-six slots plus a chest), no life pressures beyond hunger, no officially defined "things you ought to be doing." Every patch of blank space is the community's running water — mob farms, ice highways, theater-scale redstone stages, all of them growing in the places the system "couldn't be bothered to look at." The wrong way to modernize can therefore be defined with precision: **every update that makes the game "make more sense" confiscates a patch of blank space.** A hypothetical list: realistic stamina and carry weight (confiscating the freedom of "you can always run"), more realistic fluids (confiscating infinite water and the cobblestone generator), an official quest chain (confiscating self-signed goals). Each item looks "reasonable" on its own; taken together they renovate the old city into a tour group.
+
+The right way to modernize has a ready-made model: **rewrite the implementation, keep the semantics.** The 1.18 terrain rebuild delivered new differences, not new rules; the lighting rewrite improved the presentation without changing the language of 0 to 15. The community's complaint that the game is "becoming like every other game" translates into engineering as a single alarm: blank-space margin running low. A team operating a long-lived world should manage blank space the way a treasurer manages a balance sheet.
+
+## The stop-hand principle: verbs, not menus
+
+Finally, gather "when to stop" into one executable principle. It is the joint product of everything this volume has argued so far:
+
+**A new system must add verbs, not menus.**
+
+Verbs (chapter 2, [The Minimal Verb Set and Game Feel](/design/verbs-feel)) are composable actions on the world — the elytra gave "move" a gliding gear, the piston gave "place" a pushing gear; every new verb enlarges the whole community's space of expression, and its cost structure is shared with the old verbs. Menus move decisions out of the world and into the interface — skill trees, stat pages, quest lists; they compose with nothing, and they spend the player's attention entirely inside the UI. The test is one sentence: **is the new thing combined in the world, or configured in an interface?**
+
+The principle binds three parties at once. For the officials: ask it of every new version — will this content become a player verb (ender pearls, elytra, spawn eggs), or a procedure to be followed? Collect the former; go careful with the latter. For mod authors and server owners: chapter 13's absorption principle ([Mods as Design Method](/design/mods-as-method)) is this principle projected onto the ecosystem layer — absorb verbs, leave systems alone. For the community itself: the sharpest question to ask of an update is not "how much content?" but "what new verbs did it give us?" — the answer is often half a line long, but half a line of verbs is worth a whole page of content.
+
+There is a still more fundamental stop, beyond any single update: **the stop line for blank space as a whole.** When the officials find the anxiety of "nothing left to do" becoming more than the community can carry — when new players churn not because "they have done it all" but because "they don't know what to play" — that is the moment to add signposts (an advice layer: advancements, the recipe book). But beyond signposts, resist forever the urge to finish paving the player's road. Chapter 10, [Dimensions, Advancements, and the Endgame](/design/dimensions-endgame), said it: the endgame stays blank so that players can occupy it. The final form of the stop-hand principle is admitting that the list of this game's best content carries someone else's name — the players'.
+
+## What this chapter leaves behind
+
+- **For players**: the next time you want to complain that some rule is "unreal," first count what it conceded you — floating blocks let you bridge in midair, fake fluids let you plan a farm — and you will find you have been living on a concession list all along.
+- **For developers**: what you can take away is the three-piece kit — the concession audit (say, for every "unreality," exactly what it conceded), the three criteria for special cases (teachable, composable, counter-intuitive cost), and the stop-hand principle (verbs in, menus out). What you cannot take away is the debt-to-asset channel: a mess like quasi-connectivity can be cashed into an asset by the community only if you have a community with fifteen years of patience, willing to write three hundred thousand tutorials about the mess.
+
+[^gravity]: Minecraft Wiki, "Falling block" (the list of blocks affected by gravity: sand, gravel, concrete powder, and others; all remaining blocks hover where placed), minecraft.wiki, retrieved 2026-09-18: see https://minecraft.wiki/w/Falling_block .

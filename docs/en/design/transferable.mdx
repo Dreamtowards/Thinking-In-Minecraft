@@ -1,0 +1,77 @@
+---
+title: A Checklist of Transferable Principles
+description: Twelve take-away design principles, each with its premise of application; four non-transferable circumstances listed on their own; four anti-patterns that copy the skin and lose the bone. Volume II's close — a system you can inhabit, not disposable content.
+---
+
+> **This chapter's thesis**: Minecraft's legacy to developers comes as two lists — twelve principles that stipulate how to think, and four circumstances that mark out where thinking gets you nothing. Failures of the "alike but never alive" kind come, almost all of them, from copying the second list as though it were the first. If some product satisfied all twelve principles and still failed, the sufficiency of this thesis would be wrong — which is precisely what the next section has to concede up front.
+
+## Why Minecraft-likes are "alike but never alive"
+
+Chapter 12 of Volume I answered the macro version (see [Competition, Imitation, and Industry Influence](/history/competition)): timing, the doorway, the toolchain, history — circumstances cannot be copied. This chapter gives the micro version from the design side: **imitators copy the visible layer and lose the generative layer.**
+
+The visible layer is representation choices: what blocks look like, how crafting is operated, where the health and hunger bars sit. This layer is fully visible and trivially easy to copy — which is exactly why it is the layer copied most thoroughly. The generative layer is structural relation: the orthogonality between rules, where the blank space sits, the outsourcing of goals, the layering of legislation. This layer is invisible — it is scattered across the analyses of a dozen-odd chapters, written in the places where "the system did nothing," and there is nothing there to copy. From this comes the standard for telling skin from bone: **swap the representation and the product is still itself (a resource pack later, it is still Minecraft); swap the structure and the product changes ancestry (replace the grid with smooth terrain and it is no longer Minecraft).** The failures are not failures of resemblance — they copied the skin correctly and the bone wrongly.
+
+This chapter sorts the bone into two lists. The first is the twelve transferable principles, distilled from this volume's sixteen chapters, each with its source and its premise of application. The second is the non-transferable conditions — they are not principles, they are history, and they are written down to keep the first list from being misused.
+
+## The twelve principles
+
+| # | Principle | One-line statement | Source chapter | Non-omittable premise |
+| --- | --- | --- | --- | --- |
+| 1 | A minimal verb set; depth comes from combination | Few enough verbs to write on a single line; expressive power comes from the combinatorial explosion | [The Minimal Verb Set and Game Feel](/design/verbs-feel) | The world must be operable (see #2) |
+| 2 | The world is the inventory | The world is cut into cells that can be broken, placed, and counted | [The Voxel as a Design Primitive](/design/voxel-primitive) | The unit must align with the player's body |
+| 3 | Goals are outsourced | The game supplies verbs and physics; the player supplies goals and narrative | [Survival as a Meaning Machine](/design/survival), [Dimensions, Advancements, and the Endgame](/design/dimensions-endgame) | Signposts must be ready for players weak in self-direction |
+| 4 | The misusable system | The officials deliver physics, not a play list | [Redstone: Physics as Programming](/design/redstone) | The officials must accept a "correct usage" they do not govern |
+| 5 | Growth attaches to things | Getting stronger is built into items — visible, tradable, loseable — not into the character sheet | [Crafting, Items, and Inventory](/design/crafting-inventory) | Items must circulate (no class locks) |
+| 6 | The procedural contract is "explorable" | The generator produces qualified difference, not endpoints | [World Generation as Content Production](/design/worldgen) | Difference must clear a quality floor |
+| 7 | Constraints are depth | Every "unreal" choice must be able to say which advantage it bought | [Constraints Are Depth](/design/constraints) | It takes the community years to digest the special cases |
+| 8 | Modes are permissions, not four games | Permission configurations on one and the same world model | [Creative Mode Is Not a Level Editor](/design/creative-mode) | The world model must be single |
+| 9 | The social contract is half the design | Each radius is matched to its institutions; legislation splits into three layers | [Multiplayer Is the Default](/design/multiplayer), [Who Makes the Rules](/design/who-makes-rules) | You must admit you write only the thinnest layer |
+| 10 | Mods and data-driving are first-class citizens | The officials monopolize physics only, ceding gameplay legislation layer by layer | [Commands, Datapacks, and Maps](/design/commands-datapacks), [Mods as Design Method](/design/mods-as-method) | The officials must resist having the blank space filled in |
+| 11 | The world must outlive the engine | Save compatibility is an ethics toward the player's time | [Survival as a Meaning Machine](/design/survival), [Mods as Design Method](/design/mods-as-method) | Format migration demands a long-term commitment |
+| 12 | New systems must add verbs, not menus | The new thing is combined in the world, not configured in an interface | [Constraints Are Depth](/design/constraints) | The team must be able to say where its depth lives |
+
+Three cautions for using this table, each of them more important than the table itself.
+
+**First, the principles hold shares in one another.** These are not side dishes you can order à la carte: a minimal verb set (1) has nothing to combine without the world being the inventory (2); goal outsourcing (3) is an empty slogan without a misusable system (4); growth attached to things (5) depends on items circulating, and circulation depends on there being no class locks. The case study in copying a single principle comes at the end of this chapter. **Second, every premise is a constraint, not a footnote.** Applying a principle while its premise does not hold is building to blueprint on sand — the layered legislation of chapter 12 ([Who Makes the Rules](/design/who-makes-rules)) requires that you genuinely be willing to cede power, and most teams stop at "accepting feedback," which is not ceding. **Third, this table describes games of habitation.** Its domain is products of the kind where players settle long-term, the community legislates, and the world endures; forcing principle 3 onto a linear narrative game is handing a tour group the old city's charter.
+
+## The non-transferable conditions (they are not principles)
+
+The conclusion of Volume I chapter 12 is folded into this list here, formally, to forestall misreading: the four entries below are Minecraft's **historical circumstances**. They do not transfer, and any project proposal containing an imitation of them should be crossed out.
+
+- **Timing**: the 2009–2011 stretch, when the channels for independent release had just matured and the YouTube transmission chain was just forming — there will not be a second window with a queue like that.
+- **The medium window**: a generation's "first game" has a single slot, and it is almost never reassigned.
+- **A twenty-year toolchain**: servers, mods, datapacks, tutorials, wikis — for a player, leaving means rebuilding the entire downstream, and a newcomer's downstream is zero.
+- **Undefined behavior absorbed as API**: quasi-connectivity and the cobblestone generator — historical conspiracies of "bug promoted to feature" that needed fifteen years of mutual non-prosecution between community and officials; no project plan can produce them.
+
+Principles can be learned; circumstances can only be caught or missed. Writing circumstances into a vision is managing a lottery ticket as a portfolio — this is the project proposal this chapter most wants to stop at the door.
+
+## Anti-patterns: the skin copied, the bone lost
+
+Four common failure recipes, each mapping precisely onto the absence of one principle on the table.
+
+**Recipe one: the block look copied, the system of measurement lost (loses 1 and 2).** The world wears pixel textures and block shapes, but the terrain is a smooth mesh and objects cannot be broken — or break into vapor. "Blocks" are reduced to a filter. The symptom: players cannot talk to each other in calls, because there is no "that cell." And in the players' own trailer footage, every gesture is camera work; none of it is building.
+
+**Recipe two: the crafting system copied, spatial memory lost (loses 5, and chapter 5's recipe speakability).** The flow of "gather, craft, upgrade" survives, but crafting is built as a lookup list gated by character level. Recipe knowledge degrades from "drawable and speakable" into numeric entries; the community loses the ingredients it once passed by word of mouth; the wiki becomes a necessity, and the newcomer community slides from "teaching" to "looking up."
+
+**Recipe three: the hunger bar copied, the cyclical structure lost (loses 3, and the sense of contract in 6).** Every survival game apparently deserves a hunger value, so one is added — but the world ships no matching day-night beat, no density design of "moments that demand a response." The hunger bar meshes with nothing and is demoted to a second progress bar beside the first; players notice it only when it dings, and are annoyed. The mechanism was copied; the machine that turns the mechanism into meaning was not.
+
+**Recipe four: free building copied, goal outsourcing lost (loses 3, violates 12).** The marketing says "free like Minecraft"; step inside and it is quest lists all the way down — build five houses to claim a reward, put up the structure the story specifies. Once building is task-driven, it is demoted from settled labor to errand-running, and everything the player builds bears the receipt of a task. The "free" in free building was never about whether you may build; it is that **the why of building is yours to set.**
+
+The four recipes can also be located one by one against the twelve principles: recipe one loses 1 and 2 together; recipe two loses 5, and with it chapter 5's speakability ([Crafting, Items, and Inventory](/design/crafting-inventory)); recipe three loses 3 and the contract sense of 6; recipe four loses 3 and violates 12 outright. The value of locating a failure is the prescription: what lost 1 and 2 must go back and rebuild its system of measurement; what lost 3 must learn to leave blank space. But prescriptions work only on products that have not shipped. For a launched hybrid of skin and bone, the price of structural surgery is on file in chapter 9 ([Mobs, Combat, and Threats](/design/mobs-combat)): the later the surgery, the more muscle memory it zeroes out. This echoes, once more, the old line from Volume I: some mistakes have to be made on day one — because the more a mistake looks like a mistake, the more it says the direction should have changed on day one.
+
+The four recipes share a single root disease: mistaking representation for mechanism. So the diagnosis has exactly one instrument — **the skin-swap test**: strip your product's entire presentation layer (art style, subject matter, interface) and ask whether the structure of relations underneath still holds, and is still fun. Whatever holds is your bone; whatever does not says you had only skin. Minecraft passes the skin-swap test — resource packs have been swapped round after round — and every chapter this volume analyzed ought to pass it too.
+
+The skin-swap test has an operable three steps. Step one, list the structures: write down "every relation between the player and the system" in your product — what he changes, what he loses, with whom he contracts, why he stays; write verbs and relations only, no nouns or images. Step two, perform the swap: imagine this set of relations fitted into another representation — seafaring, a space station, an ink-wash town — and ask of each relation, "does this one still feel natural?" Step three, count the survivors: if more than seven in ten relations survive naturally, you have bone, and the representation is an optional skin; if fewer than three in ten survive, your product is that skin itself — it may be a good product, but it is not a transferable structure, and the only column this checklist has left for it is "anti-pattern."
+
+## Volume II in closing
+
+The volume thesis can now be submitted: **depth comes not from content volume but from the combinatorial explosion of a very few rules over a voxel world; goals are outsourced to the player, and systems are built as tools that can be misused.** Along this volume's sixteen-chapter route, every word of that sentence has drawn its mechanism: the voxel (chapter 1) gave combination its ground; the minimal verb set (chapter 2) guaranteed the density of rules; the meaning machine (chapter 3) and permissions (chapter 4) kept diversity alive; the interlocking systems (chapters 5–10) supplied the material for combination; the social layer (chapters 11–13) outsourced gameplay to its legislators; the methodology (chapters 14–15) explained why this way of building holds, and when to stop.
+
+"Inhabitable" now has a definition in design terms: **a world a player can modify unilaterally, set goals in freely, and whose outputs the system remembers and society recognizes.** The opposite of inhabiting is not "living somewhere else" — it is "consuming somewhere else." Content you finish and discard does not need you; a world you can inhabit has been waiting for your legislation since day one.
+
+The next volume turns the camera to the countinghouse. Everything this volume praised — permanent saves, the twenty-ticks-per-second contract, infinite worlds, misusable physics — has a price at the implementation layer. Volume III's task is to read those price lists one by one, and on the way to answer a question left suspended until now: how did a 2009 amateur project carry these designs to the present day.
+
+## What this chapter leaves behind
+
+- **For players**: what you have just read is the complete list of secrets behind this game's "fun" — the list is not complicated; what is complicated is fifteen years without a single version betraying it.
+- **For developers**: what you can take away is the twelve principles plus their premises of application, and the discipline to treat them as a system rather than a plate of sides. Before you take them, run the skin-swap test — only when you can count what would remain of your own product "with the representation swapped" are you in a position to borrow anyone else's bone. What you cannot take away is fifteen years of loyalty to the principles: any single line on this table reads as common sense; the hard part is re-signing all of it at every version update.
