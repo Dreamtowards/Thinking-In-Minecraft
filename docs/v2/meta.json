@@ -1,3 +1,5 @@
 ﻿{
-  "root": true
+  "title": "V2",
+  "description": "第二版草稿。",
+  "root": "edition"
 }

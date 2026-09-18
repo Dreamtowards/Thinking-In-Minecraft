@@ -1,14 +1,3 @@
 {
-  "pages": [
-    "toc",
-    "prelude",
-    "history",
-    "design",
-    "impl",
-    "rewrite",
-    "---番外---",
-    "...extras",
-    "---附录---",
-    "...appendix"
-  ]
+  "pages": ["zh", "en", "v2"]
 }

@@ -1,0 +1,17 @@
+{
+  "title": "中文",
+  "description": "主版本：历史、设计与实现三卷，及番外与附录。",
+  "root": "edition",
+  "pages": [
+    "../toc",
+    "../prelude",
+    "../history",
+    "../design",
+    "../impl",
+    "../rewrite",
+    "---番外---",
+    "...../extras",
+    "---附录---",
+    "...../appendix"
+  ]
+}
