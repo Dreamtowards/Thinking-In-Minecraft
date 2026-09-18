@@ -1,5 +1,14 @@
 ﻿{
   "title": "V2",
   "description": "第二版草稿。",
-  "root": "edition"
+  "root": true,
+  "pages": [
+    "prelude",
+    "history",
+    "design",
+    "impl",
+    "rewrite",
+    "---附录---",
+    "appendix"
+  ]
 }

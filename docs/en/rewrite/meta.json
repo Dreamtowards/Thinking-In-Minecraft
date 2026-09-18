@@ -1,0 +1,18 @@
+{
+  "title": "Volume IV · Rewrite",
+  "defaultOpen": true,
+  "pages": [
+    "index",
+    "what-to-rewrite",
+    "invariants",
+    "accidents",
+    "world-rep",
+    "scheduler",
+    "scripting",
+    "network-perms",
+    "render-tools",
+    "compat",
+    "who-rewrites",
+    "seeing-the-original"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "title": "卷三 · 技术实现",
+  "defaultOpen": true,
+  "pages": [
+    "index",
+    "data-model",
+    "storage",
+    "worldgen-pipeline",
+    "light-fluid-updates",
+    "tick",
+    "entities",
+    "items",
+    "redstone",
+    "client-render",
+    "protocol",
+    "feel-client",
+    "mod-architecture",
+    "datapacks",
+    "java-runtime",
+    "bedrock",
+    "servers",
+    "tech-debt",
+    "modifiable-engine"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "title": "卷四 · 重写",
+  "defaultOpen": true,
+  "pages": [
+    "index",
+    "what-to-rewrite",
+    "invariants",
+    "accidents",
+    "world-rep",
+    "scheduler",
+    "scripting",
+    "network-perms",
+    "render-tools",
+    "compat",
+    "who-rewrites",
+    "seeing-the-original"
+  ]
+}

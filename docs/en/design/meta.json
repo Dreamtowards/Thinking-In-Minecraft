@@ -1,0 +1,23 @@
+{
+  "title": "Volume II · Game Design",
+  "defaultOpen": true,
+  "pages": [
+    "index",
+    "voxel-primitive",
+    "verbs-feel",
+    "survival",
+    "creative-mode",
+    "crafting-inventory",
+    "worldgen",
+    "redstone",
+    "commands-datapacks",
+    "mobs-combat",
+    "dimensions-endgame",
+    "multiplayer",
+    "who-makes-rules",
+    "mods-as-method",
+    "emergence",
+    "constraints",
+    "transferable"
+  ]
+}

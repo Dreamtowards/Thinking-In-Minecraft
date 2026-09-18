@@ -1,5 +1,14 @@
 {
   "title": "English",
   "description": "Main edition in English.",
-  "root": "edition"
+  "root": true,
+  "pages": [
+    "prelude",
+    "history",
+    "design",
+    "impl",
+    "rewrite",
+    "---Appendix---",
+    "appendix"
+  ]
 }
