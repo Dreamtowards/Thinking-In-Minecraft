@@ -1,8 +1,20 @@
+import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 
 const root = process.cwd();
-const zh = JSON.parse(fs.readFileSync(path.join(root, 'lib/book-toc-data.json'), 'utf8'));
+const zhPath = path.join(root, 'lib/book-toc-data.json');
+const enPath = path.join(root, 'lib/book-toc-data-en.json');
+
+function loadBaseline() {
+  const raw = execSync('git show HEAD:lib/book-toc-data.json', {
+    cwd: root,
+    encoding: 'utf8',
+  });
+  return JSON.parse(raw);
+}
+
+const baseline = loadBaseline();
 
 const VOLUME_PATH = {
   prelude: 'prelude',
@@ -96,6 +108,40 @@ function readFileIfExists(filePath) {
   }
 }
 
+function listPartDirs(volumeDir) {
+  const base = path.join(root, 'docs', volumeDir);
+  if (!fs.existsSync(base)) return [];
+  return fs
+    .readdirSync(base, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory() && /^\(part\d+\)$/.test(entry.name))
+    .map((entry) => entry.name)
+    .sort((a, b) => Number(a.match(/\d+/)[0]) - Number(b.match(/\d+/)[0]));
+}
+
+function normalizePageSlug(page) {
+  return page.replace(/^\.\.\//, '');
+}
+
+/** Map numbered ids (e.g. impl/05) to canonical hrefs from volume part meta.json. */
+function buildChapterHrefMap() {
+  const map = {};
+  for (const volumeDir of ['history', 'design', 'impl', 'rewrite']) {
+    let n = 0;
+    for (const part of listPartDirs(volumeDir)) {
+      const metaPath = path.join(root, 'docs', volumeDir, part, 'meta.json');
+      const raw = readFileIfExists(metaPath);
+      if (!raw) continue;
+      const meta = JSON.parse(raw);
+      for (const page of meta.pages) {
+        n += 1;
+        const slug = normalizePageSlug(page);
+        map[`${volumeDir}/${String(n).padStart(2, '0')}`] = `/${volumeDir}/${slug}`;
+      }
+    }
+  }
+  return map;
+}
+
 function parseFrontmatter(source) {
   const match = source.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
   if (!match) return null;
@@ -118,25 +164,32 @@ function parseFrontmatter(source) {
   };
 }
 
-function resolveEnDoc(href) {
+function resolveDoc(href, locale) {
   if (!href) return null;
   const rel = href.replace(/^\//, '');
+  const docsRoot = locale === 'en' ? path.join(root, 'docs', 'en') : path.join(root, 'docs');
   const candidates = [
-    path.join(root, 'docs/en', `${rel}.mdx`),
-    path.join(root, 'docs/en', rel, 'index.mdx'),
+    path.join(docsRoot, `${rel}.mdx`),
+    path.join(docsRoot, rel, 'index.mdx'),
   ];
+
+  const [volume, slug] = rel.split('/');
+  if (volume && slug) {
+    const volumeDir = path.join(docsRoot, volume);
+    if (fs.existsSync(volumeDir)) {
+      for (const entry of fs.readdirSync(volumeDir, { withFileTypes: true })) {
+        if (entry.isDirectory() && entry.name.startsWith('(part')) {
+          candidates.push(path.join(volumeDir, entry.name, `${slug}.mdx`));
+        }
+      }
+    }
+  }
+
   for (const candidate of candidates) {
     const raw = readFileIfExists(candidate);
     if (raw) return parseFrontmatter(raw);
   }
   return null;
-}
-
-function extractH2(body) {
-  return body
-    .split(/\r?\n/)
-    .map((line) => line.match(/^##\s+(.+)$/)?.[1]?.trim())
-    .filter(Boolean);
 }
 
 function loadPartMeta(volumeId, partIndex) {
@@ -148,26 +201,49 @@ function loadPartMeta(volumeId, partIndex) {
   return JSON.parse(raw);
 }
 
-function transformChapter(ch) {
-  const doc = ch.href ? resolveEnDoc(ch.href) : null;
+function resolveChapterHref(ch, slugMap) {
+  return ch.href ?? slugMap[ch.id] ?? null;
+}
+
+function enrichChapter(ch, slugMap, locale) {
+  const baseHref = resolveChapterHref(ch, slugMap);
+  const doc = resolveDoc(baseHref, locale);
+  const href =
+    baseHref && locale === 'en' ? `/en${baseHref}` : baseHref;
+
   return {
     ...ch,
     title: doc?.title || ch.title,
     desc: doc?.description || ch.desc,
-    question: doc ? '' : ch.question,
-    href: ch.href ? `/en${ch.href}` : null,
-    sections: doc ? extractH2(doc.body) : ch.sections,
-    tags: ch.tags.map((tag) => TAG_EN[tag] ?? tag),
+    question: doc && locale === 'en' ? '' : ch.question,
+    href,
+    written: Boolean(doc),
+    tags: locale === 'en' ? ch.tags.map((tag) => TAG_EN[tag] ?? tag) : ch.tags,
   };
 }
+
+const slugMap = buildChapterHrefMap();
+
+const syncedZh = {
+  ...baseline,
+  volumes: baseline.volumes.map((volume) => ({
+    ...volume,
+    parts: volume.parts.map((part) => ({
+      ...part,
+      chapters: part.chapters.map((ch) => enrichChapter(ch, slugMap, 'zh')),
+    })),
+  })),
+};
+
+fs.writeFileSync(zhPath, `${JSON.stringify(syncedZh, null, 2)}\n`);
 
 const en = {
   thesis:
     'Minecraft is not disposable content, but a system you can inhabit, play beyond its design, and redevelop through mods and servers.',
-  volumes: zh.volumes.map((volume) => {
+  volumes: syncedZh.volumes.map((volume) => {
     const meta = VOLUME_EN[volume.id] ?? {};
     const volPath = VOLUME_PATH[volume.id];
-    const volDoc = volPath ? resolveEnDoc(`/${volPath}`) : null;
+    const volDoc = volPath ? resolveDoc(`/${volPath}`, 'en') : null;
 
     return {
       ...volume,
@@ -188,13 +264,13 @@ const en = {
                 ? 'Reference'
                 : (partMeta?.title ?? part.title),
           intent: intents?.[partIndex] ?? part.intent,
-          chapters: part.chapters.map(transformChapter),
+          chapters: part.chapters.map((ch) => enrichChapter(ch, slugMap, 'en')),
         };
       }),
     };
   }),
 };
 
-const outPath = path.join(root, 'lib/book-toc-data-en.json');
-fs.writeFileSync(outPath, `${JSON.stringify(en, null, 2)}\n`);
-console.log(`Wrote ${outPath}`);
+fs.writeFileSync(enPath, `${JSON.stringify(en, null, 2)}\n`);
+console.log(`Synced ${zhPath}`);
+console.log(`Wrote ${enPath}`);

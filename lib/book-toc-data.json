@@ -21,7 +21,7 @@
               "id": "prelude/index",
               "title": "前言",
               "audience": "both",
-              "desc": "从历史、设计与技术理解 Minecraft：哪些规律逐渐形成，哪些经验可以迁移。",
+              "desc": "从历史、设计与技术三个方向理解 Minecraft：它为何能容纳长期生活、意外玩法与持续再开发，以及哪些经验可以迁移。",
               "question": "这本书研究什么？怎样避免把后见规律冒充创作意图？按什么顺序读？",
               "sections": [
                 "这本书研究什么",
@@ -39,7 +39,7 @@
               "id": "prelude/thesis",
               "title": "全书的命题",
               "audience": "both",
-              "desc": "从结果回看形成条件，而不把后见规律冒充创作意图。三卷从历史、设计与技术论证 Minecraft 最终形成了怎样的系统。",
+              "desc": "销量解释不了 Minecraft 是什么。它是能住进去、能玩出设计之外、还能被再开发的系统。三卷证明这句话；第四卷问拿掉 2009 年的凑合之后它还在不在。",
               "question": "这本书在证明什么？为什么必须分三卷？",
               "sections": [
                 "为什么「最畅销」什么都没解释",
@@ -59,7 +59,7 @@
               "id": "prelude/method",
               "title": "体例与方法",
               "audience": "both",
-              "desc": "现象开篇、证伪标准、双版本口径，以及不同材料各自能证明什么。区分创作意图、实现机制与长期结果。",
+              "desc": "现象开篇、证伪标准、双版本口径，以及不同材料各自能证明什么。区分创作意图、实现机制与长期结果，避免把后见规律写成先验蓝图。",
               "question": "读者凭什么相信后面的判断？",
               "sections": [
                 "游戏书写的三种失败：百科、攻略、情怀",
@@ -132,7 +132,7 @@
               "id": "history/03",
               "title": "Mojang 成立、Beta 与正式版",
               "audience": "both",
-              "desc": "个人项目变成工作室后，设计权从直觉变成组织。Beta 1.8 的饥饿与冒险是第一次「向游戏收敛」。2011 正式版完成的是仪式，不是系统。一次买断、无内购，是后来 Marketplace 冲突的底色。",
+              "desc": "个人项目变成工作室后，设计权从直觉变成组织。Beta 1.8 是第一次「向游戏收敛」。2011 正式版完成的是仪式，不是系统。一次买断是后来 Marketplace 冲突的底色。",
               "question": "变成工作室之后，设计权发生了什么变化？",
               "sections": [
                 "正式版那天，游戏真的完成了吗",
@@ -194,7 +194,7 @@
               "id": "history/06",
               "title": "影像、教育与一代人的媒介",
               "audience": "fan",
-              "desc": "Let's Play、教程、动画和梦核把 Minecraft 写成儿童与家庭的通用语言。教育版改写了「谁的 Minecraft」。当传播发生在视频里，正作还需要教什么，就成了设计问题。",
+              "desc": "Let's Play、教程、动画和梦核把 Minecraft 写成儿童与家庭的通用语言。教育版改写了谁的 Minecraft。当传播发生在视频里，正作还需要教什么，就成了设计问题。",
               "question": "它如何从游戏变成一代人的通用语言？",
               "sections": [
                 "很多人是在视频里学会玩的",
@@ -228,14 +228,14 @@
                 "产品线扩张：教育、Dungeons、Legends、电影——作为 IP 第二曲线的入口"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/history/acquisition",
+              "written": true
             },
             {
               "id": "history/08",
               "title": "两条产品线：Java 与 Bedrock",
               "audience": "both",
-              "desc": "从 Pocket Edition 到 Bedrock，跨平台是产品逻辑，功能分裂是品牌债。Marketplace 把 UGC 商业化，同时把模组文化排除在外。两个 Minecraft 不是两个皮肤。",
+              "desc": "从 Pocket Edition 到 Bedrock，跨平台是产品逻辑，功能分裂是品牌债。Marketplace 把 UGC 收成货架，把模组文化留在门外。两个 Minecraft 不是两个皮肤。",
               "question": "为何存在两个 Minecraft，分裂如何变成债？",
               "sections": [
                 "「买一份能玩全部」为何做不到",
@@ -254,7 +254,7 @@
               "id": "history/09",
               "title": "版本政治与更新哲学",
               "audience": "both",
-              "desc": "从「Notch 随手加」到主题版本。快照、实验玩法、数据包成为官方共创接口。洞穴与山崖证明生成系统可以当版本卖点。「原版纯度」是被更新不断改写的执念。",
+              "desc": "从「Notch 随手加」到主题版本：快照、实验玩法、数据包成为官方共创接口。「原版纯度」是被更新不断改写的执念。",
               "question": "官方如何与社区抢定义权？",
               "sections": [
                 "为什么系统更深了，仍有人觉得「不是以前那个游戏」",
@@ -264,8 +264,8 @@
                 "投票与失败实验：治理替代作者直觉"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/history/version-politics",
+              "written": true
             }
           ]
         },
@@ -288,8 +288,8 @@
                 "不能从哪里来：为何模组抽成失败（细节见第 11 章）"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/history/revenue",
+              "written": true
             },
             {
               "id": "history/11",
@@ -305,8 +305,8 @@
                 "两种 UGC：Marketplace vs 模组"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/history/grey-economy",
+              "written": true
             },
             {
               "id": "history/12",
@@ -322,14 +322,14 @@
                 "不可复制条件"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/history/competition",
+              "written": true
             },
             {
               "id": "history/13",
               "title": "作为文化遗产的 Minecraft",
               "audience": "fan",
-              "desc": "版本、存档、服务器和模组比引擎更难保存。当童年变成 IP，品牌管理、审查与创作自由开始摩擦。媒介一旦停止被再开发，就只剩 IP。",
+              "desc": "版本、存档、服务器和模组比引擎更难保存。当童年变成 IP，品牌管理、审查与创作自由开始摩擦。媒介一旦停止被再开发，就只剩商标。",
               "question": "谁来保存世界、模组与服务器？",
               "sections": [
                 "一个旧模组世界现在还打得开吗",
@@ -341,8 +341,8 @@
               "tags": [
                 "结语"
               ],
-              "href": null,
-              "written": false
+              "href": "/history/heritage",
+              "written": true
             }
           ]
         }
@@ -368,7 +368,7 @@
               "id": "design/01",
               "title": "体素作为设计原语",
               "audience": "both",
-              "desc": "1 米立方体同时服务建造、导航、战斗与红石，因为空间是离散、可破坏、可放置、可计数的。世界即库存。连续空间更「自由」，却失去可复述的组合语法。体素不是美术风格，是度量衡。",
+              "desc": "1 米立方体同时服务建造、导航、战斗与红石，因为空间是离散、可破坏、可放置、可计数的。世界即库存。连续空间更自由，却失去可复述的组合语法。体素不是美术风格，是度量衡。",
               "question": "1 米立方体凭什么同时服务这么多玩法？",
               "sections": [
                 "「方块游戏」为什么不是贬义",
@@ -425,7 +425,7 @@
               "id": "design/04",
               "title": "创造模式不是关卡编辑器",
               "audience": "both",
-              "desc": "生存 / 创造 / 冒险 / 旁观是同一世界的四种权限，不是四个游戏。创造必须寄生于生存规则才有意义。无限资源改变的是建造的社会意义。关卡编辑器是另一类产品。",
+              "desc": "生存、创造、冒险、旁观是同一世界的四种权限，不是四个游戏。创造必须寄生于生存规则才有意义。无限资源改变的是建造的社会意义。关卡编辑器是另一类产品。",
               "question": "四种模式是四种游戏，还是四种权限？",
               "sections": [
                 "为什么创造模式仍像在玩 Minecraft",
@@ -589,8 +589,8 @@
                 "2b2t：极限实验，不是猎奇"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/design/who-makes-rules",
+              "written": true
             },
             {
               "id": "design/13",
@@ -606,8 +606,8 @@
                 "收编原则 + 反例（至少四条）"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/design/mods-as-method",
+              "written": true
             }
           ]
         },
@@ -630,8 +630,8 @@
                 "同一权利：建造 / 红石 / 地图 / 影像"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/design/emergence",
+              "written": true
             },
             {
               "id": "design/15",
@@ -649,8 +649,8 @@
               "tags": [
                 "枢纽"
               ],
-              "href": null,
-              "written": false
+              "href": "/design/constraints",
+              "written": true
             },
             {
               "id": "design/16",
@@ -680,8 +680,8 @@
               "tags": [
                 "结语"
               ],
-              "href": null,
-              "written": false
+              "href": "/design/transferable",
+              "written": true
             }
           ]
         }
@@ -717,8 +717,8 @@
                 "高度上限事件：数据模型如何限制设计"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/data-model",
+              "written": true
             },
             {
               "id": "impl/02",
@@ -734,8 +734,8 @@
                 "版本迁移成本"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/storage",
+              "written": true
             },
             {
               "id": "impl/03",
@@ -751,8 +751,8 @@
                 "确定性、可复现、实验性生成器"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/worldgen-pipeline",
+              "written": true
             },
             {
               "id": "impl/04",
@@ -768,8 +768,8 @@
                 "连锁更新即图计算"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/light-fluid-updates",
+              "written": true
             }
           ]
         },
@@ -792,8 +792,8 @@
                 "看门狗与玩家可感知的时间"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/tick",
+              "written": true
             },
             {
               "id": "impl/06",
@@ -809,8 +809,8 @@
                 "农场与崩溃路径"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/entities",
+              "written": true
             },
             {
               "id": "impl/07",
@@ -826,8 +826,8 @@
                 "迁移地狱"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/items",
+              "written": true
             },
             {
               "id": "impl/08",
@@ -845,8 +845,8 @@
               "tags": [
                 "枢纽"
               ],
-              "href": null,
-              "written": false
+              "href": "/impl/redstone",
+              "written": true
             }
           ]
         },
@@ -859,7 +859,7 @@
               "id": "impl/09",
               "title": "客户端与渲染",
               "audience": "dev",
-              "desc": "从即时模式到批处理。区块网格、剔除、透明。资源包是官方模组。原版不用贪婪网格是历史与复杂度选择。优化模组证明了原版债，它们是民间官方实现的一部分。",
+              "desc": "从即时模式到批处理。区块网格、剔除、透明。资源包是官方模组。原版不用贪婪网格，是模型合同与重建成本，不是没听过算法。优化模组是这一层的民间官方实现。",
               "question": "原版为何不用贪婪网格，模组如何改写这一层？",
               "sections": [
                 "看得见的世界如何被拼出来",
@@ -869,8 +869,8 @@
                 "优化模组作为证据"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/client-render",
+              "written": true
             },
             {
               "id": "impl/10",
@@ -886,14 +886,14 @@
                 "协议版本与多版本服务器"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/protocol",
+              "written": true
             },
             {
               "id": "impl/11",
               "title": "音频、粒子与手感谎言",
               "audience": "both",
-              "desc": "位置音频是空间信息。粒子是反馈不是电影。挖掘、受伤、GUI 大量客户端预测。无障碍是设计还是债，单独成节。",
+              "desc": "位置音频是空间信息。粒子是反馈不是电影。挖掘、受伤、GUI 大量客户端预测。无障碍是设计还是债，要分开看：有的把感官做成可选，有的把信息补进另一条通道。",
               "question": "手感有多少是模拟，有多少是反馈？",
               "sections": [
                 "挖一下、挨一下，服务器还没说话",
@@ -903,8 +903,8 @@
                 "无障碍"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/feel-client",
+              "written": true
             }
           ]
         },
@@ -917,7 +917,7 @@
               "id": "impl/12",
               "title": "模组与插件架构",
               "audience": "dev",
-              "desc": "字节码、Mixin、Forge / Fabric / NeoForge。Bukkit / Paper 是另一条河。没有稳定 API 时，注入即 API，升级变成政治。兼容矩阵：版本 × 加载器 × 模组。模组比引擎更难维护。",
+              "desc": "字节码、Mixin、Forge / Fabric / NeoForge。Bukkit / Paper 是另一条河。没有稳定 API 时，注入即 API，升级变成政治。兼容矩阵让模组比引擎更难维护。",
               "question": "为什么模组比引擎更难维护？",
               "sections": [
                 "为什么每个大版本都是模组的末日",
@@ -927,14 +927,14 @@
                 "兼容矩阵"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/mod-architecture",
+              "written": true
             },
             {
               "id": "impl/13",
               "title": "数据包、资源包与数据驱动",
               "audience": "dev",
-              "desc": "扁平化之后的命名空间世界。数据包能改什么、不能改什么。资源包与数据分工。官方扩展面故意停在「新动词」之前。数据驱动是温和模组的政治。",
+              "desc": "扁平化之后的命名空间世界。数据包能改内容与部分规则，加不出新的交互方式。资源包与数据分工。官方扩展面故意停在系统之前。数据驱动是温和模组的政治。",
               "question": "官方扩展面的边界在哪？",
               "sections": [
                 "为什么有了数据包还是要写 Java",
@@ -944,14 +944,14 @@
                 "政治含义"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/datapacks",
+              "written": true
             },
             {
               "id": "impl/14",
               "title": "Java 版运行时",
               "audience": "dev",
-              "desc": "2009 年选 Java 证明了可移植与模组性，也卡住了性能与发布。GC、JIT、启动器、版本隔离。性能史从「能跑」到各类优化模组。语言是历史偶然，不是设计本质。",
+              "desc": "2009 年选 Java 证明了可移植与模组性，也卡住了性能与发布。GC、JIT、启动器、版本隔离。性能史从能跑到优化模组。语言是历史偶然，不是设计本质。",
               "question": "Java 证明了什么、卡住了什么？",
               "sections": [
                 "2009 年的正确选择",
@@ -961,14 +961,14 @@
                 "偶然 vs 本质"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/java-runtime",
+              "written": true
             },
             {
               "id": "impl/15",
               "title": "Bedrock 作为另一次实现",
               "audience": "both",
-              "desc": "C++、跨平台、独立渲染栈。行为包、附加包、脚本 API。红石 / 战斗 / 世界格式的语义分叉比性能差异更致命。Marketplace 技术反过来塑造能做什么。换语言重写之后，分叉会变成两个游戏。",
+              "desc": "C++、跨平台、独立渲染栈。行为包、附加包、脚本 API。红石、战斗、世界格式的语义分叉比跑分更致命。Marketplace 反过来约束能做什么。换语言重写之后，分叉会变成两个游戏。",
               "question": "语义差异为何比性能差异更致命？",
               "sections": [
                 "另一次实现不是移植",
@@ -978,14 +978,14 @@
                 "两个游戏的工程现实"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/bedrock",
+              "written": true
             },
             {
               "id": "impl/16",
               "title": "服务端与规模",
               "audience": "dev",
-              "desc": "原版服务端、Paper、分片实验。视距 vs 模拟距离。代理、群组、反作弊、备份。万人网络已经是另一种引擎用法。原版没有把兴趣管理当成一等公民。",
+              "desc": "原版服务端、Paper、分片实验。视距对模拟距离。代理、群组、反作弊、备份。万人网络已经是另一种引擎用法。原版没有把兴趣管理当成一等公民。第三方核心是证据，不是安装推荐。",
               "question": "同一内核如何同时服务单人档与万人网络？",
               "sections": [
                 "单人档和万人服真的是同一个程序吗",
@@ -995,8 +995,8 @@
                 "大型服务器作为另一种引擎用法"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/servers",
+              "written": true
             }
           ]
         },
@@ -1083,7 +1083,7 @@
               "id": "rewrite/02",
               "title": "必须保留的设计不变量",
               "audience": "both",
-              "desc": "1m 体素、可破坏世界、最小动词、目标外包、红石级可误用系统、世界比引擎活得更久、模组 / 数据包作为第一公民。去掉这些，它就不再是 Minecraft，哪怕更漂亮。",
+              "desc": "一米体素、可破坏世界、最小动词、目标外包、红石级可误用系统、世界比引擎活得更久、模组与数据包作为第一公民、模式即权限。去掉这些，它就不再是 Minecraft，哪怕更漂亮。",
               "question": "去掉哪些东西，它就不再是？",
               "sections": [
                 "「Minecraft 味」哪一部分是规则",
@@ -1155,7 +1155,7 @@
               "id": "rewrite/06",
               "title": "脚本与模组的双层",
               "audience": "dev",
-              "desc": "数据包级沙箱 + 原生模组。「全用脚本」和「全用 native」都会失败。稳定的世界 / 协议 / 内容 API。热重载与版本化 schema。模组作者体验是引擎的一部分。两层缺一，作者席就会塌成商城或塌成破解。",
+              "desc": "数据包级沙箱加系统层模组。全用脚本和全用 native 都会失败。稳定的世界、协议、内容 API。热重载与版本化 schema。模组作者体验是引擎的一部分。两层缺一，作者席就会塌成商城或塌成破解。",
               "question": "为何两端都会失败？",
               "sections": [
                 "全脚本与全原生的失败模式",
@@ -1285,7 +1285,7 @@
               "id": "appendix/timeline",
               "title": "年表",
               "audience": "both",
-              "desc": "2009–2026，版本、公司、模组、服务器、影像、诉讼对照。",
+              "desc": "2009–2026，产品、社区、商业三轨对照。只记可核对的事件，不代替卷一的论证。",
               "question": "",
               "sections": [
                 "三轨表——产品 / 社区 / 商业。只记事件，不议论。"
@@ -1298,7 +1298,7 @@
               "id": "appendix/people",
               "title": "人物与组织",
               "audience": "both",
-              "desc": "Notch、Jeb、Dinnerbone、Mojang、微软、NetEase、Bukkit、Paper、Fabric 等。",
+              "desc": "Notch、Jeb、Dinnerbone、Mojang、微软、网易、Bukkit、Paper、Fabric 等。每人每组织三到六行，链回正编，不做传记。",
               "question": "",
               "sections": [
                 "每人 / 组织 3–6 行；链回正编。"
@@ -1311,7 +1311,7 @@
               "id": "appendix/java-bedrock",
               "title": "Java / Bedrock 对照表",
               "audience": "both",
-              "desc": "世界格式、红石、战斗、模组 / 附加包、市场、平台能力。",
+              "desc": "世界格式、红石、战斗、模组与附加包、市场、平台能力。逐项列表。解释在正编，不在本表展开。",
               "question": "",
               "sections": [
                 "逐项表；每行链到 `history/08` 或 `impl/15`。"
@@ -1324,7 +1324,7 @@
               "id": "appendix/glossary",
               "title": "术语表",
               "audience": "both",
-              "desc": "区块、刻、NBT、数据包、Mixin、模拟距离、准连接、扁平化、组件化等。",
+              "desc": "区块、刻、NBT、数据包、Mixin、模拟距离、准连接、扁平化、组件化等。每词四十字到八十字。禁止在此展开论证。",
               "question": "",
               "sections": [
                 "每词 40–80 字。禁止在此展开论证。"
@@ -1337,7 +1337,7 @@
               "id": "appendix/references",
               "title": "文献与源",
               "audience": "both",
-              "desc": "设计、技术、商业三类。口述、版本说明、论文分列。",
+              "desc": "设计、技术、商业三类。口述、版本说明、论文分列。只收正编用过或明确推荐的源，不在此重新论证。",
               "question": "",
               "sections": [
                 "只收录正编用过或推荐的源。"
@@ -1350,7 +1350,7 @@
               "id": "appendix/exercises",
               "title": "开发者实验题",
               "audience": "both",
-              "desc": "最小体素沙盒、可误用系统、存档迁移、红石语义测试。",
+              "desc": "最小体素沙盒、可误用系统、存档迁移、红石语义测试。每题写目标、约束、对应章节、何为通过。不给标准实现。",
               "question": "",
               "sections": [
                 "每题写目标、约束、对应哪一章、何为通过。不给标准实现。"
