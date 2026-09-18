@@ -1286,15 +1286,13 @@ Minecraft 的设计有一半发生在玩家之间的契约里。
 - **简介**：MDA、Rational Game Design、心流、技能原子等常用框架各自说什么、从哪来、适合用来想哪类问题。
 - **口径**：介绍，不承担三卷论证；不写命题 / 问题 / 留下什么。
 - **大纲**：
-  1. 地图：分析词汇 / 生产方法 / 动机模型
-  2. 玩的哲学：魔圈、Caillois、Suits
-  3. MDA 与亲戚、二阶设计
-  4. Rational Game Design
-  5. 技能原子、动词、手感
-  6. 心流与 PENS
-  7. 涌现与半真实
-  8. 同一场面（移动平台）三套词
-  9. 词条速查与阅读入口
+  1. 结构分析：MDA、八种乐趣、DDE、DPE、元素四元组与百镜、二阶设计、Playcentric、FADT
+  2. 工作室方法：RGD、RLD、400 Project、模式、支柱
+  3. 微观语法：技能原子、循环、内部经济、动词、Game Feel
+  4. 体验与动机：心流、PENS、Bartle、八种乐趣
+  5. 玩法形态：涌现 / 进度、Half-Real、Immersive Sim、程序修辞、GNS
+  6. 玩的哲学：Huizinga、Caillois、Suits
+  7. 怎么选用（对照表）+ 阅读入口
 
 ## 附录
 
