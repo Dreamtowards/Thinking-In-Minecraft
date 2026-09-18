@@ -2,7 +2,7 @@
   "title": "V2",
   "description": "第二版草稿。",
   "root": "edition",
-  "pagesIndex": "prelude/index",
+  "pagesIndex": "index",
   "pages": [
     "prelude",
     "history",

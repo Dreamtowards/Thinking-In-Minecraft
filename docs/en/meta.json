@@ -2,7 +2,7 @@
   "title": "English",
   "description": "Main edition in English.",
   "root": "edition",
-  "pagesIndex": "prelude/index",
+  "pagesIndex": "index",
   "pages": [
     "prelude",
     "history",
