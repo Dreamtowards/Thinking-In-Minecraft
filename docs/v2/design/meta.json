@@ -1,23 +1,5 @@
 {
   "title": "卷二 · 游戏设计",
   "defaultOpen": true,
-  "pages": [
-    "index",
-    "voxel-primitive",
-    "verbs-feel",
-    "survival",
-    "creative-mode",
-    "crafting-inventory",
-    "worldgen",
-    "redstone",
-    "commands-datapacks",
-    "mobs-combat",
-    "dimensions-endgame",
-    "multiplayer",
-    "who-makes-rules",
-    "mods-as-method",
-    "emergence",
-    "constraints",
-    "transferable"
-  ]
+  "pages": ["index", "(part1)", "(part2)", "(part3)", "(part4)"]
 }

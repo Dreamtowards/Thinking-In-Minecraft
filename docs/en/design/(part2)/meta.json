@@ -1,0 +1,11 @@
+{
+  "title": "How Systems Interlock",
+  "pages": [
+    "../crafting-inventory",
+    "../worldgen",
+    "../redstone",
+    "../commands-datapacks",
+    "../mobs-combat",
+    "../dimensions-endgame"
+  ]
+}

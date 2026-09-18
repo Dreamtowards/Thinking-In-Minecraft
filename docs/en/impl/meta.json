@@ -1,25 +1,5 @@
 {
   "title": "Volume III · Implementation",
   "defaultOpen": true,
-  "pages": [
-    "index",
-    "data-model",
-    "storage",
-    "worldgen-pipeline",
-    "light-fluid-updates",
-    "tick",
-    "entities",
-    "items",
-    "redstone",
-    "client-render",
-    "protocol",
-    "feel-client",
-    "mod-architecture",
-    "datapacks",
-    "java-runtime",
-    "bedrock",
-    "servers",
-    "tech-debt",
-    "modifiable-engine"
-  ]
+  "pages": ["index", "(part1)", "(part2)", "(part3)", "(part4)", "(part5)"]
 }

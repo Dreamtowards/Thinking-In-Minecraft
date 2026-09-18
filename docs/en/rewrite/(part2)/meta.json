@@ -1,0 +1,4 @@
+{
+  "title": "Architecture Proposal",
+  "pages": ["../world-rep", "../scheduler", "../scripting", "../network-perms", "../render-tools"]
+}

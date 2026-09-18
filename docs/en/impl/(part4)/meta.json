@@ -1,0 +1,4 @@
+{
+  "title": "Extensibility and the Two Engines",
+  "pages": ["../mod-architecture", "../datapacks", "../java-runtime", "../bedrock", "../servers"]
+}

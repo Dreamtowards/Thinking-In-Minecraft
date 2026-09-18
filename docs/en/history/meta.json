@@ -2,20 +2,5 @@
   "title": "Volume I · History and Business",
   "description": "How Minecraft became a medium that communities, platforms, and capital could redevelop.",
   "defaultOpen": true,
-  "pages": [
-    "index",
-    "infiniminer",
-    "alpha",
-    "mojang-beta",
-    "mods-as-authors",
-    "servers",
-    "media-education",
-    "acquisition",
-    "java-bedrock",
-    "version-politics",
-    "revenue",
-    "grey-economy",
-    "competition",
-    "heritage"
-  ]
+  "pages": ["index", "(part1)", "(part2)", "(part3)", "(part4)"]
 }
