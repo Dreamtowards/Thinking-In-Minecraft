@@ -9,17 +9,17 @@ import './home-page.css';
 
 const covers = [
   {
-    src: 'https://elytra.dev/thinking-in-minecraft/assets/cover/tim-1.jpg',
+    src: 'https://old.elytra.dev/thinking-in-minecraft/assets/cover/tim-1.jpg',
     alt: '卷一封面',
     tilt: '-6',
   },
   {
-    src: 'https://elytra.dev/thinking-in-minecraft/assets/cover/tim-2.jpg',
+    src: 'https://old.elytra.dev/thinking-in-minecraft/assets/cover/tim-2.jpg',
     alt: '卷二封面',
     tilt: '0',
   },
   {
-    src: 'https://elytra.dev/thinking-in-minecraft/assets/cover/tim-3.jpg',
+    src: 'https://old.elytra.dev/thinking-in-minecraft/assets/cover/tim-3.jpg',
     alt: '卷三封面',
     tilt: '6',
   },
