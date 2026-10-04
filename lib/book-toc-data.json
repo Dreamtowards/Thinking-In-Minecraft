@@ -1288,33 +1288,6 @@
       ]
     },
     {
-      "id": "other",
-      "heading": "番外",
-      "thesis": "",
-      "parts": [
-        {
-          "title": "本卷",
-          "span": "",
-          "intent": "",
-          "chapters": [
-            {
-              "id": "extras/mod-systems",
-              "title": "模组系统对照：创作者在哪一层",
-              "audience": "both",
-              "desc": "强弱不看能改多少，看作者席开在哪一层。皮、数据、沙箱、API、注入、法律是六种合同。",
-              "question": "最著名的模组系统，合同到底写在哪一层？",
-              "sections": [
-                "六层作者席；Doom / Quake / 上古卷轴 / 魔兽地图 / Minecraft 三条河；稳定合同与注入即 API。"
-              ],
-              "tags": [],
-              "href": "/extras/mod-systems",
-              "written": true
-            }
-          ]
-        }
-      ]
-    },
-    {
       "roman": "",
       "short": "附录",
       "english": "Appendix",
