@@ -87,7 +87,7 @@ docs/
 │   ├── index.mdx
 │   ├── infiniminer.mdx        # 01 从 Infiniminer 到 Cave Game
 │   ├── alpha.mdx              # 02 Alpha 的公开开发
-│   ├── mojang-beta.mdx        # 03 Mojang、Beta 与正式版
+│   ├── mojang-beta.mdx        # 03 Mojang 成立、Beta 与正式版
 │   ├── mods-as-authors.mdx    # 04 模组作为第二作者
 │   ├── servers.mdx            # 05 服务器即新游戏
 │   ├── media-education.mdx    # 06 影像与一代人的媒介
@@ -405,16 +405,17 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 #### `history/03` Mojang 成立、Beta 与正式版
 
 - 文件：`docs/history/mojang-beta.mdx` · 两类 · ▤
-- **简介**：个人项目变成工作室后，设计权从直觉变成组织。Beta 1.8 的饥饿与冒险是第一次「向游戏收敛」。2011 正式版完成的是仪式，不是系统。一次买断、无内购，是后来 Marketplace 冲突的底色。
-- **要回答**：变成工作室之后，设计权发生了什么变化？
-- **交叉**：`history/10`、`design/03`
+- **简介**：2010 到 2011 年，Minecraft 从个人项目变成一间工作室的核心产品。团队扩大、Beta 继续快速变化，直到 MineCon 上发布 1.0；正式版没有结束开发，却改变了游戏与公司的关系。
+- **要回答**：当一个靠个人节奏生长的项目变成团队产品，“完成 Minecraft”究竟开始意味着什么？
+- **交叉**：`history/08`、`history/09`、`design/03`
 - **大纲**：
-  1. 正式版那天，游戏真的完成了吗
-  2. 工作室化：分工、品牌、MineCon
-  3. Beta 1.8：饥饿、冒险、玩家分裂
-  4. 定价伦理：一次买断
-  5. 仪式而非系统：1.0 没有结束设计
-- **验收**：Beta 1.8 当设计政治写，不当更新说明写
+  1. Mojang 成形：办公室、Jeb 加入、公司开始需要管理项目与发布日期
+  2. 组织化没有立刻消灭实验：Kanban、发布目标与给“fun new stuff”保留空间
+  3. Beta 1.8：饥饿、疾跑、结构、创造模式等不同方向同时扩张
+  4. 1.0 为什么仍值得发布：正式身份、MineCon 与一个持续更新游戏的 milestone
+  5. Pocket Edition：Minecraft 开始从单一 Java 客户端变成可复制到不同平台的产品
+  6. Jeb 接手 lead developer：项目第一次具备不依赖原作者亲自掌舵继续发展的条件
+- **验收**：不要把公司化写成“设计权必然变坏”；不要把 Beta 1.8 强行收成单一设计政治；不要把一次买断提前解释成完整商业伦理，商业冲突留给后文
 
 ---
 
