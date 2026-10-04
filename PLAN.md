@@ -568,16 +568,19 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 #### `history/12` 竞争、模仿与产业影响
 
 - 文件：`docs/history/competition.mdx` · 两类 · ▤
-- **简介**：不把后来者排成 Minecraft-like 名单，而是看 Terraria、Vintage Story、Luanti、Hytale、Roblox 分别继承了 Minecraft 的哪一层，又在哪一层主动分叉。「下一个 Minecraft」难，不只是因为玩法，而是因为媒介窗口、工具链与入口不可复制。
-- **要回答**：后来者分别继承了什么，为什么「下一个 Minecraft」仍很难出现？
-- **交叉**：`design/16`、`rewrite/01`
+- **简介**：Minecraft 之后出现了大量体素、生存、建造与 UGC 游戏，但它们并不是一条“谁更像 Minecraft”的排行榜。更有价值的问题是：后来者分别继承了哪一层，又在哪一层主动分叉。
+- **要回答**：Minecraft 之后，哪些设计和产品思路真正扩散到了整个行业？哪些东西看起来容易复制，实际却依赖多年积累的存档、工具链、社区与入口？
+- **交叉**：`design/16`、`rewrite/01`、`history/04`、`history/05`
 - **大纲**：
-  1. 每年都有 Minecraft-like
-  2. 谱系：各继承了哪一层，又放下了哪一层
-  3. Roblox：不是 Minecraft-like，而是另一种 UGC 平台化路径
-  4. 对开放世界、生存、沙盒、UGC 的具体影响
-  5. 不可复制条件
-- **验收**：Roblox 必须是对照主轴，不能只是名单一项
+  1. “Minecraft-like”混合了多种不同亲缘：机制启发、类型分叉、模组出走、引擎平台与 UGC 对照
+  2. Terraria：挖掘 / 合成如何走向更明确的冒险与进度
+  3. Vintage Story：从 Minecraft Modding 的限制出发，走向更密模拟与独立引擎
+  4. Luanti：从 Minetest 的克隆起点演化成开源体素游戏 / 创作平台
+  5. Hytale：从 Hypixel 服务器经验走向独立沙盒 RPG 与创作工具；以 2026 Early Access 为当前状态，不提前下结论
+  6. Roblox：不是 Minecraft 后代，而是“如果 UGC 从一开始就平台化”的重要对照
+  7. 产业影响具体化：survival crafting 语法、程序生成世界、运行时建造、UGC 不必先有官方编辑器
+  8. “下一个 Minecraft”为什么难：玩家投入、生态时间、品牌入口都具有累积性；同时承认后来者不必以取代 Minecraft 为成功标准
+- **验收**：不要写成游戏排名或“后来者失败史”；不要把 Roblox 写成唯一真正分叉，也不要用“媒介只有一个座位”解释一切；历史状态（尤其 Hytale）以当前可核查事实为准
 
 #### `history/13` 作为文化遗产的 Minecraft · 卷结语
 
