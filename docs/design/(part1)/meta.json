@@ -1,4 +1,4 @@
 {
-  "title": "设计原语",
-  "pages": ["voxel-primitive", "verbs-feel", "survival", "creative-mode"]
+  "title": "世界与生存",
+  "pages": ["modifiable-world", "survival"]
 }
