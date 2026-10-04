@@ -3,7 +3,8 @@ import { renderMermaidSVG } from 'beautiful-mermaid';
 import { MermaidViewer } from './mermaid-viewer';
 
 function normalizeChart(chart: string) {
-  return chart.replaceAll('\\n', '\n').trim();
+  // The renderer handles escaped newlines inside labels after parsing the graph.
+  return chart.trim();
 }
 
 function inheritPageFont(svg: string) {
