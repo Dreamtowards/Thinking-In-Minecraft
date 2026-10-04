@@ -21,7 +21,7 @@
 | P0 | [卷三 03](<docs/impl/(part1)/worldgen-pipeline.mdx>) | “两个人走了不同的路，同一串数字都可以长出另一座山”把生成次序引起的局部差异说成地形普遍改写。分开写主地形、跨区块结构／装饰、版本与产品线变更、存档已有区块；只对有证据的版本与场景讨论次序效应。 |
 | P0 | [卷一 10](<docs/history/(part4)/revenue.mdx>)、[卷一 11](<docs/history/(part4)/grey-economy.mdx>) | 商业规则有时态。书中对 2014 年服务器变现限制的叙述可作历史，但不宜直接当作现行完整规则；现行官方使用指南允许**不造成竞争优势、也不损害他人体验**的部分玩法权益。表格分别列“2014 当时规定／当前规则／实际做法”，并给访问日期。见[官方 EULA](https://www.minecraft.net/en-us/eula)与[官方使用指南](https://www.minecraft.net/en-us/usage-guidelines)。 |
 | P0 | [卷一 01](<docs/history/(part1)/infiniminer.mdx>)、[02](<docs/history/(part1)/alpha.mdx>)、[03](<docs/history/(part1)/mojang-beta.mdx>) | 三章脚注定义均为 0，却有具体日期、价格、版本与人物表态。“未完成是产品策略”“玩家变成共同作者”尤其需要避免用后来结果倒推当时意图。补同时代论坛／博客、发布记录、采访；找不到的动机改写为编辑推论。 |
-| P1 | [卷二导读](docs/design/index.mdx)、[卷二 10](<docs/design/(part2)/dimensions-endgame.mdx>)、[卷二 14](<docs/design/(part4)/emergence.mdx>) | “没有一个任务链超过一小时”“通关是一句空话”“涌现是必然”等总括缺少边界。承认龙、进度、速通和服务器活动有真实的终点；再证明**终点不回收世界**。把“必然”改成“规则为哪些创作提供了可重复的条件”。 |
+| P1 | [卷二导读](docs/design/index.mdx)、[卷二 06](<docs/design/(part2)/progression-dimensions.mdx>)、[卷二 13](<docs/design/(part4)/emergence.mdx>) | 卷二 06 已处理“通关是一句空话”的问题：承认龙、速通、Advancements 与服务器赛季都有真实终点，同时区分“结束一条目标线”与“封存长期世界”。卷二导读与涌现章仍需在各自重写时清理过度总括。 |
 | P1 | [卷三 13](<docs/impl/(part4)/datapacks.mdx>)、[卷三 15](<docs/impl/(part4)/bedrock.mdx>)、[卷一 08](<docs/history/(part3)/java-bedrock.mdx>) | “数据包不能增加新动词”“Bedrock 的扩展面停在 JSON”容易把 Java 的边界误套到 Bedrock。分别标明版本、产品线、官方扩展面和第三方改程序能力。Bedrock 官方文档已有脚本驱动的自定义方块／物品组件，见[Microsoft Learn 的 Custom Components](https://learn.microsoft.com/en-us/minecraft/creator/documents/scripting/custom-components?view=minecraft-bedrock-stable)。 |
 | P1 | 章节篇幅与枢纽密度 | 按中文汉字粗计、排除脚注定义，47 章有 12 章低于普通章 4000 字目标；6 个标为“枢纽”的章节有 5 个低于 8000 字目标。卷一和卷三导读也低于 800 字目标。数字只作找薄弱论证的线索，不建议填充说明性段落。优先补案例、反例与版本差异。 |
 
@@ -114,7 +114,7 @@
 | [07 红石：把物理做成编程](<docs/design/(part2)/redstone.mdx>) | 先定义“可误用系统”的判据，再用一台装置证明某行为从物理发现变成社区语言；Java／Bedrock 的同一装置对照最有说服力。“官方不教”要有具体教学范围和年代，不能只靠印象。把更新顺序细节留给卷三 08。 |
 | [08 命令、数据包与地图](<docs/design/(part2)/commands-datapacks.mdx>) | “能做 RPG”和“不能加新动词”之间缺一条成本线：原有指令能模拟到什么程度、要付出多少性能／维护代价、何时才需改程序？以一张具体地图为例，比罗列计分板和函数更自然。此章限定 Java 数据包，别暗示 Bedrock 完全同型。 |
 | [05 生物、战斗与威胁](<docs/design/(part2)/mobs-combat.mdx>) | 已按卷二新结构重写：先看生物如何改变空间判断，再区分威胁、资源、伙伴与 Villager 经济；Warden 用于说明避战也可以成立，Java / Bedrock 战斗差异只作为边界，不再预设“战斗不够好却足够用”。 |
-| [10 维度、进度与终局](<docs/design/(part2)/dimensions-endgame.mdx>) | “通关是一句空话”请改为“击败末影龙完成了官方的一条目标线，却不结束存档”。正面处理速通、进度全收集和玩家造的服务器赛季：它们有终点，恰好证明终点可以被选择、复制或撤销。 |
+| [06 进度、维度与游戏后期](<docs/design/(part2)/progression-dimensions.mdx>) | 已按卷二新结构重写：承认击败末影龙是官方认可的完成节点，同时区分一条目标线、一次速通、All Advancements、服务器赛季与长期世界；Nether / End、Elytra、Shulker Box、Beacon 和基础设施分别放回 progression 与后期成本变化中讨论。 |
 
 ### 第三部：社会设计
 
