@@ -242,8 +242,8 @@ const meta = {
     short: '历史与商业',
     english: 'History & Business',
     color: 'orange',
-    payoffFan: '把版本、模组、服务器和影像写成可检验的产业史，不是怀旧清单。',
-    payoffDev: '买断、UGC、双引擎、收购与平台化各自解决了什么，以及「下一个 Minecraft」为何极难出现。',
+    payoffFan: '不只看版本更新，而是把原型、社区、服务器、影像、跨平台与保存串成一段完整历史。',
+    payoffDev: '看一个长期沙盒如何从原型变成跨平台产品与创作生态，以及兼容、商业化和社区基础设施各自带来的代价。',
   },
   v2: {
     roman: 'II',
