@@ -36,7 +36,7 @@ description: 简介（40–80 字）
 
 ## 文章标签
 
-Frontmatter 支持可选的 `tags: [模组, 玩家作者性, 社区生态]`。通常每章选 3–5 个正文确实展开的主题，沿用已有标签名称；标签描述研究对象或问题，不预设结论。没有标签的文章可正常发布。卷归属由目录推导，不需要填写 `category` 或 `topic`。标签聚合目前只收录当前中文版；数据接口与使用约定见 `TAGGING.md`。
+Frontmatter 支持可选的 `tags: [modding, player-authorship, community]`。标签统一用英文，优先小写，多个单词用连字符连接，如 `worldgen`、`player-authorship`、`ugc`、`java`、`bedrock`；显示和 URL 直接使用英文标签，暂不添加翻译映射。通常每章选 3–5 个正文确实展开的主题，沿用已有标签名称；标签描述研究对象或问题，不预设结论。没有标签的文章可正常发布。卷归属由目录推导，不需要填写 `category` 或 `topic`。标签聚合目前只收录当前中文版；数据接口与使用约定见 `TAGGING.md`。
 
 ## 脚注
 
