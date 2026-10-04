@@ -7,14 +7,14 @@ description: 物品栈、NBT、组件化。配方数据驱动。库存同步与�
 
 ## 问题
 
-玩家本人几乎透明：除了一条经验条，角色的强度不在角色面板上，而写在物品上。物能丢掉、能交给别人、能放回世界，设计合同在卷二（[《合成、物品与库存》](/design/crafting-inventory)）。本章问实现：口袋——背包、箱子、一切容纳物品的容器——的法律一改，为什么比改一座山更疼？
+玩家本人几乎透明：除了一条经验条，角色的强度不在角色面板上，而写在物品上。物能丢掉、能交给别人、能放回世界，设计合同在卷二（[《物品、合成与库存》](/design/items-crafting-inventory)）。本章问实现：口袋——背包、箱子、一切容纳物品的容器——的法律一改，为什么比改一座山更疼？
 
 要回答：技术如何追随模组文化？可被证伪的说法是：物品格式跟着官方审美走，模组只是使用者。只要矿辞（模组之间互认材料的旧机制，OreDictionary）确曾被标签接替、非结构化 `tag` 确曾被组件挤走、数据包确能加配方却仍加不出新动词，这句话就不成立。官方是在追：第二作者早已把物品当成可扩展对象，正作只好把对象收编成可校验的模式。
 
 上一章（[《实体与碰撞》](/impl/entities)）把实体写成税，掉落物是税的一种；进了背包，税变成财产，而财产必须比引擎活得久——[《存储与序列化》](/impl/storage)把账单开在每一件物品上。本章把口袋打开：栈怎么叠，窗口怎么点，配方怎么从代码搬进 JSON。
 
 <Cards>
-  <Card title="成长写在物上" href="/design/crafting-inventory" description="合同在卷二。口袋在这里。" />
+  <Card title="成长写在物上" href="/design/items-crafting-inventory" description="合同在卷二。口袋在这里。" />
   <Card title="组件化按件计费" href="/impl/storage" description="翻译器扫的是全部对象。" />
   <Card title="数据包加配方" href="/design/commands-datapacks" description="新动词仍要写系统。" />
 </Cards>

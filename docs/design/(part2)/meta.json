@@ -1,11 +1,4 @@
 {
-  "title": "系统如何互相咬合",
-  "pages": [
-    "crafting-inventory",
-    "worldgen",
-    "redstone",
-    "commands-datapacks",
-    "mobs-combat",
-    "dimensions-endgame"
-  ]
+  "title": "资源、探索与进度",
+  "pages": ["items-crafting-inventory", "worldgen", "mobs-combat", "dimensions-endgame"]
 }
