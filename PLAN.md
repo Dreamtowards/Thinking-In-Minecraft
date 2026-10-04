@@ -86,7 +86,7 @@ docs/
 │   ├── mojang-beta.mdx        # 03 Mojang、Beta 与正式版
 │   ├── mods-as-authors.mdx    # 04 模组作为第二作者
 │   ├── servers.mdx            # 05 服务器即新游戏
-│   ├── media-education.mdx    # 06 影像、教育与一代人的媒介
+│   ├── media-education.mdx    # 06 影像与一代人的媒介
 │   ├── acquisition.mdx        # 07 微软收购
 │   ├── java-bedrock.mdx       # 08 两条产品线
 │   ├── version-politics.mdx   # 09 版本政治与更新哲学
@@ -230,9 +230,9 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
     "infiniminer", "alpha", "mojang-beta",
     "---第二部 · 成为文化（2011–2014）---",
     "mods-as-authors", "servers", "media-education",
-    "---第三部 · 被收购之后（2014–）---",
+    "---第三部 · 平台化与治理（2014–）---",
     "acquisition", "java-bedrock", "version-politics",
-    "---第四部 · 商业模型解剖---",
+    "---第四部 · 产业与遗产---",
     "revenue", "grey-economy", "competition", "heritage"
   ]
 }
@@ -442,25 +442,26 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
   5. Bukkit 危机：基础设施的脆弱
 - **验收**：不是服务器评测；2b2t 只作无规则实验
 
-#### `history/06` 影像、教育与一代人的媒介
+#### `history/06` 影像与一代人的媒介
 
 - 文件：`docs/history/media-education.mdx` · 爱好者 · ▤
-- **简介**：Let's Play、教程、动画和梦核把 Minecraft 写成儿童与家庭的通用语言。教育版改写了「谁的 Minecraft」。当传播发生在视频里，正作还需要教什么，就成了设计问题。
+- **简介**：Let's Play、教程、动画、音乐与后来的怀旧影像，把 Minecraft 从客户端里的游戏写成一代人的共同语言。视频既是传播，也是说明书、连续剧和记忆载体。
 - **要回答**：它如何从游戏变成一代人的通用语言？
 - **交叉**：`design/02`、`design/06`
 - **大纲**：
-  1. 很多人是在视频里学会玩的
-  2. 类型：实况、教程、动画、音乐、梦核
-  3. 儿童、家庭、「安全的创造」
-  4. 教育版：课堂沙盒改写了谁的游戏
-  5. 正作还教什么：进度与配方书是对视频教学的迟到补课
-- **验收**：不要列 YouTuber 排行
+  1. 很多人是在视频里先学会 Minecraft 的
+  2. 实况：把没有主线的世界拍成连续剧
+  3. 教程：把社区发现写成可复制的步骤
+  4. 动画、音乐与怀旧影像：游戏怎样离开操作仍然可被识别
+  5. 儿童、家庭与「安全的创造」：传播如何反过来塑造公众想象
+  6. 正作还需要教什么：配方书与进度是对社区说明书的迟到回应
+- **验收**：不要列 YouTuber 排行；Education Edition 的产品史移到 `history/07`，这里只写影像与传播
 
 ---
 
-### 第三部 · 被收购之后（2014–）
+### 第三部 · 平台化与治理（2014–）
 
-资本、双产品线与版本政治，如何把「保护 Minecraft」变成长期治理。
+当 Minecraft 已经属于太多人，收购、跨平台、双产品线与版本政治如何把「继续开发」变成长期治理。
 
 #### `history/07` 微软收购
 
@@ -473,7 +474,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
   2. 交易：结构、动机、时间线（可查）
   3. 「保护 Minecraft」保护了谁
   4. Jeb 时代的风格转变（点到设计，不写人事）
-  5. 产品线扩张：教育、Dungeons、Legends、电影——作为 IP 第二曲线的入口
+  5. 产品线扩张：MinecraftEdu → Education Edition、Dungeons、Legends、电影——入口如何被复制到课堂与其他媒介
 - **验收**：不做控诉；每个判断连到可查事件
 
 #### `history/08` 两条产品线：Java 与 Bedrock · 枢纽
@@ -506,9 +507,9 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 ---
 
-### 第四部 · 商业模型解剖
+### 第四部 · 产业与遗产
 
-把收入、灰色经济、竞争与遗产放在同一张图上。
+官方如何赚钱、社区如何形成自己的经济、后来者继承了 Minecraft 的哪一层，以及这些世界最终如何被保存。
 
 #### `history/10` 收入结构
 
@@ -539,13 +540,13 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 #### `history/12` 竞争、模仿与产业影响
 
 - 文件：`docs/history/competition.mdx` · 两类 · ▤
-- **简介**：Terraria、Vintage Story、Minetest、Hytale 是谱系对照。Roblox 才是真正的品类分叉：平台化对游戏化。「下一个 Minecraft」难，因为时机、工具链和一代人的入口不可复制。
-- **要回答**：「下一个 Minecraft」为什么很难出现？
+- **简介**：不把后来者排成 Minecraft-like 名单，而是看 Terraria、Vintage Story、Luanti、Hytale、Roblox 分别继承了 Minecraft 的哪一层，又在哪一层主动分叉。「下一个 Minecraft」难，不只是因为玩法，而是因为媒介窗口、工具链与入口不可复制。
+- **要回答**：后来者分别继承了什么，为什么「下一个 Minecraft」仍很难出现？
 - **交叉**：`design/16`、`rewrite/01`
 - **大纲**：
   1. 每年都有 Minecraft-like
-  2. 谱系：各继承了哪一层
-  3. Roblox：平台化 vs 游戏化
+  2. 谱系：各继承了哪一层，又放下了哪一层
+  3. Roblox：不是 Minecraft-like，而是另一种 UGC 平台化路径
   4. 对开放世界、生存、沙盒、UGC 的具体影响
   5. 不可复制条件
 - **验收**：Roblox 必须是对照主轴，不能只是名单一项

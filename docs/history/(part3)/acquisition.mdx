@@ -9,7 +9,7 @@ description: 25 亿美元买下的是游戏、平台，还是一代人的入口�
 
 2014 年 9 月 15 日，新闻写成一句话：微软花 25 亿美元买 Minecraft。论坛立刻长出另一种一句话：卖身了。
 
-两种一句话都太便宜。前一种把对象收成一个 SKU，后一种把十年收成道德剧。上一章刚写完：模组写系统，服务器写法律，影像写口语。正作主持过仪式，没主持过这三种写作。若收购只是换东家，这三种写作不该被惊动。后来它们都被惊动了——不是因为方块忽然加不动，是因为入口被收进了另一张桌子：商店、账号、课堂许可、跨设备的同一份世界。
+两种一句话都太便宜。前一种把对象收成一个 SKU，后一种把十年收成道德剧。前一部刚写完：模组写系统，服务器写法律，影像写口语。正作主持过仪式，没主持过这三种写作。若收购只是换东家，这三种写作不该被惊动。后来它们都被惊动了——不是因为方块忽然加不动，是因为入口被收进了另一张桌子：商店、账号、课堂许可、跨设备的同一份世界。
 
 本章要回答：这笔交易买下的到底是什么？可被证伪的说法是：买下的只是一款会继续更新的沙盒，其余都是附带情绪。只要还看见 Windows 商店里的第二个客户端、教育版换引擎、电影把方块带出游戏，这句话就不成立。情绪可以有。史实管的是：钱换来的治理权，落在哪一层。
 
@@ -55,7 +55,7 @@ Notch 自己写的离场理由不是「我把灵魂卖了」。他写：人太�
 
 账号是收紧的第一种形状。跨设备的世界需要同一套身份；身份一旦进商店，合规、儿童、地区许可就有了抓手。抓手对家庭是安全，对工地是门禁。上一章写过：影像把 Minecraft 教成儿童语言之后，官方就很难再把产品只当成论坛老用户的工地。收购把这句从口碑收成制度。制度不是从 25 亿里长出来的恶意。制度是入口一旦属于一家要向学校和广告商交代的公司，就会长出来的东西。Windows 10 Edition 要你同时有一份旧账号和一份微软账号，才能把免费领取走完——交割后十个月，门已经不是 jar，是账户迁移。[^win10] 门看起来像技术细节。细节决定谁还进得去：进得去商店的人，和进得去模组河的人，开始不再是同一批。
 
-「保护」还有一层没有写进新闻稿：保护的是可治理的那条产品线。Java 的第二作者河难治理，教育版后来选 Bedrock，不是审美，是管理。上一章已经下过这一刀。收购是刀柄。没有交割，微软没有资格把课室从 Java 模组迁到自己的引擎上；有了交割，资格先于任何一节课。
+「保护」还有一层没有写进新闻稿：保护的是可治理的那条产品线。Java 的第二作者河难治理，教育版后来走向 Bedrock，不只是审美，也是管理。后面会具体看到这条迁移。收购是刀柄。没有交割，微软没有资格把课室从 Java 模组迁到自己的引擎上；有了交割，资格先于任何一节课。
 
 可被证伪的说法是：保护只保护玩家体验，公司自己不是受益人。Nadella 把「社区的新机会」和「微软的新机会」写在同一句里。[^ms-announce] 同一句不是笔误。它是交易的诚实处。诚实处比控诉有用：后面所有版本政治、货架和双端，都是这句被执行之后的技术细节。
 
@@ -69,11 +69,21 @@ Notch 时代的公开开发，是一个人的周更和回帖。Jeb 在 1.0 之�
 
 这不是控诉「变差了」。1.9 之后的鞘翅延长了自愿的后期，末地不再只是一条龙。有人因此住得更久。住得更久，和「还像不像 Cave Game」，可以同时成立。同时成立，才需要后文的版本政治：官方开始用快照和投票，去替代一个人的直觉。替代不是因为微软讨厌直觉。替代是因为直觉已经离开公司，而入口还在。
 
+## 从 MinecraftEdu 到 Education Edition
+
+课堂是“入口被平台化”最清楚的一次实验。MinecraftEdu 早在 2011 年就以第三方形态进入学校：TeacherGaming 把课堂管理能力接在 Java 版上。微软在 2016 年 1 月收购这条线，同年 11 月正式推出 Minecraft: Education Edition。[^edu-ms][^edu-launch]
+
+这里不只是换了名字。MinecraftEdu 是围绕 Java 版生长出来的第三方教育工具；Education Edition 则进入微软自己的产品、账号与授权体系，并走向 Bedrock 技术栈。课堂需要的不是 Forge 式共同立法，而是教师可以管理的设备、身份、权限与课程。[^edu-bedrock] 这正好说明收购后的产品逻辑：当 Minecraft 从社区工具变成机构采购的产品，可治理性本身就会成为设计条件。
+
+教育版因此不是“Minecraft 终于变严肃了”。更值得看的，是**谁拥有作者权**发生了变化。普通服务器里，服主通过插件和规则建立自己的法律；课堂里，教师需要传送、发放物品、限制行动和组织课程。后来 Code Builder 与 Agent 又把一部分创造从“亲手挖放”移到“给代理下指令”。[^makecode] 同样的方块语言，被放进了另一套权限关系。
+
+这条线也解释了为什么 Education 适合放在收购之后，而不是和 YouTube 并列。影像是社区把 Minecraft 传播出去；Education Edition 是平台把已经形成的文化入口重新包装成可采购、可管理、可持续授权的产品。一个是文化外溢，一个是产品治理。两者有关，但不是同一件事。
+
 ## 产品线：入口的第二曲线
 
 若买下的真只是沙盒客户端，后来那些带 Minecraft 名字、却不是挖放看的东西，都会显得多余。它们不多余。它们是入口的复制。2020 年，公司名也从单数改成了复数——Mojang Studios：一个名字底下住进多个工作室，这句正是入口复制的落款。
 
-教育版把语言收进课表，上一章写过：换引擎、换立法者、按年按头收费。Dungeons 在 2020 年 5 月 26 日把方块收成地牢；Legends 在 2023 年 4 月 18 日把方块收成即时战略。[^spinoff] 电影在 2025 年 4 月 4 日把方块收成可以坐在黑暗里看的故事，Nadella 的祝贺是「from block to blockbuster」。[^movie] 复制的不是循环。复制的是可被认出的口语：苦力怕、箱子、那种一看就知道的格子。口语离开客户端，IP 才能在不玩游戏的人那里继续值 25 亿。
+教育版把语言收进课表，刚才已经看到：换产品体系、换立法者，也换成机构可以采购和管理的授权方式。Dungeons 在 2020 年 5 月 26 日把方块收成地牢；Legends 在 2023 年 4 月 18 日把方块收成即时战略。[^spinoff] 电影在 2025 年 4 月 4 日把方块收成可以坐在黑暗里看的故事，Nadella 的祝贺是「from block to blockbuster」。[^movie] 复制的不是循环。复制的是可被认出的口语：苦力怕、箱子、那种一看就知道的格子。口语离开客户端，IP 才能在不玩游戏的人那里继续值 25 亿。
 
 第二曲线会反咬第一曲线。电影和地牢需要一个更干净、更好拍、更好卖周边的 Minecraft；工地需要误用、崩坏和没人的走廊。品牌部门保护的是前者。保护一旦成功，后者会被说成「不是给孩子的」——上一章已经见过这句。收购没有发明这句。收购让这句有了预算。
 
@@ -99,6 +109,14 @@ Notch 时代的公开开发，是一个人的周更和回帖。Jeb 在 1.0 之�
 [^win10]: Minecraft: Windows 10 Edition Beta 于 2015 年 7 月 4 日 Minecon 宣布，7 月 29 日随 Windows 10 进入 Windows 商店；已有 Java/PC 版的玩家可免费领取。Owen Hill（Mojang）说明其带有 Pocket Edition 特征，并预告与 PE 联机。见 Windows Experience Blog，<https://blogs.windows.com/windowsexperience/2015/07/04/announcing-minecraft-windows-10-edition-beta/>；Xbox Wire 转载的 Mojang 公告，<https://news.xbox.com/en-us/2015/07/04/games-announcing-minecraft-windows-10-edition-beta/>。
 
 [^combat]: Java Edition 1.9（Combat Update）于 2016 年 2 月 29 日发布：攻击冷却、双持/副手、盾、鞘翅，以及末地扩建。见 [Java Edition 1.9](https://minecraft.wiki/w/Java_Edition_1.9)。
+
+[^edu-ms]: 2016 年 1 月 19 日微软宣布收购 Teacher Gaming 的 MinecraftEdu，并投资开发课堂向的 Minecraft Education Edition；当时口径为四十余国、七千余间教室已在使用 Minecraft。见微软官方博客，<https://blogs.microsoft.com/blog/2016/01/19/microsoft-invests-in-new-and-expanded-version-of-minecraft-for-the-classroom-opens-public-preview-of-learning-tools-for-onenote/>；TechCrunch 同日报道，<https://techcrunch.com/2016/01/19/microsoft-to-launch-minecraft-education-edition-for-classrooms-this-summer-following-acquisition-of-learning-game/>。MinecraftEdu 本身约 2011 年起作为第三方课堂工具存在。
+
+[^edu-launch]: Minecraft: Education Edition 于 2016 年 11 月 1 日正式发售（Windows 10 与 macOS），含 Classroom Mode（教师查看位置、发放物品、传送等），按用户按年收费。见 Windows Experience Blog，<https://blogs.windows.com/windowsexperience/2016/11/01/minecraft-education-edition-available-now/>；The Verge，<https://www.theverge.com/2016/11/1/13489340/minecraft-education-edition-launches>。
+
+[^edu-bedrock]: MinecraftEdu 是 Java 版模组；Minecraft Education 基于 Bedrock，旧世界不能迁入。Wiki：[MinecraftEdu](https://minecraft.wiki/w/MinecraftEdu)、[Minecraft Education](https://minecraft.wiki/w/Minecraft_Education)。官方亦说明 Education 与 Java / 消费级 Bedrock 互不兼容。见 <https://edusupport.minecraft.net/hc/en-us/articles/360047117692-FAQ-Game-Features>。
+
+[^makecode]: 2017 年 5 月 2 日，MakeCode 团队宣布 Minecraft: Education Edition 的 Code Builder / Code Connection 测试：用积木或 JavaScript 改变世界、驱动 Agent。见 <https://makecode.com/blog/minecraft-code-builder>。
 
 [^spinoff]: *Minecraft Dungeons* 由 Mojang Studios 与 Double Eleven 开发，2020 年 5 月 26 日发售。*Minecraft Legends* 由 Mojang Studios 与 Blackbird Interactive 开发，2023 年 4 月 18 日发售。Legends 上线公告见 Mojang，<https://www.minecraft.net/en-us/article/minecraft-legends-here>。发售日与工作室分工见 Wikipedia，[Minecraft Dungeons](https://en.wikipedia.org/wiki/Minecraft_Dungeons)、[Minecraft Legends](https://en.wikipedia.org/wiki/Minecraft_Legends)。
 

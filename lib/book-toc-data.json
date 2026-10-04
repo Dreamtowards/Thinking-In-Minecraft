@@ -192,16 +192,17 @@
             },
             {
               "id": "history/06",
-              "title": "影像、教育与一代人的媒介",
+              "title": "影像与一代人的媒介",
               "audience": "fan",
-              "desc": "Let's Play、教程、动画和梦核把 Minecraft 写成儿童与家庭的通用语言。教育版改写了「谁的 Minecraft」。当传播发生在视频里，正作还需要教什么，就成了设计问题。",
+              "desc": "Let's Play、教程、动画、音乐与后来的怀旧影像，把 Minecraft 从客户端里的游戏写成一代人的共同语言。视频既是传播，也是说明书、连续剧和记忆载体。",
               "question": "它如何从游戏变成一代人的通用语言？",
               "sections": [
-                "很多人是在视频里学会玩的",
-                "类型：实况、教程、动画、音乐、梦核",
-                "儿童、家庭、「安全的创造」",
-                "教育版：课堂沙盒改写了谁的游戏",
-                "正作还教什么：进度与配方书是对视频教学的迟到补课"
+                "很多人是在视频里先学会 Minecraft 的",
+                "实况：把没有主线的世界拍成连续剧",
+                "教程：把社区发现写成可复制的步骤",
+                "动画、音乐与怀旧影像：游戏怎样离开操作仍然可被识别",
+                "儿童、家庭与「安全的创造」：传播如何反过来塑造公众想象",
+                "正作还需要教什么：配方书与进度是对社区说明书的迟到回应"
               ],
               "tags": [],
               "href": "/history/media-education",
@@ -210,9 +211,9 @@
           ]
         },
         {
-          "title": "第三部 · 被收购之后",
+          "title": "第三部 · 平台化与治理",
           "span": "2014–",
-          "intent": "资本、双产品线与版本政治，如何把「保护 Minecraft」变成长期治理。",
+          "intent": "当 Minecraft 已经属于太多人，收购、跨平台、双产品线与版本政治如何把「继续开发」变成长期治理。",
           "chapters": [
             {
               "id": "history/07",
@@ -225,7 +226,7 @@
                 "交易：结构、动机、时间线（可查）",
                 "「保护 Minecraft」保护了谁",
                 "Jeb 时代的风格转变（点到设计，不写人事）",
-                "产品线扩张：教育、Dungeons、Legends、电影——作为 IP 第二曲线的入口"
+                "产品线扩张：MinecraftEdu → Education Edition、Dungeons、Legends、电影——入口如何被复制到课堂与其他媒介"
               ],
               "tags": [],
               "href": "/history/acquisition",
@@ -270,9 +271,9 @@
           ]
         },
         {
-          "title": "第四部 · 商业模型解剖",
+          "title": "第四部 · 产业与遗产",
           "span": "",
-          "intent": "把收入、灰色经济、竞争与遗产放在同一张图上。",
+          "intent": "官方如何赚钱、社区如何形成自己的经济、后来者继承了 Minecraft 的哪一层，以及这些世界最终如何被保存。",
           "chapters": [
             {
               "id": "history/10",
@@ -312,12 +313,12 @@
               "id": "history/12",
               "title": "竞争、模仿与产业影响",
               "audience": "both",
-              "desc": "Terraria、Vintage Story、Minetest、Hytale 是谱系对照。Roblox 才是真正的品类分叉：平台化对游戏化。「下一个 Minecraft」难，因为时机、工具链和一代人的入口不可复制。",
-              "question": "「下一个 Minecraft」为什么很难出现？",
+              "desc": "不把后来者排成 Minecraft-like 名单，而是看 Terraria、Vintage Story、Luanti、Hytale、Roblox 分别继承了 Minecraft 的哪一层，又在哪一层主动分叉。「下一个 Minecraft」难，不只是因为玩法，而是因为媒介窗口、工具链与入口不可复制。",
+              "question": "后来者分别继承了什么，为什么「下一个 Minecraft」仍很难出现？",
               "sections": [
                 "每年都有 Minecraft-like",
-                "谱系：各继承了哪一层",
-                "Roblox：平台化 vs 游戏化",
+                "谱系：各继承了哪一层，又放下了哪一层",
+                "Roblox：不是 Minecraft-like，而是另一种 UGC 平台化路径",
                 "对开放世界、生存、沙盒、UGC 的具体影响",
                 "不可复制条件"
               ],
