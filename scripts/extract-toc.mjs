@@ -6,22 +6,35 @@ const start = lines.findIndex((l) => l === '## 总序');
 const end = lines.findIndex((l) => l === '## 怎么读');
 const slice = lines.slice(start, end);
 
-const published = new Set([
-  'docs/prelude/index.mdx',
-  'docs/prelude/thesis.mdx',
-  'docs/prelude/method.mdx',
-  'docs/history/infiniminer.mdx',
-  'docs/history/alpha.mdx',
-  'docs/history/mojang-beta.mdx',
-  'docs/history/mods-as-authors.mdx',
-  'docs/history/servers.mdx',
-  'docs/history/media-education.mdx',
-]);
+function resolveDocFile(file) {
+  if (!file) return null;
+  if (fs.existsSync(file)) return file;
+
+  const normalized = file.replace(/\\/g, '/');
+  const slash = normalized.lastIndexOf('/');
+  const dir = normalized.slice(0, slash);
+  const name = normalized.slice(slash + 1);
+
+  if (!fs.existsSync(dir)) return null;
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (!entry.isDirectory() || !/^\(part\d+\)$/.test(entry.name)) continue;
+    const candidate = `${dir}/${entry.name}/${name}`;
+    if (fs.existsSync(candidate)) return candidate;
+  }
+  return null;
+}
 
 function hrefFromFile(file) {
-  if (!file || !published.has(file)) return null;
-  const p = file.replace(/^docs\//, '').replace(/\.mdx$/, '');
-  if (p.endsWith('/index')) return `/${p.slice(0, -'/index'.length)}`;
+  const resolved = resolveDocFile(file);
+  if (!resolved) return null;
+
+  let p = resolved
+    .replace(/\\/g, '/')
+    .replace(/^docs\//, '')
+    .replace(/\.mdx$/, '')
+    .replace(/\/\(part\d+\)(?=\/)/g, '');
+
+  if (p.endsWith('/index')) p = p.slice(0, -'/index'.length);
   return `/${p}`;
 }
 
@@ -59,7 +72,7 @@ for (const line of slice) {
     vol = { id, heading: title, thesis: '', parts: [] };
     volumes.push(vol);
     if (id === 'prelude') {
-      part = { title: '总序', span: '', intent: '说明作者动机、研究问题与方法；暂定答案可以随着全书推进而修改。', chapters: [] };
+      part = { title: '总序', span: '', intent: '说明作者为什么写、这本书真正追问什么，以及后文怎样形成判断。', chapters: [] };
     }
     if (id === 'appendix') {
       part = { title: '查阅', span: '', intent: '年表、人物、对照与术语。不承担论证。', chapters: [] };
@@ -222,7 +235,7 @@ const meta = {
     english: 'Preface',
     color: 'gray',
     payoffFan: '先知道这本书为什么写、正在追问什么，再从你关心的卷开始。',
-    payoffDev: '把暂定答案当问题，不当规范；方法页说明不同材料各自能回答什么。',
+    payoffDev: '方法页说明不同材料各自能回答什么；从具体问题进入对应卷即可。',
   },
   v1: {
     roman: 'I',
@@ -267,12 +280,12 @@ const meta = {
 };
 
 const book = {
-  thesis: 'Minecraft 不是通关即弃的内容，而是一套能住进去、能玩出设计之外、还能被再开发的系统。',
+  thesis: '为什么 Minecraft 能从一款游戏长成一个可以长期生活、创造、改写，并不断被重新解释的世界？',
   volumes: volumes.map((v) => ({
     ...meta[v.id],
     id: v.id,
     heading: v.heading,
-    thesis: v.thesis || (v.id === 'prelude' ? '这本书从一份暂定答案出发，但允许历史、设计、技术与重新发明不断修正它。' : v.id === 'appendix' ? '查阅用，不承担论证。' : ''),
+    thesis: v.thesis || (v.id === 'prelude' ? '为什么 Minecraft 能从一款游戏长成一个长期存在、不断被玩家重新解释的世界？' : v.id === 'appendix' ? '查阅用，不承担论证。' : ''),
     parts: v.parts.map((p) => ({
       title: p.title,
       span: p.span,
@@ -294,7 +307,6 @@ const book = {
 
 const json = JSON.stringify(book, null, 2);
 fs.writeFileSync('c:/dev/Projects/Thinking-In-Minecraft/lib/book-toc-data.json', json, 'utf8');
-fs.writeFileSync('c:/dev/Projects/Thinking-In-Minecraft/scripts/toc-extracted.json', json, 'utf8');
 
 const counts = book.volumes.map((v) => {
   const n = v.parts.reduce((s, p) => s + p.chapters.length, 0);

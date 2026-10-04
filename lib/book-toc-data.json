@@ -1,5 +1,5 @@
 {
-  "thesis": "Minecraft 不是通关即弃的内容，而是一套能住进去、能玩出设计之外、还能被再开发的系统。",
+  "thesis": "为什么 Minecraft 能从一款游戏长成一个可以长期生活、创造、改写，并不断被重新解释的世界？",
   "volumes": [
     {
       "roman": "",
@@ -7,15 +7,15 @@
       "english": "Preface",
       "color": "gray",
       "payoffFan": "先知道这本书为什么写、正在追问什么，再从你关心的卷开始。",
-      "payoffDev": "把暂定答案当问题，不当规范；方法页说明不同材料各自能回答什么。",
+      "payoffDev": "方法页说明不同材料各自能回答什么；从具体问题进入对应卷即可。",
       "id": "prelude",
       "heading": "总序",
-      "thesis": "这本书从一份暂定答案出发，但允许历史、设计、技术与重新发明不断修正它。",
+      "thesis": "为什么 Minecraft 能从一款游戏长成一个长期存在、不断被玩家重新解释的世界？",
       "parts": [
         {
           "title": "总序",
           "span": "",
-          "intent": "说明作者动机、研究问题与方法；暂定答案可以随着全书推进而修改。",
+          "intent": "说明作者为什么写、这本书真正追问什么，以及后文怎样形成判断。",
           "chapters": [
             {
               "id": "prelude/index",
@@ -27,7 +27,7 @@
                 "从打完末影龙仍有事情可做的具体体验开篇",
                 "从玩家到开发者：小学玩 Minecraft、初中服务器与模组、后来 Java / C++ / Rust / Unity 多次重写体素沙盒",
                 "真正的问题从“怎么实现 Minecraft”变成“什么值得继承”",
-                "明确这不是百科或教程；给出当前暂定答案，但不展开方法论",
+                "明确这不是百科或教程；点出三个反复出现的现象，但不提前把它们收成结论",
                 "四卷地图：历史与商业 / 游戏设计 / 技术实现 / 重新发明；更长的副题留在卷首页",
                 "两类读者的入口与阅读邀请"
               ],
@@ -39,15 +39,15 @@
               "id": "prelude/thesis",
               "title": "这本书想回答什么",
               "audience": "both",
-              "desc": "提出全书真正关心的问题，并给出一份暂定答案：Minecraft 为什么能从一款游戏长成一个长期存在、不断被玩家重新解释的世界？",
-              "question": "我们现在最想弄清什么？“住进去 / 玩出设计之外 / 再开发”这份暂定答案能解释多少，又遗漏了什么？",
+              "desc": "把全书真正关心的问题摆出来：Minecraft 为什么能从一款游戏长成一个长期存在、不断被玩家重新解释的世界？",
+              "question": "哪些现象真正值得解释？它们为什么会同时发生在 Minecraft 身上，又有多少来自历史偶然？",
               "sections": [
                 "为什么「最畅销」什么都没解释",
-                "当前暂定答案：住进去 / 玩出设计之外 / 再开发",
-                "为什么这不是 Notch 的秘密设计文档：意图与结果分开",
-                "四卷不是四次证明，而是四个观察角度",
-                "最先写、最后定稿：允许整本书改变自己的答案",
-                "给读者留下问题，而不是要求相信一句口号"
+                "三个反复出现的现象：世界积累历史 / 规则被玩出说明书 / 游戏被继续开发",
+                "它们为什么会同时出现：共同结构、历史窗口，还是被我们过度统一",
+                "为什么这不是 Notch 的秘密设计文档：意图、机制与长期结果分开",
+                "四卷怎样从历史、设计、技术与重新发明接近同一个问题",
+                "不急着定义完整，把问题留给后文"
               ],
               "tags": [],
               "href": "/prelude/thesis",
@@ -228,8 +228,8 @@
                 "产品线扩张：教育、Dungeons、Legends、电影——作为 IP 第二曲线的入口"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/history/acquisition",
+              "written": true
             },
             {
               "id": "history/08",
@@ -247,8 +247,8 @@
               "tags": [
                 "枢纽"
               ],
-              "href": null,
-              "written": false
+              "href": "/history/java-bedrock",
+              "written": true
             },
             {
               "id": "history/09",
@@ -264,8 +264,8 @@
                 "投票与失败实验：治理替代作者直觉"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/history/version-politics",
+              "written": true
             }
           ]
         },
@@ -288,8 +288,8 @@
                 "不能从哪里来：为何模组抽成失败（细节见第 11 章）"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/history/revenue",
+              "written": true
             },
             {
               "id": "history/11",
@@ -305,8 +305,8 @@
                 "两种 UGC：Marketplace vs 模组"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/history/grey-economy",
+              "written": true
             },
             {
               "id": "history/12",
@@ -322,8 +322,8 @@
                 "不可复制条件"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/history/competition",
+              "written": true
             },
             {
               "id": "history/13",
@@ -341,8 +341,8 @@
               "tags": [
                 "结语"
               ],
-              "href": null,
-              "written": false
+              "href": "/history/heritage",
+              "written": true
             }
           ]
         }
@@ -380,8 +380,8 @@
               "tags": [
                 "先写"
               ],
-              "href": null,
-              "written": false
+              "href": "/design/voxel-primitive",
+              "written": true
             },
             {
               "id": "design/02",
@@ -399,8 +399,8 @@
               "tags": [
                 "先写"
               ],
-              "href": null,
-              "written": false
+              "href": "/design/verbs-feel",
+              "written": true
             },
             {
               "id": "design/03",
@@ -418,8 +418,8 @@
               "tags": [
                 "先写"
               ],
-              "href": null,
-              "written": false
+              "href": "/design/survival",
+              "written": true
             },
             {
               "id": "design/04",
@@ -437,8 +437,8 @@
               "tags": [
                 "先写"
               ],
-              "href": null,
-              "written": false
+              "href": "/design/creative-mode",
+              "written": true
             }
           ]
         },
@@ -461,8 +461,8 @@
                 "反 RPG：选择而非缺失"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/design/crafting-inventory",
+              "written": true
             },
             {
               "id": "design/06",
@@ -478,8 +478,8 @@
                 "「找不到」作为探索燃料"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/design/worldgen",
+              "written": true
             },
             {
               "id": "design/07",
@@ -497,8 +497,8 @@
               "tags": [
                 "枢纽"
               ],
-              "href": null,
-              "written": false
+              "href": "/design/redstone",
+              "written": true
             },
             {
               "id": "design/08",
@@ -514,8 +514,8 @@
                 "极限：何时必须写出新系统"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/design/commands-datapacks",
+              "written": true
             },
             {
               "id": "design/09",
@@ -531,8 +531,8 @@
                 "不能做成动作游戏的原因"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/design/mobs-combat",
+              "written": true
             },
             {
               "id": "design/10",
@@ -548,8 +548,8 @@
                 "玩家后期：冰道、工厂、服务器活动"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/design/dimensions-endgame",
+              "written": true
             }
           ]
         },
@@ -572,8 +572,8 @@
                 "延迟的多人：种子、模组、影像"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/design/multiplayer",
+              "written": true
             },
             {
               "id": "design/12",
@@ -589,8 +589,8 @@
                 "2b2t：极限实验，不是猎奇"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/design/who-makes-rules",
+              "written": true
             },
             {
               "id": "design/13",
@@ -606,8 +606,8 @@
                 "收编原则 + 反例（至少四条）"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/design/mods-as-method",
+              "written": true
             }
           ]
         },
@@ -630,8 +630,8 @@
                 "同一权利：建造 / 红石 / 地图 / 影像"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/design/emergence",
+              "written": true
             },
             {
               "id": "design/15",
@@ -649,8 +649,8 @@
               "tags": [
                 "枢纽"
               ],
-              "href": null,
-              "written": false
+              "href": "/design/constraints",
+              "written": true
             },
             {
               "id": "design/16",
@@ -668,8 +668,8 @@
               "tags": [
                 "结语"
               ],
-              "href": null,
-              "written": false
+              "href": "/design/transferable",
+              "written": true
             }
           ]
         }
@@ -705,8 +705,8 @@
                 "高度上限事件：数据模型如何限制设计"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/data-model",
+              "written": true
             },
             {
               "id": "impl/02",
@@ -722,8 +722,8 @@
                 "版本迁移成本"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/storage",
+              "written": true
             },
             {
               "id": "impl/03",
@@ -739,8 +739,8 @@
                 "确定性、可复现、实验性生成器"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/worldgen-pipeline",
+              "written": true
             },
             {
               "id": "impl/04",
@@ -756,8 +756,8 @@
                 "连锁更新即图计算"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/light-fluid-updates",
+              "written": true
             }
           ]
         },
@@ -780,8 +780,8 @@
                 "看门狗与玩家可感知的时间"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/tick",
+              "written": true
             },
             {
               "id": "impl/06",
@@ -797,8 +797,8 @@
                 "农场与崩溃路径"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/entities",
+              "written": true
             },
             {
               "id": "impl/07",
@@ -814,8 +814,8 @@
                 "迁移地狱"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/items",
+              "written": true
             },
             {
               "id": "impl/08",
@@ -833,8 +833,8 @@
               "tags": [
                 "枢纽"
               ],
-              "href": null,
-              "written": false
+              "href": "/impl/redstone",
+              "written": true
             }
           ]
         },
@@ -857,8 +857,8 @@
                 "优化模组作为证据"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/client-render",
+              "written": true
             },
             {
               "id": "impl/10",
@@ -874,8 +874,8 @@
                 "协议版本与多版本服务器"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/protocol",
+              "written": true
             },
             {
               "id": "impl/11",
@@ -891,8 +891,8 @@
                 "无障碍"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/feel-client",
+              "written": true
             }
           ]
         },
@@ -915,8 +915,8 @@
                 "兼容矩阵"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/mod-architecture",
+              "written": true
             },
             {
               "id": "impl/13",
@@ -932,8 +932,8 @@
                 "政治含义"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/datapacks",
+              "written": true
             },
             {
               "id": "impl/14",
@@ -949,8 +949,8 @@
                 "偶然 vs 本质"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/java-runtime",
+              "written": true
             },
             {
               "id": "impl/15",
@@ -966,8 +966,8 @@
                 "两个游戏的工程现实"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/bedrock",
+              "written": true
             },
             {
               "id": "impl/16",
@@ -983,8 +983,8 @@
                 "大型服务器作为另一种引擎用法"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/servers",
+              "written": true
             }
           ]
         },
@@ -1007,8 +1007,8 @@
                 "民间官方实现"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/impl/tech-debt",
+              "written": true
             },
             {
               "id": "impl/18",
@@ -1026,8 +1026,8 @@
               "tags": [
                 "结语"
               ],
-              "href": null,
-              "written": false
+              "href": "/impl/modifiable-engine",
+              "written": true
             }
           ]
         }
@@ -1063,8 +1063,8 @@
                 "本卷的规则：每个新能力都要回答“增加了什么可能，又破坏了什么”"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/rewrite/what-to-rewrite",
+              "written": true
             },
             {
               "id": "rewrite/02",
@@ -1080,8 +1080,8 @@
                 "留下待卷四后半继续挑战的开放项"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/rewrite/invariants",
+              "written": true
             },
             {
               "id": "rewrite/03",
@@ -1097,8 +1097,8 @@
                 "为后面的新系统建立一张“可替换 / 需保留语义 / 待定”表"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/rewrite/accidents",
+              "written": true
             }
           ]
         },
@@ -1121,8 +1121,8 @@
                 "压力测试结论：哪些原则被保住，哪些需要重写"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/rewrite/world-rep",
+              "written": true
             },
             {
               "id": "rewrite/05",
@@ -1138,8 +1138,8 @@
                 "机械与载具何时成为“系统”，何时只是昂贵内容"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/rewrite/scheduler",
+              "written": true
             },
             {
               "id": "rewrite/06",
@@ -1155,8 +1155,8 @@
                 "“创作者体验就是产品”的边界与代价"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/rewrite/scripting",
+              "written": true
             },
             {
               "id": "rewrite/07",
@@ -1172,8 +1172,8 @@
                 "沉浸感是否会反过来破坏 Minecraft 式抽象与可读性"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/rewrite/network-perms",
+              "written": true
             },
             {
               "id": "rewrite/08",
@@ -1189,8 +1189,8 @@
                 "“现代化”何时只是把玩家的自由换成作者的资产量"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/rewrite/render-tools",
+              "written": true
             }
           ]
         },
@@ -1213,8 +1213,8 @@
                 "什么情况下 AI 真正增加了新的玩法关系"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/rewrite/compat",
+              "written": true
             },
             {
               "id": "rewrite/10",
@@ -1230,27 +1230,27 @@
                 "哪些技术决策应该允许替换，哪些语义合同应该长期稳定"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/rewrite/who-rewrites",
+              "written": true
             },
             {
               "id": "rewrite/11",
               "title": "再发明之后，我们还想保留什么",
               "audience": "both",
-              "desc": "回收第四卷所有压力测试，重新检查全书 working thesis。最终结论可以保留“住进去 / 玩出设计之外 / 再开发”，也可以修改它；不要求回到写作开始时的答案。",
+              "desc": "回收第四卷所有压力测试，重新回答全书最初的问题。结论可以保留“住进去 / 玩出设计之外 / 再开发”这组三个观察，也可以换成更准确的结构。",
               "question": "把方块、Java、传统红石、低保真画面甚至部分 Minecraft 习惯都拿掉之后，我们究竟还在追求什么？",
               "sections": [
                 "回看：哪些候选原则经受住了压力测试",
                 "哪些原则被新技术推翻或改写",
                 "哪些“现代化”其实是退步",
-                "更新全书最终命题",
+                "回到总序的问题：我们现在会怎样回答“什么值得继承”",
                 "结尾：我们不是在寻找一个更像 Minecraft 的游戏，而是在继续追问怎样创造一个能持续产生可能性的世界"
               ],
               "tags": [
                 "结语"
               ],
-              "href": null,
-              "written": false
+              "href": "/rewrite/seeing-the-original",
+              "written": true
             }
           ]
         }
@@ -1276,8 +1276,8 @@
                 "六层作者席；Doom / Quake / 上古卷轴 / 魔兽地图 / Minecraft 三条河；稳定合同与注入即 API。"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/extras/mod-systems",
+              "written": true
             },
             {
               "id": "extras/design-theories",
@@ -1295,8 +1295,8 @@
                 "怎么选用（对照表）+ 阅读入口"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/extras/design-theories",
+              "written": true
             }
           ]
         }
@@ -1328,8 +1328,8 @@
                 "三轨表——产品 / 社区 / 商业。只记事件，不议论。"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/appendix/timeline",
+              "written": true
             },
             {
               "id": "appendix/people",
@@ -1341,8 +1341,8 @@
                 "每人 / 组织 3–6 行；链回正编。"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/appendix/people",
+              "written": true
             },
             {
               "id": "appendix/java-bedrock",
@@ -1354,8 +1354,8 @@
                 "逐项表；每行链到 `history/08` 或 `impl/15`。"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/appendix/java-bedrock",
+              "written": true
             },
             {
               "id": "appendix/glossary",
@@ -1367,8 +1367,8 @@
                 "每词 40–80 字。禁止在此展开论证。"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/appendix/glossary",
+              "written": true
             },
             {
               "id": "appendix/references",
@@ -1380,8 +1380,8 @@
                 "只收录正编用过或推荐的源。"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/appendix/references",
+              "written": true
             },
             {
               "id": "appendix/exercises",
@@ -1393,8 +1393,8 @@
                 "每题写目标、约束、对应哪一章、何为通过。不给标准实现。"
               ],
               "tags": [],
-              "href": null,
-              "written": false
+              "href": "/appendix/exercises",
+              "written": true
             }
           ]
         }

@@ -213,13 +213,13 @@ export default function MinecraftDesignToc() {
 function Overview() {
   return (
     <Stack gap={20}>
-      <Callout tone="info" title="当前暂定答案">
-        {BOOK.thesis} 四卷会从历史、设计、技术与重新发明四个方向不断检验和修正这句话。
+      <Callout tone="info" title="全书问题">
+        {BOOK.thesis} 四卷会从历史、设计、技术与重新发明四个方向接近这个问题。
       </Callout>
 
       <H2>四卷对照</H2>
       <Table
-        headers={["卷", "核心命题", "章", "爱好者带走", "开发者带走"]}
+        headers={["卷", "核心问题 / 线索", "章", "爱好者带走", "开发者带走"]}
         rows={BOOK.volumes.map((v) => [
           v.roman ? \`\${v.roman} \${v.short}\` : v.short,
           v.thesis,
