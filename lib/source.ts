@@ -14,6 +14,7 @@ const docs = defineDocs({
     schema: pageSchema.extend({
       title: z.string().optional(),
       description: z.string().optional(),
+      tags: z.array(z.string().trim().min(1)).optional(),
     }),
     postprocess: {
       includeProcessedMarkdown: true,

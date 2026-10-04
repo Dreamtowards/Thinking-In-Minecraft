@@ -8,5 +8,6 @@ export function baseOptions(): BaseLayoutProps {
       transparentMode: 'none',
     },
     githubUrl: `https://github.com/${gitConfig.user}/${gitConfig.repo}`,
+    links: [{ text: '标签', url: '/tags', active: 'nested-url' }],
   };
 }

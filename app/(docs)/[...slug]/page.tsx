@@ -12,6 +12,9 @@ import { getMDXComponents } from '@/components/mdx';
 import type { Metadata } from 'next';
 import { createRelativeLink } from 'fumadocs-ui/mdx';
 import { gitConfig } from '@/lib/shared';
+import { TagLink } from '@/components/tags/tag-link';
+import { normalizeTags } from '@/lib/tag-utils';
+import { isCurrentBookPage } from '@/lib/tags';
 
 export const revalidate = false;
 
@@ -23,6 +26,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
   const MDX = page.data.body;
   const markdownUrl = getPageMarkdownUrl(page).url;
   const title = getPageTitle(page);
+  const tags = isCurrentBookPage(page.slugs) ? normalizeTags(page.data.tags) : [];
 
   return (
     <DocsPage toc={page.data.toc} full={page.data.full}>
@@ -31,6 +35,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
         <DocsDescription className="mb-0">{page.data.description}</DocsDescription>
       ) : null}
       <div className="flex flex-row flex-wrap gap-2 items-center border-b pb-6 mb-6">
+        {tags.length > 0 && (
+          <nav aria-label="章节标签" className="flex flex-1 flex-wrap gap-1.5">
+            {tags.map((tag) => <TagLink key={tag} tag={tag} />)}
+          </nav>
+        )}
         <MarkdownCopyButton markdownUrl={markdownUrl} />
         <ViewOptionsPopover
           markdownUrl={markdownUrl}
