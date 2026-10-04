@@ -37,28 +37,28 @@ const cards = [
     href: '/history',
     kicker: '卷一',
     title: '历史与商业',
-    detail: '从原型、公开开发与社区生态，到微软收购、平台化与商业模式。',
+    detail: '一个独立游戏如何在开发者、玩家、社区与平台的共同作用下，逐渐长成一种文化与产业。',
     tint: 'rgba(251, 146, 60, 0.18)',
   },
   {
     href: '/design',
     kicker: '卷二',
     title: '游戏设计',
-    detail: '从方块、生存、红石与多人，理解少数规则如何打开巨大的玩法空间。',
+    detail: '为什么少数简单规则，能在方块世界里组合出如此丰富的目标、玩法与玩家创造。',
     tint: 'rgba(96, 165, 250, 0.18)',
   },
   {
     href: '/impl',
     kicker: '卷三',
     title: '技术实现',
-    detail: '从 Chunk、世界生成、渲染与网络，到模组架构与二十年的兼容债',
+    detail: '体素世界如何被表示、生成、模拟与渲染，又如何支持多人游戏与 Mod 扩展。',
     tint: 'rgba(52, 211, 153, 0.16)',
   },
   {
     href: '/rewrite',
     kicker: '卷四',
     title: '重新发明',
-    detail: '把体素、物理、UGC、VR 与 AI 放进新的沙盒，再问什么值得继承',
+    detail: '当体素、物理、UGC、VR 与 AI 改变了沙盒的条件，Minecraft 留下的哪些思想仍然值得继承？',
     tint: 'rgba(192, 132, 252, 0.18)',
   },
 ];
@@ -140,14 +140,15 @@ export function HomePage() {
 
       <section className="relative flex min-h-[min(86svh,52rem)] flex-col items-center justify-center px-6 pb-16 pt-20 text-center">
         <p className="text-sm tracking-[0.05em] text-white/45 sm:text-base">
-          Thinking in Minecraft<span className="text-white/30">: History, Design and Algorithms</span>
+          Thinking in Minecraft
+          <span className="text-white/30">: History, Design, Technology and Reinvention</span>
         </p>
         <h1 className="home-text-glow mt-3 bg-gradient-to-r from-white via-white to-white/55 bg-clip-text text-5xl font-extrabold tracking-tight text-transparent sm:text-6xl md:text-7xl">
           Minecraft 设计思想
         </h1>
         <p className="mt-5 max-w-2xl text-lg font-light leading-relaxed text-white/78 md:text-xl">
           从历史、游戏设计与技术实现理解 Minecraft，<br/>
-          也借它思考下一代沙盒世界还能走到哪里。
+          并由此追问下一代沙盒世界可以如何被重新创造。
         </p>
 
         <div className="home-covers mt-10 flex items-end justify-center gap-3 sm:gap-4">
