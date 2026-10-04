@@ -176,8 +176,6 @@ export function HomePage() {
             开始阅读
           </GlassLink>
           <GlassLink href="/toc">全书目录</GlassLink>
-          <GlassLink href="/tags">按标签探索</GlassLink>
-          <GlassLink href="/map?view=tags">标签地图</GlassLink>
           <GlassLink href="/prelude/thesis">这本书想回答什么</GlassLink>
         </div>
       </section>

@@ -101,20 +101,20 @@ docs/
 ├── design/                    # 卷二 · 14 章（重构目标）
 │   ├── meta.json
 │   ├── index.mdx
-│   ├── voxel-primitive.mdx    # 01 方块与可修改世界
-│   ├── survival.mdx           # 02 生存与玩家目标
-│   ├── crafting-inventory.mdx # 03 物品、合成与库存
-│   ├── worldgen.mdx           # 04 世界生成与探索
-│   ├── mobs-combat.mdx        # 05 生物、战斗与威胁
-│   ├── dimensions-endgame.mdx # 06 进度、维度与游戏后期
-│   ├── building-space.mdx     # 07 建造与空间（新增）
-│   ├── creative-mode.mdx      # 08 创造模式与创作工具
-│   ├── redstone.mdx           # 09 红石、机器与自动化
-│   ├── commands-datapacks.mdx # 10 命令、数据驱动与地图创作
-│   ├── mods-as-method.mdx     # 11 模组与玩法扩展
-│   ├── multiplayer.mdx        # 12 多人游戏与共同世界
-│   ├── emergence.mdx          # 13 设计之外的玩法
-│   └── transferable.mdx       # 14 Minecraft 值得继承什么？
+│   ├── modifiable-world.mdx        # 01 方块与可修改世界
+│   ├── survival-goals.mdx          # 02 生存与玩家目标
+│   ├── items-crafting-inventory.mdx# 03 物品、合成与库存
+│   ├── worldgen-exploration.mdx    # 04 世界生成与探索
+│   ├── mobs-combat.mdx             # 05 生物、战斗与威胁
+│   ├── progression-dimensions.mdx  # 06 进度、维度与游戏后期
+│   ├── building-space.mdx          # 07 建造与空间（新增）
+│   ├── creative-tools.mdx          # 08 创造模式与创作工具
+│   ├── redstone-automation.mdx     # 09 红石、机器与自动化
+│   ├── commands-data-maps.mdx      # 10 命令、数据驱动与地图创作
+│   ├── mods-expansion.mdx          # 11 模组与玩法扩展
+│   ├── multiplayer-world.mdx       # 12 多人游戏与共同世界
+│   ├── emergent-play.mdx           # 13 设计之外的玩法
+│   └── what-to-inherit.mdx         # 14 Minecraft 值得继承什么？
 ├── impl/                      # 卷三 · 18 章
 │   ├── meta.json
 │   ├── index.mdx
@@ -249,13 +249,13 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
   "pages": [
     "index",
     "---第一部 · 世界与生存---",
-    "voxel-primitive", "survival",
+    "modifiable-world", "survival-goals",
     "---第二部 · 资源、探索与进度---",
-    "crafting-inventory", "worldgen", "mobs-combat", "dimensions-endgame",
+    "items-crafting-inventory", "worldgen-exploration", "mobs-combat", "progression-dimensions",
     "---第三部 · 创造与扩展---",
-    "building-space", "creative-mode", "redstone", "commands-datapacks", "mods-as-method",
+    "building-space", "creative-tools", "redstone-automation", "commands-data-maps", "mods-expansion",
     "---第四部 · 多人、涌现与继承---",
-    "multiplayer", "emergence", "transferable"
+    "multiplayer-world", "emergent-play", "what-to-inherit"
   ]
 }
 ```
@@ -619,31 +619,32 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 5. **设计卷不替技术卷做实现说明。** 为什么这样设计放在本卷；Chunk、Tick、协议、红石更新顺序、数据格式等实现细节留给卷三。
 6. **设计卷不写攻略。** 不给合成表、刷怪塔步骤、红石教程、开服教程；具体机制只用于解释设计关系。
 7. **卷末才讨论“值得继承什么”。** 第 14 章是阶段性总结，不是戒律清单；每个判断必须带条件、反例和可能失效的场景，并允许卷三、卷四继续推翻。
+8. **标题、文件名与 slug 都服从新结构。** 卷二目前没有需要维护的公开历史兼容包袱；旧 slug 若携带已经废弃的理论框架，可以直接改名。不要为了“曾经叫过这个”保留 `voxel-primitive`、`mods-as-method`、`transferable` 之类不再贴合正文的名称。
 
 ### 新结构：四部 · 14 章
 
 ```text
 第一部 · 世界与生存
-01 方块与可修改世界
-02 生存与玩家目标
+01 方块与可修改世界 · `modifiable-world`
+02 生存与玩家目标 · `survival-goals`
 
 第二部 · 资源、探索与进度
-03 物品、合成与库存
-04 世界生成与探索
-05 生物、战斗与威胁
-06 进度、维度与游戏后期
+03 物品、合成与库存 · `items-crafting-inventory`
+04 世界生成与探索 · `worldgen-exploration`
+05 生物、战斗与威胁 · `mobs-combat`
+06 进度、维度与游戏后期 · `progression-dimensions`
 
 第三部 · 创造与扩展
-07 建造与空间
-08 创造模式与创作工具
-09 红石、机器与自动化
-10 命令、数据驱动与地图创作
-11 模组与玩法扩展
+07 建造与空间 · `building-space`
+08 创造模式与创作工具 · `creative-tools`
+09 红石、机器与自动化 · `redstone-automation`
+10 命令、数据驱动与地图创作 · `commands-data-maps`
+11 模组与玩法扩展 · `mods-expansion`
 
 第四部 · 多人、涌现与继承
-12 多人游戏与共同世界
-13 设计之外的玩法
-14 Minecraft 值得继承什么？
+12 多人游戏与共同世界 · `multiplayer-world`
+13 设计之外的玩法 · `emergent-play`
+14 Minecraft 值得继承什么？ · `what-to-inherit`
 ```
 
 这四部形成一条读者可以直接理解的路线：
@@ -668,7 +669,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 #### `design/01` 方块与可修改世界
 
-- 文件：`docs/design/voxel-primitive.mdx` · 两类 · ▤
+- 目标文件：`docs/design/(part1)/modifiable-world.mdx` · 两类 · ▤
 - **简介**：从“世界可以被直接改变并长期留下痕迹”出发，研究 Minecraft 为什么把地形、资源、建筑和许多装置组织成离散、可指认的方块空间；同时区分体素表示、方块画风与可修改性。
 - **要回答**：为什么 Minecraft 的世界既容易被玩家理解和修改，又能承载建造、资源循环和各种系统？方格尺度帮了什么，又限制了什么？
 - **交叉**：`impl/01`、`history/12`、`rewrite/04`
@@ -677,7 +678,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 #### `design/02` 生存与玩家目标
 
-- 文件：`docs/design/survival.mdx` · 两类 · ▤
+- 目标文件：`docs/design/(part1)/survival-goals.mdx` · 两类 · ▤
 - **简介**：研究没有传统任务线时，黑夜、资源稀缺、饥饿、死亡与安全需求怎样让玩家自然产生“接下来做什么”；同时承认这些压力不是 Minecraft 唯一的目标来源。
 - **要回答**：Minecraft 为什么不需要持续派发任务，也能让玩家不断产生短期和长期目标？生存条件在其中到底起多大作用？
 - **交叉**：`history/03`、`design/03`、`design/05`、`design/07`
@@ -692,7 +693,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 #### `design/03` 物品、合成与库存
 
-- 文件：`docs/design/crafting-inventory.mdx` · 两类 · ▤
+- 目标文件：`docs/design/(part2)/items-crafting-inventory.mdx` · 两类 · ▤
 - **简介**：研究世界中的材料怎样被采集、携带、组合和消耗；库存既提供掌控感，也制造容量与选择限制，物品和基础设施共同构成 Minecraft 的成长。
 - **要回答**：Minecraft 的资源为什么值得收集？合成与库存怎样把世界中的材料连接成长期循环？
 - **交叉**：`impl/07`、`design/02`、`design/06`
@@ -701,7 +702,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 #### `design/04` 世界生成与探索
 
-- 文件：`docs/design/worldgen.mdx` · 两类 · ▤
+- 目标文件：`docs/design/(part2)/worldgen-exploration.mdx` · 两类 · ▤
 - **简介**：研究程序生成怎样制造方向感、未知、稀有性和旅行理由；玩家明知世界由算法产生，仍会把某些山、洞穴和结构当成值得发现的地方。
 - **要回答**：程序生成怎样从“自动生产地形”变成真正值得探索的世界？
 - **交叉**：`impl/03`、`history/09`、`history/12`
@@ -710,7 +711,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 #### `design/05` 生物、战斗与威胁
 
-- 文件：`docs/design/mobs-combat.mdx` · 两类 · ▤
+- 目标文件：`docs/design/(part2)/mobs-combat.mdx` · 两类 · ▤
 - **简介**：Minecraft 的生物既可能是敌人、资源、伙伴、交易对象，也可能只是让世界显得有生命。战斗只是其中一部分。
 - **要回答**：不同生物怎样改变玩家对空间、时间和资源的判断？战斗在 Minecraft 的整体设计中到底承担什么职责？
 - **交叉**：`design/02`、`design/03`、`history/09`
@@ -719,7 +720,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 #### `design/06` 进度、维度与游戏后期
 
-- 文件：`docs/design/dimensions-endgame.mdx` · 两类 · ▤
+- 目标文件：`docs/design/(part2)/progression-dimensions.mdx` · 两类 · ▤
 - **简介**：研究 Minecraft 如何在没有严格主线的情况下制造成长：工具与装备、Nether、End、Boss、Elytra、Beacon、Villager Economy，以及玩家自己搭建的长期基础设施。
 - **要回答**：Minecraft 可以被“通关”，为什么通关以后世界仍然可以继续？玩家又是怎样感到自己不断在前进？
 - **交叉**：`design/03`、`design/04`、`design/07`
@@ -734,7 +735,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 #### `design/07` 建造与空间 · 新章
 
-- 文件：`docs/design/building-space.mdx` · 两类 · ☐
+- 目标文件：`docs/design/(part3)/building-space.mdx` · 两类 · ☐
 - **简介**：Minecraft 最具代表性的活动之一此前没有独立章节。本章研究逐块放置为什么能形成建筑、道路、基地和城市，以及玩家怎样把随机生成的空间逐渐变成“自己的地方”。
 - **要回答**：为什么如此粗粒度、逐块放置的建造方式仍能产生强烈的空间表达和长期依恋？
 - **交叉**：`design/01`、`design/02`、`design/08`、`history/13`
@@ -743,7 +744,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 #### `design/08` 创造模式与创作工具
 
-- 文件：`docs/design/creative-mode.mdx` · 两类 · ▤
+- 目标文件：`docs/design/(part3)/creative-tools.mdx` · 两类 · ▤
 - **简介**：从 Creative Mode 到 WorldEdit、Axiom、Structure Block、WorldPainter、Bedrock Editor，Minecraft 存在多个不同层级的创作方式。本章研究游戏模式、权限和专业工具各自解决什么问题。
 - **要回答**：Creative Mode 为什么存在？什么时候它已经不够，需要更强的编辑工具？游戏模式和创作工具应该怎样分工？
 - **交叉**：`design/07`、`design/10`、`rewrite/07`
@@ -752,7 +753,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 #### `design/09` 红石、机器与自动化 · 枢纽
 
-- 文件：`docs/design/redstone.mdx` · 两类 · ▤
+- 目标文件：`docs/design/(part3)/redstone-automation.mdx` · 两类 · ▤
 - **简介**：从按钮、门和轨道，到自动农场、飞行器和计算机，研究有限的信号、状态和机械规则为什么能支持如此多机器与自动化玩法。
 - **要回答**：红石为什么能够从一组局部规则逐渐长成机器、自动化和计算？哪些能力来自设计，哪些来自实现历史和玩家发现？
 - **交叉**：`impl/08`、`design/03`、`design/13`
@@ -761,7 +762,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 #### `design/10` 命令、数据驱动与地图创作
 
-- 文件：`docs/design/commands-datapacks.mdx` · 两类 · ▤
+- 目标文件：`docs/design/(part3)/commands-data-maps.mdx` · 两类 · ▤
 - **简介**：当玩家开始用命令、函数、数据包 / Add-On、资源与行为数据安排事件和规则时，创作从“搭东西”进入“编排玩法”。冒险地图、CTM、小游戏和 RPG 都在这里出现。
 - **要回答**：Minecraft 怎样让玩家在不完全重写游戏的情况下，开始编排规则、事件和关卡？
 - **交叉**：`impl/13`、`history/04`、`design/08`、`design/11`
@@ -770,7 +771,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 #### `design/11` 模组与玩法扩展
 
-- 文件：`docs/design/mods-as-method.mdx` · 两类 · ▤
+- 目标文件：`docs/design/(part3)/mods-expansion.mdx` · 两类 · ▤
 - **简介**：模组可以增加内容、增加系统、改变规则，整合包还能重新组织 progression。本章用 Mod 看原版没有选择的设计空间，而不是替 Mojang 开一份“应该收编什么”的药方。
 - **要回答**：Modding 为什么能把 Minecraft 变成非常不同的游戏？它对理解原版设计有什么帮助？
 - **交叉**：`history/04`、`impl/12`、`design/06`、`design/10`
@@ -785,7 +786,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 #### `design/12` 多人游戏与共同世界
 
-- 文件：`docs/design/multiplayer.mdx` · 两类 · ▤
+- 目标文件：`docs/design/(part4)/multiplayer-world.mdx` · 两类 · ▤
 - **简介**：第二个玩家进入以后，同一套方块、生存和建造规则会产生合作、展示、交换、财产、信任、冲突和共同约定。本章把旧 `who-makes-rules` 合并进多人设计，不再人为拆成两章。
 - **要回答**：为什么只增加其他玩家，就会让同一套 Minecraft 规则产生完全不同的社会问题和玩法？
 - **交叉**：`history/05`、`history/11`、`impl/10`、`rewrite/07`
@@ -794,7 +795,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 #### `design/13` 设计之外的玩法
 
-- 文件：`docs/design/emergence.mdx` · 两类 · ▤
+- 目标文件：`docs/design/(part4)/emergent-play.mdx` · 两类 · ▤
 - **简介**：刷怪塔、冰船高速路、红石计算机、Parkour、Speedrun、Skyblock、服务器玩法等大量内容并不是开发者逐项写成关卡。本章从这些具体例子进入“涌现”问题。
 - **要回答**：为什么 Minecraft 会不断出现设计者没有明确安排过的玩法？这究竟来自规则组合、玩家目标、社区传播，还是历史偶然？
 - **交叉**：`design/04`、`design/09`、`design/12`、`history/06`
@@ -803,7 +804,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 #### `design/14` Minecraft 值得继承什么？ · 卷结语
 
-- 文件：`docs/design/transferable.mdx` · 两类 · ▤
+- 目标文件：`docs/design/(part4)/what-to-inherit.mdx` · 两类 · ▤
 - **简介**：回看前 13 章，整理目前最可信的设计关系，同时明确哪些只在特定条件下成立、哪些可能只是 Minecraft 的历史结果。它是交给卷三和卷四继续检验的中间结论。
 - **要回答**：如果今天不以“复制 Minecraft”为目标，而是设计新的沙盒世界，我们目前真正有理由带走什么？哪些东西不该被当成普遍原则？
 - **交叉**：`history/12`、`history/13`、`impl/index`、`rewrite/01`、`rewrite/02`
@@ -816,25 +817,25 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 现有文件先**不要立即删除**。执行重写时，先提取仍有价值的史实、案例、引用和对照，再迁移链接；确认新章承接完成后才退休旧文件。
 
-| 旧文件 / 旧章 | 处理 | 主要去向 |
+| 旧文件 / 旧章 | 处理 | 新文件 / 去向 |
 | --- | --- | --- |
-| `voxel-primitive.mdx` | 保留文件，整章重写 | 新 01《方块与可修改世界》 |
-| `verbs-feel.mdx` | **退休** | 挖 / 放 / 指向 → 01；工具与效率 → 03；放置与建造体验 → 07；纯表现层 → `impl/11` |
-| `survival.mdx` | 保留文件，整章重写 | 新 02《生存与玩家目标》 |
-| `creative-mode.mdx` | 保留文件，约 80% 重写 | 新 08《创造模式与创作工具》；地方感 / 建筑意义 → 07 |
-| `crafting-inventory.mdx` | 保留文件，整章重写 | 新 03 |
-| `worldgen.mdx` | 保留文件，整章重写 | 新 04 |
-| `mobs-combat.mdx` | 保留文件，整章重写 | 新 05 |
-| `dimensions-endgame.mdx` | 保留文件，整章重写 | 新 06 |
-| （无） | **新增** | `building-space.mdx` → 新 07《建造与空间》 |
-| `redstone.mdx` | 保留文件，整章重写 | 新 09 |
-| `commands-datapacks.mdx` | 保留文件，整章重写 | 新 10 |
-| `mods-as-method.mdx` | 保留文件，整章重写 | 新 11《模组与玩法扩展》 |
-| `multiplayer.mdx` | 保留文件，整章重写 | 新 12 |
-| `who-makes-rules.mdx` | **退休并合并** | 有效内容并入新 12 |
-| `emergence.mdx` | 保留文件，整章重写 | 新 13《设计之外的玩法》 |
+| `voxel-primitive.mdx` | 改名 + 整章重写 | `modifiable-world.mdx` → 01《方块与可修改世界》 |
+| `verbs-feel.mdx` | **退休并拆分** | 挖 / 放 / 指向 → 01；工具与效率 → 03；放置与建造体验 → 07；纯表现层 → `impl/11` |
+| `survival.mdx` | 改名 + 整章重写 | `survival-goals.mdx` → 02《生存与玩家目标》 |
+| `crafting-inventory.mdx` | 改名 + 整章重写 | `items-crafting-inventory.mdx` → 03《物品、合成与库存》 |
+| `worldgen.mdx` | 改名 + 整章重写 | `worldgen-exploration.mdx` → 04《世界生成与探索》 |
+| `mobs-combat.mdx` | 保留 slug，整章重写 | `mobs-combat.mdx` → 05《生物、战斗与威胁》 |
+| `dimensions-endgame.mdx` | 改名 + 整章重写 | `progression-dimensions.mdx` → 06《进度、维度与游戏后期》 |
+| （无） | **新增** | `building-space.mdx` → 07《建造与空间》 |
+| `creative-mode.mdx` | 改名 + 约 80% 重写 | `creative-tools.mdx` → 08《创造模式与创作工具》；地方感 / 建筑意义 → 07 |
+| `redstone.mdx` | 改名 + 整章重写 | `redstone-automation.mdx` → 09《红石、机器与自动化》 |
+| `commands-datapacks.mdx` | 改名 + 整章重写 | `commands-data-maps.mdx` → 10《命令、数据驱动与地图创作》 |
+| `mods-as-method.mdx` | 改名 + 整章重写 | `mods-expansion.mdx` → 11《模组与玩法扩展》 |
+| `multiplayer.mdx` | 改名 + 整章重写 | `multiplayer-world.mdx` → 12《多人游戏与共同世界》 |
+| `who-makes-rules.mdx` | **退休并合并** | 有效内容并入 12 |
+| `emergence.mdx` | 改名 + 整章重写 | `emergent-play.mdx` → 13《设计之外的玩法》 |
 | `constraints.mdx` | **退休并拆分** | 方格 / 限制 → 01、07；生存限制 → 02；历史怪癖 / 边缘行为 → 13；原则层反思 → 14 |
-| `transferable.mdx` | 保留文件，整章重写 | 新 14《Minecraft 值得继承什么？》 |
+| `transferable.mdx` | 改名 + 整章重写 | `what-to-inherit.mdx` → 14《Minecraft 值得继承什么？》 |
 
 ### 明确废弃的旧命题
 
@@ -863,7 +864,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 ### 执行顺序
 
-1. **先更新导航结构，但不急着删除旧文件。** 建立 4 个 Part 和新章 `building-space` 的目标位置。
+1. **先更新导航结构与 slug，但不急着删除旧文件。** 按上面的 4 个 Part 与 14 个目标 slug 建立新位置；旧链接无需兼容，可直接迁移到新路径。
 2. **重写 01–02**，先把“世界是什么 / 为什么开始行动”写清；不再先写所谓四个“设计原语”。
 3. **重写 03–06**，形成资源—探索—威胁—进度的主线，并在这一阶段校正 02 的边界。
 4. **重写 07–11**。这一部是卷二核心之一：建造 → 创作工具 → 自动化 → 数据驱动创作 → Mod 扩展。每章都要避免重复“玩家是作者”的抽象结论，而是讲具体能力怎样变化。
@@ -970,7 +971,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 - 文件：`docs/impl/entities.mdx` · 开发者 · ▤
 - **简介**：实体、方块实体、展示实体。AABB、步进、船与矿车特例。AI 是目标选择与寻路。实体预算和农场是性能崩溃的经典路径。方块便宜，实体昂贵。
 - **要回答**：为什么实体才是真正的税？
-- **交叉**：`design/09`
+- **交叉**：`design/05`
 - **大纲**：
   1. 为什么生物多了比方块多了更卡
   2. 三类对象
@@ -998,7 +999,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 - 文件：`docs/impl/redstone.mdx` · 两类 · ▤
 - **简介**：信号强度、弱充能、准连接。活塞、BUD、更新顺序。未定义行为被社区当成稳定 API。红石是隐式虚拟机。兼容性高于正确性时，怪癖会变成平台。
 - **要回答**：「未定义行为」如何成为社区 API？
-- **交叉**：`design/07`、`rewrite/03`、`impl/17`
+- **交叉**：`design/09`、`rewrite/03`、`impl/17`
 - **大纲**：
   1. 为什么「修 bug」会引发红石革命
   2. 信号模型：强度、充能、准连接
@@ -1080,7 +1081,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 - 文件：`docs/impl/datapacks.mdx` · 开发者 · ▤
 - **简介**：扁平化之后的命名空间世界。数据包能改什么、不能改什么。资源包与数据分工。官方扩展面故意停在「新动词」之前。数据驱动是温和模组的政治。
 - **要回答**：官方扩展面的边界在哪？
-- **交叉**：`design/08`、`impl/07`
+- **交叉**：`design/10`、`impl/07`
 - **大纲**：
   1. 为什么有了数据包还是要写 Java
   2. 命名空间世界
@@ -1296,7 +1297,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 - 文件：`docs/rewrite/compat.mdx` · 两类 · ▤
 - **简介**：生成式 AI、行为树、规划与传统模拟可以让 NPC 更会说、更会做，但真正的问题不是“能不能接大模型”，而是它是否让沙盒世界产生新的关系、任务与意外。
 - **要回答**：AI NPC 的价值是噱头、内容生成，还是让世界获得新的自主性？
-- **交叉**：`design/09`、`design/14`
+- **交叉**：`design/05`、`design/13`
 - **大纲**：
   1. 传统 NPC 为什么常像任务终端
   2. 对话智能、行为智能、长期记忆是三件不同的事
@@ -1323,7 +1324,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 - 文件：`docs/rewrite/seeing-the-original.mdx` · 两类 · ▤
 - **简介**：回收第四卷所有压力测试，重新回答全书最初的问题。结论可以保留“住进去 / 玩出设计之外 / 再开发”这组三个观察，也可以换成更准确的结构。
 - **要回答**：把方块、Java、传统红石、低保真画面甚至部分 Minecraft 习惯都拿掉之后，我们究竟还在追求什么？
-- **交叉**：`prelude/thesis`、`design/16`、`rewrite/02`
+- **交叉**：`prelude/thesis`、`design/14`、`rewrite/02`
 - **大纲**：
   1. 回看：哪些候选原则经受住了压力测试
   2. 哪些原则被新技术推翻或改写
