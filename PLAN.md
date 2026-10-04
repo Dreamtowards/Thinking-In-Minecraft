@@ -735,7 +735,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 #### `design/07` 建造与空间 · 新章
 
-- 目标文件：`docs/design/(part3)/building-space.mdx` · 两类 · ☐
+- 目标文件：`docs/design/(part3)/building-space.mdx` · 两类 · ✎
 - **简介**：Minecraft 最具代表性的活动之一此前没有独立章节。本章研究逐块放置为什么能形成建筑、道路、基地和城市，以及玩家怎样把随机生成的空间逐渐变成“自己的地方”。
 - **要回答**：为什么如此粗粒度、逐块放置的建造方式仍能产生强烈的空间表达和长期依恋？
 - **交叉**：`design/01`、`design/02`、`design/08`、`history/13`
