@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { BackgroundPicker } from './background-picker';
 import { GlassCard } from './glass-card';
@@ -10,48 +11,54 @@ import './home-page.css';
 const covers = [
   {
     src: 'https://old.elytra.dev/thinking-in-minecraft/assets/cover/tim-1.jpg',
-    alt: '卷一封面',
+    alt: '《Minecraft 设计思想》卷一封面',
+    href: '/history',
+    label: '阅读卷一：历史与商业',
     tilt: '-6',
   },
   {
     src: 'https://old.elytra.dev/thinking-in-minecraft/assets/cover/tim-2.jpg',
-    alt: '卷二封面',
+    alt: '《Minecraft 设计思想》卷二封面',
+    href: '/design',
+    label: '阅读卷二：游戏设计',
     tilt: '0',
   },
   {
     src: 'https://old.elytra.dev/thinking-in-minecraft/assets/cover/tim-3.jpg',
-    alt: '卷三封面',
+    alt: '《Minecraft 设计思想》卷三封面',
+    href: '/impl',
+    label: '阅读卷三：技术实现',
     tilt: '6',
   },
 ];
 
 const cards = [
   {
-    href: '/history/infiniminer',
+    href: '/history',
     kicker: '卷一',
     title: '历史与商业',
-    detail: '从一个人的原型，长成模组与服务器，最终席卷全球的文化现象',
+    detail: '从原型、公开开发与社区生态，到微软收购、平台化与商业模式。',
     tint: 'rgba(251, 146, 60, 0.18)',
   },
   {
-    href: '/design/voxel-primitive',
+    href: '/design',
     kicker: '卷二',
     title: '游戏设计',
-    detail: '全书中轴。深度来自极少数规则在体素世界上的组合。',
+    detail: '从方块、生存、红石与多人，理解少数规则如何打开巨大的玩法空间。',
     tint: 'rgba(96, 165, 250, 0.18)',
   },
   {
-    href: '/impl/data-model',
+    href: '/impl',
     kicker: '卷三',
     title: '技术实现',
-    detail: '刨析引擎与算法、体素系统、PCG、Mod系统、渲染、多人网络与优化',
+    detail: '从 Chunk、世界生成、渲染与网络，到模组架构与二十年的兼容债',
     tint: 'rgba(52, 211, 153, 0.16)',
   },
   {
-    href: '/toc',
+    href: '/rewrite',
     kicker: '卷四',
-    title: '重写',
-    detail: '以更现代的方式实现，把偶然从本质里剥开',
+    title: '重新发明',
+    detail: '把体素、物理、UGC、VR 与 AI 放进新的沙盒，再问什么值得继承',
     tint: 'rgba(192, 132, 252, 0.18)',
   },
 ];
@@ -69,7 +76,7 @@ function CardCopy({
     <>
       <p className="text-xs tracking-widest text-white/45">{kicker}</p>
       <h2 className="mt-2 text-lg font-semibold">{title}</h2>
-      <p className="mt-1 text-sm text-white/55">{detail}</p>
+      <p className="mt-1 text-sm leading-relaxed text-white/55">{detail}</p>
     </>
   );
 }
@@ -132,24 +139,25 @@ export function HomePage() {
       <HomeBackground key={activeEffect} effect={activeEffect} />
 
       <section className="relative flex min-h-[min(86svh,52rem)] flex-col items-center justify-center px-6 pb-16 pt-20 text-center">
-        <h1 className="home-text-glow bg-gradient-to-r from-white via-white to-white/55 bg-clip-text text-5xl font-extrabold tracking-tight text-transparent sm:text-6xl md:text-7xl">
+        <p className="text-sm tracking-[0.05em] text-white/45 sm:text-base">
+          Thinking in Minecraft<span className="text-white/30">: History, Design and Algorithms</span>
+        </p>
+        <h1 className="home-text-glow mt-3 bg-gradient-to-r from-white via-white to-white/55 bg-clip-text text-5xl font-extrabold tracking-tight text-transparent sm:text-6xl md:text-7xl">
           Minecraft 设计思想
         </h1>
-        <p className="mt-4 text-xl font-light tracking-wide text-white/80 md:text-2xl">
-          历史、设计与算法
-        </p>
-        <p className="mt-2 text-sm text-white/45 md:text-base">
-          Thinking in Minecraft: History, Designs and Algorithms
+        <p className="mt-5 max-w-2xl text-lg font-light leading-relaxed text-white/78 md:text-xl">
+          从历史、游戏设计与技术实现理解 Minecraft，<br/>
+          也借它思考下一代沙盒世界还能走到哪里。
         </p>
 
         <div className="home-covers mt-10 flex items-end justify-center gap-3 sm:gap-4">
           {covers.map((cover) => (
-            <button
+            <Link
               key={cover.src}
-              type="button"
+              href={cover.href}
               className="home-cover"
               data-tilt={cover.tilt}
-              aria-label={`放大${cover.alt}`}
+              aria-label={cover.label}
             >
               <img
                 src={cover.src}
@@ -158,20 +166,25 @@ export function HomePage() {
                 height={128}
                 className="h-28 w-auto rounded-sm shadow-lg shadow-black/40 sm:h-32"
               />
-            </button>
+            </Link>
           ))}
         </div>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <GlassLink href="/prelude" solid>
-            序
+            开始阅读
           </GlassLink>
           <GlassLink href="/toc">全书目录</GlassLink>
-          <GlassLink href="/prelude/thesis">命题</GlassLink>
+          <GlassLink href="/prelude/thesis">这本书想回答什么</GlassLink>
         </div>
       </section>
 
       <section className="relative mx-auto w-full max-w-5xl px-6 pb-10">
+        {/*<div className="mb-5 flex items-end justify-between gap-4">*/}
+        {/*  <div>*/}
+        {/*    <h2 className="mt-2 text-xl font-semibold text-white/90">从理解 Minecraft，到重新发明沙盒</h2>*/}
+        {/*  </div>*/}
+        {/*</div>*/}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {cards.map((card) => (
             <GlassCard key={card.title} href={card.href} tint={card.tint}>
@@ -182,10 +195,12 @@ export function HomePage() {
       </section>
 
       <footer className="relative mx-auto w-full max-w-5xl px-6 pb-16">
-        <p className="border-t border-white/10 pt-6 text-sm leading-relaxed text-white/55">
-          Minecraft 不是通关即弃的内容，而是一套能住进去、能玩出设计之外、还能被再开发的系统。这本书写它的历史、设计与实现。
-        </p>
-        <p className="mt-3 text-xs text-white/35">Aether · 沙盒游戏《以太效应》开发者</p>
+        <div className="border-t border-white/10 pt-6">
+          <p className="max-w-3xl text-sm leading-relaxed text-white/55">
+            写给 Minecraft 的长期玩家，也写给正在做沙盒、体素、引擎、Mod 与 UGC 的开发者。
+          </p>
+          <p className="mt-3 text-xs text-white/35">Aether · 沙盒游戏《以太效应》开发者</p>
+        </div>
       </footer>
 
       <BackgroundPicker value={activeEffect} onChange={onEffectChange} />
