@@ -94,6 +94,74 @@ Vintage Story 最明显的分叉是模拟密度。
 
 所以 Vintage Story 最值得继承的历史意义，不是“Minecraft 玩家终于做出了完整版 Minecraft”，而是：**模组生态能够成为独立游戏的研发前史。**
 
+## Luanti：把“可改”推进到引擎层
+
+Luanti 的路线又不同。
+
+它最初叫 Minetest。项目自己在 2024 年改名时非常坦率地回顾：创始人 celeron55 一开始确实是在 Minecraft Alpha 之后尝试做类似实验，但十多年后，项目已经从一个“像 Minecraft 的游戏”逐渐变成一个可以承载不同体素游戏、Mod 和脚本的开源平台。[^luanti-rename]
+
+改名本身就很能说明这次转变。
+
+Minetest 这个名字长期让外界先问“是不是 Minecraft 克隆”；Luanti 则希望把注意力放到 creation 和 Lua 上。官方今天把它定义为一个用于各种体素游戏的 game engine / platform，而不只是某一款默认游戏。[^luanti-docs]
+
+如果说 Minecraft 的模组生态是在一个具体游戏周围长出第二层作者能力，Luanti 则把这件事进一步提前：
+
+> **引擎本身就把“做另一款游戏”当作正常用法。**
+
+玩家可以安装不同游戏和 Mod，开发者可以使用 Lua API 写内容，平台还提供统一内容浏览器。这让它和 Minecraft Java Modding 很像，却又少了一层必须围绕 Mojang 原版规则工作的约束。
+
+代价也同样明显：平台能力并不会自动产生一个和 Minecraft 同等规模的默认世界、玩家文化或内容入口。
+
+Luanti 因此是一个特别好的反例：**开放性可以被重新实现，生态规模却不是一个 API 特性。**
+
+## Hytale：服务器经验并不会自动变成独立游戏
+
+Hytale 是这几条谱系里最戏剧性的一条。
+
+它来自 Hypixel 背后的团队。Hypixel 已经证明，他们非常擅长在 Minecraft 服务器上做地图、小游戏、运营和大规模多人内容。2018 年公开 Hytale 时，项目希望把沙盒 RPG、多人服务器、创作工具和 Modding 能力放进一款独立游戏。
+
+这使它天然会被拿来和 Minecraft 比较。
+
+但 Hytale 的开发史也提醒我们：**会在既有游戏上创造内容，和从头维护一整套引擎、客户端、工具链与产品，并不是同一种工作。**
+
+项目后来经历长期开发、引擎重写、Riot 收购与 2025 年取消。随后原始创始团队重新买回 Hytale，放弃那次跨平台引擎重写，回到较早的代码基础，并在 2026 年 1 月 13 日把游戏以真正意义上的 Early Access 形式交给玩家。官方自己也明确提醒，当前版本仍然不完整、粗糙，许多功能缺失。[^hytale-ea]
+
+这段经历不适合被拿来证明“Hytale 失败了”——它现在已经真正可以被玩家使用和继续观察。
+
+反而更值得看到它暴露出的工程尺度：一款沙盒如果同时想要冒险内容、多人、服务器、Modding、创作工具和跨平台，就不是“把 Minecraft 加强一下”那么简单。这些能力彼此之间会形成巨大的技术和产品耦合。
+
+有趣的是，2026 年 Early Access 的 Hytale 又回到一种非常早期 Minecraft 式的状态：游戏还没完成，创作者和服务器作者已经被邀请在第一天进入。[^hytale-ea]
+
+它最终会长成什么，现在还不适合替它下结论。
+
+## Roblox：不是 Minecraft 后代，却是最重要的 UGC 对照
+
+Roblox 常常和 Minecraft 放在一起，因为两者都拥有大量年轻玩家、多人社交与用户创作。
+
+但把 Roblox 称作 Minecraft-like 并不准确。Roblox 早于 Minecraft，并不是从体素生存游戏发展出来的。
+
+它更适合回答另一个问题：**如果一开始就把“玩家创作内容”作为平台核心，而不是让创作生态在游戏周围慢慢长出来，会发生什么？**
+
+Roblox 把创作工具、内容发布、账号、推荐、虚拟货币和创作者收入放进同一套平台。创作者在 Roblox Studio 中制作体验，用户在平台内发现和消费这些体验，符合条件的创作者还可以通过 Developer Exchange 把 Earned Robux 兑换成法币。[^roblox-devex]
+
+这和 Minecraft Java 的路径差异很大。
+
+Minecraft 的 Mod、服务器、整合包和工具链长期分散在 Mojang 官方之外；Roblox 则从产品结构上就更接近一个统一的创作与分发平台。
+
+| | Minecraft Java 生态 | Roblox |
+| --- | --- | --- |
+| 基础对象 | 一款长期更新的游戏 | 承载大量体验的平台 |
+| 创作工具 | Mod Loader、插件、地图工具、第三方 IDE 等分散存在 | Roblox Studio 是官方核心工具 |
+| 分发 | 社区网站、服务器地址、第三方平台并存 | 平台内发现与发布 |
+| 支付 | 多数交易发生在不同平台与服务器里 | Robux / DevEx 统一在平台体系中 |
+| 作品与底层关系 | 创作通常仍依赖 Minecraft 本体规则 | 每个体验可以拥有非常不同的玩法 |
+
+这不是说 Roblox“更平台”、所以一定更先进。
+
+统一平台让发现、支付和创作者商业化更直接，也意味着创作者更依赖平台政策、推荐系统和官方工具。Minecraft 的分散生态更难统一管理和抽成，却允许很多东西在官方产品边界之外发展。
+
+两条路线都形成了巨大生态，只是回答了不同的问题。
+
 ## 三条值得并列观察的空间分叉
 
 还有三款游戏不适合被强行写成 Minecraft 的“直系后代”，却特别适合放在这里做设计对照。因为它们都继续追问了 Minecraft 最基础的一件事：**如果世界可以被玩家直接修改，这件事还能往哪里走？**
@@ -169,74 +237,6 @@ Rising World、Enshrouded 和 Teardown 因而不需要被证明是 Minecraft 的
 | Teardown | 空间本身可以被破坏 | 结构破坏、材料感与物理模拟 | 性能、复杂度与可预测性 |
 
 它们把同一个问题拆成了三个方向：**表现、作者性、物理。** 这三项后来也会成为第四卷 Reinvention 最值得重新组合的材料。
-
-## Luanti：把“可改”推进到引擎层
-
-Luanti 的路线又不同。
-
-它最初叫 Minetest。项目自己在 2024 年改名时非常坦率地回顾：创始人 celeron55 一开始确实是在 Minecraft Alpha 之后尝试做类似实验，但十多年后，项目已经从一个“像 Minecraft 的游戏”逐渐变成一个可以承载不同体素游戏、Mod 和脚本的开源平台。[^luanti-rename]
-
-改名本身就很能说明这次转变。
-
-Minetest 这个名字长期让外界先问“是不是 Minecraft 克隆”；Luanti 则希望把注意力放到 creation 和 Lua 上。官方今天把它定义为一个用于各种体素游戏的 game engine / platform，而不只是某一款默认游戏。[^luanti-docs]
-
-如果说 Minecraft 的模组生态是在一个具体游戏周围长出第二层作者能力，Luanti 则把这件事进一步提前：
-
-> **引擎本身就把“做另一款游戏”当作正常用法。**
-
-玩家可以安装不同游戏和 Mod，开发者可以使用 Lua API 写内容，平台还提供统一内容浏览器。这让它和 Minecraft Java Modding 很像，却又少了一层必须围绕 Mojang 原版规则工作的约束。
-
-代价也同样明显：平台能力并不会自动产生一个和 Minecraft 同等规模的默认世界、玩家文化或内容入口。
-
-Luanti 因此是一个特别好的反例：**开放性可以被重新实现，生态规模却不是一个 API 特性。**
-
-## Hytale：服务器经验并不会自动变成独立游戏
-
-Hytale 是这几条谱系里最戏剧性的一条。
-
-它来自 Hypixel 背后的团队。Hypixel 已经证明，他们非常擅长在 Minecraft 服务器上做地图、小游戏、运营和大规模多人内容。2018 年公开 Hytale 时，项目希望把沙盒 RPG、多人服务器、创作工具和 Modding 能力放进一款独立游戏。
-
-这使它天然会被拿来和 Minecraft 比较。
-
-但 Hytale 的开发史也提醒我们：**会在既有游戏上创造内容，和从头维护一整套引擎、客户端、工具链与产品，并不是同一种工作。**
-
-项目后来经历长期开发、引擎重写、Riot 收购与 2025 年取消。随后原始创始团队重新买回 Hytale，放弃那次跨平台引擎重写，回到较早的代码基础，并在 2026 年 1 月 13 日把游戏以真正意义上的 Early Access 形式交给玩家。官方自己也明确提醒，当前版本仍然不完整、粗糙，许多功能缺失。[^hytale-ea]
-
-这段经历不适合被拿来证明“Hytale 失败了”——它现在已经真正可以被玩家使用和继续观察。
-
-反而更值得看到它暴露出的工程尺度：一款沙盒如果同时想要冒险内容、多人、服务器、Modding、创作工具和跨平台，就不是“把 Minecraft 加强一下”那么简单。这些能力彼此之间会形成巨大的技术和产品耦合。
-
-有趣的是，2026 年 Early Access 的 Hytale 又回到一种非常早期 Minecraft 式的状态：游戏还没完成，创作者和服务器作者已经被邀请在第一天进入。[^hytale-ea]
-
-它最终会长成什么，现在还不适合替它下结论。
-
-## Roblox：不是 Minecraft 后代，却是最重要的 UGC 对照
-
-Roblox 常常和 Minecraft 放在一起，因为两者都拥有大量年轻玩家、多人社交与用户创作。
-
-但把 Roblox 称作 Minecraft-like 并不准确。Roblox 早于 Minecraft，并不是从体素生存游戏发展出来的。
-
-它更适合回答另一个问题：**如果一开始就把“玩家创作内容”作为平台核心，而不是让创作生态在游戏周围慢慢长出来，会发生什么？**
-
-Roblox 把创作工具、内容发布、账号、推荐、虚拟货币和创作者收入放进同一套平台。创作者在 Roblox Studio 中制作体验，用户在平台内发现和消费这些体验，符合条件的创作者还可以通过 Developer Exchange 把 Earned Robux 兑换成法币。[^roblox-devex]
-
-这和 Minecraft Java 的路径差异很大。
-
-Minecraft 的 Mod、服务器、整合包和工具链长期分散在 Mojang 官方之外；Roblox 则从产品结构上就更接近一个统一的创作与分发平台。
-
-| | Minecraft Java 生态 | Roblox |
-| --- | --- | --- |
-| 基础对象 | 一款长期更新的游戏 | 承载大量体验的平台 |
-| 创作工具 | Mod Loader、插件、地图工具、第三方 IDE 等分散存在 | Roblox Studio 是官方核心工具 |
-| 分发 | 社区网站、服务器地址、第三方平台并存 | 平台内发现与发布 |
-| 支付 | 多数交易发生在不同平台与服务器里 | Robux / DevEx 统一在平台体系中 |
-| 作品与底层关系 | 创作通常仍依赖 Minecraft 本体规则 | 每个体验可以拥有非常不同的玩法 |
-
-这不是说 Roblox“更平台”、所以一定更先进。
-
-统一平台让发现、支付和创作者商业化更直接，也意味着创作者更依赖平台政策、推荐系统和官方工具。Minecraft 的分散生态更难统一管理和抽成，却允许很多东西在官方产品边界之外发展。
-
-两条路线都形成了巨大生态，只是回答了不同的问题。
 
 ## Minecraft 真正影响了哪些东西
 
@@ -364,3 +364,5 @@ Terraria 争夺的是一部分探索与冒险时间；Vintage Story 面向更喜
 [^hytale-ea]: Hypixel Studios 于 2020 年被 Riot Games 收购；2025 年开发被取消后，原始创始团队重新买回 Hytale，并宣布放弃此前的跨平台重写、回到旧代码基础。Hytale 于 2026 年 1 月 13 日正式进入 Early Access，官方同时强调当前版本仍不完整，并邀请 Modder、服主和创作者从早期参与。见 <https://hytale.com/news/2020/4/announcement-faq-april-16-2020>、<https://hytale.com/news/2025/11/hytale-is-saved>、<https://hytale.com/news/2025/11/hytale-early-access-january-13-2026>、<https://hytale.com/news/2026/1/hytale-is-finally-here>。
 
 [^roblox-devex]: Roblox Developer Exchange（DevEx）允许符合条件的创作者把 Earned Robux 兑换成法币，体现了创作、支付与分成被纳入同一平台体系。当前规则见 Roblox Creator Hub：<https://create.roblox.com/docs/production/monetization/developer-exchange>。
+
+[executed on device: DESKTOP-9K2FEID (2ac0db25-d0d8-41a6-9056-faf06c5230c3)]

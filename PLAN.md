@@ -575,10 +575,10 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
   1. “Minecraft-like”混合了多种不同亲缘：机制启发、类型分叉、模组出走、引擎平台与 UGC 对照
   2. Terraria：挖掘 / 合成如何走向更明确的冒险与进度
   3. Vintage Story：从 Minecraft Modding 的限制出发，走向更密模拟与独立引擎
-  4. 三条空间分叉作为设计对照，而非强行证明血缘：Rising World 把开放沙盒推向写实建造；Enshrouded 把可塑地形嵌进手工 RPG 世界；Teardown 把可修改空间推进到结构破坏与物理模拟
-  5. Luanti：从 Minetest 的克隆起点演化成开源体素游戏 / 创作平台
-  6. Hytale：从 Hypixel 服务器经验走向独立沙盒 RPG 与创作工具；以 2026 Early Access 为当前状态，不提前下结论
-  7. Roblox：不是 Minecraft 后代，而是“如果 UGC 从一开始就平台化”的重要对照
+  4. Luanti：从 Minetest 的克隆起点演化成开源体素游戏 / 创作平台
+  5. Hytale：从 Hypixel 服务器经验走向独立沙盒 RPG 与创作工具；以 2026 Early Access 为当前状态，不提前下结论
+  6. Roblox：不是 Minecraft 后代，而是“如果 UGC 从一开始就平台化”的重要对照
+  7. 三条空间分叉作为设计对照，而非强行证明血缘：Rising World 把开放沙盒推向写实建造；Enshrouded 把可塑地形嵌进手工 RPG 世界；Teardown 把可修改空间推进到结构破坏与物理模拟
   8. 产业影响具体化：survival crafting 语法、程序生成世界、运行时建造、UGC 不必先有官方编辑器
   9. “下一个 Minecraft”为什么难：玩家投入、生态时间、品牌入口都具有累积性；同时承认后来者不必以取代 Minecraft 为成功标准
 - **验收**：不要写成游戏排名或“后来者失败史”；不要把 Roblox 写成唯一真正分叉，也不要用“媒介只有一个座位”解释一切；历史状态（尤其 Hytale）以当前可核查事实为准
