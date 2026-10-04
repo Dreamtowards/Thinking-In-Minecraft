@@ -8,7 +8,7 @@ Minecraft 成功以后，“像 Minecraft”很快变成一种方便、也很粗
 
 只要画面里有方块、挖掘、合成、程序生成或多人建造，一款游戏就可能被贴上 Minecraft-like 的标签。这个标签对商店分类很有用，对理解游戏却常常没什么帮助。
 
-Terraria、Vintage Story、Luanti、Hytale 和 Roblox 都可以和 Minecraft 放在同一章讨论，但原因完全不同：有的继承挖掘与生存，有的从模组文化出走，有的直接把“可改的体素世界”做成引擎，有的从大型 Minecraft 服务器经验出发，也有的根本不是 Minecraft 后代，却提供了另一种 UGC 平台答案。
+Terraria、Vintage Story、Rising World、Enshrouded、Teardown、Luanti、Hytale 和 Roblox 都可以和 Minecraft 放在同一章讨论，但原因完全不同：有的继承挖掘与生存，有的从模组文化出走，有的继续追问“可修改空间还能怎样表现”，有的直接把体素世界做成引擎，有的从大型 Minecraft 服务器经验出发，也有的根本不是 Minecraft 后代，却提供了另一种 UGC 平台答案。
 
 所以这一章不排“谁更像、谁更强”。
 
@@ -25,6 +25,7 @@ Terraria、Vintage Story、Luanti、Hytale 和 Roblox 都可以和 Minecraft 放
 - 继承**挖掘、采集与合成**，但做成更明确的冒险游戏；
 - 继承**可修改的体素世界**，但把模拟密度做得更高；
 - 继承**模组与脚本能力**，干脆把游戏做成创作引擎；
+- 保留**可修改空间**，却把视觉、RPG 世界或物理破坏推向另一种表现；
 - 继承**服务器和社区玩法**，再把它重做成独立产品；
 - 或者根本不继承体素，而是解决同一个更大的问题：怎样让玩家也成为内容生产者。
 
@@ -36,6 +37,9 @@ flowchart LR
 
   MC --> TE["Terraria<br/>挖掘 + 合成 → 冒险与进度"]
   MC --> VS["Vintage Story<br/>体素生存 → 更密的模拟"]
+  MC -.-> RW["Rising World<br/>开放沙盒 → 写实建造"]
+  MC -.-> EN["Enshrouded<br/>可塑地形 → 手工 RPG 世界"]
+  MC -.-> TD["Teardown<br/>可破坏空间 → 物理破坏"]
   MC --> LU["Luanti<br/>可改世界 → 开源创作平台"]
   MC --> HY["Hytale<br/>服务器经验 → 沙盒 RPG + 创作工具"]
 
@@ -44,6 +48,9 @@ flowchart LR
 
   TE --> Q["后来者不必成为“下一款 Minecraft”"]
   VS --> Q
+  RW --> Q
+  EN --> Q
+  TD --> Q
   LU --> Q
   HY --> Q
   RB --> Q
@@ -86,6 +93,82 @@ Vintage Story 最明显的分叉是模拟密度。
 更密的模拟会给玩家更多需要理解和准备的因果，同时也会提高学习成本、节奏和系统依赖。Minecraft 的简化与 Vintage Story 的细化，是两种不同的沙盒取舍。
 
 所以 Vintage Story 最值得继承的历史意义，不是“Minecraft 玩家终于做出了完整版 Minecraft”，而是：**模组生态能够成为独立游戏的研发前史。**
+
+## 三条值得并列观察的空间分叉
+
+还有三款游戏不适合被强行写成 Minecraft 的“直系后代”，却特别适合放在这里做设计对照。因为它们都继续追问了 Minecraft 最基础的一件事：**如果世界可以被玩家直接修改，这件事还能往哪里走？**
+
+### Rising World：如果开放沙盒变得更写实
+
+Rising World 保留了非常熟悉的一组沙盒承诺：世界可以修改、支持单人和多人、建筑可以保存成蓝图，游戏还提供专门的 Plugin API。官方甚至直接把“Modifiable World”列为核心特性，强调玩家看到的世界都可以改变。 [^rising-world]
+
+但它没有坚持 Minecraft 的立方体视觉语言。
+
+新版建筑系统允许构件自由缩放、移动和旋转，也提供更细的吸附工具；地形和光照则明显朝更写实、更沉浸的方向发展。 [^rising-building] 这让 Rising World 成为一个很有意思的对照：**可修改世界不一定必须看起来像方块世界。**
+
+它的技术史甚至比设计本身更值得注意。
+
+Rising World 原本有一套 Java 版本，后来开发者决定迁移到 Unity，并趁机重写大量机制、世界生成、网络和表现系统。2025 年，新版本正式替代旧 Java 版成为主版本；开发者明确表示，这不是简单移植，而是借换引擎重新制作大量系统。旧世界也无法直接和新世界兼容。 [^rising-rewrite]
+
+这几乎是“现代化一个长期沙盒”的缩影：更好的光照、地形、物理和工具并不是免费升级，底层重写会直接碰到存档、插件与旧玩家留下的历史。
+
+新版又重新建立了 Plugin API，而且插件主要在服务端执行，客户端不必安装同一份插件。 [^rising-plugin] 这说明它并没有因为追求现代画面就放弃“让外部作者继续扩展世界”这条线。
+
+Rising World 因此很适合回答一个问题：
+
+> **Minecraft 式开放沙盒如果保留“世界属于玩家”，但把建筑表达、渲染和技术栈现代化，会付出什么代价？**
+
+### Enshrouded：可塑地形遇到手工设计的 RPG 世界
+
+Enshrouded《雾锁王国》走的是另一条路。
+
+官方把它定义为一款发生在**手工打造的大型世界**中的轻度生存 Action RPG，同时又明确强调玩家可以通过 **voxel terraforming** 改变地形，并使用体素建筑系统修建大型基地。 [^enshrouded]
+
+这两个条件放在一起，本身就形成了 Minecraft 很少正面面对的矛盾：
+
+> **如果世界既是作者设计的关卡，又是玩家可以挖掉和重建的材料，作者怎样保住自己需要存在的东西？**
+
+Enshrouded 的答案并不是“所有东西都能拆”。
+
+世界设计团队公开解释过，一些 Ancient Structures 会被故意设成玩家无法拆除或修改，因为开发者需要保留这些地点，未来继续填充古代文明的剧情与探索内容。 [^enshrouded-world]
+
+这是一个非常值得写进 Minecraft 谱系之外的设计选择。
+
+Minecraft 更习惯让世界规则保持一致，然后接受玩家把很多东西拆掉；Enshrouded 则会在可塑地形中保留**作者权限更高的区域**。这样可以得到更强的叙事、关卡和视觉构图，却也意味着“世界完全属于玩家”不再是最高原则。
+
+因此它不是“画面更好的 Minecraft”，而是在回答一个不同的问题：
+
+> **体素自由度能不能和手工 RPG 世界同时成立？如果能，边界应该画在哪里？**
+
+### Teardown：把可修改空间推进到物理破坏
+
+Teardown 又把问题往完全不同的方向推了一步。
+
+它没有 Minecraft 的采矿—合成—生存循环，也不需要证明自己属于 Minecraft-like。它值得放在这里，是因为它把“世界由可修改的小单位组成”这件事推到了**物理和破坏**本身。
+
+官方 FAQ 说明，Teardown 使用专门为游戏开发的 voxel physics / graphics engine；场景不是传统多边形渲染，ray tracing 是核心体素渲染器的一部分，不能关闭。 [^teardown] 同时，游戏大量依赖物理模拟，破坏后的形状会真正参与后续的碰撞和运动。
+
+这让体素的意义发生了变化。
+
+在 Minecraft 里，方块首先是一种**操作语言**：挖掉一个、放上一个，世界由离散单位组成，玩家很容易理解。
+
+在 Teardown 里，体素更像一种**材料语言**：墙可以被打穿，结构可以失去支撑，碎片和剩余部分会参与物理。玩家面对的不是“这个方块还能不能采集”，而是“我要怎样改变这栋建筑的结构”。
+
+Teardown 也拥有 Sandbox、Creative 和 Steam Workshop Modding；社区能够继续扩展工具、地图和破坏玩法。 [^teardown]
+
+所以它提供了一个对第四卷尤其重要的提醒：
+
+> **“更现代的 Minecraft”如果只理解成更高分辨率的体素，并没有走多远。真正困难的是：当世界具有更连续的破坏、结构和物理以后，Minecraft 那种简单、可预测、低成本的修改语言还能不能保住？**
+
+Rising World、Enshrouded 和 Teardown 因而不需要被证明是 Minecraft 的后代。它们更像三场实验：
+
+| 方向 | 保留了什么问题 | 把什么推得更远 | 新的代价 |
+| --- | --- | --- | --- |
+| Rising World | 世界可以长期被玩家塑造 | 写实表现、精细建筑、现代工具链 | 重写、存档与插件兼容 |
+| Enshrouded | 地形和建筑可以被改变 | 手工 RPG 世界、战斗、叙事与视觉构图 | 必须限制一部分玩家修改权 |
+| Teardown | 空间本身可以被破坏 | 结构破坏、材料感与物理模拟 | 性能、复杂度与可预测性 |
+
+它们把同一个问题拆成了三个方向：**表现、作者性、物理。** 这三项后来也会成为第四卷 Reinvention 最值得重新组合的材料。
 
 ## Luanti：把“可改”推进到引擎层
 
@@ -237,7 +320,7 @@ Terraria 没有因为没有成为 Minecraft 而失败；Vintage Story 的价值�
 
 Minecraft 的影响越大，“竞争”这个词反而越难定义。
 
-Terraria 争夺的是一部分探索与冒险时间；Vintage Story 面向更喜欢深度模拟的人；Hytale 想同时做沙盒 RPG 和创作者生态；Luanti 更接近基础设施；Roblox 则在 UGC 平台层面争夺创作者和年轻玩家的时间。
+Terraria 争夺的是一部分探索与冒险时间；Vintage Story 面向更喜欢深度模拟的人；Rising World、Enshrouded 和 Teardown 分别把可修改空间推向写实建造、手工 RPG 世界和物理破坏；Hytale 想同时做沙盒 RPG 和创作者生态；Luanti 更接近基础设施；Roblox 则在 UGC 平台层面争夺创作者和年轻玩家的时间。
 
 它们并不都在同一条赛道。
 
@@ -253,12 +336,26 @@ Terraria 争夺的是一部分探索与冒险时间；Vintage Story 面向更喜
 
 ## 这一章留下什么
 
-- **爱好者**：一款“很像 Minecraft”的游戏并不需要取代 Minecraft 才有价值。Terraria、Vintage Story、Luanti、Hytale 与 Roblox 最有意思的地方，恰恰是它们从不同方向把某些可能性继续推远。
+- **爱好者**：一款“很像 Minecraft”的游戏并不需要取代 Minecraft 才有价值。Terraria、Vintage Story、Rising World、Enshrouded、Teardown、Luanti、Hytale 与 Roblox 最有意思的地方，恰恰是它们从不同方向把某些可能性继续推远。
 - **开发者**：不要把 Minecraft 的成功压缩成体素、合成和第一夜。可迁移的是某些结构——可修改世界、低门槛动词、程序内容、多人和外部创作；不可直接打包交付的是十几年积累出来的存档、工具链、社区知识、内容网络和品牌入口。
 
 [^ars-clones]: Andrew Webster，《Living under a blocky shadow: The world of Minecraft clones》，Ars Technica，2011 年 7 月 27 日。文章记录了早期 Minecraft 模仿与影响讨论，也包含 Terraria 开发者与 Notch 对“启发”和“克隆”的不同看法。见 <https://arstechnica.com/gaming/2011/07/living-under-a-blocky-shadow-the-world-of-minecraft-clones/>。
 
 [^vs]: Vintage Story 官方 About 页面回顾：开发者先制作 Minecraft 模组与总转换 Vintagecraft，随后因第三方 Mod API 限制以及对独立体验的追求，于 2016 年开始自研引擎。见 <https://www.vintagestory.at/aboutus.html/>。
+
+[^rising-world]: Rising World 官方主页把“Modifiable World”、多人、蓝图、免费 Dedicated Server 与 Plugin API 列为核心特性，并强调世界可以被玩家自由修改。见 <https://www.rising-world.net/>。
+
+[^rising-building]: Rising World 新版建筑系统允许构件自由缩放、移动和旋转，并提供模块化吸附；新版也重做了地形、光照等表现。见官方更新 <https://forum.rising-world.net/thread/11276-update-0-2-building-update/> 与 <https://forum.rising-world.net/thread/13977-update-0-8-1-new-version-en/>。
+
+[^rising-rewrite]: 开发者在 2019 年宣布迁移到 Unity，理由包括更好的图形、光照、物理、多平台能力，并借机重写世界生成、网络、UI 等系统；2025 年新版正式替代旧 Java 版成为主版本。旧 Java 世界与新版本世界不直接兼容。见 <https://forum.rising-world.net/thread/10171-the-future-of-rising-world-faq/>、<https://forum.rising-world.net/thread/12060-important-notice-for-server-hoster/>、<https://forum.rising-world.net/thread/13977-update-0-8-1-new-version-en/>。
+
+[^rising-plugin]: Rising World 新 Plugin API 主要在服务端执行，客户端进入插件服务器时不需要安装对应插件，并由游戏处理客户端同步。见 <https://forum.rising-world.net/thread/12495-update-0-6-5-plugin-api-en/>。
+
+[^enshrouded]: Enshrouded 官方将游戏描述为发生在广阔手工世界中的轻度生存 Action RPG，同时明确提供 voxel terraforming 与 voxel-based building。见 <https://enshrouded.com/en-US>。
+
+[^enshrouded-world]: Enshrouded 世界设计团队解释，一部分 Ancient Structures 会被设为玩家无法拆除或修改，以便未来继续补充古代文明的剧情与探索内容。见官方 AMA 回顾：<https://enshrouded.com/en-US/news/enshrouded-world-design-team-reddit-ama-recap>。
+
+[^teardown]: Teardown 官方 FAQ 说明游戏使用专门开发的 voxel physics / graphics engine，不采用传统多边形渲染，ray tracing 是核心体素渲染器的一部分；游戏提供 Sandbox、Creative 与 Steam Workshop Modding。见 <https://www.teardowngame.com/faq.html>。
 
 [^luanti-rename]: Luanti 官方在 2024 年 10 月宣布从 Minetest 改名，并回顾项目最初确实源自“做一个 Minecraft clone”的实验，后来逐渐成为拥有游戏、Mod、脚本 API 和内容库的平台。见 <https://blog.luanti.org/2024/10/13/Introducing-Our-New-Name/>。
 
