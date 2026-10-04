@@ -31,13 +31,11 @@ tags: [voxel, world-design, building, sandbox]
 
 Minecraft 把这几件事结合得非常紧，但它们并不是天然绑定的。
 
-体素只是一类空间表示方式。体素数据可以渲染成平滑地形，也可以只作为破坏和碰撞的内部结构；反过来，一个看起来很“方块”的游戏也未必允许玩家随意改变地形。
+首先，**体素表示不等于方块外观。** 体素描述的是空间怎样被记录；最终画面可以保留明显的格子，也可以经过表面重建变成更平滑的地形。Teardown 同样使用专门开发的体素物理与图形引擎，但它把这些体素更多用于结构破坏、材料和物理，而不是 Minecraft 那种逐格采集与长期建造。[^teardown]
 
-《雾锁王国》就是很好的对照。它同时拥有手工设计的大世界、体素地形改造和基于体素的建造，但开发团队仍然会把一部分 Ancient Structures 设为不可拆除，以便保留未来的剧情与探索内容。[^enshrouded][^enshrouded-world] 这说明**“世界由可编辑的数据表示”并不等于“玩家拥有所有空间的修改权”。**
+其次，**世界可以被编辑，也不等于玩家能修改所有地方。** 《雾锁王国》拥有体素地形改造和基于体素的建造，同时又是一个手工设计的 RPG 世界；开发团队会把一部分 Ancient Structures 设为不可拆除，以保留未来的剧情与探索内容。[^enshrouded][^enshrouded-world] 技术上“这里可以表示变化”，和设计上“这里允许玩家改变”，仍然是两回事。
 
-同样，Teardown 使用专门为游戏开发的体素物理与图形引擎，核心玩法却更偏向结构破坏、路线规划和物理连锁，而不是 Minecraft 那种逐格采集与长期建造。[^teardown]
-
-所以如果要理解 Minecraft，首先应该把“它用了什么数据结构”放到一边，先看玩家真正面对的是什么。
+所以如果要理解 Minecraft，不能只问它用了什么数据结构。更重要的是：**玩家看见什么、一次能改多大、哪些地方允许改，以及这些改动会不会长期留下来。**
 
 ## 方块首先让世界变得容易指认
 
@@ -102,9 +100,11 @@ Minecraft 的网格很粗。
 
 如果把空间切得更细，表达能力当然会增加，但操作成本也会随之变化。更精细的系统往往需要更强的选择、复制、缩放、旋转、吸附和批量编辑工具。
 
-Rising World 就走向了这个方向。它的新建筑系统允许构件自由缩放、移动和旋转，并提供更强的 snapping，以便创建圆形甚至更有机的结构。[^rising] 这带来了比固定方块更大的造型自由，同时也意味着**建造工具本身开始承担更多复杂度**。
+Minecraft 社区自己就做过这种实验。**Chisels & Bits** 允许玩家把原本的大方块切成更小的 bits，再把这些小块重新组合成更细的楼梯、屋顶、柱子或装饰。[^chisels-bits] 它仍然工作在 Minecraft 的世界里，却明显改变了“建造一次需要处理多少细节”这件事：表达能力提高了，玩家也需要更细的工具和更长的操作过程。
 
-Minecraft 自己也在说明同一件事。Bedrock Editor 提供多方块选择、画笔、复制、移动、变形、Undo / Redo 等工具，因为当创作规模变大以后，“一次放一块”并不总是最合适的工作方式。[^minecraft-editor]
+Rising World 则把这条路继续推向自由缩放、移动、旋转与 snapping。[^rising] 这带来了比固定方块更大的造型自由，同时也意味着**建造工具本身开始承担更多复杂度**。
+
+Minecraft 官方自己的 Bedrock Editor 又从另一方向说明了同一件事：它提供多方块选择、画笔、复制、移动、变形、Undo / Redo 等工具，因为当创作规模变大以后，“一次放一块”并不总是最合适的工作方式。[^minecraft-editor]
 
 所以这里并不存在简单的：
 
@@ -215,5 +215,7 @@ Minecraft 选择的是一种特别强调可读性、直接编辑和长期累积�
 [^rising]: JIW-Games / red51，[《Update 0.8.1: New Version》](https://forum.rising-world.net/thread/13977-update-0-8-1-new-version-en/)，2025 年。开发者说明新版建筑构件可以自由缩放、移动、旋转，并提供更强的 snapping 工具；本文用它对照固定网格与更复杂建造工具之间的取舍。
 
 [^teardown]: Tuxedo Labs，[Teardown FAQ](https://www.teardowngame.com/faq.html)，2026 年 10 月 4 日访问。官方说明游戏使用专门开发的 voxel physics / graphics engine，不采用传统多边形渲染，并大量依赖物理模拟；本文只用它说明体素表示可以服务完全不同的交互目标。
+
+[^chisels-bits]: Chisels & Bits 项目，[GitHub 仓库](https://github.com/ChiselsAndBits/Chisels-and-Bits)，2026 年 10 月 4 日访问。项目说明它允许玩家把组成世界的大方块切成更小的 bits，再按需要重新放置和组合，用于更细的楼梯、屋顶、柱子等造型。
 
 [^minecraft-editor]: Mojang Studios，[Minecraft Creator Tools](https://www.minecraft.net/en-us/creator/tools)，2026 年 10 月 4 日访问。官方列出的 Bedrock Editor 能力包括多方块选择、画笔、Undo / Redo、复制与变形等；这里用于说明大规模创作往往需要高于“逐块放置”的工具层。
