@@ -16,6 +16,7 @@ tags: [modding, player-authorship, community]
 
 - `/tags`：标签计数、搜索与已标记章节。
 - `/tags/[tag]`：同一标签的跨卷章节，例如 `/tags/modding`；URL 对标准化后的标签进行编码，不删除标点。
+- `/map?view=tags`：从 Elytra 移植的标签节点地图，支持搜索、拖动、缩放、聚焦与相关文章。总览显示至少出现在两篇文章中的标签，单次标签可从侧栏选择。用 `&tag=modding` 或 `&article=/history/mods-as-authors` 分享当前选择，浏览器前进 / 后退会恢复选择。
 - 文章标题下方：可点击标签。首页和文档导航均提供标签入口。
 
 聚合范围是当前中文版的序言、四卷、番外、附录和全书目录，排除 `en`、`v2` 等其他版本，防止重复计数。添加或修改标签后，开发模式自动更新，生产站点需要重新构建发布。
@@ -31,3 +32,5 @@ tags: [modding, player-authorship, community]
 查询参数需用 `URLSearchParams` 编码，例如 `c++` 中的加号。接口仅输出可序列化的元数据，不包含 MDX 正文或组件。
 
 共享标签表示主题关联。未来若加入前置阅读、深入阅读或反例关系，应另行记录关系类型与理由。
+
+地图通过 `lib/knowledge-map.ts` 的 `buildKnowledgeMapData(getTagData())` 复用标签索引。节点颜色由目录中的卷归属决定；跨卷标签按出现最多的卷配色。标签共现线表示同一文章同时使用两个标签，文章与标签之间的虚线表示归属，不表示前置阅读或因果关系。
