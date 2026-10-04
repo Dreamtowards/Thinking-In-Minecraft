@@ -1,5 +1,6 @@
 import { CodeBlock, Pre } from 'fumadocs-ui/components/codeblock';
 import { renderMermaidSVG } from 'beautiful-mermaid';
+import { MermaidViewer } from './mermaid-viewer';
 
 function normalizeChart(chart: string) {
   return chart.replaceAll('\\n', '\n').trim();
@@ -29,12 +30,12 @@ export function Mermaid({ chart }: { chart: string }) {
       }),
     );
 
-    return (
-      <div
-        className="mermaid-diagram my-6 overflow-x-auto rounded-xl border border-fd-border bg-fd-card p-4 [&_svg]:mx-auto [&_svg]:h-auto [&_svg]:max-w-full"
-        dangerouslySetInnerHTML={{ __html: svg }}
-      />
-    );
+    const dimensions = svg.match(/<svg\b[^>]*\bwidth="([\d.]+)"[^>]*\bheight="([\d.]+)"/);
+    if (!dimensions || Number(dimensions[1]) <= 0 || Number(dimensions[2]) <= 0) {
+      throw new Error('Mermaid SVG has no dimensions');
+    }
+
+    return <MermaidViewer svg={svg} width={Number(dimensions[1])} />;
   } catch {
     return (
       <CodeBlock title="Mermaid">
