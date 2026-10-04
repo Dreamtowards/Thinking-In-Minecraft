@@ -18,7 +18,7 @@ Status: all entries below are ✔ = adapted from the reviewed Chinese edition an
 - `history/media-education.mdx` — ✔
 - `history/acquisition.mdx` — ✔
 - `history/java-bedrock.mdx` — ✔
-- `history/version-politics.mdx` — ✔
+- `history/version-evolution.mdx` — ✔
 - `history/revenue.mdx` — ✔
 - `history/grey-economy.mdx` — ✔ (as "The Grey Economy", matching inbound links)
 - `history/competition.mdx` — ✔

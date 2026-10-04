@@ -93,7 +93,7 @@ docs/
 │   ├── media-education.mdx    # 06 影像与一代人的媒介
 │   ├── acquisition.mdx        # 07 微软收购
 │   ├── java-bedrock.mdx       # 08 两条产品线
-│   ├── version-politics.mdx   # 09 版本政治与更新哲学
+│   ├── version-evolution.mdx  # 09 版本演进与更新策略
 │   ├── revenue.mdx            # 10 收入结构
 │   ├── grey-economy.mdx       # 11 模组、服务器与灰色经济
 │   ├── competition.mdx        # 12 竞争、模仿与产业影响
@@ -235,7 +235,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
     "---第二部 · 成为文化（2011–2014）---",
     "mods-as-authors", "servers", "media-education",
     "---第三部 · 平台化与治理（2014–）---",
-    "acquisition", "java-bedrock", "version-politics",
+    "acquisition", "java-bedrock", "version-evolution",
     "---第四部 · 产业与遗产---",
     "revenue", "grey-economy", "competition", "heritage"
   ]
@@ -509,9 +509,9 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
   8. 分裂的真正重量：难合并的不只是代码，而是两边各自累积的用户、作品与平台约束
 - **验收**：必须说明两个产品线不是换皮；不要写成功能差异清单；不要把 Java / Bedrock 简化成“自由 vs 商业”“高级 vs 简化”；区分跨平台需求、技术实现、社区生态和商业分发四个层级
 
-#### `history/09` 版本政治与更新哲学
+#### `history/09` 版本演进与更新策略
 
-- 文件：`docs/history/version-politics.mdx` · 两类 · ▤
+- 文件：`docs/history/version-evolution.mdx` · 两类 · ▤
 - **简介**：Minecraft 的更新不只是在旧游戏上继续加内容。每一次改规则、重做地形或改变发布节奏，都要同时面对旧存档、旧服务器、旧知识和不同世代玩家留下的惯性。
 - **要回答**：一个存在十几年、玩家会长期保存世界与玩法习惯的游戏，怎样继续更新而不把过去全部推翻？
 - **交叉**：`design/06`、`design/15`、`impl/02`、`impl/08`
