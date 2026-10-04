@@ -23,6 +23,39 @@ tags: [monetization, realms, marketplace, licensing, ip]
 
 这张表比“买断还是免费”更接近 Minecraft 今天真正的收入结构。
 
+```mermaid
+flowchart LR
+  Core["Minecraft<br/>核心产品与品牌"]
+
+  Player["玩家 / 家庭"]
+  School["学校 / 机构"]
+  Region["区域发行伙伴"]
+  Media["影视 / 玩具 / 出版 / 乐园"]
+
+  Game["客户端 / Game Pass<br/>进入游戏"]
+  Realms["Realms<br/>托管与便利"]
+  Market["Marketplace<br/>社区内容分发"]
+  Edu["Minecraft Education<br/>年度许可与课堂能力"]
+  Local["本地版本<br/>发行与运营"]
+  IP["IP 授权<br/>客户端之外的商品与体验"]
+
+  Player --> Game --> Core
+  Player --> Realms --> Core
+  Player --> Market --> Core
+  School --> Edu --> Core
+  Region --> Local --> Core
+  Media --> IP --> Core
+
+  Core -. "同一套世界、品牌与文化识别" .-> Game
+  Core -.-> Realms
+  Core -.-> Market
+  Core -.-> Edu
+  Core -.-> Local
+  Core -.-> IP
+```
+
+这张图不是一条从左到右设计好的商业漏斗。Realms、Marketplace、Education、区域发行和 IP 授权来自不同时间、不同需求；它只是把今天围绕 Minecraft 已经形成的几种交易关系放到同一张地图上。
+
 ## 买断仍然是入口，但已经不是全部
 
 2022 年起，Windows PC 上的标准产品变成 **Minecraft: Java & Bedrock Edition for PC**：购买一次，同时获得 Java 和 Bedrock，两款游戏仍然各自独立。[^bundle] 同一产品也可以通过 Game Pass 获得。
