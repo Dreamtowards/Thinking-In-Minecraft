@@ -6,30 +6,30 @@
       "short": "序",
       "english": "Preface",
       "color": "gray",
-      "payoffFan": "先读命题，再决定跳哪一卷。这书不是攻略或年表。",
-      "payoffDev": "原则必须带不可迁移条件。不要从卷四起笔。",
+      "payoffFan": "先知道这本书为什么写、正在追问什么，再从你关心的卷开始。",
+      "payoffDev": "把暂定答案当问题，不当规范；方法页说明不同材料各自能回答什么。",
       "id": "prelude",
       "heading": "总序",
-      "thesis": "Minecraft 未必诞生于完整理论，却在开发与玩家参与中形成了可以被理解的设计思想。",
+      "thesis": "这本书从一份暂定答案出发，但允许历史、设计、技术与重新发明不断修正它。",
       "parts": [
         {
           "title": "总序",
           "span": "",
-          "intent": "划定读者、禁止误读、说明三卷分工。",
+          "intent": "说明作者动机、研究问题与方法；暂定答案可以随着全书推进而修改。",
           "chapters": [
             {
               "id": "prelude/index",
               "title": "前言",
               "audience": "both",
-              "desc": "从历史、设计与技术三个方向理解 Minecraft：它为何能容纳长期生活、意外玩法与持续再开发，以及哪些经验可以迁移。",
-              "question": "这本书研究什么？怎样避免把后见规律冒充创作意图？按什么顺序读？",
+              "desc": "从一份仍想回去的存档出发，说明作者为什么会从玩家、服主一路走到体素沙盒开发，并把“怎么复现 Minecraft”逐渐改问成“真正值得继承的是什么”。",
+              "question": "为什么要写这本书？它和普通 Minecraft 百科、开发教程有什么不同？四卷分别从哪里进入？",
               "sections": [
-                "这本书研究什么",
-                "不是攻略、维基、怀旧、控诉",
-                "设计思想不等于创作者的先验意图",
-                "爱好者要「原来如此」；开发者要原则加不可迁移条件",
-                "路径表",
-                "命题、方法与三卷入口"
+                "从打完末影龙仍有事情可做的具体体验开篇",
+                "从玩家到开发者：小学玩 Minecraft、初中服务器与模组、后来 Java / C++ / Rust / Unity 多次重写体素沙盒",
+                "真正的问题从“怎么实现 Minecraft”变成“什么值得继承”",
+                "明确这不是百科或教程；给出当前暂定答案，但不展开方法论",
+                "四卷地图：历史与商业 / 游戏设计 / 技术实现 / 重新发明；更长的副题留在卷首页",
+                "两类读者的入口与阅读邀请"
               ],
               "tags": [],
               "href": "/prelude",
@@ -37,38 +37,38 @@
             },
             {
               "id": "prelude/thesis",
-              "title": "全书的命题",
+              "title": "这本书想回答什么",
               "audience": "both",
-              "desc": "销量解释不了 Minecraft 是什么。它是能住进去、能玩出设计之外、还能被再开发的系统。三卷证明这句话；第四卷问拿掉 2009 年的凑合之后它还在不在。",
-              "question": "这本书在证明什么？为什么必须分三卷？",
+              "desc": "提出全书真正关心的问题，并给出一份暂定答案：Minecraft 为什么能从一款游戏长成一个长期存在、不断被玩家重新解释的世界？",
+              "question": "我们现在最想弄清什么？“住进去 / 玩出设计之外 / 再开发”这份暂定答案能解释多少，又遗漏了什么？",
               "sections": [
                 "为什么「最畅销」什么都没解释",
-                "回溯性判断不等于创作意图",
-                "总命题：住进去 / 玩出设计之外 / 再开发，各给一个可被玩家反驳的例子",
-                "三卷分工与关系图",
-                "第四卷：思想实验，写在不变量冻结之后",
-                "只读十分钟应带走的一句话"
+                "当前暂定答案：住进去 / 玩出设计之外 / 再开发",
+                "为什么这不是 Notch 的秘密设计文档：意图与结果分开",
+                "四卷不是四次证明，而是四个观察角度",
+                "最先写、最后定稿：允许整本书改变自己的答案",
+                "给读者留下问题，而不是要求相信一句口号"
               ],
-              "tags": [
-                "先写"
-              ],
+              "tags": [],
               "href": "/prelude/thesis",
               "written": true
             },
             {
               "id": "prelude/method",
-              "title": "体例与方法",
+              "title": "我们怎样研究 Minecraft",
               "audience": "both",
-              "desc": "现象开篇、证伪标准、双版本口径，以及不同材料各自能证明什么。区分创作意图、实现机制与长期结果，避免把后见规律写成先验蓝图。",
-              "question": "读者凭什么相信后面的判断？",
+              "desc": "不把熟悉当理解，也不把后见之明写成先验设计。说明玩家经验、历史材料、技术实现与跨游戏比较分别能帮助我们回答什么。",
+              "question": "面对一个已经活了十几年的复杂游戏，我们怎样尽量避免把品味、情怀和后见之明写成“设计真理”？",
               "sections": [
-                "游戏书写的三种失败：百科、攻略、情怀",
-                "现象开篇：从已知场面进入机制",
-                "什么叫可被资深玩家证伪",
-                "默认指 Java 时必须标明；Bedrock 不得一句带过",
-                "材料与证明责任：意图、结果、机制不能互相代替",
-                "不写清单",
-                "最易混的术语：区块、刻、数据包、模组、插件（其余见附录）"
+                "先分清三件事：创作意图 / 实际机制 / 长期结果",
+                "从玩家真正遇到的场面开始，再进入抽象",
+                "不把 Minecraft 的历史写成必然",
+                "Java / Bedrock 只在差异会改变论点时分述",
+                "材料没有统一排名，只有不同用途",
+                "比较用于暴露取舍，不用于排高下",
+                "可迁移原则必须带着前提、代价与反例离开 Minecraft",
+                "明确不写百科、攻略与源码导读",
+                "最重要的一条：允许整本书改主意"
               ],
               "tags": [],
               "href": "/prelude/method",
@@ -86,8 +86,8 @@
       "payoffFan": "把版本、模组、服务器和影像写成可检验的产业史，不是怀旧清单。",
       "payoffDev": "买断、UGC、双引擎、收购与平台化各自解决了什么，以及「下一个 Minecraft」为何极难出现。",
       "id": "v1",
-      "heading": "第一卷 · 历史与商业",
-      "thesis": "成功不是「一个独立游戏卖得好」，而是一种可被社区、平台与资本反复再开发的媒介的形成史。卖的不是通关即弃的内容，是能住进去的系统。",
+      "heading": "第一卷 · 历史：从游戏到世界",
+      "thesis": "一个原本很小的独立游戏，怎样在公开开发、玩家创作、服务器、影像传播、公司化与商业治理中，逐渐变成一种可以长期生活和继续创造的世界？这里既研究成功条件，也研究偶然、冲突和没有被复制出来的部分。",
       "parts": [
         {
           "title": "第一部 · 起源",
@@ -132,7 +132,7 @@
               "id": "history/03",
               "title": "Mojang 成立、Beta 与正式版",
               "audience": "both",
-              "desc": "个人项目变成工作室后，设计权从直觉变成组织。Beta 1.8 是第一次「向游戏收敛」。2011 正式版完成的是仪式，不是系统。一次买断是后来 Marketplace 冲突的底色。",
+              "desc": "个人项目变成工作室后，设计权从直觉变成组织。Beta 1.8 的饥饿与冒险是第一次「向游戏收敛」。2011 正式版完成的是仪式，不是系统。一次买断、无内购，是后来 Marketplace 冲突的底色。",
               "question": "变成工作室之后，设计权发生了什么变化？",
               "sections": [
                 "正式版那天，游戏真的完成了吗",
@@ -194,7 +194,7 @@
               "id": "history/06",
               "title": "影像、教育与一代人的媒介",
               "audience": "fan",
-              "desc": "Let's Play、教程、动画和梦核把 Minecraft 写成儿童与家庭的通用语言。教育版改写了谁的 Minecraft。当传播发生在视频里，正作还需要教什么，就成了设计问题。",
+              "desc": "Let's Play、教程、动画和梦核把 Minecraft 写成儿童与家庭的通用语言。教育版改写了「谁的 Minecraft」。当传播发生在视频里，正作还需要教什么，就成了设计问题。",
               "question": "它如何从游戏变成一代人的通用语言？",
               "sections": [
                 "很多人是在视频里学会玩的",
@@ -228,14 +228,14 @@
                 "产品线扩张：教育、Dungeons、Legends、电影——作为 IP 第二曲线的入口"
               ],
               "tags": [],
-              "href": "/history/acquisition",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "history/08",
               "title": "两条产品线：Java 与 Bedrock",
               "audience": "both",
-              "desc": "从 Pocket Edition 到 Bedrock，跨平台是产品逻辑，功能分裂是品牌债。Marketplace 把 UGC 收成货架，把模组文化留在门外。两个 Minecraft 不是两个皮肤。",
+              "desc": "从 Pocket Edition 到 Bedrock，跨平台是产品逻辑，功能分裂是品牌债。Marketplace 把 UGC 商业化，同时把模组文化排除在外。两个 Minecraft 不是两个皮肤。",
               "question": "为何存在两个 Minecraft，分裂如何变成债？",
               "sections": [
                 "「买一份能玩全部」为何做不到",
@@ -247,14 +247,14 @@
               "tags": [
                 "枢纽"
               ],
-              "href": "/history/java-bedrock",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "history/09",
               "title": "版本政治与更新哲学",
               "audience": "both",
-              "desc": "从「Notch 随手加」到主题版本：快照、实验玩法、数据包成为官方共创接口。「原版纯度」是被更新不断改写的执念。",
+              "desc": "从「Notch 随手加」到主题版本。快照、实验玩法、数据包成为官方共创接口。洞穴与山崖证明生成系统可以当版本卖点。「原版纯度」是被更新不断改写的执念。",
               "question": "官方如何与社区抢定义权？",
               "sections": [
                 "为什么系统更深了，仍有人觉得「不是以前那个游戏」",
@@ -264,8 +264,8 @@
                 "投票与失败实验：治理替代作者直觉"
               ],
               "tags": [],
-              "href": "/history/version-politics",
-              "written": true
+              "href": null,
+              "written": false
             }
           ]
         },
@@ -288,8 +288,8 @@
                 "不能从哪里来：为何模组抽成失败（细节见第 11 章）"
               ],
               "tags": [],
-              "href": "/history/revenue",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "history/11",
@@ -305,8 +305,8 @@
                 "两种 UGC：Marketplace vs 模组"
               ],
               "tags": [],
-              "href": "/history/grey-economy",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "history/12",
@@ -322,14 +322,14 @@
                 "不可复制条件"
               ],
               "tags": [],
-              "href": "/history/competition",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "history/13",
               "title": "作为文化遗产的 Minecraft",
               "audience": "fan",
-              "desc": "版本、存档、服务器和模组比引擎更难保存。当童年变成 IP，品牌管理、审查与创作自由开始摩擦。媒介一旦停止被再开发，就只剩商标。",
+              "desc": "版本、存档、服务器和模组比引擎更难保存。当童年变成 IP，品牌管理、审查与创作自由开始摩擦。媒介一旦停止被再开发，就只剩 IP。",
               "question": "谁来保存世界、模组与服务器？",
               "sections": [
                 "一个旧模组世界现在还打得开吗",
@@ -341,8 +341,8 @@
               "tags": [
                 "结语"
               ],
-              "href": "/history/heritage",
-              "written": true
+              "href": null,
+              "written": false
             }
           ]
         }
@@ -353,8 +353,8 @@
       "short": "游戏设计",
       "english": "Game Design",
       "color": "blue",
-      "payoffFan": "习以为常的机制变成可证伪的判断：创造不是编辑器，红石不是电线。",
-      "payoffDev": "十二条原则，以及抄不走的条件。本卷是全书中轴。",
+      "payoffFan": "把习以为常的方块、动作、生存、红石与多人重新看成彼此咬合的设计关系。",
+      "payoffDev": "得到一份可继续被技术与 Reinvention 检验的候选原则，而不是固定教条。",
       "id": "v2",
       "heading": "第二卷 · 游戏设计",
       "thesis": "深度不来自内容量，而来自极少数规则在体素世界上的组合爆炸。目标外包给玩家；系统做成可被误用的工具。",
@@ -366,22 +366,22 @@
           "chapters": [
             {
               "id": "design/01",
-              "title": "体素作为设计原语",
+              "title": "世界为何由方块构成",
               "audience": "both",
-              "desc": "1 米立方体同时服务建造、导航、战斗与红石，因为空间是离散、可破坏、可放置、可计数的。世界即库存。连续空间更自由，却失去可复述的组合语法。体素不是美术风格，是度量衡。",
-              "question": "1 米立方体凭什么同时服务这么多玩法？",
+              "desc": "从可修改且能留存的世界出发，解释体素表示如何在 Minecraft 中成为可见、可操作的方块语言；对照不同粒度的建造、破坏与雕塑，再讨论跨系统组合、直角美术和模组扩展。",
+              "question": "Minecraft 为什么把地形、建造和多种玩法装置放进相通的空间语言？约一米的尺度与方正外观帮了什么，又限制了什么？",
               "sections": [
-                "「方块游戏」为什么不是贬义",
-                "离散空间：认知负担与表达力；整数坐标",
-                "世界即库存：可破坏、可放置、可计数",
-                "一套度量压进建造 / 导航 / 战斗 / 红石",
-                "对照 GMod、Dreams：连续空间得到什么、失去什么"
+                "世界从场景成为材料：修改权、资源循环和持久留存",
+                "从体素表示到方块语言：数据、可见目标、操作单位与实现例外",
+                "编辑尺度的取舍：Minecraft、雾锁王国、Teardown 与 Dreams 的不同量纲",
+                "地形、水、农作物、红石与设施如何在同一空间语法中组合；Java / Bedrock 的边界",
+                "直角美术、NoCubes 与连接纹理：方格底层不等于单一外观，模组继续改写语法"
               ],
               "tags": [
                 "先写"
               ],
-              "href": "/design/voxel-primitive",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "design/02",
@@ -399,8 +399,8 @@
               "tags": [
                 "先写"
               ],
-              "href": "/design/verbs-feel",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "design/03",
@@ -418,14 +418,14 @@
               "tags": [
                 "先写"
               ],
-              "href": "/design/survival",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "design/04",
               "title": "创造模式不是关卡编辑器",
               "audience": "both",
-              "desc": "生存、创造、冒险、旁观是同一世界的四种权限，不是四个游戏。创造必须寄生于生存规则才有意义。无限资源改变的是建造的社会意义。关卡编辑器是另一类产品。",
+              "desc": "生存 / 创造 / 冒险 / 旁观是同一世界的四种权限，不是四个游戏。创造必须寄生于生存规则才有意义。无限资源改变的是建造的社会意义。关卡编辑器是另一类产品。",
               "question": "四种模式是四种游戏，还是四种权限？",
               "sections": [
                 "为什么创造模式仍像在玩 Minecraft",
@@ -437,8 +437,8 @@
               "tags": [
                 "先写"
               ],
-              "href": "/design/creative-mode",
-              "written": true
+              "href": null,
+              "written": false
             }
           ]
         },
@@ -461,8 +461,8 @@
                 "反 RPG：选择而非缺失"
               ],
               "tags": [],
-              "href": "/design/crafting-inventory",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "design/06",
@@ -478,8 +478,8 @@
                 "「找不到」作为探索燃料"
               ],
               "tags": [],
-              "href": "/design/worldgen",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "design/07",
@@ -497,8 +497,8 @@
               "tags": [
                 "枢纽"
               ],
-              "href": "/design/redstone",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "design/08",
@@ -514,8 +514,8 @@
                 "极限：何时必须写出新系统"
               ],
               "tags": [],
-              "href": "/design/commands-datapacks",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "design/09",
@@ -531,8 +531,8 @@
                 "不能做成动作游戏的原因"
               ],
               "tags": [],
-              "href": "/design/mobs-combat",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "design/10",
@@ -548,8 +548,8 @@
                 "玩家后期：冰道、工厂、服务器活动"
               ],
               "tags": [],
-              "href": "/design/dimensions-endgame",
-              "written": true
+              "href": null,
+              "written": false
             }
           ]
         },
@@ -572,8 +572,8 @@
                 "延迟的多人：种子、模组、影像"
               ],
               "tags": [],
-              "href": "/design/multiplayer",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "design/12",
@@ -589,8 +589,8 @@
                 "2b2t：极限实验，不是猎奇"
               ],
               "tags": [],
-              "href": "/design/who-makes-rules",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "design/13",
@@ -606,8 +606,8 @@
                 "收编原则 + 反例（至少四条）"
               ],
               "tags": [],
-              "href": "/design/mods-as-method",
-              "written": true
+              "href": null,
+              "written": false
             }
           ]
         },
@@ -630,8 +630,8 @@
                 "同一权利：建造 / 红石 / 地图 / 影像"
               ],
               "tags": [],
-              "href": "/design/emergence",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "design/15",
@@ -649,39 +649,27 @@
               "tags": [
                 "枢纽"
               ],
-              "href": "/design/constraints",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "design/16",
-              "title": "可迁移原则清单",
+              "title": "可迁移原则：暂定清单",
               "audience": "dev",
-              "desc": "十二条可带走原则，加上不可复制条件，加上 Minecraft-like 反面教材。卷二收束：能住进去的系统，不是通关即弃的内容。",
-              "question": "开发者到底能拿走什么？",
+              "desc": "把卷二反复出现的设计关系整理成一份**候选原则**，同时列出反例、适用条件与不可复制因素。它是交给卷三和卷四继续检验的中间成果，不是十二条戒律。",
+              "question": "开发者暂时可以带走什么？哪些判断仍需要被历史、实现或 Reinvention 推翻？",
               "sections": [
-                "为什么 Minecraft-like 总是「像但不长」",
-                "十二条原则（必须用这十二条，可改表述不可换核）：",
-                "最小动词，深度来自组合",
-                "世界即库存",
-                "目标外包",
-                "可误用系统",
-                "成长附着于物",
-                "程序内容合同 = 可探索",
-                "约束即深度；不真实可以更好玩",
-                "模式是权限，不是四个游戏",
-                "社会契约是设计的一半",
-                "模组 / 数据驱动是第一公民",
-                "世界比引擎活得更久",
-                "新系统必须增加动词，不增加菜单",
-                "不可复制条件：时机、媒介窗口、二十年工具链、未定义行为被收编为 API",
-                "反面教材：至少三种「抄了皮、丢了骨」的机制类型",
-                "卷二结语"
+                "为什么 Minecraft-like 常常「像但不长」",
+                "从下列候选中整理 8–12 条原则；允许合并、拆分、删除或新增，但每条都要给反例和适用条件：",
+                "不可复制条件：时机、媒介窗口、长期工具链、社区习惯、未定义行为被收编为事实接口",
+                "反面教材：至少三种「抄了皮、丢了骨」的机制类型，也允许反例证明某条候选原则并不普遍",
+                "卷二结语：把这份清单交给卷三与卷四，而不是在这里封口"
               ],
               "tags": [
                 "结语"
               ],
-              "href": "/design/transferable",
-              "written": true
+              "href": null,
+              "written": false
             }
           ]
         }
@@ -717,8 +705,8 @@
                 "高度上限事件：数据模型如何限制设计"
               ],
               "tags": [],
-              "href": "/impl/data-model",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "impl/02",
@@ -734,8 +722,8 @@
                 "版本迁移成本"
               ],
               "tags": [],
-              "href": "/impl/storage",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "impl/03",
@@ -751,8 +739,8 @@
                 "确定性、可复现、实验性生成器"
               ],
               "tags": [],
-              "href": "/impl/worldgen-pipeline",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "impl/04",
@@ -768,8 +756,8 @@
                 "连锁更新即图计算"
               ],
               "tags": [],
-              "href": "/impl/light-fluid-updates",
-              "written": true
+              "href": null,
+              "written": false
             }
           ]
         },
@@ -792,8 +780,8 @@
                 "看门狗与玩家可感知的时间"
               ],
               "tags": [],
-              "href": "/impl/tick",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "impl/06",
@@ -809,8 +797,8 @@
                 "农场与崩溃路径"
               ],
               "tags": [],
-              "href": "/impl/entities",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "impl/07",
@@ -826,8 +814,8 @@
                 "迁移地狱"
               ],
               "tags": [],
-              "href": "/impl/items",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "impl/08",
@@ -845,8 +833,8 @@
               "tags": [
                 "枢纽"
               ],
-              "href": "/impl/redstone",
-              "written": true
+              "href": null,
+              "written": false
             }
           ]
         },
@@ -859,7 +847,7 @@
               "id": "impl/09",
               "title": "客户端与渲染",
               "audience": "dev",
-              "desc": "从即时模式到批处理。区块网格、剔除、透明。资源包是官方模组。原版不用贪婪网格，是模型合同与重建成本，不是没听过算法。优化模组是这一层的民间官方实现。",
+              "desc": "从即时模式到批处理。区块网格、剔除、透明。资源包是官方模组。原版不用贪婪网格是历史与复杂度选择。优化模组证明了原版债，它们是民间官方实现的一部分。",
               "question": "原版为何不用贪婪网格，模组如何改写这一层？",
               "sections": [
                 "看得见的世界如何被拼出来",
@@ -869,8 +857,8 @@
                 "优化模组作为证据"
               ],
               "tags": [],
-              "href": "/impl/client-render",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "impl/10",
@@ -886,14 +874,14 @@
                 "协议版本与多版本服务器"
               ],
               "tags": [],
-              "href": "/impl/protocol",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "impl/11",
               "title": "音频、粒子与手感谎言",
               "audience": "both",
-              "desc": "位置音频是空间信息。粒子是反馈不是电影。挖掘、受伤、GUI 大量客户端预测。无障碍是设计还是债，要分开看：有的把感官做成可选，有的把信息补进另一条通道。",
+              "desc": "位置音频是空间信息。粒子是反馈不是电影。挖掘、受伤、GUI 大量客户端预测。无障碍是设计还是债，单独成节。",
               "question": "手感有多少是模拟，有多少是反馈？",
               "sections": [
                 "挖一下、挨一下，服务器还没说话",
@@ -903,8 +891,8 @@
                 "无障碍"
               ],
               "tags": [],
-              "href": "/impl/feel-client",
-              "written": true
+              "href": null,
+              "written": false
             }
           ]
         },
@@ -917,7 +905,7 @@
               "id": "impl/12",
               "title": "模组与插件架构",
               "audience": "dev",
-              "desc": "字节码、Mixin、Forge / Fabric / NeoForge。Bukkit / Paper 是另一条河。没有稳定 API 时，注入即 API，升级变成政治。兼容矩阵让模组比引擎更难维护。",
+              "desc": "字节码、Mixin、Forge / Fabric / NeoForge。Bukkit / Paper 是另一条河。没有稳定 API 时，注入即 API，升级变成政治。兼容矩阵：版本 × 加载器 × 模组。模组比引擎更难维护。",
               "question": "为什么模组比引擎更难维护？",
               "sections": [
                 "为什么每个大版本都是模组的末日",
@@ -927,14 +915,14 @@
                 "兼容矩阵"
               ],
               "tags": [],
-              "href": "/impl/mod-architecture",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "impl/13",
               "title": "数据包、资源包与数据驱动",
               "audience": "dev",
-              "desc": "扁平化之后的命名空间世界。数据包能改内容与部分规则，加不出新的交互方式。资源包与数据分工。官方扩展面故意停在系统之前。数据驱动是温和模组的政治。",
+              "desc": "扁平化之后的命名空间世界。数据包能改什么、不能改什么。资源包与数据分工。官方扩展面故意停在「新动词」之前。数据驱动是温和模组的政治。",
               "question": "官方扩展面的边界在哪？",
               "sections": [
                 "为什么有了数据包还是要写 Java",
@@ -944,14 +932,14 @@
                 "政治含义"
               ],
               "tags": [],
-              "href": "/impl/datapacks",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "impl/14",
               "title": "Java 版运行时",
               "audience": "dev",
-              "desc": "2009 年选 Java 证明了可移植与模组性，也卡住了性能与发布。GC、JIT、启动器、版本隔离。性能史从能跑到优化模组。语言是历史偶然，不是设计本质。",
+              "desc": "2009 年选 Java 证明了可移植与模组性，也卡住了性能与发布。GC、JIT、启动器、版本隔离。性能史从「能跑」到各类优化模组。语言是历史偶然，不是设计本质。",
               "question": "Java 证明了什么、卡住了什么？",
               "sections": [
                 "2009 年的正确选择",
@@ -961,14 +949,14 @@
                 "偶然 vs 本质"
               ],
               "tags": [],
-              "href": "/impl/java-runtime",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "impl/15",
               "title": "Bedrock 作为另一次实现",
               "audience": "both",
-              "desc": "C++、跨平台、独立渲染栈。行为包、附加包、脚本 API。红石、战斗、世界格式的语义分叉比跑分更致命。Marketplace 反过来约束能做什么。换语言重写之后，分叉会变成两个游戏。",
+              "desc": "C++、跨平台、独立渲染栈。行为包、附加包、脚本 API。红石 / 战斗 / 世界格式的语义分叉比性能差异更致命。Marketplace 技术反过来塑造能做什么。换语言重写之后，分叉会变成两个游戏。",
               "question": "语义差异为何比性能差异更致命？",
               "sections": [
                 "另一次实现不是移植",
@@ -978,14 +966,14 @@
                 "两个游戏的工程现实"
               ],
               "tags": [],
-              "href": "/impl/bedrock",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "impl/16",
               "title": "服务端与规模",
               "audience": "dev",
-              "desc": "原版服务端、Paper、分片实验。视距对模拟距离。代理、群组、反作弊、备份。万人网络已经是另一种引擎用法。原版没有把兴趣管理当成一等公民。第三方核心是证据，不是安装推荐。",
+              "desc": "原版服务端、Paper、分片实验。视距 vs 模拟距离。代理、群组、反作弊、备份。万人网络已经是另一种引擎用法。原版没有把兴趣管理当成一等公民。",
               "question": "同一内核如何同时服务单人档与万人网络？",
               "sections": [
                 "单人档和万人服真的是同一个程序吗",
@@ -995,8 +983,8 @@
                 "大型服务器作为另一种引擎用法"
               ],
               "tags": [],
-              "href": "/impl/servers",
-              "written": true
+              "href": null,
+              "written": false
             }
           ]
         },
@@ -1019,8 +1007,8 @@
                 "民间官方实现"
               ],
               "tags": [],
-              "href": "/impl/tech-debt",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "impl/18",
@@ -1038,8 +1026,8 @@
               "tags": [
                 "结语"
               ],
-              "href": "/impl/modifiable-engine",
-              "written": true
+              "href": null,
+              "written": false
             }
           ]
         }
@@ -1047,219 +1035,268 @@
     },
     {
       "roman": "IV",
-      "short": "重写",
-      "english": "Rewrite",
+      "short": "重新发明",
+      "english": "Reinvention",
       "color": "purple",
-      "payoffFan": "看清哪些是 Minecraft，哪些只是 2009 年的偶然。",
-      "payoffDev": "考试，不是开工令。不变量冻结之前不要把本卷写成定论。",
+      "payoffFan": "把方块、低保真与旧实现换掉后，再看哪些 Minecraft 式关系仍然值得留下。",
+      "payoffDev": "用平滑体素、物理、UGC、VR / Avatar 与 AI 对前三卷的候选原则做压力测试。",
       "id": "v4",
-      "heading": "第四卷 · 重写（最后写）",
-      "thesis": "重写不是用新语言再做一遍，而是把偶然从本质里剥离。思想实验与设计考试，不是官方继任方案。",
+      "heading": "第四卷 · 重新发明：下一代沙盒世界（最后写）",
+      "thesis": "理解 Minecraft 之后，如果目标不再是“把 Minecraft 用现代技术重写一遍”，而是创造下一代沙盒世界，那么哪些思想仍值得继承？哪些具体表现可以被大胆替换？Smooth Voxel、持续物理、载具与机械、VR、Avatar、运行时 UGC、AI NPC 等新能力，会扩大玩家的可能性，还是反过来破坏原来成立的关系？",
       "parts": [
         {
-          "title": "第一部 · 重写之前先界定问题",
+          "title": "第一部 · 先弄清我们想继承什么",
           "span": "",
-          "intent": "四个产品不能互相替代。先冻结不变量，再谈偶然。",
+          "intent": "区分设计关系、具体表达与历史偶然；先把所谓“不变量”降级成待验证原则。",
           "chapters": [
             {
               "id": "rewrite/01",
-              "title": "我们到底在重写什么",
+              "title": "我们究竟想继承什么",
               "audience": "both",
-              "desc": "原版体验、模组平台、服务器平台、创作工具四者不能互相替代。「兼容 Minecraft」与「继承其思想」是两条路。克隆是失败样本。Paper、Fabric、Minetest 是已经发生的局部重写。",
-              "question": "四者能否互相替代？",
+              "desc": "先把“兼容 Minecraft”“复刻 Minecraft”“继承 Minecraft 的思想”“重新发明沙盒”分开。第四卷选择最后一条，但会用前三条作为对照。",
+              "question": "当我们说“下一代 Minecraft 式沙盒”时，真正想延续的是外观、玩法、社区生态，还是一种让玩家产生可能性的世界结构？",
               "sections": [
-                "先禁止「再做一遍 Minecraft」",
-                "四产品矩阵",
-                "兼容 vs 继承：两条路",
-                "失败样本",
-                "局部重写已经发生",
-                "本卷是考试，不是开工令"
+                "为什么“用新语言再做一遍”太窄",
+                "四种目标：兼容 / 复刻 / 继承 / 再发明",
+                "哪些 Minecraft-like 只继承了表面",
+                "Paper、Fabric、Minetest 等局部重写能教我们什么，又不能教什么",
+                "本卷的规则：每个新能力都要回答“增加了什么可能，又破坏了什么”"
               ],
               "tags": [],
-              "href": "/rewrite/what-to-rewrite",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "rewrite/02",
-              "title": "必须保留的设计不变量",
+              "title": "从“不变量”到待验证原则",
               "audience": "both",
-              "desc": "一米体素、可破坏世界、最小动词、目标外包、红石级可误用系统、世界比引擎活得更久、模组与数据包作为第一公民、模式即权限。去掉这些，它就不再是 Minecraft，哪怕更漂亮。",
-              "question": "去掉哪些东西，它就不再是？",
+              "desc": "不再把 1m 方块、红石或 20 TPS 这类具体表达直接当作本质。把卷二的候选原则提升到更抽象的层次：可修改且持久的世界、玩家作者权、可组合规则、自主目标、可扩展性等，并主动寻找反例。",
+              "question": "哪些是值得继承的关系，哪些只是 Minecraft 恰好采用的表达？",
               "sections": [
-                "「Minecraft 味」哪一部分是规则",
-                "逐条不变量 + 拿掉一条会怎样",
-                "交给下一章的「非不变量」"
+                "三层区分：设计关系 / 具体表达 / 历史偶然",
+                "例如“1m 方块”是否应改写为“统一、可理解、可组合的空间语言”",
+                "例如“红石”是否应改写为“世界内可组合、可误用的可编程系统”",
+                "每条候选原则都做一次“拿掉它会怎样”的反事实测试",
+                "留下待卷四后半继续挑战的开放项"
               ],
               "tags": [],
-              "href": "/rewrite/invariants",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "rewrite/03",
-              "title": "可以抛弃的历史偶然",
+              "title": "Minecraft 的具体表达与历史偶然",
               "audience": "dev",
-              "desc": "Java 不是本质。全局 20 TPS 未必本质。双端分裂不是本质。部分方块特例与未定义行为该进仿真层，而非内核。偶然可以进兼容层。",
-              "question": "哪些不是本质？",
+              "desc": "把 Java、全局 20 TPS、双产品线、部分 bug 与方块特例放回历史语境；同时承认某些“偶然”经过多年使用后可能已经获得设计价值，不能因为技术上难看就自动删除。",
+              "question": "哪些可以替换，哪些虽然偶然却已经成为玩家语义？",
               "sections": [
-                "语言运行时",
-                "全局 tick 与兴趣管理",
-                "Java / Bedrock 双端",
-                "特例与未定义行为如何安置"
+                "语言与运行时：偶然不等于错误",
+                "固定 tick、更新顺序与可解释因果",
+                "Java / Bedrock 双线：历史债如何长成产品现实",
+                "Bug、怪癖、事实 API：什么时候兼容性本身成为价值",
+                "为后面的新系统建立一张“可替换 / 需保留语义 / 待定”表"
               ],
               "tags": [],
-              "href": "/rewrite/accidents",
-              "written": true
+              "href": null,
+              "written": false
             }
           ]
         },
         {
-          "title": "第二部 · 架构提案",
+          "title": "第二部 · 把旧原则放进新世界",
           "span": "",
-          "intent": "世界、调度、模组双层、社会功能与工具链。",
+          "intent": "用平滑体素、真实物理、运行时 UGC、Avatar / VR 与更高表现力逐项做压力测试。",
           "chapters": [
             {
               "id": "rewrite/04",
-              "title": "世界表示",
+              "title": "从方块到连续世界",
               "audience": "dev",
-              "desc": "稀疏体素、调色板、流式 I/O。方块状态 vs 组件。多世界实例同时服务生存与小游戏。旧档作为第一等公民。",
-              "question": "怎样同时服务生存与小游戏？",
+              "desc": "把“1m 方块”作为可替换表达来测试。Smooth Voxel、Marching Cubes、Surface Nets、SDF 等能带来更细腻的地形与破坏，也会同时动摇建造粒度、可读性、存储、碰撞、LOD、网络与模组接口。",
+              "question": "如果方块消失了，Minecraft 最值得继承的空间语法还能不能留下？",
               "sections": [
-                "表示法要服务两种产品",
-                "稀疏与调色板",
-                "状态 vs 组件",
-                "多世界、确定性回放",
-                "旧档"
+                "方块到底解决了哪些设计与工程问题",
+                "Smooth Voxel 真正增加了什么，而不只是“更好看”",
+                "建造、挖掘、材质、碰撞、LOD 与网络的连锁代价",
+                "如何保留“可理解、可修改、可组合”的空间语言",
+                "压力测试结论：哪些原则被保住，哪些需要重写"
               ],
               "tags": [],
-              "href": "/rewrite/world-rep",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "rewrite/05",
-              "title": "模拟调度",
+              "title": "当世界拥有真正的物理",
               "audience": "dev",
-              "desc": "从全局 tick 到兴趣管理、分片、异步区块。红石与流体专用调度器。实体 LOD。单人与万人同一内核。共享时间仍要存在，但不必须是全局 20 TPS。红石玩家仍需要可解释的因果。",
-              "question": "如何让单人与万人走同一内核？",
+              "desc": "把 Minecraft 式离散世界与刚体、关节、车辆、机械结构放在一起。更真实的物理扩大了行动空间，也可能破坏稳定、可预测、可保存的世界规则。",
+              "question": "GTA / Teardown / 机械动力式物理加入后，是增加玩家动词，还是把沙盒变成难以控制的模拟器？",
               "sections": [
-                "全局 20 TPS 的限度",
-                "兴趣管理与分片",
-                "红石 / 流体专用调度器",
-                "实体预算与 LOD",
-                "时间旅行调试：因果可解释"
+                "离散方块世界为什么如此稳定",
+                "Rigidbody、Joint、Vehicle、Destruction 带来的新可能",
+                "可预测性 vs 物理真实性",
+                "持久化、网络同步与性能预算",
+                "机械与载具何时成为“系统”，何时只是昂贵内容"
               ],
               "tags": [],
-              "href": "/rewrite/scheduler",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "rewrite/06",
-              "title": "脚本与模组的双层",
+              "title": "创作者席：从 Mod 到运行时 UGC",
               "audience": "dev",
-              "desc": "数据包级沙箱加系统层模组。全用脚本和全用 native 都会失败。稳定的世界、协议、内容 API。热重载与版本化 schema。模组作者体验是引擎的一部分。两层缺一，作者席就会塌成商城或塌成破解。",
-              "question": "为何两端都会失败？",
+              "desc": "Minecraft 的模组文化、Roblox / VRChat 的创作平台、运行时脚本与热重载代表不同作者席。下一代沙盒可能不该只在“数据包 vs 原生 Mod”之间选择。",
+              "question": "如何让玩家真正拥有作者权，而不是只获得一个被商城约束的内容上传入口？",
               "sections": [
-                "全脚本与全原生的失败模式",
-                "双层模型与崩溃域",
-                "稳定 API 面",
-                "热重载与 schema",
-                "作者体验是产品"
+                "原版内创作、脚本、Mod、外部编辑器分别改变哪一层",
+                "Runtime creation 与离线 editor 的差异",
+                "热重载、稳定 API、沙箱与原生扩展",
+                "Marketplace 为什么不是作者权的同义词",
+                "“创作者体验就是产品”的边界与代价"
               ],
               "tags": [],
-              "href": "/rewrite/scripting",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "rewrite/07",
-              "title": "网络、权限与社会功能下沉",
-              "audience": "dev",
-              "desc": "服务器权威、增量同步、所有权。反作弊是系统设计。领地、备份、回滚、回放不应再只交给插件。权限从四种游戏模式推广出去。社会功能下沉到引擎，服务器才不必每个都从立法重新开始。",
-              "question": "领地 / 备份 / 回滚为何不该只交给插件？",
+              "title": "多人、Avatar 与沉浸",
+              "audience": "both",
+              "desc": "把 Minecraft 的服务器社会与 VRChat 式 Avatar、共享空间、VR / Flatscreen 共存放在一起。多人不只是同步更多实体，而是重新定义身份、尺度、权限与共同居住。",
+              "question": "当玩家不再都是同尺度的 Steve，而是拥有自定义身体与不同输入设备时，“同一个世界”要如何成立？",
               "sections": [
-                "每个服主都在重写同一套法律",
-                "权威、同步、所有权",
-                "反作弊作为系统设计",
-                "社会功能清单下沉",
-                "权限模型推广"
+                "从服务器到社会空间：多人到底改变了什么",
+                "Avatar、身体尺度与世界尺度",
+                "VR / PC 的交互语义如何统一",
+                "权限、所有权、领地、回滚与共同创作",
+                "沉浸感是否会反过来破坏 Minecraft 式抽象与可读性"
               ],
               "tags": [],
-              "href": "/rewrite/network-perms",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "rewrite/08",
-              "title": "渲染与创作工具",
-              "audience": "dev",
-              "desc": "现代网格与光照、流式加载。第一人称手感仍是产品。结构编辑、函数、数据检查器应内置。创作工具与运行时共享世界模型。工具链不内置，作者席会再次外溢。",
-              "question": "手感与工具如何同时保住？",
+              "title": "表现力、工具与“现代化”的陷阱",
+              "audience": "both",
+              "desc": "更复杂的渲染、动画、角色、音频和工具可以提升表现力，却也可能增加内容制作成本、降低可读性、让玩家更难参与创作。",
+              "question": "怎样获得 GTA 式表现力，而不把 Minecraft 式可组合性和低门槛创作一起丢掉？",
               "sections": [
-                "手感仍是产品",
-                "渲染原则（不是选购指南）",
-                "内置工具：结构、函数、检查器",
-                "从资源包到资产图",
-                "工具与运行时同一世界模型"
+                "Minecraft 的低保真究竟帮了什么",
+                "现代光照、材质、角色与动画真正改变哪些体验",
+                "表现力越高，UGC 成本是否也越高",
+                "运行时创作工具如何与高表现力共存",
+                "“现代化”何时只是把玩家的自由换成作者的资产量"
               ],
               "tags": [],
-              "href": "/rewrite/render-tools",
-              "written": true
+              "href": null,
+              "written": false
             }
           ]
         },
         {
-          "title": "第三部 · 产品与伦理",
+          "title": "第三部 · 新的变量与最后的反问",
           "span": "",
-          "intent": "兼容是对玩家时间的伦理。重写是为了看清原作。",
+          "intent": "加入 AI 等新变量，再回头判断下一代沙盒真正值得稳定哪些关系与接口。",
           "chapters": [
             {
               "id": "rewrite/09",
-              "title": "兼容性策略",
+              "title": "AI NPC：给世界更多内容，还是更多生命",
               "audience": "both",
-              "desc": "世界转换器、协议适配、数据包迁移。红石：仿真层 vs 新语义。能读旧档是对玩家时间的伦理。兼容代价必须写进产品范围。不能读旧档，就是宣布玩家的过去作废。",
-              "question": "能读旧档是伦理还是特性？",
+              "desc": "生成式 AI、行为树、规划与传统模拟可以让 NPC 更会说、更会做，但真正的问题不是“能不能接大模型”，而是它是否让沙盒世界产生新的关系、任务与意外。",
+              "question": "AI NPC 的价值是噱头、内容生成，还是让世界获得新的自主性？",
               "sections": [
-                "玩家的时间存在存档里",
-                "转换器与协议适配",
-                "红石双路径：仿真层 / 新语义",
-                "命名空间的长期兼容",
-                "把代价写进范围"
+                "传统 NPC 为什么常像任务终端",
+                "对话智能、行为智能、长期记忆是三件不同的事",
+                "玩家自由与 NPC 自主性如何冲突",
+                "成本、延迟、确定性、安全与可保存性",
+                "什么情况下 AI 真正增加了新的玩法关系"
               ],
               "tags": [],
-              "href": "/rewrite/compat",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "rewrite/10",
-              "title": "谁有权重写",
-              "audience": "both",
-              "desc": "协议、资产、品牌不能混为一谈。社区项目、官方继任、开源边界各自只能承诺一部分。模组作者、服主、教育者需求不同。开源能复制规则，不能复制二十年存档。成功标准不是「更像」，而是不变量仍在。",
-              "question": "谁能承诺什么？",
+              "title": "一个下一代沙盒需要哪些层",
+              "audience": "dev",
+              "desc": "在前面的压力测试之后，才重新讨论世界表示、模拟、网络、脚本、工具、内容与社会系统应该如何分层。这里不是给出唯一架构，而是说明哪些边界值得稳定。",
+              "question": "为了让一个世界长期可玩、可改、可扩展，哪些接口比“选 Unity / Rust / C++”更重要？",
               "sections": [
-                "三件不能混的东西：协议、资产、品牌",
-                "三种主体能承诺什么",
-                "三种用户的不同需求",
-                "开源的边界",
-                "判定标准：不变量仍在"
+                "世界数据与表现分离",
+                "仿真语义与渲染语义分离",
+                "权威、网络与持久化边界",
+                "稳定扩展面与创作者工具",
+                "哪些技术决策应该允许替换，哪些语义合同应该长期稳定"
               ],
               "tags": [],
-              "href": "/rewrite/who-rewrites",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "rewrite/11",
-              "title": "重写是为了看清原作",
+              "title": "再发明之后，我们还想保留什么",
               "audience": "both",
-              "desc": "本质属性清单定稿。三卷是历史、机制、实现；本卷是考试。若永不重写，本卷仍然值得写。回到住进去、玩出设计之外、再开发。",
-              "question": "前三卷命题是否仍然成立？",
+              "desc": "回收第四卷所有压力测试，重新检查全书 working thesis。最终结论可以保留“住进去 / 玩出设计之外 / 再开发”，也可以修改它；不要求回到写作开始时的答案。",
+              "question": "把方块、Java、传统红石、低保真画面甚至部分 Minecraft 习惯都拿掉之后，我们究竟还在追求什么？",
               "sections": [
-                "交卷：清单定稿",
-                "回到总序",
-                "若永不重写，为何仍值得写",
-                "全书结语：住进去、玩出设计之外、再开发"
+                "回看：哪些候选原则经受住了压力测试",
+                "哪些原则被新技术推翻或改写",
+                "哪些“现代化”其实是退步",
+                "更新全书最终命题",
+                "结尾：我们不是在寻找一个更像 Minecraft 的游戏，而是在继续追问怎样创造一个能持续产生可能性的世界"
               ],
               "tags": [
                 "结语"
               ],
-              "href": "/rewrite/seeing-the-original",
-              "written": true
+              "href": null,
+              "written": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "other",
+      "heading": "番外",
+      "thesis": "",
+      "parts": [
+        {
+          "title": "本卷",
+          "span": "",
+          "intent": "",
+          "chapters": [
+            {
+              "id": "extras/mod-systems",
+              "title": "模组系统对照：创作者在哪一层",
+              "audience": "both",
+              "desc": "强弱不看能改多少，看作者席开在哪一层。皮、数据、沙箱、API、注入、法律是六种合同。",
+              "question": "最著名的模组系统，合同到底写在哪一层？",
+              "sections": [
+                "六层作者席；Doom / Quake / 上古卷轴 / 魔兽地图 / Minecraft 三条河；稳定合同与注入即 API。"
+              ],
+              "tags": [],
+              "href": null,
+              "written": false
+            },
+            {
+              "id": "extras/design-theories",
+              "title": "游戏设计理论简介",
+              "audience": "both",
+              "desc": "MDA、Rational Game Design、心流、技能原子等常用框架各自说什么、从哪来、适合用来想哪类问题。",
+              "question": "",
+              "sections": [
+                "结构分析：MDA、八种乐趣、DDE、DPE、元素四元组与百镜、二阶设计、Playcentric、FADT",
+                "工作室方法：RGD、RLD、400 Project、模式、支柱",
+                "微观语法：技能原子、循环、内部经济、动词、Game Feel",
+                "体验与动机：心流、PENS、Bartle、八种乐趣",
+                "玩法形态：涌现 / 进度、Half-Real、Immersive Sim、程序修辞、GNS",
+                "玩的哲学：Huizinga、Caillois、Suits",
+                "怎么选用（对照表）+ 阅读入口"
+              ],
+              "tags": [],
+              "href": null,
+              "written": false
             }
           ]
         }
@@ -1285,79 +1322,79 @@
               "id": "appendix/timeline",
               "title": "年表",
               "audience": "both",
-              "desc": "2009–2026，产品、社区、商业三轨对照。只记可核对的事件，不代替卷一的论证。",
+              "desc": "2009–2026，版本、公司、模组、服务器、影像、诉讼对照。",
               "question": "",
               "sections": [
                 "三轨表——产品 / 社区 / 商业。只记事件，不议论。"
               ],
               "tags": [],
-              "href": "/appendix/timeline",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "appendix/people",
               "title": "人物与组织",
               "audience": "both",
-              "desc": "Notch、Jeb、Dinnerbone、Mojang、微软、网易、Bukkit、Paper、Fabric 等。每人每组织三到六行，链回正编，不做传记。",
+              "desc": "Notch、Jeb、Dinnerbone、Mojang、微软、NetEase、Bukkit、Paper、Fabric 等。",
               "question": "",
               "sections": [
                 "每人 / 组织 3–6 行；链回正编。"
               ],
               "tags": [],
-              "href": "/appendix/people",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "appendix/java-bedrock",
               "title": "Java / Bedrock 对照表",
               "audience": "both",
-              "desc": "世界格式、红石、战斗、模组与附加包、市场、平台能力。逐项列表。解释在正编，不在本表展开。",
+              "desc": "世界格式、红石、战斗、模组 / 附加包、市场、平台能力。",
               "question": "",
               "sections": [
                 "逐项表；每行链到 `history/08` 或 `impl/15`。"
               ],
               "tags": [],
-              "href": "/appendix/java-bedrock",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "appendix/glossary",
               "title": "术语表",
               "audience": "both",
-              "desc": "区块、刻、NBT、数据包、Mixin、模拟距离、准连接、扁平化、组件化等。每词四十字到八十字。禁止在此展开论证。",
+              "desc": "区块、刻、NBT、数据包、Mixin、模拟距离、准连接、扁平化、组件化等。",
               "question": "",
               "sections": [
                 "每词 40–80 字。禁止在此展开论证。"
               ],
               "tags": [],
-              "href": "/appendix/glossary",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "appendix/references",
               "title": "文献与源",
               "audience": "both",
-              "desc": "设计、技术、商业三类。口述、版本说明、论文分列。只收正编用过或明确推荐的源，不在此重新论证。",
+              "desc": "设计、技术、商业三类。口述、版本说明、论文分列。",
               "question": "",
               "sections": [
                 "只收录正编用过或推荐的源。"
               ],
               "tags": [],
-              "href": "/appendix/references",
-              "written": true
+              "href": null,
+              "written": false
             },
             {
               "id": "appendix/exercises",
               "title": "开发者实验题",
               "audience": "both",
-              "desc": "最小体素沙盒、可误用系统、存档迁移、红石语义测试。每题写目标、约束、对应章节、何为通过。不给标准实现。",
+              "desc": "最小体素沙盒、可误用系统、存档迁移、红石语义测试。",
               "question": "",
               "sections": [
                 "每题写目标、约束、对应哪一章、何为通过。不给标准实现。"
               ],
               "tags": [],
-              "href": "/appendix/exercises",
-              "written": true
+              "href": null,
+              "written": false
             }
           ]
         }

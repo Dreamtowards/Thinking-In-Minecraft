@@ -165,7 +165,7 @@ export default function MinecraftDesignToc() {
           卷三 技术
         </Pill>
         <Pill active={tab === "v4"} onClick={() => setTab("v4")}>
-          卷四 重写
+          卷四 重新发明
         </Pill>
         <Pill active={tab === "appendix"} onClick={() => setTab("appendix")}>
           附录
@@ -213,8 +213,8 @@ export default function MinecraftDesignToc() {
 function Overview() {
   return (
     <Stack gap={20}>
-      <Callout tone="info" title="总命题">
-        {BOOK.thesis} 卷一写这套规则如何变成产业，卷二写它为何有效，卷三写它如何被拖进不可能的规模，卷四把偶然从本质里剥离。
+      <Callout tone="info" title="当前暂定答案">
+        {BOOK.thesis} 四卷会从历史、设计、技术与重新发明四个方向不断检验和修正这句话。
       </Callout>
 
       <H2>四卷对照</H2>
@@ -269,7 +269,7 @@ function Paths() {
     <Stack gap={16}>
       <H2>阅读路径</H2>
       <Text tone="secondary">
-        两类读者共用总命题，随后分叉。卷四是考试，不是开工令。
+        两类读者可以从不同入口进入；第四卷用新技术与新产品形态重新检验前三卷得到的候选原则。
       </Text>
       <Table headers={["你更像", "顺序", "可跳过"]} rows={PATHS} striped />
     </Stack>

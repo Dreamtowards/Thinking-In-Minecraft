@@ -59,7 +59,7 @@ for (const line of slice) {
     vol = { id, heading: title, thesis: '', parts: [] };
     volumes.push(vol);
     if (id === 'prelude') {
-      part = { title: '总序', span: '', intent: '划定读者、禁止误读、说明三卷分工。', chapters: [] };
+      part = { title: '总序', span: '', intent: '说明作者动机、研究问题与方法；暂定答案可以随着全书推进而修改。', chapters: [] };
     }
     if (id === 'appendix') {
       part = { title: '查阅', span: '', intent: '年表、人物、对照与术语。不承担论证。', chapters: [] };
@@ -67,8 +67,8 @@ for (const line of slice) {
     continue;
   }
 
-  if (vol && line.startsWith('**卷命题**：')) {
-    vol.thesis = line.replace('**卷命题**：', '').trim();
+  if (vol && (line.startsWith('**卷命题**：') || line.startsWith('**当前问题**：'))) {
+    vol.thesis = line.replace(/^\*\*(?:卷命题|当前问题)\*\*：/, '').trim();
     continue;
   }
 
@@ -192,9 +192,9 @@ for (const v of volumes) {
 }
 
 const rewriteParts = [
-  { title: '第一部 · 重写之前先界定问题', ids: ['rewrite/01', 'rewrite/02', 'rewrite/03'], intent: '四个产品不能互相替代。先冻结不变量，再谈偶然。' },
-  { title: '第二部 · 架构提案', ids: ['rewrite/04', 'rewrite/05', 'rewrite/06', 'rewrite/07', 'rewrite/08'], intent: '世界、调度、模组双层、社会功能与工具链。' },
-  { title: '第三部 · 产品与伦理', ids: ['rewrite/09', 'rewrite/10', 'rewrite/11'], intent: '兼容是对玩家时间的伦理。重写是为了看清原作。' },
+  { title: '第一部 · 先弄清我们想继承什么', ids: ['rewrite/01', 'rewrite/02', 'rewrite/03'], intent: '区分设计关系、具体表达与历史偶然；先把所谓“不变量”降级成待验证原则。' },
+  { title: '第二部 · 把旧原则放进新世界', ids: ['rewrite/04', 'rewrite/05', 'rewrite/06', 'rewrite/07', 'rewrite/08'], intent: '用平滑体素、真实物理、运行时 UGC、Avatar / VR 与更高表现力逐项做压力测试。' },
+  { title: '第三部 · 新的变量与最后的反问', ids: ['rewrite/09', 'rewrite/10', 'rewrite/11'], intent: '加入 AI 等新变量，再回头判断下一代沙盒真正值得稳定哪些关系与接口。' },
 ];
 
 const v4 = volumes.find((v) => v.id === 'v4');
@@ -221,8 +221,8 @@ const meta = {
     short: '序',
     english: 'Preface',
     color: 'gray',
-    payoffFan: '先读命题，再决定跳哪一卷。这书不是攻略或年表。',
-    payoffDev: '原则必须带不可迁移条件。不要从卷四起笔。',
+    payoffFan: '先知道这本书为什么写、正在追问什么，再从你关心的卷开始。',
+    payoffDev: '把暂定答案当问题，不当规范；方法页说明不同材料各自能回答什么。',
   },
   v1: {
     roman: 'I',
@@ -237,8 +237,8 @@ const meta = {
     short: '游戏设计',
     english: 'Game Design',
     color: 'blue',
-    payoffFan: '习以为常的机制变成可证伪的判断：创造不是编辑器，红石不是电线。',
-    payoffDev: '十二条原则，以及抄不走的条件。本卷是全书中轴。',
+    payoffFan: '把习以为常的方块、动作、生存、红石与多人重新看成彼此咬合的设计关系。',
+    payoffDev: '得到一份可继续被技术与 Reinvention 检验的候选原则，而不是固定教条。',
   },
   v3: {
     roman: 'III',
@@ -250,11 +250,11 @@ const meta = {
   },
   v4: {
     roman: 'IV',
-    short: '重写',
-    english: 'Rewrite',
+    short: '重新发明',
+    english: 'Reinvention',
     color: 'purple',
-    payoffFan: '看清哪些是 Minecraft，哪些只是 2009 年的偶然。',
-    payoffDev: '考试，不是开工令。不变量冻结之前不要把本卷写成定论。',
+    payoffFan: '把方块、低保真与旧实现换掉后，再看哪些 Minecraft 式关系仍然值得留下。',
+    payoffDev: '用平滑体素、物理、UGC、VR / Avatar 与 AI 对前三卷的候选原则做压力测试。',
   },
   appendix: {
     roman: '',
@@ -272,7 +272,7 @@ const book = {
     ...meta[v.id],
     id: v.id,
     heading: v.heading,
-    thesis: v.thesis || (v.id === 'prelude' ? 'Minecraft 未必诞生于完整理论，却在开发与玩家参与中形成了可以被理解的设计思想。' : v.id === 'appendix' ? '查阅用，不承担论证。' : ''),
+    thesis: v.thesis || (v.id === 'prelude' ? '这本书从一份暂定答案出发，但允许历史、设计、技术与重新发明不断修正它。' : v.id === 'appendix' ? '查阅用，不承担论证。' : ''),
     parts: v.parts.map((p) => ({
       title: p.title,
       span: p.span,
