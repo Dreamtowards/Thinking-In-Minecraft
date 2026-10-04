@@ -16,6 +16,12 @@ html > body[data-scroll-locked] {
   --removed-body-scroll-bar-size: 0px !important;
 }
 
+/* 引用块不自动添加引号；需要引号时由正文显式写入。 */
+.prose blockquote p:first-of-type::before,
+.prose blockquote p:last-of-type::after {
+  content: none;
+}
+
 .fd-article video {
   width: 100%;
   max-width: 48rem;
