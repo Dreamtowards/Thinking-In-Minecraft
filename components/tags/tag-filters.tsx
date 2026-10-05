@@ -29,7 +29,7 @@ export function TagFilters({ tags, activeId, singleLine = false }: { tags: TagWi
           <ChevronDown size={14} aria-hidden="true" className={expanded ? 'rotate-180' : ''} />
         </button>
       </div>
-      <div className={singleLine ? 'flex flex-nowrap gap-2 overflow-x-auto pb-1 [&>a]:shrink-0' : 'flex flex-wrap gap-2'}>
+      <div className={singleLine ? 'flex flex-nowrap gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [&>a]:shrink-0' : 'flex flex-wrap gap-2'}>
         {featured.map(({ id, tag, count }) => <TagLink key={id} tag={tag} count={count} active={id === activeId} />)}
       </div>
       <div id={listId} hidden={!expanded} className="space-y-3 rounded-xl border bg-fd-card p-4">
