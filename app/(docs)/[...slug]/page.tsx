@@ -4,7 +4,6 @@ import {
   DocsDescription,
   DocsPage,
   DocsTitle,
-  MarkdownCopyButton,
   ViewOptionsPopover,
 } from 'fumadocs-ui/layouts/docs/page';
 import { notFound } from 'next/navigation';
@@ -15,6 +14,8 @@ import { gitConfig } from '@/lib/shared';
 import { TagLink } from '@/components/tags/tag-link';
 import { normalizeTags } from '@/lib/tag-utils';
 import { isCurrentBookPage } from '@/lib/tags';
+import { SectionNumberToggle } from '@/components/mdx/section-number-toggle';
+import { numberArticleSections } from '@/components/mdx/section-numbers';
 
 export const revalidate = false;
 
@@ -27,9 +28,10 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
   const markdownUrl = getPageMarkdownUrl(page).url;
   const title = getPageTitle(page);
   const tags = isCurrentBookPage(page.slugs) ? normalizeTags(page.data.tags) : [];
+  const sections = numberArticleSections(page.data.toc);
 
   return (
-    <DocsPage toc={page.data.toc} full={page.data.full}>
+    <DocsPage toc={sections.toc} full={page.data.full}>
       <DocsTitle>{title}</DocsTitle>
       {typeof page.data.description === 'string' ? (
         <DocsDescription className="mb-0">{page.data.description}</DocsDescription>
@@ -40,7 +42,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
             {tags.map((tag) => <TagLink key={tag} tag={tag} />)}
           </nav>
         )}
-        <MarkdownCopyButton markdownUrl={markdownUrl} />
+        <SectionNumberToggle />
         <ViewOptionsPopover
           markdownUrl={markdownUrl}
           githubUrl={`https://github.com/${gitConfig.user}/${gitConfig.repo}/blob/${gitConfig.branch}/docs/${page.path}`}
@@ -49,6 +51,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
       <DocsBody>
         <MDX
           components={getMDXComponents({
+            ...sections.headings,
             a: createRelativeLink(source, page),
           })}
         />

@@ -22,6 +22,18 @@ html > body[data-scroll-locked] {
   content: none;
 }
 
+.book-section-number {
+  display: none;
+  margin-inline-end: 0.45em;
+  color: var(--color-fd-muted-foreground);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.show-book-section-numbers .book-section-number {
+  display: inline;
+}
+
 .fd-article video {
   width: 100%;
   max-width: 48rem;
