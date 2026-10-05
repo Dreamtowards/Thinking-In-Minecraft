@@ -1005,8 +1005,8 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 ### `impl/04` 游戏循环、Tick 与调度
 
-- **目标文件**：由现有 `tick.mdx` 迁入新版 Part
-- **状态**：待重写
+- **目标文件**：`docs/impl/(part2)/tick.mdx`
+- **状态**：✎ 已按新版结构重写
 - **核心问题**：Minecraft 的“时间”在技术上怎样推进？TPS 下降到底意味着什么？
 - **建议内容**：
   1. Server tick / Client tick 的基本关系

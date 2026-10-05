@@ -1,4 +1,4 @@
 {
-  "title": "世界如何存在",
-  "pages": ["data-model", "storage", "worldgen", "light-fluid-updates"]
+  "title": "世界与数据",
+  "pages": ["data-model", "storage", "worldgen"]
 }
