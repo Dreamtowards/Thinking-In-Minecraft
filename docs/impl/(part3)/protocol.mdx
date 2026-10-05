@@ -7,14 +7,14 @@ description: 客户端–服务器权威；单人即本地服务器。区块传�
 
 ## 问题
 
-你按 Esc，单人世界会停。开了「对局域网开放」，Esc 就不停了，熔炉还在烧。不是菜单坏了，是宇宙里出现了第二双可能的眼睛，暂停这种礼貌随之被收回。这个设计的来龙去脉，卷二写过（[《多人是默认状态》](/design/multiplayer)）。
+你按 Esc，单人世界会停。开了「对局域网开放」，Esc 就不停了，熔炉还在烧。不是菜单坏了，是宇宙里出现了第二双可能的眼睛，暂停这种礼貌随之被收回。这个设计的来龙去脉，卷二写过（[《多人游戏与共同世界》](/design/multiplayer-world)）。
 
 要回答：协议为何成为模组兼容瓶颈？可被证伪的说法是：模组难更新，是因为玩法每年都变；协议只是联机用的电线，单人用不上。只要还存在 1.3 之后单人档内部跑着一台服务端、只要还存在 ViaVersion 要靠整层翻译才能让新客户端进旧服、只要还存在同一个模组要为每个协议号分别打包，这句话就不成立。
 
 上一章（[《客户端与渲染》](/impl/client-render)）把格子收成网格。网格可以本地编；编完仍要问：这一格还在不在、别人看不看得见、口袋里那把剑还在不在——口袋的账在[《物品、库存与合成》](/impl/items)。问这些问题走的那条线，就是协议。协议没有官方承诺的「模组稳定面」。没有稳定面的东西，被用久了就会变成稳定面；变成之后，改它就等于改所有第二作者的接头。
 
 <Cards>
-  <Card title="单人是延迟的多人" href="/design/multiplayer" description="门已经按第二个人留。" />
+  <Card title="单人是延迟的多人" href="/design/multiplayer-world" description="门已经按第二个人留。" />
   <Card title="口袋是窗口协议" href="/impl/items" description="点一下是立法请求。" />
   <Card title="刻是共享真实" href="/impl/tick" description="权威在服务端那二十刻。" />
 </Cards>
@@ -128,7 +128,7 @@ Bedrock 的协议号同样在涨，Geyser 一类桥把 Java 玩家送进 Bedrock
 - **爱好者**：单人档里也有服务器。Esc 能暂停，是因为还没有第二双眼睛。开了局域网，炉子就不陪你停。挖的洞闪一下回来，是权威在拉你，不是显卡抽风。
 - **开发者**：能抄走的是客户端–服务器权威、单人跑同一套服务端、区块 / 实体 / 窗口三种同步、预测加对账、协议版本必须当生态 ABI 来涨。能一起抄走的还有：反作弊难，因为合法延迟和撒谎共用预测通道。抄不走的是每年作废的包形状、ViaVersion 与代理河、Java 与 Bedrock 两张表；以及插件已经把字段焊进某一版。你若每年换协议还不提供翻译层，第二作者会比引擎先死。死的不是玩法。死的是接头。
 
-[^sp]: Java Edition 1.3.1（2012-08-01）将单人改为内置服务端，并加入对局域网开放。见 [Java Edition 1.3.1](https://minecraft.wiki/w/Java_Edition_1.3.1)；设计对照见本书 [《多人是默认状态》](/design/multiplayer)。
+[^sp]: Java Edition 1.3.1（2012-08-01）将单人改为内置服务端，并加入对局域网开放。见 [Java Edition 1.3.1](https://minecraft.wiki/w/Java_Edition_1.3.1)；设计对照见本书 [《多人游戏与共同世界》](/design/multiplayer-world)。
 
 [^be]: Bedrock 使用基于 RakNet 的 UDP 协议，与 Java 的 TCP 包格式不是同一张表。见 [Bedrock Edition protocol](https://minecraft.wiki/w/Bedrock_Edition_protocol)。
 

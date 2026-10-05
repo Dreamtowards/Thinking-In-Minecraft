@@ -786,7 +786,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 #### `design/12` 多人游戏与共同世界
 
-- 目标文件：`docs/design/(part4)/multiplayer-world.mdx` · 两类 · ▤
+- 目标文件：`docs/design/(part4)/multiplayer-world.mdx` · 两类 · ✎
 - **简介**：第二个玩家进入以后，同一套方块、生存和建造规则会产生合作、展示、交换、财产、信任、冲突和共同约定。本章把旧 `who-makes-rules` 合并进多人设计，不再人为拆成两章。
 - **要回答**：为什么只增加其他玩家，就会让同一套 Minecraft 规则产生完全不同的社会问题和玩法？
 - **交叉**：`history/05`、`history/11`、`impl/10`、`rewrite/07`
