@@ -1,0 +1,819 @@
+---
+title: 客户端渲染与反馈
+description: 从区块网格、可见性与透明渲染，到实体插值、粒子、音频和资源包，理解客户端怎样把世界状态变成玩家真正看到、听到和理解到的体验。
+tags: [client, rendering, chunk-mesh, culling, transparency, resource-pack, particles, audio, java]
+---
+
+玩家挖一块石头时，会先看到裂痕和碎屑；转动视角时，实体运动仍然应该连续；隔着水和玻璃看远处物体时，前后关系也不能突然错乱。对玩家来说，这些都属于“世界正在正常显示”。
+
+但服务器或客户端世界保存的 Block State、Entity、Light 和 Biome 并不是最终画面。GPU 需要的是顶点、索引、纹理、Render Pipeline 和 Draw Command，扬声器需要空间化的声音实例，HUD 还要把生命值、冷却和物品状态重新组织成可读信息。
+
+所以第二部建立的世界运行规则到了这里还要经过一次转换：**从可模拟的状态，变成可感知的表现。**
+
+所以这一章真正回答的是：
+
+> **客户端怎样把离散、可修改的世界状态，转换成每一帧可以提交给 GPU、扬声器和 UI 的表现，同时又不把“看见的状态”误当成另一份世界规则？**
+
+这不是一篇渲染器教程。我们不会逐个讲 Shader Stage、矩阵 API 或 OpenGL / Vulkan 调用，而是关注 Minecraft 这种**可修改体素世界**为什么需要 Chunk Mesh、异步重建、可见性裁剪、不同透明层，以及粒子、音频和破坏动画为什么属于客户端表现系统。
+
+本文主要以 **Java Edition 26.3** 为当前实现参照。这个版本的客户端渲染仍在快速演进：Terrain 已经能在支持的设备上使用 MultiDrawIndirect，“Improved Transparency” 也改为新的 Order-independent Transparency；Resource Pack Version 则已经到 97.1。[^release]
+
+```mermaid
+flowchart LR
+  World["Client-side world state"] --> Geometry["Section geometry"]
+  World --> Entities["Entity / Block Entity render state"]
+  World --> Feedback["Particles / Sounds / Overlays"]
+  Resources["Resource Pack"] --> Geometry
+  Resources --> Entities
+  Resources --> Feedback
+  Geometry --> Frame["Rendered frame"]
+  Entities --> Frame
+  Feedback --> Experience["Player feedback"]
+  Frame --> Experience
+```
+
+## 方块世界怎样变成 GPU 能画的数据？
+
+第一章里的 Section 保存的是 Block State Palette，不是 Triangle List。一个 `minecraft:stone` 的 ID 本身不会告诉 GPU 应该在屏幕哪里画六个面；楼梯、栅栏、门、玻璃和水更不可能只靠“这是哪个方块”直接提交。
+
+客户端首先需要建立一层**渲染表示**。
+
+### Block State 不是 Mesh
+
+可以把最基本的转换写成：
+
+```text
+Block State
+    +
+neighboring states / light / biome context
+    +
+resource models and textures
+        ↓
+renderable geometry
+```
+
+Block State 决定“这里是什么”，Resource Pack 中的 Model / Texture 决定“它通常怎样被画”，邻居、光照和其他局部上下文则可能继续影响最终几何、颜色或面是否需要出现。
+
+因此 Minecraft 的地形渲染并不是简单地：
+
+```text
+1 voxel = 1 cube = 12 triangles
+```
+
+有些 Block 没有完整六面体，有些模型会根据状态或连接关系改变，还有些内容需要在普通方块模型之外增加特殊表现。部分 Block Entity，例如 Chest、Banner，会使用独立的 Block Entity Renderer；Entity 则有另一套独立渲染路径。
+
+这也是为什么“Voxel Renderer”在 Minecraft 里只是起点。世界的数据粒度是格子，最终表现粒度却可能是 Model Part、Quad、Entity Render State、Particle，甚至单独的 Post Effect。
+
+### Section 是重建与提交的重要空间单位
+
+现代 Java 客户端以 **Chunk Section** 为地形渲染的重要单位。当前 26.3 的 `SectionRenderDispatcher.RenderSection` 持有自己的 `SectionMesh`、Bounding Box、Compile Task 和 Transparency Resort Task；`SectionCompiler` 会从对应 `RenderSectionRegion` 编译几何，结果再上传到 GPU。[^render-section] [^section-dispatcher]
+
+概念上是一条这样的链：
+
+```mermaid
+flowchart LR
+  State["ClientLevel<br/>Block States"] --> Dirty["Render Section needs rebuild"]
+  Dirty --> Compile["SectionCompiler"]
+  Compile --> Layers["SOLID / CUTOUT / TRANSLUCENT geometry"]
+  Layers --> Mesh["SectionMesh"]
+  Mesh --> Upload["GPU buffers"]
+  Upload --> Draw["Draw visible sections"]
+```
+
+这样做的意义不是“Chunk 恰好是 Minecraft 的传统单位”，而是为了让变化可以被**局部失效**。
+
+玩家挖掉一格石头时，不需要重建整个世界。客户端只需要让相关 Section 的旧 Mesh 失效，并安排新的 Compile Task；如果变化发生在 Section 边缘，邻区几何也可能因为原本被遮住的面暴露而需要更新。
+
+这和前面几章反复出现的思想一致：
+
+> **世界可以很大，但变化通常很局部，所以派生数据也应该允许局部重建。**
+
+### Compile 和 Draw 是两种完全不同的工作
+
+一个已经编译完成的 Section Mesh，可以连续很多帧重复画。
+
+真正昂贵且不必每帧重复的，是从 Block State / Model 重新生成 Geometry。
+
+所以渲染循环可以粗略分成：
+
+```text
+world changed?
+    ↓ yes
+rebuild / upload geometry
+
+every frame:
+    reuse geometry
+    ↓
+select visible work
+    ↓
+submit draw commands
+```
+
+当前 `SectionRenderDispatcher` 本身就维护 Compile Queue、Buffer Pool、Staging Buffer 与 GPU Upload；`RenderSection` 同时支持异步 Compile Task。[^section-dispatcher]
+
+这解释了一个玩家经常见到的现象：**世界数据已经改变，并不意味着新的 Mesh 必须在同一 CPU 指令里立刻完成。**
+
+渲染表示可以晚一小步更新，只要系统能尽快把失效区域重新构建出来。
+
+<Callout type="info" title="World data 与 Render cache 是两层">
+Block State 是世界状态；Section Mesh 是从它计算出的客户端缓存。缓存可以被丢弃、重建或换一种实现，只要重新生成后的画面仍正确表达当前客户端世界。
+</Callout>
+
+### 为什么要分 SOLID、CUTOUT 和 TRANSLUCENT？
+
+26.3 当前的 `ChunkSectionLayer` 仍明确分成：
+
+- `SOLID`；
+- `CUTOUT`；
+- `TRANSLUCENT`。[^chunk-layers]
+
+这不是为了给代码分类得好看，而是因为不同几何需要不同的 Raster / Depth / Blend 规则。
+
+**Solid** 适合普通完全不透明表面。  
+**Cutout** 常用于纹理只有“完全显示 / 完全丢弃”两种结果的表面，例如很多叶片或植物。  
+**Translucent** 则允许中间 Alpha，需要真正的混色。
+
+如果把它们全部用同一种方式处理，要么会牺牲正确性，要么会付出不必要的 Blend / Sorting 成本。
+
+因此 Section Compile 的输出不是“一个万能 Mesh”，而是按渲染语义拆成不同 Layer 的几何。
+
+### 三角形数量不是唯一的 Mesh 成本
+
+经典 Voxel Meshing 常讨论 Greedy Meshing：把相邻、共面的 Quad 尽可能合并，减少 Vertex / Triangle 数量。
+
+这个思路当然有效，但在 Minecraft 这样的模型驱动世界中，判断“两个面能不能安全合并”不只需要看：
+
+```text
+same block?
+same texture?
+```
+
+还可能涉及：
+
+- 两个面是不是同一 Render Layer；
+- Tint 是否相同；
+- Light / AO 顶点数据是否兼容；
+- UV 和 Model Geometry 是否能连续；
+- Transparency 是否要求更细的排序粒度；
+- Resource Pack 是否改变了 Model。
+
+所以更一般的评价式不是：
+
+> Triangle 越少，Renderer 一定越好。
+
+而是要同时看：
+
+> **Mesh 大小、Compile 成本、失效范围、上传成本和每帧提交成本。**
+
+一个完全静态的 Voxel 场景，可能非常适合激进合并；一个玩家每秒都在挖、放、推动，而且 Model 可以被 Resource Pack 改写的世界，则更看重重建路径是否稳定。
+
+这不是在证明某一种 Meshing 算法“绝对不适合 Minecraft”，而是在提醒开发者：**优化目标要和内容模型以及修改频率一起讨论。**
+
+### 26.3 继续在减少提交开销
+
+26.3 的官方技术变更明确写到：在支持的设备上，Terrain Blocks 现在会使用 **MultiDrawIndirect** 渲染。[^release]
+
+这类优化针对的不是“方块规则”，而是：
+
+> 已经有很多可画 Mesh 以后，怎样用更少的 CPU 提交开销让 GPU 执行更多 Draw。
+
+当前 `LevelRenderer` 也明确保存 `multiDrawIndirectAvailable` / `usingMultiDrawIndirectForTerrain`，`ChunkSectionLayer` 则分别持有普通和 Multi-draw Pipeline。[^level-renderer] [^chunk-layers]
+
+这很好地说明渲染层为什么值得独立出来：
+
+- 世界规则不需要知道 Draw Call 是怎么提交的；
+- Render Backend 可以多年持续重构；
+- 只要画面和交互语义保持兼容，底层实现就有很大的优化空间。
+
+## 客户端怎样决定这一帧真正要画什么？
+
+即使 Section Mesh 都已经编译完成，也不应该把所有 Mesh 每帧全部交给 GPU。
+
+一个世界可以加载很多 Section，但镜头只看向其中一部分；墙后、身后、远处的对象也未必值得进入本帧。
+
+因此**存在于 ClientLevel**与**进入当前 Frame**仍然是两种状态。
+
+### Frustum Culling 先排除镜头范围之外的对象
+
+Camera 的 View / Projection 可以定义一个可见视锥。
+
+当前 26.3 的 `Frustum` 可以用 AABB 判断对象是否在视锥中，`EntityRenderDispatcher.shouldRender` 也会结合 Frustum、相机位置和 Entity Renderer 来判断某个 Entity 是否值得提交。[^frustum] [^entity-renderer]
+
+```mermaid
+flowchart LR
+  Loaded["客户端已有对象"] --> Frustum{"在 Camera Frustum 内？"}
+  Frustum -->|no| Skip["本帧不提交"]
+  Frustum -->|yes| More["继续可见性判断"]
+  More --> Render["进入 Render work"]
+```
+
+Frustum Culling 的好处非常直接：相机背后的 Section 即使已经准备好 Mesh，也没有必要这一帧画。
+
+但它只能回答：
+
+> 在镜头方向里吗？
+
+不能回答：
+
+> 虽然在镜头方向里，但是否被一堵山完全挡住？
+
+### Section Occlusion 继续减少被遮挡的地形
+
+当前 `LevelRenderer` 还维护 `SectionOcclusionGraph`、`visibleSections` 与 `nearbyVisibleSections`。[^level-renderer]
+
+它解决的是比 Frustum 更进一步的问题：对于由大量 Section 构成的体素地形，可以利用 Section 之间的可见连通关系，减少明显被封闭几何遮挡的区域进入 Draw List。
+
+可以概念化成：
+
+```text
+loaded / available sections
+        ↓
+view frustum
+        ↓
+section visibility / occlusion
+        ↓
+visible section list
+        ↓
+render layers
+```
+
+这里的 **Render Distance** 只负责限定更大的候选范围；它怎样和 Chunk Loading、Server Simulation Distance、多人玩家位置共同作用，会放到第 11 章统一讨论。
+
+本章只保留客户端视角：
+
+> **Loaded 不等于 Visible，Visible 也不等于最终每个 Pixel 都能通过 Depth Test。**
+
+这是三个不同层级的裁剪。
+
+### Entity 和 Block Entity 不必塞进地形 Mesh
+
+一只 Zombie 每 Tick 都可能移动。如果把它焊进 Section Mesh，几乎每次移动都要让地形重建。
+
+因此 Entity 使用独立的 `EntityRenderDispatcher` / `EntityRenderer`。需要特殊动态表现的 Block Entity 则可以交给 `BlockEntityRenderDispatcher`；这不意味着“只要数据对象是 Block Entity，它的全部外观就一定脱离地形 Mesh”。普通方块模型与额外的动态 Renderer 可以共同组成最终表现。当前 `LevelRenderer` 同时持有 Entity / Block Entity Dispatcher，并与 Terrain 分开提交这些工作。[^level-renderer] [^entity-renderer] [^block-entity-renderer]
+
+| 表现对象 | 常见情况 | 典型渲染表示 |
+| --- | --- | --- |
+| 普通地形 Block | 多数时间静止 | Section Mesh |
+| 需要特殊表现的 Block Entity | 固定位置但局部外观持续变化 | Block Entity Renderer，可与方块模型并存 |
+| Entity | 连续移动、动画 | 独立 Entity Render State |
+| Particle | 短生命周期、大量实例 | Particle Engine |
+
+这里不能从运行时对象类型机械推导渲染路径，但可以看到一个共同趋势：**更新频率和表现需求不同的数据，往往需要不同的缓存与提交方式。**
+
+### Frame 可以在两个 Tick 状态之间插值
+
+第四章已经区分 Tick 与 Frame。
+
+如果 Entity 只在 20 TPS 的状态点上画位置，即使显示器能输出 144 FPS，也会看起来每 50 ms 跳一下。
+
+客户端因此可以在两个离散状态之间计算表现位置。最简单的线性插值是：
+
+$$
+p_{render} = (1-alpha)p_{prev} + alpha p_{current}
+$$
+
+其中 `alpha` 是当前 Frame 位于两个 Tick 之间的比例。
+
+当前 26.3 的 `EntityRenderDispatcher.extractEntity(entity, partialTicks)` 就明确把 `partialTicks` 带入 Entity Render State 的提取；Renderer 得到的是适合这一帧表现的状态，而不必直接把服务端 / Client Tick 的离散坐标原样画出来。[^entity-renderer]
+
+```mermaid
+flowchart LR
+  Prev["Previous Tick state"] --> Interp["partial tick interpolation"]
+  Current["Current Tick state"] --> Interp
+  Interp --> RenderState["EntityRenderState"]
+  RenderState --> Frame["Current frame"]
+```
+
+因此：
+
+> **Rendered Position 可以不是任何一个 Tick 真正保存过的位置。**
+
+它只是两个合法模拟状态之间的视觉表示。
+
+这不等于客户端擅自改变世界。它恰恰是在承认：Simulation 是离散的，Display 可以更连续。
+
+<Impl title="把 Render State 从 Simulation Object 中提取出来">
+如果 Renderer 每次都任意读取可变 Entity 对象，很容易让渲染线程、插值和模拟状态互相耦合。现代 Java 的 Entity Renderer 已经显式存在 Render State 提取步骤。对自研引擎来说，这种 Snapshot / Extract 思路同样适合把模拟与表现解耦。
+</Impl>
+
+## 透明为什么比不透明更难？
+
+不透明表面有一个非常有利的性质：只要 Depth Buffer 正确，很多时候前后绘制顺序并不影响最终结果。
+
+半透明却不一样。
+
+如果两个半透明表面 A、B 重叠，传统 Alpha Blending 的结果通常依赖：
+
+```text
+draw A then B
+```
+
+还是：
+
+```text
+draw B then A
+```
+
+因此透明几何长期需要额外的排序或近似算法。
+
+### 传统做法需要关心 Back-to-front Order
+
+从原理上说，半透明面通常希望从远到近绘制。
+
+如果排序单位过粗，会发生：
+
+- 远处的水盖到近处玻璃前面；
+- Particle 通过玻璃时顺序错误；
+- 两个相交透明物体无法找到一个全局正确顺序；
+- 相机移动后，之前正确的排序突然失效。
+
+当前 `RenderSection` 甚至单独存在 `ResortTransparencyTask`，`LevelRenderer` 也会根据 Camera Position 安排 Translucent Section Resort。[^render-section] [^level-renderer]
+
+这说明 Transparency 的问题并不止发生在 Shader 里。**相机移动本身就可能让 Index / Draw Order 需要重新组织。**
+
+### 26.3 的 Improved Transparency 改成 OIT
+
+Java 26.3 是这一问题非常值得记录的版本。
+
+官方把 “Improved Transparency” 的旧实现替换为新的 **Order-independent Transparency（OIT）** 算法。官方说明也直接解释了原因：传统半透明通常要 Back-to-front 排序，而即使逐 Triangle 完美排序，相交 Triangle 仍然无法用单一顺序正确解决。[^release]
+
+开启 Improved Transparency 后，新 OIT 允许 Translucent Object 以任意顺序提交，再通过额外的 Buffer / Pass 近似组合结果。
+
+```mermaid
+flowchart TB
+  subgraph Sorted["传统透明路径"]
+    Geometry1["Translucent geometry"] --> Sort["按视角排序"]
+    Sort --> Blend["按顺序 Blend"]
+  end
+
+  subgraph OIT["26.3 Improved Transparency"]
+    Geometry2["Translucent geometry"] --> Accumulate["OIT passes / accumulation"]
+    Accumulate --> Composite["Composite final transparency"]
+  end
+```
+
+它解决了很多“透过某个透明对象看另一个对象时消失”的问题，但不是免费午餐。
+
+官方明确指出：
+
+- OIT 是近似算法；
+- 仍可能产生较小的颜色误差；
+- 性能成本预计高于旧 Improved Transparency。[^release]
+
+因此更准确的工程判断不是：
+
+> OIT 比 Sorting 先进，所以永远应该开。
+
+而是：
+
+> **透明正确性、GPU 带宽 / Render Target 成本与设备能力之间仍然存在取舍。**
+
+关闭 Improved Transparency 时，26.3 仍保留更偏向性能的传统路径。[^release]
+
+### Render Layer 是一种“先把不同问题拆开”的办法
+
+SOLID、CUTOUT、TRANSLUCENT 的价值现在就更清楚了。
+
+Solid Geometry 不必为 Transparency 付费；Cutout 可以依赖 Alpha Test / Discard 一类规则而不进行连续混色；只有真正需要半透明的表面进入最复杂的路径。
+
+这也是实时渲染常见的设计原则：
+
+> **不要因为少数对象需要最贵的规则，就让所有对象都支付同样的成本。**
+
+同一原则在 Entity、Particles、Post Effect 上还会不断出现。
+
+## Resource Pack 为什么会影响渲染架构？
+
+如果 Resource Pack 只能替换 PNG，那么它只是“换皮”。
+
+现代 Java 的 Resource Pack 已经不是这个范围。
+
+它可以参与：
+
+- Block / Item Model；
+- Texture / Atlas Sprite；
+- Entity Equipment Asset；
+- Font；
+- Sound；
+- GUI Sprite；
+- Particle Resource；
+- Post-processing Effect；
+- 以及一些 Shader 相关资源。[^release]
+
+所以 Renderer 不能假设：
+
+> Stone 永远是某张固定 Texture，某个 Item 永远只有内置 Model。
+
+资源加载本身已经是客户端渲染输入的一部分。
+
+### Model 与 Texture 是运行时输入，不是编译进代码的常数
+
+当 Resource Pack 改变 Block Model 时，同一个 Block State 仍然可以对应不同的几何外观。
+
+因此这条链应该理解成：
+
+```mermaid
+flowchart LR
+  State["Block State"] --> Resolver["Block Model Resolver"]
+  Pack["Resource Pack"] --> Resolver
+  Resolver --> Geometry["Baked / resolved geometry"]
+  Pack --> Atlas["Textures / Atlases"]
+  Atlas --> Geometry
+  Geometry --> Section["Section compile"]
+```
+
+这也是为什么更换资源以后，Renderer 需要 Reload / Invalidate。
+
+当前 `EntityRenderDispatcher`、`BlockEntityRenderDispatcher` 都是 Resource Reload Listener；`LevelRenderer` 也有 `invalidateCompiledGeometry`。[^entity-renderer] [^block-entity-renderer] [^level-renderer]
+
+换句话说：
+
+> **资源包不是运行在 Render Pipeline 外面的“最后滤镜”，它会改变 Renderer 生成表现数据时使用的输入。**
+
+### Texture Atlas 减少的是状态切换，不改变世界语义
+
+大量 Block Texture 会被组织进 Atlas。
+
+Atlas 的意义是让很多几何能够共享较少的 Texture Binding / Material State，而不必每画一个方块就重新绑定一张独立图片。
+
+从世界系统角度，它只是一个表现层优化：
+
+```text
+minecraft:stone
+→ sprite region in atlas
+```
+
+Block State、碰撞、掉落、光照规则都不因为 Texture 被重新打包进 Atlas 而改变。
+
+这正是“表现缓存可以换实现”的典型例子。
+
+### Resource Pack 和 Data Pack 改的是不同层
+
+第 12 章会详细解释两者，这里只建立客户端边界。
+
+**Resource Pack** 主要改变：
+
+- 看起来怎样；
+- 听起来怎样；
+- UI / Font 怎样呈现；
+- 某些客户端 Effect 怎样执行。
+
+**Data Pack** 主要改变：
+
+- Recipe；
+- Loot；
+- Tag；
+- Worldgen；
+- Function；
+- Registry Data 等游戏数据和规则。
+
+两者并不是绝对互不相干——同一个 Item ID 当然可能同时有配方和模型——但所有权不同。
+
+可以粗略理解成：
+
+```text
+game meaning / content data
+        ↓
+Data Pack
+
+presentation resources
+        ↓
+Resource Pack
+```
+
+不要因为它们都叫 Pack，就把它们当成同一个扩展面。
+
+### Core Shader Override 和受支持的 Post Effect 不在同一支持边界
+
+现代 Resource Pack 已经能触及 Shader，但这里尤其需要注意官方支持边界。
+
+26.3 官方说明明确指出：虽然 Resource Pack 技术上可以覆盖 **Core Shaders**，但这仍然被视为**不受支持、不是预期的 Resource Pack Feature**，内部实现可以随时变化。[^release]
+
+另一方面，26.3 新增了 `/posteffect`，让 Resource Pack 提供的 Post-processing Effect 成为显式可调用能力；还支持 `minecraft:end_of_frame` 这种 Pack 加载期间持续启用的 Post Effect。[^release]
+
+这两者很适合用来观察 API 的支持边界：
+
+| 能力 | 能不能做到 | 官方支持定位 |
+| --- | --- | --- |
+| 替换 Texture / Model / Sound | 可以 | Resource Pack 正式职责 |
+| 定义 Post Effect | 可以 | 26.3 提供显式支持 |
+| Override Core Shader | 技术上可以 | 官方明确视为不受支持内部实现 |
+
+所以“文件能覆盖”并不自动等于“这是稳定扩展 API”。
+
+<Callout type="warning" title="可修改不等于受支持">
+成熟游戏常常存在三层扩展面：正式 Schema、可用但不稳定的内部资源，以及纯实现细节。对 Mod / Pack 作者来说，它们的升级成本完全不同。
+</Callout>
+
+## 世界变化怎样变成玩家能感知的反馈？
+
+渲染不只是“把地形画出来”。
+
+如果挖方块时只有最终某一帧突然从 Stone 变成 Air，没有裂痕、声音和碎屑；如果 Creeper 已经开始引爆，却没有任何声音提示；如果玩家受到伤害，但画面、HUD 和音效都完全不响应，那么世界规则虽然还能运行，玩家却很难及时读懂它。
+
+反馈系统做的就是：
+
+> **把模拟事件和状态变化转换成视觉、听觉和界面信息。**
+
+### Block Break Animation 是覆盖层，不是 Block State
+
+挖掘裂痕最能说明表现状态为什么可以独立存在。
+
+方块在完全破坏之前仍然是原来的 Block State，但客户端可以在其表面叠加一层逐级变化的 Crack Overlay。
+
+当前 26.3 的 `LevelRenderer` 仍然有专门的 `submitBlockDestroyAnimation`；代码中也存在独立的 `BlockDestructionProgress` 记录类型，用来保存位置、进度和更新时间。[^level-renderer] [^break-progress] 这里足以说明的是：**破坏进度可以独立于 Block State 表达**，而不是必须把“20% 损坏、30% 损坏”编码成新的方块状态。
+
+于是玩家看到的其实是：
+
+```text
+Stone Block State
++
+destroy progress overlay
+```
+
+而不是：
+
+```text
+Stone_20PercentBroken
+Stone_30PercentBroken
+Stone_40PercentBroken
+...
+```
+
+这避免了为了表现过程，把临时 UI 状态污染进真正的 Block Registry / Block State。
+
+同一种模式也适用于：
+
+- Entity Hurt Flash；
+- Selection Outline；
+- Cooldown Indicator；
+- Portal Overlay；
+- Screen Post Effect。
+
+**表现层可以给同一份世界状态叠加额外解释，而无需把这些解释永久保存到世界里。**
+
+### Particle 是短生命周期的客户端对象
+
+Particle 看起来像 Entity：有位置、速度、年龄，甚至可能做简单碰撞。
+
+但它并不是共享世界里的普通 Entity。
+
+当前 `ParticleEngine` 只存在客户端，维护按 `ParticleRenderType` 分组的 Particle、待加入队列、Tracking Emitter 与 Particle Limit；每个 Particle 自己有 Age、Lifetime、Gravity、Friction 和可选 Physics。[^particles]
+
+```mermaid
+flowchart LR
+  Event["World / client event"] --> Spawn["create Particle"]
+  Spawn --> Engine["ParticleEngine"]
+  Engine --> Tick["client particle tick"]
+  Tick --> Extract["extract visible particle render state"]
+  Extract --> Frame["render"]
+  Tick --> Dead{"lifetime ended?"}
+  Dead -->|yes| Remove["remove"]
+  Dead -->|no| Tick
+```
+
+它适合表示：
+
+- 方块破碎碎屑；
+- Smoke；
+- Portal；
+- Critical Hit；
+- Splash；
+- Explosion Visual；
+- 环境气氛。
+
+Particle 消失不会让服务器 World 删除一个 Entity，因为它本来就不是那层数据。
+
+这让 Particle 可以拥有更激进的客户端预算策略。26.3 的 Particle Engine 本身就有 Particle Limit / Group Capacity；在高负载时，少显示一些 Particle 通常比让整个 World Simulation 停下来更合理。[^particles]
+
+### Sound 既是反馈，也是空间信息
+
+Sound 也不能简单归类成“装饰”。
+
+脚步、爆炸、Creeper 引信、水流、Minecart、方块破坏都能告诉玩家：
+
+- 发生了什么；
+- 距离多远；
+- 大概在哪个方向。
+
+当前 `SoundManager` 保存 Listener Transform、Sound Category Volume、设备与活动 Sound Instance；玩家 Camera / Listener 的位置直接参与最终听感。[^sound-manager]
+
+因此：
+
+```text
+Sound Event + source position
+        ↓
+client listener transform
+        ↓
+distance / direction / volume
+        ↓
+left-right-spatial perception
+```
+
+位置音频不改变 Creeper 是否真的爆炸，但它会改变玩家能否在爆炸前意识到危险。
+
+这说明表现层存在一个重要区别：
+
+> **不决定世界规则，不代表不承载游戏信息。**
+
+粒子数量可以只是氛围；Creeper 的声音却可能是生存决策所依赖的信息通道。
+
+### 字幕把声音事件搬到另一种感官
+
+Java 的 Subtitles 正是对这个问题的另一种处理：把 Sound Event 转换成屏幕上的文本与方向提示。
+
+从系统上看，它不是另一份模拟，只是同一个事件的另一条 Presentation Channel：
+
+```mermaid
+flowchart LR
+  SoundEvent["Sound Event"] --> Audio["Spatial Audio"]
+  SoundEvent --> Subtitle["Subtitle / visual cue"]
+  Audio --> Player["Player perception"]
+  Subtitle --> Player
+```
+
+这也是无障碍设计里非常重要的一条原则：
+
+> **如果某种反馈实际承载玩法信息，就应该思考能不能通过另一种感官通道表达，而不是只问“这个特效能不能关闭”。**
+
+本章不会展开完整的 Accessibility Feature List，但这一原则值得保留，因为它直接来自表现层的职责。
+
+### HUD 是把世界状态压缩成可读符号
+
+Health、Hunger、Armor、Crosshair、Hotbar、Boss Bar 都不是世界中真实存在的几何物体。
+
+它们把复杂状态压缩成即时可读的视觉符号。
+
+例如玩家生命值可以存在 Simulation State 中，但“十颗心”是 UI 表现；Attack Cooldown 可以是游戏规则里的计时状态，但屏幕 Indicator 是客户端对它的可视化。
+
+因此：
+
+```text
+simulation state
+      ↓
+presentation mapping
+      ↓
+HUD symbol
+```
+
+HUD 的作用不是复制世界，而是**选择哪些状态值得持续展示**。
+
+这和 Particle / Audio 一样，本质上都是信息设计，只是它更稳定、更符号化。
+
+
+## 表现状态和世界状态怎样划界？
+
+客户端需要一份世界状态才能渲染，但最终画面还会维护许多只服务于表现的状态。Section Mesh、动画姿态、Particle、Sound Instance、Camera Bob、Screen Shake 和 Post Effect 都属于这一层。
+
+### 表现层可以拥有自己的临时状态
+
+Section Mesh 是从 Block State 编译出的缓存；GPU Buffer 丢失、Resource Pack Reload 或 Renderer Backend 改变时，它可以被丢弃并重新生成。Entity 的渲染位置也可以通过 partial tick 落在两个 Simulation Tick 之间，Particle 则拥有自己的年龄、速度和生命周期。
+
+所以“表现层没有状态”并不准确。更好的区分是：
+
+> **表现层可以维护派生状态和临时状态，但这些状态不应成为共享玩法状态的最终裁决来源。**
+
+这也是 `/posteffect` 很有代表性的地方。26.3 官方明确说明 Post Effect 存在于客户端 Resource Pack 中，服务器无法知道某个 Effect 最终是否真的应用。[^release] 服务器可以表达一个表现意图，但最终像素仍取决于客户端资源和渲染实现。
+
+```mermaid
+flowchart LR
+  World["World / gameplay state"] --> Presentation["Client presentation state"]
+  Resources["Resource Pack / client settings"] --> Presentation
+  Presentation --> Frame["Pixels / audio / UI"]
+  Presentation -.->|"does not rewrite authority"| World
+```
+
+### 同一份世界语义可以有不同表现
+
+Resource Pack 让这件事变得非常直观。同一服务器上的两个客户端可以使用不同 Texture、Model、Font、Sound、UI 或受支持的 Post Effect，但仍然共同理解 `minecraft:stone` 代表同一个 Block ID 和同一套玩法语义。
+
+因此 Multiplayer Consistency 并不要求所有客户端逐像素一致，而是要求**会影响共享玩法结果的状态保持一致**。客户端当然可以把普通方块和实体画成不同风格；限制的是它不能因为视觉解释不同，就单方面宣布方块不存在、玩家没有受伤，或者 Inventory 多出了一组物品。
+
+| 表现层可以维护或改变 | 不能据此改写 |
+| --- | --- |
+| Entity 的插值姿态 | 权威 Entity Position |
+| Section Mesh / GPU Buffer | Block State 是否存在 |
+| Particle 数量与生命周期 | 对应 Gameplay Event 是否发生 |
+| Texture / Model / Sound | Item / Block 的玩法语义 |
+| Crack Overlay | 方块是否真正破坏 |
+| Post Effect | 服务器世界规则 |
+
+这条边界也解释了为什么反馈可以比模拟更平滑、更丰富，而不需要和 Simulation Tick 一一对应。
+
+接下来很自然会出现另一个问题：玩家按下按键以后，客户端能不能在服务端确认之前先推进一部分结果？这已经进入 **Prediction、Confirmation 与 Reconciliation**。客户端预测、服务器确认与状态校正将在下一章讨论；本章停在表现边界。
+
+## 一帧的成本到底花在哪里？
+
+完整性能预算会在第 11 章统一讨论，但在结束客户端渲染之前，需要先建立一张最小成本图。
+
+如果目标帧率是 $f$，每帧墙钟预算近似为：
+
+$$
+B_{frame} = 1000 / f
+$$
+
+60 FPS 约有 16.7 ms，144 FPS 则只剩约 6.9 ms。
+
+这段时间并不只属于 GPU。
+
+### CPU 需要准备这一帧要画什么
+
+客户端 CPU 可能正在做：
+
+- Dirty Section Compile / Rebuild；
+- Visibility / Occlusion 更新；
+- Entity Render State 提取；
+- Particle Tick / Extract；
+- Draw / Submit 数据准备；
+- Resource / Animation 更新；
+- UI Layout / Text 等工作。
+
+Section Rebuild 尤其容易制造“世界一改就卡一下”的脉冲成本，因为它不是稳定的每帧固定工作，而是由玩家移动、挖掘、Chunk 到达和 Resource Reload 触发。
+
+### GPU 负责真正执行大量可见工作
+
+GPU 侧则会承担：
+
+- Terrain Rasterization；
+- Entity / Block Entity；
+- Transparency；
+- Particle；
+- Shadow / Lighting-related Shader Work；
+- Post-processing；
+- UI Composition 等。
+
+OIT 就是一个很典型的 GPU 取舍：它换来更可靠的透明结果，但需要额外 Pass / Buffer，并明确有更高的性能成本。[^release]
+
+MultiDrawIndirect 则从另一方向减少 CPU → GPU 提交开销。[^release]
+
+于是同一个 FPS 下降，可能来自完全不同的层：
+
+```mermaid
+flowchart TD
+  LowFPS["FPS 下降"] --> CPU["CPU frame work"]
+  LowFPS --> GPU["GPU frame work"]
+  CPU --> Rebuild["Section rebuild / visibility / submit"]
+  CPU --> ClientSim["Particle / render-state extraction"]
+  GPU --> Terrain["Terrain / entities"]
+  GPU --> Transparency["Transparency / post effects"]
+```
+
+不能因为“画面卡了”，就直接得出：
+
+> GPU 不够快。
+
+更不能得出：
+
+> Server TPS 也一定掉了。
+
+第四章已经建立 FPS / TPS 的区别，第 11 章会再把 Client Rendering、Chunk I/O、Worldgen、Entity、GC 等放进同一个性能诊断框架。
+
+<Alternative title="先问哪一层超预算，再问用什么优化">
+降低 Render Distance、减少 Particle、优化 Section Compile、减少 Draw Submission、简化 Shader，解决的是不同瓶颈。一个优化技巧只有在它打中当前预算来源时才有意义。
+</Alternative>
+
+## 这一章留下什么
+
+对玩家来说，客户端渲染最重要的价值并不是“把世界画得更漂亮”，而是让离散、不断变化的规则变得**连续、可读、可判断**。裂痕告诉你方块正在被破坏，空间音频告诉你危险来自哪里，插值让 20 TPS 的状态不会看起来像每 50 ms 跳一次。表现不决定这些事件是否发生，却直接决定玩家能否及时理解它们。
+
+对开发者来说，Minecraft 当前的 Section Mesh、OIT、MultiDrawIndirect 或具体 Renderer 类都不该被直接照搬成普遍答案。真正更值得迁移的是几条边界：
+
+- **Source State 与 Derived Render Cache 分离**：缓存应能失效、重建和替换实现；
+- **Simulation Tick 与 Render Frame 分离**：显示频率不必绑死模拟频率；
+- **不同更新模式使用不同表现路径**：静态地形、动态实体、粒子没有必要共用一种缓存；
+- **Gameplay Meaning 与 Presentation Resource 分离**：资源可以重解释外观，但不应成为共享玩法状态的裁决来源；
+- **先确定瓶颈，再选择渲染优化**：减少 Mesh、减少提交、改变透明算法解决的是不同问题。
+
+不能直接抄走的，则是 Minecraft 26.3 当前选择的 Section 粒度、Layer 划分和透明算法。它们服务于 Minecraft 自己的模型系统、资源包兼容和硬件范围；换一个体素引擎，最优答案完全可能不同。
+
+下一章会穿过这条边界继续向外：客户端手里这份世界状态究竟从哪里来？单人游戏为什么也会有 Client / Server 两边？Chunk、Entity、Inventory 和玩家操作怎样跨 Packet 保持一致，而 Prediction 又为什么会让高延迟世界仍然显得可以操作？
+
+[^release]: Mojang Studios，《Minecraft Java Edition 26.3》，2026-09-15。正式版 Technical Changes 同时记录了 Terrain MultiDrawIndirect、Improved Transparency 的新 OIT 实现及其性能取舍、Resource Pack Version 97.1、Core Shader Override 的不受支持定位，以及 `/posteffect` 与 `minecraft:end_of_frame` 等 Post Effect 能力。见 https://feedback.minecraft.net/hc/en-us/articles/48913133328013-Minecraft-Java-Edition-26-3
+
+[^render-section]: Java 26.3 `SectionRenderDispatcher.RenderSection` 当前持有 `SectionMesh`、AABB、Compile Task、Transparency Resort Task，并支持异步 / 同步 Section Compile。见 NeoForge 26.3 映射 Javadoc：https://aldak0.ru/javadoc/26.3.x/net/minecraft/client/renderer/chunk/SectionRenderDispatcher.RenderSection.html
+
+[^section-dispatcher]: Java 26.3 `SectionRenderDispatcher` 当前维护 Compile Queue、SectionBufferBuilderPool、Staging Buffer、GPU Terrain Buffer Upload 与 Camera Position。见 https://aldak0.ru/javadoc/26.3.x/net/minecraft/client/renderer/chunk/SectionRenderDispatcher.html
+
+[^chunk-layers]: Java 26.3 `ChunkSectionLayer` 当前明确包含 `SOLID`、`CUTOUT`、`TRANSLUCENT`，并为 Layer 保存 Pipeline / MultiDraw Pipeline 与 Transparency 信息。见 https://aldak0.ru/javadoc/26.3.x/net/minecraft/client/renderer/chunk/ChunkSectionLayer.html
+
+[^level-renderer]: Java 26.3 `LevelRenderer` 当前持有 `SectionOcclusionGraph`、`visibleSections`、`SectionRenderDispatcher`、Entity / Block Entity Dispatcher、OIT Targets 与 MultiDrawIndirect 状态，并负责提交 Terrain、Entities、Block Entities、Block Destroy Animation 等世界表现。见 https://aldak0.ru/javadoc/26.3.x/net/minecraft/client/renderer/LevelRenderer.html
+
+[^frustum]: Java 26.3 `Frustum` 根据 Model-view / Projection 构建视锥，并提供 `isVisible(AABB)`、`cubeInFrustum` 等可见性查询。见 https://aldak0.ru/javadoc/26.3.x/net/minecraft/client/renderer/culling/Frustum.html
+
+[^entity-renderer]: Java 26.3 `EntityRenderDispatcher` 当前按 Entity Type 选择 Renderer，并通过 `extractEntity(entity, partialTicks)` 提取当前 Frame 的 `EntityRenderState`；`shouldRender` 接受 Frustum 与 Camera Position。见 https://aldak0.ru/javadoc/26.3.x/net/minecraft/client/renderer/entity/EntityRenderDispatcher.html
+
+[^block-entity-renderer]: Java 26.3 `BlockEntityRenderDispatcher` 当前独立管理 Block Entity Renderer，并同时使用 Block Model、Item Model、Entity Renderer、Sprites 等客户端表现资源。见 https://aldak0.ru/javadoc/26.3.x/net/minecraft/client/renderer/blockentity/BlockEntityRenderDispatcher.html
+
+
+
+
+
+
+
+
+
+[^break-progress]: Java 26.3 `BlockDestructionProgress` 记录 Block Position、Progress 与 Updated Render Tick；Level Renderer 另有专用 Block Destroy Animation 提交路径。见 https://aldak0.ru/javadoc/26.3.x/net/minecraft/server/level/BlockDestructionProgress.html
+
+[^particles]: Java 26.3 `ParticleEngine` 位于客户端，当前维护 Particle Render Type 分组、待加入队列、Tracking Emitter 与 Particle Limit，并在 Client Tick 后提取可见 Particle Render State。见 https://aldak0.ru/javadoc/26.3.x/net/minecraft/client/particle/ParticleEngine.html 与 https://aldak0.ru/javadoc/26.3.x/net/minecraft/client/particle/Particle.html
+
+[^sound-manager]: Java 26.3 `SoundManager` 位于客户端，管理 Sound Engine、Listener Transform、Sound Source Volume、设备和活动 Sound Instance。见 https://aldak0.ru/javadoc/26.3.x/net/minecraft/client/sounds/SoundManager.html
