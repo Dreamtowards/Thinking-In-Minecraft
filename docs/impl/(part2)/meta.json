@@ -1,4 +1,4 @@
 {
   "title": "世界如何运行",
-  "pages": ["tick", "entities", "items", "redstone"]
+  "pages": ["tick", "block-updates-light-fluid", "entities", "items", "redstone"]
 }

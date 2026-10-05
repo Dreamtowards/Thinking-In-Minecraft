@@ -1022,8 +1022,8 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 ### `impl/05` 方块更新、光照与流体
 
-- **目标文件**：由现有 `light-fluid-updates.mdx` 重写
-- **状态**：待重写
+- **目标文件**：`docs/impl/(part2)/block-updates-light-fluid.mdx`
+- **状态**：✎ 已按新版结构重写
 - **核心问题**：一个方块变化以后，这种变化怎样在附近世界继续传播？
 - **建议结构**：
 
@@ -1298,7 +1298,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 | --- | --- |
 | `worldgen-pipeline.mdx` 中 Worldgen 主体 | `impl/03 世界生成` |
 | `worldgen-pipeline.mdx` 中完整 Chunk Lifecycle / 多线程加载 | `impl/11 区块加载、世界流送与性能预算` |
-| `light-fluid-updates.mdx` | `impl/05 方块更新、光照与流体` |
+| `light-fluid-updates.mdx` | `impl/05 方块更新、光照与流体` → `block-updates-light-fluid.mdx` |
 | `entities.mdx` | `impl/06 实体、移动与 AI` |
 | `client-render.mdx` | `impl/09 客户端渲染与反馈` |
 | `feel-client.mdx` 中音频 / 粒子 / 视觉反馈 | `impl/09` |
