@@ -74,14 +74,11 @@ max(
 
 `SignalGetter.getSignal(pos, direction)` 的核心关系可以概念化为：
 
-```text
-own weak signal of block
-        ↓
-is this block a redstone conductor?
-   ↙                    ↘
- no                     yes
- ↓                       ↓
-own signal      max(own signal, direct signal entering it)
+```mermaid
+flowchart TD
+  Own["own weak signal of block"] --> Conductor{"is this block a redstone conductor?"}
+  Conductor -->|no| Weak["own signal"]
+  Conductor -->|yes| Combined["max(own signal, direct signal entering it)"]
 ```
 
 于是所谓“一个实心方块被强充能以后，可以继续让旁边装置读到信号”，不是因为世界给这个方块永久写入了：
@@ -180,12 +177,13 @@ Wire 计算出新强度以后，事情还没有结束。
 
 而更像：
 
-```text
-某格重新计算
-→ 状态改变
-→ 通知附近位置
-→ 下一格重新计算
-→ 继续展开
+```mermaid
+flowchart LR
+  Evaluate["某格重新计算"] --> Change{"状态改变了吗？"}
+  Change -->|否| Stop["停止"]
+  Change -->|是| Notify["通知附近位置"]
+  Notify --> Next["下一格重新计算"]
+  Next --> Evaluate
 ```
 
 这正是上一章 Update Cascade 在红石中的具体表现。
@@ -242,14 +240,13 @@ Repeater 的作用不只是把输出恢复到 15。
 
 这意味着 Repeater 的基本语义是：
 
-```text
-input changed
-     ↓
-should output change?
-     ↓
-schedule future block tick
-     ↓
-re-check / commit powered state
+```mermaid
+flowchart LR
+  Input["Input changed"] --> Decide{"Should output change?"}
+  Decide -->|no| Keep["保持当前状态"]
+  Decide -->|yes| Schedule["Schedule future block tick"]
+  Schedule --> Recheck["到期后重新检查"]
+  Recheck --> Commit["Commit POWERED state"]
 ```
 
 而不是立即把输入复制到输出。
@@ -291,16 +288,12 @@ watchedState != oldState ?
 
 它复用了方块更新基础设施：
 
-```text
-watched block changes
-      ↓
-shape update reaches observer
-      ↓
-observer schedules tick
-      ↓
-POWERED toggles
-      ↓
-output pulse
+```mermaid
+flowchart LR
+  Change["被观察方块变化"] --> Shape["Shape Update 到达 Observer"]
+  Shape --> Schedule["安排 Scheduled Tick"]
+  Schedule --> Toggle["切换 POWERED"]
+  Toggle --> Pulse["输出短脉冲"]
 ```
 
 这和 BUD 有历史关系，但两者不是同一个实现机制。后面会专门区分。
@@ -363,34 +356,21 @@ Java 当前至少存在三类容易混淆的顺序：
 
 假设 A 和 B 都会影响 C。
 
-如果顺序是：
+如果顺序不同，C 读取到的就可能是两版不同的中间世界：
 
-```text
-A changes
-→ C checks world
-→ B changes
-```
+```mermaid
+flowchart TB
+  subgraph First["顺序一"]
+    A1["A changes"] --> C1["C checks world"]
+    C1 --> B1["B changes"]
+    C1 -.-> Seen1["C sees: A = new, B = old"]
+  end
 
-那么 C 看见的是：
-
-```text
-A = new
-B = old
-```
-
-如果顺序改成：
-
-```text
-A changes
-→ B changes
-→ C checks world
-```
-
-C 看见的就是：
-
-```text
-A = new
-B = new
+  subgraph Second["顺序二"]
+    A2["A changes"] --> B2["B changes"]
+    B2 --> C2["C checks world"]
+    C2 -.-> Seen2["C sees: A = new, B = new"]
+  end
 ```
 
 最终稳定状态可能完全相同，但 C 在中间是否产生过 Pulse、是否预约过一次 Tick、是否排入过 Block Event，都可能不同。
@@ -464,21 +444,20 @@ Quasi-connectivity，通常简称 **QC**，是 Java Redstone 最容易被说成�
 
 当前 `PistonBaseBlock.getNeighborSignal` 先检查 Piston 自己周围的信号，然后还会检查**Piston 上方那一格周围**的信号。[^piston-qc]
 
-因此可以出现：
+Power Source 并不需要直接接触 Piston。关键在于 Piston 的激活查询覆盖了两层位置：
 
-```text
-power source
-     ↓
-[ space above piston ]
-     ↓
-   piston
+```mermaid
+flowchart TD
+  Check["Piston activation query"] --> Self{"自身位置周围有信号？"}
+  Check --> Above{"上方一格周围有信号？"}
+  Self -->|yes| Active["Piston 应被激活"]
+  Above -->|yes| Active
+  Self -->|no| Continue["继续检查另一范围"]
+  Above -->|no| Continue
+  Continue --> Inactive["若两者都为 no，则不激活"]
 ```
 
-Power Source 并没有直接接触 Piston，却仍然满足 Piston 的“应该被激活”查询。
-
-这不是所有 Block 的通用规则。
-
-当前 Java 中，Piston、Dispenser、Dropper 属于这类会向上多检查一层的少数机制；Crafter 并不因此自动获得 QC。[^piston-qc] [^qc-ticket]
+这不是所有 Block 的通用规则。当前 Java 中，Piston、Dispenser、Dropper 属于这类会向上多检查一层的少数机制；Crafter 并不因此自动获得 QC。[^piston-qc] [^qc-ticket]
 
 所以更准确的说法是：
 
@@ -492,16 +471,7 @@ Power Source 并没有直接接触 Piston，却仍然满足 Piston 的“应该�
 
 会立刻遇到很多反例。
 
-真正发生的是：
-
-```text
-Piston asks:
-"would my own position be powered?"
-        +
-"would the space above me be powered?"
-```
-
-只要第二个问题回答 Yes，Piston 就认为自己应该动作。
+真正发生的只是：Piston 在判断自己是否应该动作时，除了询问“我的位置周围是否有信号”，还会询问“我上方那一格的周围是否有信号”。只要其中一个查询成立，激活条件就成立。
 
 因此“空气被供电”也只是方便描述，不意味着 Air Block 本身获得了新的持久化 Power State。
 
@@ -544,18 +514,14 @@ Quasi-connectivity 很早就被报告为 Bug。旧 Mojira 的 MC-108 描述的�
 5. Piston 再执行 `getNeighborSignal`；
 6. 此时它才发现自己早就应该动作。
 
-于是系统出现了：
+于是系统会经历一段“逻辑条件已经改变，但组件状态还没追上”的窗口：
 
-```text
-logical condition changed
-        ↓
-component not notified
-        ↓
-state temporarily stale
-        ↓
-unrelated later update arrives
-        ↓
-component catches up
+```mermaid
+flowchart LR
+  Condition["Logical condition changed"] --> Missing["Component not notified"]
+  Missing --> Stale["State temporarily stale"]
+  Stale --> Later["Later Neighbor Update arrives"]
+  Later --> CatchUp["Component re-checks and catches up"]
 ```
 
 这就是许多 **Block Update Detector** 行为的根。
@@ -651,20 +617,16 @@ Piston 会真正重写世界。
 
 真正执行动作时，`triggerEvent` 还会重新确认条件。
 
-因此：
+因此它更像一次分成两个阶段的提交：
 
-```text
-Update arrives
-      ↓
-Piston decides "I may need to move"
-      ↓
-Block Event queued
-      ↓
-world may change again
-      ↓
-Block Event phase
-      ↓
-Piston re-checks and commits
+```mermaid
+flowchart LR
+  Update["Neighbor Update arrives"] --> Decide["Piston 判断是否需要移动"]
+  Decide --> Queue["Queue Block Event"]
+  Queue --> Gap["世界仍可能继续变化"]
+  Gap --> Event["进入 Block Event 阶段"]
+  Event --> Recheck["再次检查条件"]
+  Recheck --> Commit["提交移动"]
 ```
 
 这种**两阶段提交**是很多零刻、短脉冲和 Piston 时序现象的基础。
@@ -692,16 +654,13 @@ Piston 不只是检查正前方一个 Block。
 
 Minecraft 会写入 Moving Piston 占位，并用 `PistonMovingBlockEntity` 保存真正被搬运的 Block State、进度和运动信息。[^piston-events]
 
-于是一次移动经历：
+于是一次移动会在静态与动态表示之间往返：
 
-```text
-static blocks
-     ↓
-moving placeholder + runtime state
-     ↓
-animation / entity pushing
-     ↓
-static blocks again
+```mermaid
+flowchart LR
+  Static["Static Block State"] --> Moving["Moving Piston 占位<br/>+ PistonMovingBlockEntity"]
+  Moving --> Progress["推进动画 / 推动 Entity"]
+  Progress --> Settle["写回最终 Static Block State"]
 ```
 
 这再次说明：
