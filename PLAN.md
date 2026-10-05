@@ -950,7 +950,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 ### `impl/01` 体素世界的数据模型
 
 - **目标文件**：`docs/impl/(part1)/data-model.mdx`（现有 `data-model.mdx` 作为素材）
-- **状态**：待重写
+- **状态**：✎ 已按新版结构重写
 - **核心问题**：玩家看到“一块方块”，程序到底保存了什么？Chunk 又承担了哪些职责？
 - **建议内容**：
   1. Block / Block State / Block Entity

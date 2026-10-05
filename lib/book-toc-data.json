@@ -694,16 +694,18 @@
               "id": "impl/01",
               "title": "体素世界的数据模型",
               "audience": "dev",
-              "desc": "方块状态、元数据、方块实体。区块是空间与 I/O 单位。节、调色板、压缩。空气也是数据。高度上限从 256 到 384，是数据模型对设计的限制被改写。区块不是实现细节，是「无限」的代价单位。",
-              "question": "空气为什么也是数据？区块意味着什么？",
+              "desc": "玩家看到的是石头、门、箱子和空气，程序需要把它们表示成可寻址、可压缩、可保存的数据。本章从 Block State、Block Entity 到 Chunk、Section、Palette 与 Registry，建立理解 Minecraft 世界实现的第一张地图。",
+              "question": "玩家眼里由方块组成的世界，在程序里究竟由哪些数据组成？",
               "sections": [
-                "玩家看到的方块 vs 内存里的方块",
-                "方块状态、元数据、方块实体",
-                "区块、节、调色板、压缩",
-                "稀疏与稠密",
-                "高度上限事件：数据模型如何限制设计"
+                "一格方块在程序里是什么：Block State、Block Entity 与 Air",
+                "世界不能按单格管理：Chunk、Section 与 Palette",
+                "名字、状态与 Registry 怎样对应",
+                "数据模型会反过来限制世界能长成什么样",
+                "Java 与 Bedrock：概念相似，实现不必相同"
               ],
-              "tags": [],
+              "tags": [
+                "基础"
+              ],
               "href": "/impl/data-model",
               "written": true
             },
