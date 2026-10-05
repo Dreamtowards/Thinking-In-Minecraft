@@ -66,203 +66,155 @@ Creative 很适合快速试错，但“无限资源 + 飞行”并不会自动�
 
 于是创作工具的基本问题出现了：
 
-> **能不能让玩家直接表达“我要改这一片区域”，而不必把这个意图拆成几千次单块操作？**
+> **能不能让玩家用更接近设计意图的尺度和动作来编辑世界，而不必把所有想法都拆成一次次单块点击？**
 
-从这里开始，编辑单位就从“一个方块”逐渐上升到“一个结构、一个选区、一片地形”。
+这里的变化并不只有“从一块变成一片”。有些工具把编辑尺度放大到结构、选区和整片地形，有些工具反而把一块方块继续切细；还有一些工具根本不改变世界的数据粒度，而是增加笔刷、雕刻、平滑、变换和预览等新的编辑动作。
 
-## 创作工具怎样扩展编辑能力
+## 从逐块建造到世界编辑
 
-### 从方块到结构：复用已经做好的东西
+Creative Mode 仍然保留 Minecraft 最直接的建造方式：站在世界里，看准位置，再一块一块放下去。它的优势是低门槛、直观，而且作品从一开始就处在真实游戏空间里。
 
-#### Structure Block 把建筑变成可复用的片段
+但大型创作很快会遇到另一个问题：作者脑中想操作的，往往已经不是“这一块方块”。
 
-Structure Block 可以保存一块区域中的方块与实体，再把它加载到别处；加载时还可以进行旋转、镜像等处理。Bedrock 官方教程甚至直接用“保存一栋木屋，再不断复制它形成村庄”作为示例。[^structure]
+### Structure Block：让结构可以复用
 
-这会改变一个很基础的工作流：逐块建造时，作品只能通过再次施工来复制；有了 structure 以后，一栋房子可以先成为一个**可复用片段**。
+Structure Block 是一个很自然的第一步。
+
+它可以保存一片区域中的方块与实体，再把这段内容加载到别处；加载时还能旋转、镜像。Bedrock 官方教程甚至直接用“保存一栋木屋，再不断复制它形成村庄”作为示例。[^structure]
+
+于是，一栋房子不再只能靠重新施工来复制，而可以先成为一个**可复用的结构片段**。
 
 ```mermaid
 flowchart LR
   A["逐块搭建原型"] --> B["保存为 Structure"]
   B --> C["复制 / 旋转 / 镜像"]
   C --> D["组成更大的场景"]
-  D --> E["再逐块修改局部"]
+  D --> E["再回到局部修改"]
 ```
 
-这里并没有出现新的地形表示。被保存和重新放置的仍然是普通方块，只是玩家不再需要每次从零开始。
+这种变化很重要，因为它第一次把“我已经做好的这一部分”变成一个可以继续操作的对象。地图作者可以先做几种住宅、街道、塔楼和机关，再把它们组合成更大的场景。
 
-因此 Structure Block 很适合**模块化复用**：房间、塔楼、树木、装饰、机关片段，都可以先做成一个局部，再组合成更大结构。
+它有一点类似 prefab 思维，但不要直接等同。Structure 仍然只是方块与实体区域，没有复杂的层级、参数化组件和完整对象模型。它解决的是一个更具体的问题：
 
-#### 复用也会改变创作思维
+> **已经设计好的这一段，能不能不用再做一遍？**
 
-一旦知道结构可以复制，玩家就会开始主动设计“可重复单元”。
+### WorldEdit：让区域本身成为操作对象
 
-一座大城不一定从头到尾逐块设计，而可以由几种住宅、几段街道、几种屋顶和装饰组合出来；地图作者也可以把一次性搭建转成模块库。
+Structure Block 擅长复用完整片段，但很多编辑意图并不是“复制这栋房子”，而是：
 
-这和游戏开发里的 prefab 思维有一点相似，但不要把两者直接等同。
+- 把这一整片石头换成空气；
+- 把大厅整体向左移动十格；
+- 把同一种材料批量替换；
+- 复制一片城区；
+- 用 Brush 修整一整面山坡。
 
-Minecraft 的 Structure 仍然受方块、实体和结构格式约束，也没有自动提供复杂的层级、参数化组件或完整的场景对象模型。
+WorldEdit 的核心因此不是某一条命令，而是 **Selection / Region**。玩家先选中一片区域，再对它执行 Fill、Replace、Copy、Paste、Rotate、Brush 等操作。官方文档把 Selection 作为 WorldEdit 的基础能力，并提供 Cuboid、Polygon、Ellipsoid、Cylinder 等不同选区形式。[^worldedit-selection]
 
-它解决的是一个更具体的问题：**已经做好的这一块东西，能不能不用重新做一遍？**
+原本的意图：
 
-### 从结构到选区：直接表达“改这一片”
+> “在这里放一块石头。”
 
-Structure Block 适合复用现成结构，但如果问题是“把这整个区域的石头换成空气”，就需要另一类工具。
+可以变成：
 
-WorldEdit 是这条路线最典型的社区工具。
-
-#### WorldEdit 把区域本身变成操作对象
-
-WorldEdit 的核心不是某一条命令，而是 **selection / region**。
-
-玩家先选中一片区域，再对整个区域执行 fill、replace、copy、paste、rotate、brush 等操作。官方文档把 selection 称为 WorldEdit 的基础能力，并提供 cuboid、polygon、ellipsoid、cylinder 等不同选区形式。[^worldedit-selection]
-
-于是玩家表达意图的方式发生变化：
-
-> “在这里放一块石头”
-
-变成：
-
-> “把这整个选区替换成石头。”
+> “把这一整个区域替换成石头。”
 
 或者：
 
-> “复制这一片，然后旋转 90° 粘到那边。”
+> “复制这一片，旋转 90°，再粘到那边。”
 
-WorldEdit 官方文档本身就把“几秒内创建、替换或删除成千上万的方块”“复制、粘贴、保存 schematic”“用 brush 雕出山体”等列为主要能力。[^worldedit] 这类工具最直接的价值不是“更强”，而是让**操作粒度和设计粒度重新对齐**：当作者想的是一面墙，就可以操作一面墙；想的是整片山坡，就不必假装自己仍然只想改一个方块。
+WorldEdit 官方文档本身就把批量创建、替换、删除大量方块、Schematic、Brush 和 Terrain Sculpting 列为主要能力。[^worldedit] 它真正减少的，是那些设计已经完成、却还需要手工重复几百次甚至几万次的操作。
 
-#### 命令式工具也有自己的摩擦
+### Axiom 与 Bedrock Editor：从命令走向直接操作
 
-WorldEdit 很高效，但大量能力通过命令、参数、pattern、mask 和选区表达。熟悉以后这非常精确；刚接触时，却需要先把“脑中的形状”翻译成工具语言。
+WorldEdit 很强，但大量能力需要通过命令、Pattern、Mask 和 Selection 表达。熟悉以后很精确，刚接触时却需要把脑中的空间意图先翻译成工具语言。
 
-复杂编辑如果缺少可视化反馈，还容易产生另一类错误：选区到底选到哪里、paste 的原点在哪、mask 会不会误伤其他材料。这也是为什么后来出现了越来越多强调可视化编辑界面的工具。
+Axiom 和 Bedrock Editor 展示了另一条路线：**让这些操作更多地变成可视化的直接编辑。**
 
-### 从命令到可视化编辑：Axiom 与 Bedrock Editor
+Axiom 把自己描述为 Minecraft world editing 的 all-in-one tool，提供自定义 Editor UI，以及 Magic Select、Box Select、Freehand Select、Painter、Biome Painter、Sculpt、Smooth、Flatten、Extrude 等工具。[^axiom]
 
-Axiom 和 Bedrock Editor 虽然来源完全不同，却都能说明 Minecraft worldbuilding 正在出现更接近专业编辑器的交互。
+这里重要的不只是“能一次改更多方块”。Painter、Sculpt、Smooth、Extrude 这些能力本身就是新的编辑动作。作者想的是“把山坡修圆一点”时，不必一定把问题翻译成一串 Replace / Mask / Selection 命令，而可以直接对形状进行绘制和塑形。
 
-#### Axiom 把许多编辑操作搬到图形界面里
+Bedrock Editor 则把类似的编辑语言正式带进 Mojang 自己的 Creator Tools。官方目前提供 Multiblock Selection、Brush、Undo / Redo、复制、移动和形状操作；Selection Tool 可以使用 Marquee、Freehand Brush 与 Magic Select，并对选区执行 Fill、Transform、Nudge。[^editor-tools][^editor-selection][^editor-brush]
 
-Axiom 把自己描述为 Minecraft world editing 的 all-in-one tool，提供自定义 Editor UI，以及 Magic Select、Box Select、Freehand Select、Painter、Biome Painter、Sculpt、Smooth、Flatten、Extrude 等大量工具。[^axiom]
+这说明 Minecraft 的世界仍然可以保持普通方块数据，但创作界面并不需要永远停留在“一块一块放”。
 
-这类界面最大的变化，是玩家不必把所有意图先写成命令。可以先看见选区，再拖动、雕刻、平滑或绘制；“我想把这面山修圆一点”开始更接近直接操作，而不是寻找一条合适的命令。
+### MCEdit：把整个存档当成可编辑世界
 
-它仍然工作在 Minecraft 世界里，仍然编辑普通方块，却借用了很多 DCC / level editor 已经成熟的交互语言：选择、变换、笔刷、预览。
+在 Mojang 推出今天的 Bedrock Editor 很久以前，社区已经尝试过把 Minecraft 世界放进一个更接近传统地图编辑器的界面里。
 
-这说明一个很现实的趋势：
+MCEdit 从 2010 年前后开始发展，定位就是 Minecraft 的 world / saved-game editor。它可以直接打开已有世界，在独立的 3D 视图里选择大范围方块，进行 Clone、Fill、Replace、导入 / 导出 Schematic、创建或删除 Chunk、移动出生点等操作；后来的 MCEdit 2 还继续扩展了 Brush、不同形状的 Selection 和对实体 / Block Entity 的编辑。[^mcedit]
 
-> **方块世界并不要求创作工具永远也必须是“一块一块放”。**
+这和 WorldEdit 有一个很直观的差别：WorldEdit 通常仍然发生在运行中的 Minecraft 世界里，而 MCEdit 把存档本身拿到游戏之外编辑。作者不需要先以“玩家”的身份站在现场，再通过命令改变世界；世界数据本身就是编辑器的对象。
 
-世界的数据粒度和用户操作的粒度可以不同。
+MCEdit 今天已经不再是现代 Minecraft 制作流程的主流工具，原始 1.x 代码也明确停止开发，MCEdit 2 最终停留在早期版本阶段。[^mcedit-status] 但它在历史上非常重要，因为它很早就证明了：
 
-#### Bedrock Editor 把这种工具层正式带进官方生态
+> **Minecraft 世界既可以被“玩”，也可以像关卡或地图资产一样被单独打开、观察和编辑。**
 
-Bedrock Editor 更值得注意的地方，不只是功能，而是它来自 Mojang 自己。
+### WorldPainter：地图生成和世界编辑并不是一回事
 
-官方 Creator Tools 页面目前把 Editor 作为专门的 worldbuilding 工具提供，支持 multiblock selection、brush、Undo / Redo、复制、移动和形状操作；官方说明强调，修改会直接出现在世界中。[^editor-tools]
+WorldPainter 和 MCEdit 看起来都在游戏之外处理世界，但它们解决的是不同问题。
 
-它还有明显区别于普通 Creative 的 **Tool Mode**。
-
-Selection Tool 可以选中空气与方块，支持 marquee、freehand brush、Magic Select；选区可以 fill、transform、nudge。Brush Tool 则可以用不同形状和尺寸连续绘制方块。[^editor-selection][^editor-brush]
-
-这些能力已经非常接近专业关卡编辑器的常见语言。
-
-但 Bedrock Editor 又保留了 Crosshair Mode，让创作者可以在更接近普通 Minecraft 的方式里进入世界观察和操作；Tool Mode 与 Crosshair Mode 可以切换。[^editor-mode]
-
-因此，Creative 和 Editor 并不是只能二选一。
-
-更自然的关系反而是：
-
-> **在 Tool Mode 里处理大尺度编辑，在玩家视角里检查它真正走起来是什么样。**
-
-这种往返很重要，因为现实的创作流程本来就会在不同视角之间切换：大尺度编辑需要更高层的工具，最终体验却仍然要回到玩家实际行走、观察和互动的世界中。
-
-### 地图级创作可以发生在游戏之外
-
-到这里仍然是在直接编辑 Minecraft 世界，WorldPainter 则把创作再往外移了一层。
-
-#### WorldPainter 主要解决的是地形生成，而不是普通建筑编辑
-
-WorldPainter 官方把自己称为 Minecraft Java Edition 的 interactive map generator：像使用绘图软件一样，绘制地形、材料、树木、雪和冰，再把结果导出为 Minecraft 地图。[^worldpainter]
-
-它自己的 FAQ 甚至特意强调：
+WorldPainter 官方把自己称为 Minecraft Java Edition 的 **interactive map generator**：像使用绘图软件一样绘制地形、材料、植被、雪和冰，再把结果导出成 Minecraft 地图。[^worldpainter] 它自己的 FAQ 甚至特意强调：
 
 > **WorldPainter is a map generator, not an editor.**[^worldpainter-faq]
 
-这句话很重要。
+它更适合在宏观尺度上决定“大陆是什么形状、山脉在哪里、河流怎么走”，而不是打开一个已经完成的房间，把窗户向右挪一格。WorldPainter 内部的 World 也是一种比真实 Minecraft 地图更简化、更抽象的表示，导出时才根据这些信息生成实际方块。[^worldpainter-concepts]
 
-WorldPainter 更适合在宏观尺度上决定“这座大陆是什么形状、山脉在哪、河流怎么走”，而不是进入已经完成的房间里把窗户向右挪一格。
+因此，MCEdit 和 WorldPainter 正好代表两种不同的“游戏之外创作”：
 
-它内部使用的 World 还是一种比真实 Minecraft 地图更简化、更抽象的表示；导出时才根据这些信息生成实际方块。[^worldpainter-concepts]
+| 工具 | 更像什么 | 主要用途 |
+| --- | --- | --- |
+| **MCEdit** | 世界 / 存档编辑器 | 打开已有世界，直接修改方块、结构、Chunk 与实体数据 |
+| **WorldPainter** | 地图 / 地形生成器 | 在导入游戏以前设计大陆、山脉、材料与宏观地形 |
 
-所以它的优势来自**暂时不受游戏运行时的操作方式限制**。
+把它们和 Creative、WorldEdit、Axiom、Bedrock Editor 放在一起以后，Minecraft 的创作工具就不再是一条简单的“从小到大”升级线，而是不同工作方式之间的分工。
 
-这也意味着它和 Creative / WorldEdit 的职责不同。
+## 专业工具怎样改变创作过程
 
-一个典型流程完全可以是：
+前面的工具解决的是“作者可以直接做什么”；到了这里，另一个问题开始变重要：**作者怎样试、怎样改，以及做错以后怎样回来。**
+
+### 命令、可视化和玩家视角各有用途
+
+WorldEdit 的命令式工作流精确、可复制，也很适合熟练用户；Axiom 和 Bedrock Editor 则更强调直接选择、拖动、绘制和预览。两种方式并不是谁取代谁，而是不同表达方式。
+
+Bedrock Editor 还保留了 Crosshair Mode，让创作者可以在更接近普通 Minecraft 的方式里进入世界观察和操作；Tool Mode 与 Crosshair Mode 可以切换。[^editor-mode]
+
+于是创作流程可以在几种视角之间往返：
 
 ```mermaid
 flowchart LR
-  A["WorldPainter\n大陆 / 山脉 / 地形"] --> B["Minecraft 世界"]
-  B --> C["WorldEdit / Axiom / Editor\n区域与大型结构"]
-  C --> D["Creative\n局部建造与检查"]
-  D --> E["Adventure / Survival\n实际游玩"]
+  A["WorldPainter\n宏观地形"] --> B["Minecraft 世界"]
+  B --> C["MCEdit / WorldEdit / Axiom / Editor\n结构与区域编辑"]
+  C --> D["Creative\n局部调整"]
+  D --> E["Adventure / Survival\n实际游玩检查"]
+  E --> C
 ```
 
-这不是唯一工作流，也不是工具排名。
+这不是固定流程，也不是工具排名。它只是说明：大型世界创作往往需要在**高层编辑**和**真实玩家体验**之间反复切换。
 
-它只是说明：**创作者面对的尺度不同，最合适的交互也会不同。**
+### Undo、预览和历史记录改变试错成本
 
-## 专业创作工具改变了什么
+Creative 可以瞬间拆方块，但“拆回去”并不等于真正的 Undo。如果刚刚误删的是一大块复杂建筑，手工重建原状会非常痛苦。
 
-### 编辑单位需要匹配设计意图
+专业创作工具通常把历史记录当作基本能力。Bedrock Editor 的 Tool Mode 明确提供 Undo / Redo；WorldEdit 也长期维护 Edit Session 与 History，用于撤销大范围操作；早期 MCEdit 同样提供 Undo。[^editor-mode][^worldedit][^mcedit]
 
-把这些工具放在一起以后，比“哪个最强”更有意思的是它们各自让玩家直接操作什么。
+当错误可以低成本回退，创作者更愿意尝试整体移动、替换和大范围塑形；当每一次尝试都可能不可逆地毁掉几个小时的作品，工具会自然让人保守。
 
-| 层级 | 直接操作的对象 | 典型问题 |
-| --- | --- | --- |
-| **Creative Mode** | 单个方块与物品 | 这里应该放什么？形状和细节对不对？ |
-| **Structure Block** | 一块已完成结构 | 这一段能不能保存、复制、旋转后复用？ |
-| **WorldEdit** | 选区与规则化操作 | 能不能一次替换、填充、复制这一整片？ |
-| **Axiom / Bedrock Editor** | 可视化选区、笔刷、形状与变换 | 能不能直接雕刻、移动、平滑和预览？ |
-| **WorldPainter** | 地形与地图级抽象 | 整片大陆、山脉和生物群系应该怎样分布？ |
+所以创作自由不只来自：
 
-工具越往下，操作粒度通常越大，但这并不意味着越下面就越适合所有任务。
+> “你能不能做这个操作？”
 
-用 WorldPainter 调整一扇窗户很荒谬，用 Creative 手工塑造一整片几千格山脉也很低效。真正需要匹配的是：
+还来自：
 
-> **作者此刻脑中正在做的是哪一种决定？**
+> **“做错以后能不能安全回来？”**
 
-如果决定是“这里用深色木板还是石砖”，单块编辑很自然；如果决定是“这条山脉整体向西延伸”，笔刷或地图级工具更接近意图。
+### 编辑能力越强，安全边界也越重要
 
-这也是创作软件普遍会不断增加层级工具的原因：不是为了让低层操作消失，而是让用户不必永远把高层意图手动翻译成最小动作。
+批量修改世界非常方便，也意味着一次操作可以破坏更多东西。Creative 误挖一块墙，影响有限；WorldEdit 或 Editor 的错误选区可能一次删除整座城市。
 
-### Undo 改变的是试错成本
+服务器里如果所有人都拥有这种能力，性能、破坏和责任边界都会迅速变成问题。WorldEdit 文档本身就把大量操作绑定到 Permission；Bedrock Editor 也以专门的 Editor 项目和 Creator Tools 工作流提供，而不是把全部能力直接放进每一个普通 Survival 世界。[^worldedit][^editor-tools]
 
-Creative 可以瞬间拆方块，但“拆回去”不等于真正的 Undo。如果玩家刚刚误删了一大块复杂建筑，手工重建原状可能非常痛苦。
-
-专业创作工具通常会把历史记录当成基本能力。Bedrock Editor 的 Tool Mode 明确提供 Undo / Redo，官方快捷键也是标准的 Ctrl+Z / Ctrl+Y；WorldEdit 也长期维护 edit session 与 history，用于撤销大范围操作。[^editor-mode][^worldedit]
-
-当错误可以低成本回退，创作者更愿意尝试大范围变换；当每次尝试都可能不可逆地破坏几个小时的作品，工具会自然让人保守。
-
-所以创作自由不仅来自“你能不能做某种操作”，还来自：
-
-> **做错以后能不能安全回来。**
-
-这也是为什么把专业编辑器理解成“Creative 加几个更快的按钮”并不够。选择、预览、历史记录、变换、结构库共同改变了创作过程本身。
-
-### 大尺度编辑也需要更明确的权限
-
-批量修改世界非常方便，也意味着一次操作可以破坏更多东西。
-
-Creative 玩家误挖一块墙，影响有限；WorldEdit 的一个错误选区可能删除整座城市。服务器里如果所有人都拥有大范围编辑权限，性能、破坏和责任边界都会迅速变成问题。
-
-WorldEdit 文档本身就把大量操作绑定到 permission；Bedrock Editor 则以专门的 Editor 项目和 Creator Tools 工作流提供，而不是把全部能力直接放进每一个普通 Survival 世界。[^worldedit][^editor-tools]
-
-所以“更强的工具”通常也意味着“更明确的权限”。这会和后面的多人章节连接起来：谁有权批量修改世界，谁可以撤销谁的改动，公共服务器怎样区分普通玩家、建筑师和管理员，都是工具设计最终会遇到的社会问题。
-
-这里先留下一个比较简单的判断：
-
-> **编辑能力越接近世界级操作，权限就越不能只靠‘大家别乱用’维持。**
+因此，专业编辑能力最终一定会碰到权限问题：谁可以批量修改世界，谁能撤销谁的改动，普通玩家、建筑师和管理员之间应该怎样区分。
 
 ## 游戏模式和创作工具应该怎样分工
 
@@ -297,20 +249,22 @@ Creative 没有复杂的项目设置，也不要求先定义选区、导出地�
 
 ## 这一章留下什么
 
-Creative Mode 与专业创作工具并不处在一条简单的升级链上。更准确地说，它们在不同尺度上处理不同问题：
+Creative Mode 与各种创作工具并不处在一条简单的升级链上。更准确地说，它们承担的是不同的创作任务，并提供不同的编辑能力与工作流：
 
 - **Creative Mode 主要取消资源、伤害和移动限制，让玩家仍以普通 Minecraft 的方式更自由地逐块建造。**
 - **当设计意图已经明确，继续逐块重复同一操作就可能从创作变成机械劳动。**
-- **Structure Block 把已经完成的局部变成可复用结构；WorldEdit 则把选区和批量操作提升为直接编辑对象。**
+- **Structure Block 让已经完成的局部可以保存、复制和旋转；WorldEdit 则进一步把选区、批量替换、Brush 与 Schematic 变成日常世界编辑能力。**
 - **Axiom 与 Bedrock Editor 说明，Minecraft 世界可以继续保持方块表示，同时使用选择、笔刷、变换、预览等更接近专业编辑器的交互。**
-- **WorldPainter 解决的是更宏观的地形生成问题，它甚至明确把自己定位为 map generator，而不是普通世界编辑器。**
+- **MCEdit 曾把完整 Minecraft 存档带进独立的 3D 世界编辑器；WorldPainter 则更专注于地图与宏观地形生成。两者说明“游戏之外创作”本身也存在不同工具分工。**
 - **Undo / Redo、预览和历史记录降低了大尺度试错成本，是专业工具和普通逐块建造之间很重要的差别。**
 - **工具越能一次改动大片世界，权限和治理就越重要；强编辑能力不适合无条件地交给每一个玩家。**
-- **最合适的工具取决于创作者当前思考的尺度，而不是工具本身的‘强弱排名’。**
+- **最合适的工具取决于创作者此刻要完成什么：局部搭建、结构复用、批量世界编辑、可视化塑形、离线存档修改或宏观地形生成，而不是单纯追求“更强”的工具。**
 
 下一章[《红石、机器与自动化》](/design/redstone-automation)会从“改造空间”进入“编排因果”：方块不再只是组成墙和道路，还会传递信号、保存状态、推动其他方块，最后长成自动农场、交通系统甚至计算机。
 
 [^creative]: Mojang Studios，《What is Minecraft?》与《Creative vs Survival Mode》，Minecraft.net。官方把 Creative 描述为拥有无限资源、飞行、近乎无伤害和瞬间破坏方块的模式，主要让玩家专注于创造。https://www.minecraft.net/en-us/article/what-minecraft https://www.minecraft.net/en-us/article/creative-vs-survival-mode
+
+
 
 [^structure]: Microsoft Learn，《Structure Blocks and the Structure Command Tutorial》，2026 年访问。官方教程演示通过 Structure Block 保存一栋建筑，再进行加载、旋转与重复放置，用于快速组成更大的场景。https://learn.microsoft.com/en-us/minecraft/creator/documents/structures/structureblockscommandtutorial
 
@@ -327,6 +281,10 @@ Creative Mode 与专业创作工具并不处在一条简单的升级链上。更
 [^editor-brush]: Microsoft Learn，《Minecraft Bedrock Editor Brush Tool》，2026 年访问。Brush Tool 可以用不同形状与尺寸绘制方块，用于快速塑造地形和形状。https://learn.microsoft.com/en-us/minecraft/creator/documents/bedrockeditor/editorbrushtool
 
 [^editor-mode]: Microsoft Learn，《Minecraft Bedrock Editor Modes》，2026 年访问。Editor 区分 Tool Mode 与 Crosshair Mode；Tool Mode 提供 selection、brush、paste preview、Undo / Redo 等编辑能力，两种模式可以切换。https://learn.microsoft.com/en-us/minecraft/creator/documents/bedrockeditor/editortoolmode
+
+[^mcedit]: MCEdit Project，《MCEdit》与《About MCEdit 2.0》，2016 年存档，2026 年访问。MCEdit 把 Minecraft 存档视为可直接打开的 3D 世界，支持大范围 Selection、Clone、Fill / Replace、Schematic 导入导出、Chunk 创建 / 删除、Brush 与部分实体 / Block Entity 编辑。https://www.mcedit.net/ https://www.mcedit.net/about.html https://github.com/mcedit/mcedit/blob/master/README.html
+
+[^mcedit-status]: MCEdit Project，GitHub repositories，2026 年访问。MCEdit 1.x 仓库明确标注 no longer developed；MCEdit 2 是后续重写项目，但官方站点长期停留在旧 Java 版本支持与 2016 年 Beta 阶段。https://github.com/mcedit/mcedit https://github.com/mcedit/mcedit2 https://www.mcedit.net/archive.html
 
 [^worldpainter]: WorldPainter，《WorldPainter》，2026 年访问。项目把自己描述为 Minecraft Java Edition 的 interactive map generator，可以像绘图软件一样绘制地形、材料、植被、雪与冰，再导出为 Minecraft 地图。https://www.worldpainter.net/
 
