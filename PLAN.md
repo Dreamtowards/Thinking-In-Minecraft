@@ -804,7 +804,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 #### `design/14` Minecraft 值得继承什么？ · 卷结语
 
-- 目标文件：`docs/design/(part4)/what-to-inherit.mdx` · 两类 · ▤
+- 目标文件：`docs/design/(part4)/what-to-inherit.mdx` · 两类 · ✎
 - **简介**：回看前 13 章，整理目前最可信的设计关系，同时明确哪些只在特定条件下成立、哪些可能只是 Minecraft 的历史结果。它是交给卷三和卷四继续检验的中间结论。
 - **要回答**：如果今天不以“复制 Minecraft”为目标，而是设计新的沙盒世界，我们目前真正有理由带走什么？哪些东西不该被当成普遍原则？
 - **交叉**：`history/12`、`history/13`、`impl/index`、`rewrite/01`、`rewrite/02`
