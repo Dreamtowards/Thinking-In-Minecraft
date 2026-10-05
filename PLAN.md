@@ -877,292 +877,463 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 ---
 ## 第三卷 · 技术实现
 
-**卷命题**：技术史是「一个能跑的原型被成功拖进不可能的规模」。架构债与设计自由同源。
+> **本卷进入整体重构阶段。旧 18 章草稿只作为素材库，不再作为结构约束。**
+>
+> 旧版主要问题不是缺少技术点，而是 Part 边界混乱：Worldgen 与 Chunk Lifecycle 混写，客户端反馈与网络预测拆散，Mod / Plugin / Server / Java Runtime / Bedrock 被塞在同一部，性能问题则散落各章却缺少统一模型。新版改为一条更容易理解的技术主线：
+>
+> **世界与数据 → 世界如何运行 → 客户端、网络与性能 → 扩展与服务器生态 → 两种实现与长期演化**
 
-爱好者主路径要读得懂「这意味着什么」。硬核公式可单列，不挡主论证。
+本卷不再预设「技术债与设计自由同源」「实体才是税」「可被模组的引擎才是完整产品」等结论。它们若成立，应由后文事实与反例重新赢回来。
+
+爱好者主路径应始终能回答“这意味着什么”；具体格式、算法、公式和代码可以下沉到表格、附录或技术框，不阻断主论证。
+
+### 本轮重构已经确认的边界
+
+1. **World Generation 独立成章。**
+   世界生成本身已经足够大，应专心讨论 Seed、Noise / Density、Terrain、Biome、Feature、Structure、Carver、生成阶段与确定性。不要把完整 Chunk Lifecycle、多人加载、流送与性能预算塞进这一章。
+
+2. **Chunk Lifecycle 属于运行时世界流送，而不是 Worldgen 的附属。**
+   “什么时候加载 / 生成 / 发送 / 模拟 / 保存 / 卸载”跨越 I/O、Worldgen、Simulation Distance、多人玩家加载与性能，应放到 `impl/11`《区块加载、世界流送与性能预算》。
+
+3. **`impl/05` 标题采用《方块更新、光照与流体》。**
+   标题保持具体、直观、有技术感；正文再抽象出“局部状态通过邻域、Tick 与 Update 传播”的共同机制。除了 Neighbor Update、Scheduled Tick、Random Tick、Light、Water / Lava，还应包含 Fire Spread、Crop / Sapling / Grass、Leaves Decay 等局部变化。不要把火焰传播遗忘在体系外。
+
+4. **Minecraft 不按一个统一 Physics Engine 来组织世界。**
+   因此不使用《实体、物理与 AI》这种容易误导的标题。`impl/06` 改为《实体、移动与 AI》：AABB、Velocity、Collision、Step、Projectile、Boat、Minecart、Mob AI、Pathfinding 属于 Entity Simulation；流体、火焰、Piston 等物理感行为分别回到对应系统。
+
+5. **客户端反馈与网络预测重新归位。**
+   旧 `feel-client.mdx` 不再独立成章。粒子、音频、破坏动画、伤害反馈并入 `impl/09`；客户端预测、服务器确认、输入与延迟并入 `impl/10`。腾出的章节位置用于建立长期缺失的性能 / Streaming 框架。
+
+6. **性能必须拥有统一章节，而不是散落在各章。**
+   需要明确区分 **FPS / TPS / Ping**，建立 50 ms/tick、Render Distance、Simulation Distance、Chunk I/O / Generation、Entity / Block Entity、GC、线程与任务调度等预算模型。目标不是“优化技巧大全”，而是解释性能为什么是一组不同预算。
+
+7. **Mod 与 Server Plugin 是两条不同扩展路线。**
+   Java Mod Loader / Mixin / Forge / Fabric / NeoForge 放在 `impl/13`；Bukkit / Spigot / Paper / Proxy / 运维与大型服务器放在 `impl/14`。不要再用一章同时解释客户端 Mod 和服务端 Plugin。
+
+8. **Java / Bedrock 是两套实现，不属于“扩展性”章节。**
+   二者统一放在第五部，与兼容、重构、技术债一起讨论长期演化。
+
+9. **卷三与卷二建立成对关系，但不机械重复。**
+   例如：
+   - `design/04 世界生成与探索` → `impl/03 世界生成`
+   - `design/05 生物、战斗与威胁` → `impl/06 实体、移动与 AI`
+   - `design/03 物品、合成与库存` → `impl/07 物品、库存与配方系统`
+   - `design/09 红石、机器与自动化` → `impl/08 红石与更新顺序`
+   - `design/12 多人游戏与共同世界` → `impl/10 客户端—服务器架构与网络同步`
+
+   卷二回答“为什么这种玩法关系成立”，卷三回答“计算机里怎样让它成立”。
+
+---
 
 ### `impl/index` 卷三导读
 
-- **简介**：五部地图。先抛三句：单人即本地服务器；世界必须比引擎活得更久；实体才是税。爱好者可跳读 04、05、08、11、15、17–18。
-- **大纲**：卷命题；跳读建议；链到 `impl/01`
+- **状态**：待重写
+- **新职责**：不再先抛“三句技术真理”，而是给出整卷地图：数据如何存在，世界怎样更新，客户端怎样看见并同步它，社区怎样扩展它，两套实现又怎样在十多年里承受兼容与规模。
+- **建议主问题**：
+
+  > **Minecraft 的世界怎样被表示、保存、生成、模拟、渲染和同步？一套从 2009 年不断演化的实现，又怎样承受版本兼容、社区扩展与越来越大的规模？**
+
+- **建议结构**：
+  1. 为什么技术卷不能只是 API / 算法清单
+  2. 五部地图
+  3. 面向爱好者与开发者的双层阅读方式
+  4. Vol. II 与 Vol. III 的对应关系
+  5. 链到 `impl/01`
 
 ---
 
-### 第一部 · 世界如何存在
+## 第一部 · 世界与数据
 
-#### `impl/01` 体素世界的数据模型
+**Part 职责**：回答“一个 Minecraft 世界在计算机里是什么、怎样保存、怎样从 Seed 生成出来”。
+这一部只讨论世界的**表示、持久化与生成**；不要把 Tick、Chunk Streaming、多人加载或运行时性能提前塞进来。
 
-- 文件：`docs/impl/data-model.mdx` · 开发者 · ▤
-- **简介**：方块状态、元数据、方块实体。区块是空间与 I/O 单位。节、调色板、压缩。空气也是数据。高度上限从 256 到 384，是数据模型对设计的限制被改写。区块不是实现细节，是「无限」的代价单位。
-- **要回答**：空气为什么也是数据？区块意味着什么？
-- **交叉**：`design/01`、`rewrite/04`
-- **大纲**：
-  1. 玩家看到的方块 vs 内存里的方块
-  2. 方块状态、元数据、方块实体
-  3. 区块、节、调色板、压缩
-  4. 稀疏与稠密
-  5. 高度上限事件：数据模型如何限制设计
-- **验收**：有对照表；不贴混淆映射名录
+### `impl/01` 体素世界的数据模型
 
-#### `impl/02` 存储与序列化
+- **目标文件**：`docs/impl/(part1)/data-model.mdx`（现有 `data-model.mdx` 作为素材）
+- **状态**：待重写
+- **核心问题**：玩家看到“一块方块”，程序到底保存了什么？Chunk 又承担了哪些职责？
+- **建议内容**：
+  1. Block / Block State / Block Entity
+  2. Section / Chunk / Palette / Compression
+  3. 空气、默认值、稀疏与稠密
+  4. Registry / ID 与世界数据
+  5. 高度上限等历史变化怎样反过来暴露数据模型
+- **边界**：
+  - Chunk 在这里作为**空间 / 存储数据结构**讲；
+  - 不展开完整 Chunk Lifecycle / ticket / simulation distance，那属于 `impl/11`。
+- **避免旧命题**：不要先宣布“区块不是实现细节，是无限的代价单位”。
 
-- 文件：`docs/impl/storage.mdx` · 开发者 · ▤
-- **简介**：Region / Anvil / MCA、NBT、玩家数据与结构文件。扁平化与组件化证明一次格式改革的成本。世界必须比引擎活得更久。存档兼容是对玩家时间的伦理。
-- **要回答**：世界为什么必须比引擎活得更久？
-- **交叉**：`history/13`、`rewrite/09`
-- **大纲**：
-  1. 世界比客户端活得长
-  2. 区域文件简史
-  3. NBT 作为通用层
-  4. 世界 / 玩家 / 结构
-  5. 版本迁移成本
-- **验收**：讲清迁移为何贵，不写格式规范全书
+### `impl/02` 存档、序列化与版本迁移
 
-#### `impl/03` 世界生成管线
+- **目标文件**：`docs/impl/(part1)/storage.mdx`
+- **状态**：待重写
+- **核心问题**：一个已经玩了十年的世界，怎样跨版本继续存在？
+- **建议内容**：
+  1. Region / Anvil / MCA
+  2. NBT 及不同数据文件
+  3. Chunk / Player / Entity / Structure 等如何持久化
+  4. DataFixer / migration / schema evolution
+  5. Flattening、Components 等重大格式变化的成本
+- **可能结论**：长期沙盒最大的兼容对象之一，是玩家已经投入进去的时间。
+- **避免旧命题**：不要先把“存档兼容是伦理”写成结论，先把迁移问题讲清楚。
 
-- 文件：`docs/impl/worldgen-pipeline.mdx` · 开发者 · ▤
-- **简介**：噪声、分层、特征、结构。区块生命周期与多线程。结构与地形冲突常被「假装没发生」。同样种子有时不同，因为确定性有边界。
-- **要回答**：同样的种子为何有时会不同？
-- **交叉**：`design/04`
-- **大纲**：
-  1. 生成是设计合同的实现
-  2. 管线阶段图
-  3. 区块生命周期
-  4. 结构与地形的冲突
-  5. 确定性、可复现、实验性生成器
-- **验收**：有管线图；公式不挡主文
+### `impl/03` 世界生成
 
-#### `impl/04` 光照、流体与方块更新
-
-- 文件：`docs/impl/light-fluid-updates.mdx` · 两类 · ▤
-- **简介**：天空光 / 方块光与光照重写史。有限水 vs 无限水是设计与实现耦合。方块更新、计划刻、随机刻。连锁更新是隐式图计算，也是卡顿与杜普的漏口。
-- **要回答**：卡顿、杜普、连锁更新从哪来？
-- **交叉**：`impl/08`、`design/13`
-- **大纲**：
-  1. 从玩家能感到的现象进入
-  2. 光照传播与重写史
-  3. 流体：设计与实现耦合
-  4. 三类刻
-  5. 连锁更新即图计算
-- **验收**：爱好者能把光照卡顿、无限水说成机制；不教杜普方法
+- **目标文件**：建议由 `worldgen-pipeline.mdx` 迁移为更简洁的 `worldgen.mdx`
+- **状态**：待重写
+- **核心问题**：一个尚不存在的区域，怎样从 Seed 变成真正的地形、群系、结构和资源？
+- **建议内容**：
+  1. Seed、伪随机与确定性边界
+  2. Noise / Density / Terrain shaping
+  3. Biome placement
+  4. Carver / Cave
+  5. Feature / Structure / decoration
+  6. Generation stages / 邻区依赖 / 旧 population 历史
+  7. 为什么同一 Seed 跨版本未必还是同一个世界
+- **必须保留**：Worldgen 是大课题，正文要有完整管线图。
+- **边界**：
+  - 只解释 generation 所需的最低限度 chunk stage；
+  - 不展开加载 / 保活 / 客户端发送 / simulation distance / unload，这些统一留到 `impl/11`。
+- **交叉**：`design/04 世界生成与探索`
 
 ---
 
-### 第二部 · 模拟如何推进
+## 第二部 · 世界如何运行
 
-20 TPS 是契约。打破它时，游戏失去的不是帧率，是因果。
+**Part 职责**：回答“世界加载出来以后，时间如何推进，不同对象又怎样发生变化”。
+这一部从 Tick 框架进入方块、实体、物品和红石四类主要运行时系统。
 
-#### `impl/05` 游戏循环与刻
+### `impl/04` 游戏循环、Tick 与调度
 
-- 文件：`docs/impl/tick.mdx` · 两类 · ▤
-- **简介**：20 TPS 是契约。随机刻、计划刻、方块刻、实体刻、红石刻会错位。TPS 下降时失去的是因果，不是帧率。时间是多人世界的共享真实。
-- **要回答**：TPS 下降时 Minecraft 在失去什么？
-- **交叉**：`rewrite/05`、`impl/16`
-- **大纲**：
-  1. 卡顿时「世界变慢」到底是什么
-  2. 20 TPS 契约与客户端 tick
-  3. 刻的种类
-  4. 红石刻与游戏刻的错位（细节在第 8 章）
-  5. 看门狗与玩家可感知的时间
-- **验收**：用玩家语言定义 TPS
+- **目标文件**：由现有 `tick.mdx` 迁入新版 Part
+- **状态**：待重写
+- **核心问题**：Minecraft 的“时间”在技术上怎样推进？TPS 下降到底意味着什么？
+- **建议内容**：
+  1. Server tick / Client tick 的基本关系
+  2. 20 TPS 与 50 ms/tick
+  3. Scheduled work / Random Tick / Entity Tick 等调度分类
+  4. Watchdog 与超时
+  5. TPS 下降为什么不同于 FPS 下降
+- **边界**：
+  - 不把所有具体 subsystem tick 都塞进来；
+  - 红石时序细节留给 `impl/08`；
+  - 性能预算整体模型留给 `impl/11`。
+- **避免旧命题**：不要把“20 TPS 是契约”直接当开场答案。
 
-#### `impl/06` 实体与碰撞
+### `impl/05` 方块更新、光照与流体
 
-- 文件：`docs/impl/entities.mdx` · 开发者 · ▤
-- **简介**：实体、方块实体、展示实体。AABB、步进、船与矿车特例。AI 是目标选择与寻路。实体预算和农场是性能崩溃的经典路径。方块便宜，实体昂贵。
-- **要回答**：为什么实体才是真正的税？
-- **交叉**：`design/05`
-- **大纲**：
-  1. 为什么生物多了比方块多了更卡
-  2. 三类对象
-  3. 碰撞与特例物理
-  4. AI：目标、寻路、村民日程
-  5. 农场与崩溃路径
-- **验收**：给出「税」的因果；不写刷怪塔教程
+- **目标文件**：由现有 `light-fluid-updates.mdx` 重写
+- **状态**：待重写
+- **核心问题**：一个方块变化以后，这种变化怎样在附近世界继续传播？
+- **建议结构**：
 
-#### `impl/07` 物品、库存与合成
+  1. **方块为什么会影响邻居**
+  2. **方块更新与调度**
+     - Neighbor Update
+     - Scheduled Tick
+     - Random Tick
+     - 必要的 Block Event / update propagation
+  3. **光照怎样传播**
+     - Sky Light / Block Light
+     - 遮挡与传播
+     - 为什么光照更新曾经昂贵
+  4. **流体怎样传播**
+     - Water / Lava level / source
+     - Scheduled Tick
+     - 无限水等规则怎样由局部规则产生
+  5. **火焰、生长与其他局部变化**
+     - Fire Spread
+     - Crop / Sapling / Grass
+     - Leaves Decay
+     - Falling Block 只轻触，实体阶段再说明
+  6. **当局部变化形成连锁**
+     - Update cascade
+     - Chunk boundary
+     - 性能与兼容成本
 
-- 文件：`docs/impl/items.mdx` · 开发者 · ▤
-- **简介**：物品栈、NBT、组件化。配方数据驱动。库存同步与点击窗口协议。从硬编码到 JSON，技术追随模组文化。物品是玩家财产的主要载体，所以迁移是兼容地狱。
-- **要回答**：技术如何追随模组文化？
-- **交叉**：`design/03`、`impl/02`
-- **大纲**：
-  1. 物品为什么难迁
-  2. 栈、NBT、组件化
-  3. 配方数据驱动
-  4. 窗口协议
-  5. 迁移地狱
-- **验收**：组件化要说明「为什么必须发生」
+- **统一抽象**：正文最终可以得出——Minecraft 很多“世界模拟”并非全局求解，而是大量局部状态通过邻域、Tick 与 Update 传播。
+- **注意**：标题保留“光照、流体”字样，不改成过于抽象的“局部模拟”。
 
-#### `impl/08` 红石的实现 · 枢纽
+### `impl/06` 实体、移动与 AI
 
-- 文件：`docs/impl/redstone.mdx` · 两类 · ▤
-- **简介**：信号强度、弱充能、准连接。活塞、BUD、更新顺序。未定义行为被社区当成稳定 API。红石是隐式虚拟机。兼容性高于正确性时，怪癖会变成平台。
-- **要回答**：「未定义行为」如何成为社区 API？
-- **交叉**：`design/09`、`rewrite/03`、`impl/17`
-- **大纲**：
-  1. 为什么「修 bug」会引发红石革命
-  2. 信号模型：强度、充能、准连接
-  3. 活塞与更新顺序；BUD 作为社会 API
-  4. 未定义行为变成接口的社会过程
-  5. 隐式虚拟机的工程现实
-- **验收**：零搭建步骤；准连接 / BUD 必须解释成因
+- **目标文件**：由现有 `entities.mdx` 重写
+- **状态**：待重写
+- **核心问题**：哪些对象需要作为 Entity 存在？它们怎样移动、碰撞并决定行为？
+- **建议内容**：
+  1. Entity / Block Entity / Display Entity 等边界
+  2. Position / Velocity / AABB / Collision / Step / Ground / Fall
+  3. Projectile / Boat / Minecart / Item Entity / Falling Block 等特例
+  4. Mob Goal / Brain / Pathfinding
+  5. Villager schedule 等复杂 AI
+  6. 为什么大量活动 Entity 会带来显著运行时成本
+- **重要边界**：
+  - 不设一个假想的统一“Minecraft Physics Engine”；
+  - Fluid → `impl/05`
+  - Fire → `impl/05`
+  - Piston → `impl/08`
+  - Boat / Minecart / Projectile / Gravity → 本章
+- **避免旧命题**：不要用“实体才是真正的税”作为标题或预设结论。
 
----
+### `impl/07` 物品、库存与配方系统
 
-### 第三部 · 呈现与交互
+- **目标文件**：现有 `items.mdx`
+- **状态**：待重写
+- **核心问题**：Minecraft 如何表示“可以被玩家拥有、堆叠、转移、加工和同步的数据”？
+- **建议内容**：
+  1. Item / Item Stack
+  2. NBT / Components
+  3. Slot / Container / Inventory
+  4. Recipe / data-driven crafting
+  5. Window / inventory sync
+  6. 迁移与兼容
+- **边界**：Mod 文化可以作为历史背景，但不要再以“技术如何追随模组文化”作为整章中心问题。
+- **交叉**：`design/03 物品、合成与库存`
 
-手感很大一部分是客户端谎言；权威在服务器。
+### `impl/08` 红石与更新顺序
 
-#### `impl/09` 客户端与渲染
-
-- 文件：`docs/impl/client-render.mdx` · 开发者 · ▤
-- **简介**：从即时模式到批处理。区块网格、剔除、透明。资源包是官方模组。原版不用贪婪网格是历史与复杂度选择。优化模组证明了原版债，它们是民间官方实现的一部分。
-- **要回答**：原版为何不用贪婪网格，模组如何改写这一层？
-- **交叉**：`impl/17`、`rewrite/08`
-- **大纲**：
-  1. 看得见的世界如何被拼出来
-  2. 渲染简史
-  3. 网格、剔除、透明
-  4. 资源包作为官方模组
-  5. 优化模组作为证据
-- **验收**：不写渲染器教程；对比选择即可
-
-#### `impl/10` 网络协议
-
-- 文件：`docs/impl/protocol.mdx` · 开发者 · ▤
-- **简介**：客户端–服务器权威；单人即本地服务器。区块传输、实体同步、延迟与预测。反作弊先天困难。协议是未承认的公共 API，于是成为模组兼容瓶颈。
-- **要回答**：协议为何成为模组兼容瓶颈？
-- **交叉**：`design/12`、`rewrite/07`
-- **大纲**：
-  1. 单人游戏为什么要有「服务器」
-  2. 权威模型
-  3. 同步什么：区块、实体、库存
-  4. 延迟、预测、反作弊为什么难
-  5. 协议版本与多版本服务器
-- **验收**：必须写清「单人即本地服务器」
-
-#### `impl/11` 音频、粒子与手感谎言
-
-- 文件：`docs/impl/feel-client.mdx` · 两类 · ▤
-- **简介**：位置音频是空间信息。粒子是反馈不是电影。挖掘、受伤、GUI 大量客户端预测。无障碍是设计还是债，单独成节。
-- **要回答**：手感有多少是模拟，有多少是反馈？
-- **交叉**：`design/01`、`impl/10`
-- **大纲**：
-  1. 挖一下、挨一下，服务器还没说话
-  2. 位置音频
-  3. 粒子是反馈
-  4. 客户端预测
-  5. 无障碍
-- **验收**：至少两三个可感知例子（挖掘停顿、伤害闪烁、方块破碎）
-
----
-
-### 第四部 · 可扩展性与双引擎
-
-可被模组的引擎才是完整的 Minecraft。双引擎是两次实现，不是一个产品的两个皮肤。
-
-#### `impl/12` 模组与插件架构
-
-- 文件：`docs/impl/mod-architecture.mdx` · 开发者 · ▤
-- **简介**：字节码、Mixin、Forge / Fabric / NeoForge。Bukkit / Paper 是另一条河。没有稳定 API 时，注入即 API，升级变成政治。兼容矩阵：版本 × 加载器 × 模组。模组比引擎更难维护。
-- **要回答**：为什么模组比引擎更难维护？
-- **交叉**：`history/04`、`rewrite/06`
-- **大纲**：
-  1. 为什么每个大版本都是模组的末日
-  2. 客户端模组河
-  3. 服务端插件河
-  4. 类加载、事件、生命周期
-  5. 兼容矩阵
-- **验收**：Forge 与 Fabric 写成加载哲学，不站队
-
-#### `impl/13` 数据包、资源包与数据驱动
-
-- 文件：`docs/impl/datapacks.mdx` · 开发者 · ▤
-- **简介**：扁平化之后的命名空间世界。数据包能改什么、不能改什么。资源包与数据分工。官方扩展面故意停在「新动词」之前。数据驱动是温和模组的政治。
-- **要回答**：官方扩展面的边界在哪？
-- **交叉**：`design/10`、`impl/07`
-- **大纲**：
-  1. 为什么有了数据包还是要写 Java
-  2. 命名空间世界
-  3. 能做 / 必须写代码 对照表
-  4. 资源 vs 数据
-  5. 政治含义
-- **验收**：必须有能/不能对照表
-
-#### `impl/14` Java 版运行时
-
-- 文件：`docs/impl/java-runtime.mdx` · 开发者 · ▤
-- **简介**：2009 年选 Java 证明了可移植与模组性，也卡住了性能与发布。GC、JIT、启动器、版本隔离。性能史从「能跑」到各类优化模组。语言是历史偶然，不是设计本质。
-- **要回答**：Java 证明了什么、卡住了什么？
-- **交叉**：`rewrite/03`
-- **大纲**：
-  1. 2009 年的正确选择
-  2. 运行时税：GC、热路径、启动
-  3. 性能史
-  4. 原生库与渲染后端
-  5. 偶然 vs 本质
-- **验收**：不得得出「必须用 Java」或「必须立刻换语言」的单边结论
-
-#### `impl/15` Bedrock 作为另一次实现
-
-- 文件：`docs/impl/bedrock.mdx` · 两类 · ▤
-- **简介**：C++、跨平台、独立渲染栈。行为包、附加包、脚本 API。红石 / 战斗 / 世界格式的语义分叉比性能差异更致命。Marketplace 技术反过来塑造能做什么。换语言重写之后，分叉会变成两个游戏。
-- **要回答**：语义差异为何比性能差异更致命？
-- **交叉**：`history/08`、`appendix/java-bedrock`
-- **大纲**：
-  1. 另一次实现不是移植
-  2. 技术栈与扩展模型
-  3. 语义分叉表（至少五行）
-  4. Marketplace 的反向约束
-  5. 两个游戏的工程现实
-- **验收**：禁止「Bedrock = 优化版」
-
-#### `impl/16` 服务端与规模
-
-- 文件：`docs/impl/servers.mdx` · 开发者 · ▤
-- **简介**：原版服务端、Paper、分片实验。视距 vs 模拟距离。代理、群组、反作弊、备份。万人网络已经是另一种引擎用法。原版没有把兴趣管理当成一等公民。
-- **要回答**：同一内核如何同时服务单人档与万人网络？
-- **交叉**：`history/05`、`rewrite/05`
-- **大纲**：
-  1. 单人档和万人服真的是同一个程序吗
-  2. 服务端谱系
-  3. 距离与分片
-  4. 运维栈：代理、反作弊、回滚
-  5. 大型服务器作为另一种引擎用法
-- **验收**：第三方核心写成工程证据，不是安装推荐
+- **目标文件**：现有 `redstone.mdx`
+- **状态**：待重写
+- **核心问题**：Vol. II 中那些机器，为什么会因为供电、邻居更新和执行顺序不同而产生完全不同的行为？
+- **建议内容**：
+  1. Redstone signal / power 基础语义
+  2. Strong / weak power（按实际实现校正术语）
+  3. Neighbor update / update order
+  4. Piston / Observer / BUD
+  5. Quasi-connectivity
+  6. Java / Bedrock divergence
+  7. 历史行为如何获得兼容成本
+- **边界**：
+  - 不写搭建教程；
+  - 设计意义在 `design/09 红石、机器与自动化`；
+  - 本章只解释这些行为技术上为什么成立。
+- **避免旧命题**：不要先宣布“红石是隐式虚拟机”或“兼容性高于正确性”。
 
 ---
 
-### 第五部 · 工程教训
+## 第三部 · 客户端、网络与性能
 
-#### `impl/17` 技术债作为产品策略
+**Part 职责**：回答“服务器里的世界怎样变成玩家看到、听到、操作到的世界；多人状态怎样同步；巨大世界又怎样只加载当前需要的一部分”。
+旧 `feel-client.mdx` 在这一轮退休并拆分到 09 / 10，腾出 11 给 Chunk Streaming 与性能模型。
 
-- 文件：`docs/impl/tech-debt.mdx` · 开发者 · ▤
-- **简介**：先卖再修证明独立游戏可以活，没证明你可以没有二十年社区替你扛债。重构窗口：扁平化、组件化等。红石与世界格式上，兼容性必须高于正确性。优化模组与 Paper 是民间官方实现。
-- **要回答**：先卖再修证明了什么、没证明什么？
-- **交叉**：`impl/08`、`impl/02`、`impl/12`
-- **大纲**：
-  1. 「能跑就先卖」被神话了
-  2. 几次重构窗口
-  3. 何时兼容必须高于正确
-  4. 独立开发者的限度
-  5. 民间官方实现
-- **验收**：必须同时写「证明了」和「没证明」
+### `impl/09` 客户端渲染与反馈
 
-#### `impl/18` 可被模组的引擎才是完整产品 · 卷结语
+- **目标文件**：以 `client-render.mdx` 为主，吸收旧 `feel-client.mdx` 中视觉 / 音频反馈
+- **状态**：待重写
+- **核心问题**：服务器知道的世界，客户端怎样把它变成可见、可听、可理解的体验？
+- **建议内容**：
+  1. Chunk mesh / rebuild
+  2. Culling / transparency / batching
+  3. Texture / Resource Pack
+  4. Particle / sound / block break animation / damage feedback
+  5. 客户端表现为什么不等于服务器模拟
+- **边界**：
+  - 客户端 prediction / reconciliation 主要放到 `impl/10`；
+  - 不写渲染器实现教程；
+  - 不把“原版为什么不用某某现代算法”写成先验批判。
+- **旧文件处理**：`feel-client.mdx` 的粒子、音频、视觉反馈材料迁入后可退休。
 
-- 文件：`docs/impl/modifiable-engine.mdx` · 两类 · ▤
-- **简介**：游戏、协议、数据、工具链是同一产品。实现反过来照亮卷二。有些债其实是资产。通向卷四的本质属性清单。若只读一卷技术，应带走最小内核。
-- **要回答**：为何必须当成同一产品来写？
-- **交叉**：`rewrite/02`、`design/14`
-- **大纲**：
-  1. 不能被再开发的 Minecraft 只是一个客户端
-  2. 对照卷二：实现如何照亮设计
-  3. 哪些债是资产
-  4. 最小内核：数据模型、刻、权威服务器、扩展面
-  5. 卷三结语
-- **验收**：列出最小内核 4–6 条
+### `impl/10` 客户端—服务器架构与网络同步
+
+- **目标文件**：由现有 `protocol.mdx` 重写，slug 可在执行时决定是否迁移为 `networking`
+- **状态**：待重写
+- **核心问题**：谁拥有权威状态？区块、实体、库存和玩家操作怎样跨网络保持一致？
+- **建议内容**：
+  1. Java Edition 单人 / 多人架构的历史演变
+  2. Integrated Server 与 Dedicated Server
+  3. Authority model
+  4. Chunk / Entity / Inventory / Player Action sync
+  5. Latency / prediction / confirmation / reconciliation
+  6. Anti-cheat 为什么困难
+  7. Protocol version 与多版本生态
+- **重要事实边界**：
+  - 不再写“单人即本地服务器，从第一天就在”；
+  - 应明确 Java Edition 到 1.3.1 才把单人统一到 integrated server 架构。
+- **吸收旧章**：`feel-client.mdx` 中客户端预测、输入响应、服务器确认等材料迁入本章。
+
+### `impl/11` 区块加载、世界流送与性能预算
+
+- **目标文件**：建议新建 `docs/impl/(part3)/chunk-streaming-performance.mdx`
+- **状态**：新增章
+- **核心问题**：Minecraft 世界明明巨大，为什么机器不需要同时加载、模拟和渲染整个世界？性能又到底花在哪里？
+- **建议内容**：
+  1. Chunk Lifecycle：不存在 / 请求 / 磁盘读取或生成 / loaded / active / save / unload
+  2. Chunk ticket / player loading / spawn area（按版本准确描述）
+  3. Render Distance vs Simulation Distance
+  4. 多玩家怎样扩大 loaded / simulated area
+  5. Chunk I/O 与 Worldgen 的运行时成本
+  6. 线程、worker、async I/O / generation 的边界
+  7. 50 ms/tick budget
+  8. Entity / Block Entity / Block Update / Worldgen / GC 等预算来源
+  9. FPS vs TPS vs Ping
+  10. Profiling：先找预算去哪了，而不是先背“优化技巧”
+- **边界**：
+  - Worldgen 算法本身回到 `impl/03`；
+  - Rendering 算法本身回到 `impl/09`；
+  - 本章关注 runtime streaming 与 budget。
+- **重要意义**：这是旧 Vol. III 最明显缺失的统一章节之一。
+
+---
+
+## 第四部 · 扩展与服务器生态
+
+**Part 职责**：回答“原版实现之外，Minecraft 提供或被社区建立了哪些扩展面；单机 / 小服又怎样扩展到完整创作与服务端生态”。
+
+### `impl/12` 数据包、资源包与数据驱动
+
+- **目标文件**：现有 `datapacks.mdx`
+- **状态**：待重写
+- **核心问题**：不改引擎代码，Minecraft 到底允许创作者替换哪些数据、规则和表现？
+- **建议内容**：
+  1. Namespace / registry
+  2. Recipe / Loot Table / Tag / Advancement / Function 等
+  3. Resource Pack 与 Data Pack 的职责分界
+  4. 能做 / 不能做 对照
+  5. 数据驱动怎样降低扩展成本，又在哪里需要代码
+- **避免旧命题**：不使用“温和模组的政治”作为章节框架。
+
+### `impl/13` Mod、Mixin 与加载器
+
+- **目标文件**：由现有 `mod-architecture.mdx` 重写；Bukkit / Paper 内容迁出
+- **状态**：待重写
+- **核心问题**：没有稳定、完整的官方 Java Mod API 时，社区怎样把游戏代码本身变成扩展面？
+- **建议内容**：
+  1. Class loading / mapping / transformed code
+  2. Mixin
+  3. Forge / Fabric / NeoForge
+  4. Registry / event / lifecycle
+  5. Loader 与游戏版本兼容矩阵
+  6. 为什么升级 Mod 成本高
+- **边界**：Bukkit / Paper / Proxy 不在本章展开，统一去 `impl/14`。
+- **态度**：比较加载器哲学与工程取舍，不站队。
+
+### `impl/14` 插件、服务端软件与规模化
+
+- **目标文件**：由现有 `servers.mdx` 为主，吸收 `mod-architecture.mdx` 中 Bukkit / Paper 相关内容
+- **状态**：待重写
+- **核心问题**：当 Minecraft 从几个人一起玩变成长期公共服务器或大型网络，哪些职责已经超出原版 Dedicated Server？
+- **建议内容**：
+  1. Vanilla Dedicated Server
+  2. Bukkit / Spigot / Paper
+  3. Plugin API 与服务端扩展
+  4. Proxy：Velocity / Bungee 等
+  5. Backup / rollback / moderation / anti-cheat / observability
+  6. Multi-server network / 大型社区
+  7. 性能与运营约束怎样反过来改变玩法
+- **边界**：Chunk / Simulation Distance 的基础机制在 `impl/11`，这里只讨论服务端如何利用、修改和运营它们。
+- **避免旧命题**：不要把“万人网络已经是另一种引擎用法”直接当结论。
+
+---
+
+## 第五部 · 两种实现与长期演化
+
+**Part 职责**：回答“为什么今天存在 Java 与 Bedrock 两套实现；语言、运行时、兼容与长期重构又怎样塑造现在的 Minecraft”。
+
+### `impl/15` Java 版运行时与发布环境
+
+- **目标文件**：现有 `java-runtime.mdx`
+- **状态**：待重写
+- **核心问题**：Java / JVM 这套运行环境为 Minecraft 带来了什么，又限制了什么？
+- **建议内容**：
+  1. JVM / bytecode
+  2. JIT
+  3. GC
+  4. Classpath / class loading
+  5. Native libraries / rendering backend
+  6. Launcher / bundled runtime / Java version migration
+  7. Java 与 Mod 生态的关系
+- **边界**：不要把性能问题全部归咎于“用了 Java”。
+- **避免旧命题**：不预设“2009 年的正确选择”或“Java 卡住了 Minecraft”。
+
+### `impl/16` Bedrock：另一套实现
+
+- **目标文件**：现有 `bedrock.mdx`
+- **状态**：待重写
+- **核心问题**：为什么 Bedrock 不是“Java 换成 C++ 的优化版”，而是逐渐形成了不同语义与扩展模型的另一套实现？
+- **建议内容**：
+  1. C++ / 跨平台约束
+  2. World / rendering / networking 等实现差异
+  3. Behavior Pack / Add-On / Script API
+  4. Java / Bedrock 行为语义分叉
+  5. Marketplace 与创作者平台约束
+  6. 两套实现怎样长期追求 parity
+- **重点**：性能只是差异之一，语义与生态差异往往更直接影响玩家与创作者。
+
+### `impl/17` 兼容、重构与技术债
+
+- **目标文件**：由现有 `tech-debt.mdx` 重写
+- **状态**：待重写
+- **核心问题**：一款长期演化十多年的沙盒，什么时候应该保持兼容，什么时候又必须打破旧结构？
+- **建议内容**：
+  1. 什么叫技术债，什么只是历史约束
+  2. Flattening / Components / world migration 等重构窗口
+  3. 红石 / world format / protocol / mod compatibility
+  4. 事实接口与历史行为
+  5. 什么时候兼容优先，什么时候重构优先
+  6. 第三方优化 / Paper / Mod 生态能说明什么、不能说明什么
+- **避免旧命题**：不再以“技术债作为产品策略”“兼容性必须高于正确性”作为先验答案。
+
+### `impl/18` 技术实现留下了什么 · 卷结语
+
+- **目标文件**：旧 `modifiable-engine.mdx` 只作为素材；建议执行时迁移到更中性的 slug
+- **状态**：待重写
+- **核心问题**：读完整个技术卷以后，哪些实现关系值得带进 Vol. IV，哪些只是 Minecraft 的历史偶然？
+- **建议回看**：
+  1. 数据模型与持久化
+  2. Tick 与局部模拟
+  3. Client / Server authority
+  4. Chunk Streaming / budget
+  5. 数据驱动与社区扩展面
+  6. Java / Bedrock 双实现
+  7. 兼容与长期演化
+- **作用**：为 Vol. IV 提供待验证的工程假设，而不是提前宣布“完整产品必须可模组”。
+- **避免旧命题**：删除《可被模组的引擎才是完整产品》这一绝对标题。
+
+---
+
+### Vol. III 旧稿迁移 / 退休映射
+
+执行时以“内容归宿”而不是旧编号为准：
+
+| 旧内容 | 新归宿 |
+| --- | --- |
+| `worldgen-pipeline.mdx` 中 Worldgen 主体 | `impl/03 世界生成` |
+| `worldgen-pipeline.mdx` 中完整 Chunk Lifecycle / 多线程加载 | `impl/11 区块加载、世界流送与性能预算` |
+| `light-fluid-updates.mdx` | `impl/05 方块更新、光照与流体` |
+| `entities.mdx` | `impl/06 实体、移动与 AI` |
+| `client-render.mdx` | `impl/09 客户端渲染与反馈` |
+| `feel-client.mdx` 中音频 / 粒子 / 视觉反馈 | `impl/09` |
+| `feel-client.mdx` 中 prediction / server confirmation | `impl/10` |
+| `feel-client.mdx` 本体 | 内容迁完后退休 |
+| `protocol.mdx` | `impl/10 客户端—服务器架构与网络同步` |
+| 旧各章散落的性能材料 | 汇总 / 去重到 `impl/11`，原章只保留本系统必要性能背景 |
+| `mod-architecture.mdx` 中 Java Mod / Mixin / Loader | `impl/13` |
+| `mod-architecture.mdx` 中 Bukkit / Paper | `impl/14` |
+| `servers.mdx` | `impl/14 插件、服务端软件与规模化` |
+| `java-runtime.mdx` | `impl/15` |
+| `bedrock.mdx` | `impl/16` |
+| `tech-debt.mdx` | `impl/17` |
+| `modifiable-engine.mdx` | 仅作 `impl/18` 素材，旧命题退休 |
+
+### 推荐执行顺序
+
+1. **先改 `impl/index`、Part `meta.json` 与 TOC 的目标结构**，但保留旧文件直到内容迁移完成。
+2. **重写 01–03：世界与数据。**
+   先把“数据模型 / 保存 / 世界生成”的边界立稳，尤其不要再把 Chunk Lifecycle 塞回 Worldgen。
+3. **重写 04–08：世界如何运行。**
+   Tick → 方块局部变化 → Entity Simulation → Item / Inventory → Redstone，建立运行时对象地图。
+4. **重写 09–11：客户端、网络与性能。**
+   在这一阶段拆掉 `feel-client.mdx`，并新增 `chunk-streaming-performance.mdx`。
+5. **重写 12–14：扩展与服务器生态。**
+   数据驱动 → Java Mod → Server Plugin / Operations，明确三层扩展面。
+6. **重写 15–17：两种实现与长期演化。**
+7. **最后写 18 和 `impl/index` 最终版。**
+   前 17 章完成前，不提前锁定“最小内核”“技术原则”数量。
+8. 全卷完成后统一：
+   - 删除已退休旧稿；
+   - 同步中文 / 英文导航；
+   - 检查 Vol. II / Vol. IV 交叉引用；
+   - 回看 Vol. IV 中对 `impl/04–11` 的引用是否仍使用旧编号或旧命题。
+9. 如果执行过程中发现真实实现并不支持 PLAN 中的抽象，**优先修改 PLAN 和章节职责，不维护这份结构本身。**
 
 ---
 
