@@ -271,7 +271,7 @@ render layers
 客户端因此可以在两个离散状态之间计算表现位置。最简单的线性插值是：
 
 $$
-p_{render} = (1-alpha)p_{prev} + alpha p_{current}
+p_{render} = (1-\alpha)p_{prev} + \alpha p_{current}
 $$
 
 其中 `alpha` 是当前 Frame 位于两个 Tick 之间的比例。
@@ -832,7 +832,7 @@ minecraft:stone
 
 就进入了 **Prediction / Confirmation / Reconciliation**。
 
-旧 `feel-client.mdx` 中“先演、再对账”的材料会在下一章[《客户端—服务器架构与网络同步》](/impl/protocol)重新处理，因为那里真正需要回答的是：
+旧 `feel-client.mdx` 中“先演、再对账”的材料会在下一章[《客户端—服务器架构与网络同步》](/impl/networking)重新处理，因为那里真正需要回答的是：
 
 > **谁拥有权威状态，以及高延迟下客户端可以提前相信自己多少？**
 

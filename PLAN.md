@@ -1118,7 +1118,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 ### `impl/09` 客户端渲染与反馈
 
 - **目标文件**：`docs/impl/(part3)/client-render.mdx`
-- **状态**：✎ 已按新版结构重写；已吸收 `feel-client.mdx` 中视觉 / 音频反馈，Prediction 材料留待 `impl/10` 迁移
+- **状态**：✎ 已按新版结构重写；已吸收 `feel-client.mdx` 中视觉 / 音频反馈
 - **核心问题**：服务器知道的世界，客户端怎样把它变成可见、可听、可理解的体验？
 - **建议内容**：
   1. Chunk mesh / rebuild
@@ -1130,12 +1130,12 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
   - 客户端 prediction / reconciliation 主要放到 `impl/10`；
   - 不写渲染器实现教程；
   - 不把“原版为什么不用某某现代算法”写成先验批判。
-- **旧文件处理**：`feel-client.mdx` 的粒子、音频、视觉反馈材料迁入后可退休。
+- **旧文件处理**：`feel-client.mdx` 已拆分并吸收到 `impl/09` / `impl/10`，现已退休删除。
 
 ### `impl/10` 客户端—服务器架构与网络同步
 
-- **目标文件**：由现有 `protocol.mdx` 重写，slug 可在执行时决定是否迁移为 `networking`
-- **状态**：待重写
+- **目标文件**：`docs/impl/(part3)/networking.mdx`
+- **状态**：✎ 已按新版结构重写；`protocol.mdx` 已迁移为 `networking.mdx`，`feel-client.mdx` 的 Prediction / Reconciliation 材料已吸收
 - **核心问题**：谁拥有权威状态？区块、实体、库存和玩家操作怎样跨网络保持一致？
 - **建议内容**：
   1. Java Edition 单人 / 多人架构的历史演变

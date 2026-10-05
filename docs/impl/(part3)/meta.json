@@ -1,4 +1,4 @@
 {
   "title": "客户端、网络与性能",
-  "pages": ["client-render", "protocol"]
+  "pages": ["client-render", "networking"]
 }
