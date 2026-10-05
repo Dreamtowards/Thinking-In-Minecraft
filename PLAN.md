@@ -771,7 +771,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 #### `design/11` 模组与玩法扩展
 
-- 目标文件：`docs/design/(part3)/mods-expansion.mdx` · 两类 · ▤
+- 目标文件：`docs/design/(part3)/mods-expansion.mdx` · 两类 · ✎
 - **简介**：模组可以增加内容、增加系统、改变规则，整合包还能重新组织 progression。本章用 Mod 看原版没有选择的设计空间，而不是替 Mojang 开一份“应该收编什么”的药方。
 - **要回答**：Modding 为什么能把 Minecraft 变成非常不同的游戏？它对理解原版设计有什么帮助？
 - **交叉**：`history/04`、`impl/12`、`design/06`、`design/10`
