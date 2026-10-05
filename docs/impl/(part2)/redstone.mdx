@@ -1,188 +1,1049 @@
 ---
-title: 红石的实现
-description: 信号强度、弱充能、准连接。活塞、BUD、更新顺序。未定义行为被社区当成稳定 API。红石是隐式虚拟机。兼容性高于正确性时，怪癖会变成平台。
+title: 红石与更新顺序
+description: 从信号查询、红石线传播到计划刻、活塞事件与准连接，理解 Minecraft 为什么会因为更新顺序不同而产生不同的机器行为。
+tags: [redstone, signal, update-order, piston, observer, quasi-connectivity, java]
 ---
 
-> **本章命题**：红石的「错误」只要稳定、可复述、被写进教科书，就是社区 API。官方一旦按电路图把它修正确，修的不是灰，是语言。兼容性高于正确性时，怪癖会变成平台。
+前几章已经把红石依赖的底层机制拆开了。[《游戏循环、Tick 与调度》](/impl/tick)说明世界不是连续时间，[《方块更新、光照与流体》](/impl/block-updates-light-fluid)说明局部变化通过 Neighbor Update、Scheduled Tick 和队列向外传播，[《物品、库存与配方系统》](/impl/items)则让 Comparator、Hopper 和 Crafter 有了可以读取和操作的数据。
 
-## 问题
+红石把这些机制集中到同一套装置里。
 
-某次快照改了活塞的更新通知范围，飞行器停了，农场停了，生存服的核心设施连夜出补丁。聊天里没有人说「终于符合电学」，他们说语言被删了。Wiki 上的红石和游戏里的粉不是一回事。设计合同在卷二（[《红石、机器与自动化》](/design/redstone-automation)）：可误用。本章写实现：未定义行为如何成为社区 API？
+拉下一个 Lever，看起来只是“通电”。程序却必须依次回答：
 
-可被证伪的说法是：准连接和 BUD 是还没擦干净的 bug，擦完红石会更公平，社区会感谢诚实。只要 MC-108 还被标成 Works as Intended、只要观察者把「侦测更新」收编成方块之后活塞 BUD 仍在跑、只要同一张 Java 图纸在 Bedrock 上对不上时序，这句话就不成立。
+- 这个 Block 向哪个方向输出多少信号？
+- 相邻实心方块会不会继续把信号传出去？
+- Redstone Dust 的强度应该更新成多少？
+- Repeater 是现在变化，还是预约未来变化？
+- Piston 收到通知以后，是立刻移动，还是先排入别的执行阶段？
+- 如果两个组件都在同一个 Tick 内发生变化，谁先看到谁？
 
-上一章（[《物品、库存与合成》](/impl/items)）把口袋写成权威协议，漏斗把栈衔进红石钟；再上一章（[《游戏循环与刻》](/impl/tick)）把刻写成共享真实，粉（红石粉，下文沿用社区口呼）、中继器、活塞不在同一班；邻居图则是[《方块更新、光照与流体》](/impl/block-updates-light-fluid)的账单。红石是这张图上最会编程的那一层。本章不要搭建步骤，但准连接和 BUD 必须说清成因。说清成因的意思是：能指着具体机制讲——检查函数多看了一格，更新通知却走不了那么远。指得着，才不是玄学；指不着，社区会继续用口口相传的口令代替规格，官方会继续用「修 bug」代替立法。两种代替撞在一起，就是革命。
+因此红石真正困难的地方并不是 0–15 这十六个数字，而是：
 
-<Cards>
-  <Card title="可误用是合同" href="/design/redstone-automation" description="官方停在物理。教科书长在外面。" />
-  <Card title="游戏刻不是红石刻" href="/impl/tick" description="尺子先分开。时序在这里。" />
-  <Card title="两条因果" href="/history/java-bedrock" description="删掉 Java 或 Bedrock，灯常常不成立。" />
-</Cards>
+> **信号值、邻居通知、延迟调度和执行顺序怎样共同决定最终状态？**
 
-## 为什么「修 bug」会引发红石革命
+这一章只讨论实现，不写搭建教程，也不会一开始就把红石宣布成“虚拟机”或把任何怪癖预设成不可触碰。先把信号和时序讲清楚，再讨论为什么一些历史行为后来很难改变。
 
-普通游戏修 bug，玩家说谢谢；红石修 bug，有人说革命。差别在于：社区早已把观察结果当成说明书。说明书不在 jar 里，它在 Wiki、在视频、在生存服核心里冻住的旧时序。改通知走多远、改活塞先伸哪一边、改粉会不会在同一刻里把线走完，都等于改指令集。指令集一变，飞行器不是「坏了」，是一段程序在新 CPU 上行为未定义。
-
-观察者的诞生是一次收编。1.11 把「侦测方块变化」做成方块，等于承认 BUD 是需求。[^obs] 收编没有消灭活塞上的那套。需求还在：有人要侦测更新，有人要侦测「该亮却还没被通知」。后者不是观察者的子集。修掉后者，观察者仍在，语言少一块。
-
-所以革命不是矫情。革命是：这套物理没有官方指令表，指令表是玩家从因果里读出来的。读出来的东西一旦稳定，修复就是立法。立法可以。立法时若假装自己在擦灰，聊天会炸。炸的是作者席被收回，不是灯不该更像电。
-
-1.16 的快照把这件事写进了公开记录。20w18a 让粉的**看见的连线**和**真正供电的方向**对齐：看起来连着的才给旁边的方块电，看起来没连的就不给。[^18a] 工单上这是修「视觉与逻辑两套标准」。墙上这是：曾经靠「看起来没连、逻辑上却在供电」省空间造出来的紧凑机器，突然少了一条动词。对齐没有整场撤回——它进了 Java 1.16 正式版。随后加上的是减压阀：孤立粉可在十字和圆点之间切换，圆点不给四周供电。[^dot] 减压阀承认：连「这一格粉朝哪说话」也已经是语言。准连接没有在那一轮被拿掉。修一个地方会在别处裂开，不是阴谋，是这台隐式 VM 没有模块边界。裂开之后有的改留下，有的用新开关补回旧语义。留下和补回都是立法。立法的测试集在墙上，比快照说明大。
-
-新积木同样会改指令集，哪怕没有人喊「修 bug」。粘液块让一只活塞的手一次能带走一串格；蜂蜜块改的是实体怎么跟着走。飞行器口语能膨胀，不是有人解锁了关卡，是手变长了。[^slime] 漏斗和比较器让口袋能被粉读到（上一章[《物品、库存与合成》](/impl/items)已写）。标靶把粉的转向收成方块。合成器把配方收进能被信号驱动的格。[^crafter] 每一次都像在加零件。每一次都在给已经写好的程序换 ALU。零件可以欢迎。换 ALU 仍是立法。立法的账单按已经起飞的那一层计。
-
-Java 与 Bedrock 从一开始就不是同一份指令表。准连接只活在一边。Bedrock 的红石甚至可以不跟主循环同一条队伍。粉的圆点状态、粉的视觉与逻辑是否必须对齐，两边也不是同一场革命。同一张原理图，两边的灯可以不一样亮。分叉让「修正确」无法写成一个版本号。能写成的是：每一边都有自己已经被写进教科书的怪癖。怪癖被修，那一边革命。
-
-<Memoir title="飞行器停了">
-快照说明写着修复活塞。生存服的冰道还在。天上的那一层停了。不是有人不会玩。是那一层靠一份从未写进手册的通知顺序起飞。顺序一改，程序还在坐标上，语义断了。口令「又革命了」能当政治，因为停的是语言，不是一盏门灯。
-</Memoir>
-
-## 信号模型：强度、充能、准连接
-
-红石不是电。实现上它是格子上的整数：0 到 15。粉每走一格减一；中继器把数补回 15，并跨过两游戏刻；比较器做的是读和减，不是运放。[^dust] 信号穷得只剩一个整数，反而正好当逻辑用。也因为穷，「弱」和「强」必须被发明——两者不是电压高低，是**谁有资格再去点亮旁边的粉**。
-
-粉一身两职：它是线，也是电源。线的形状（十字、边、圆点）会改变它朝哪一格说话。20w18a 之后，Java 更坚持「你看见它连着，它才给那边电」。看见与说话对齐，对新手是诚实。对已经把「没连上也在供电」写成紧凑语法的人，是一次删词。Bedrock 没有把圆点做成同一种可切换的状态。合写的是：粉占格、力是整数、会衰减。分写的是：这一格粉的形状算不算指令。
-
-**弱充能**：粉铺在方块上，这个方块算被（弱）充能，能激活邻接的门、灯、活塞，但通常不能再给邻接的粉供电。**强充能**：中继器或比较器头朝方块，这个方块能给邻接的粉供电。社区说的「硬充 / 软充」就是这件事。官方从没有发过一张电路课；模型是：充能不是方块上存的一个 bit——没有「本格已充电」这种状态被普遍存下来。组件是在被通知的时候，去看邻居够不够格；看的规则因组件而异。正因因组件而异，同一根粉，活塞和门可以得出两个答案。
-
-中继器还多一条锁：侧面被另一只中继器（或比较器）顶住时，它冻结当前输出，不再理输入。[^rep] 锁不是电学里的高阻态。锁是：计划刻那一班被叫停，格上的数暂时变成常量。比较器的减法模式和容器读取，是把上一章的口袋接进这台 VM：箱子多满，信号多强。[^cmp] 漏斗每一刻想物品；比较器把想的结果收成 0–15。财产和因果在同一根粉上见面。见面之处没有官方「库存总线」。见面之处是：有人发现容器能被读，Wiki 把读法写成零件。
-
-火把是另一条会自己停的指令。闪得太勤，它会熄一阵，直到再被通知。[^torch] 这不是电学过载。这是调度器给高频振荡加的保险丝。保险丝会改变钟的时序，于是也进入教科书：有人靠它停，有人被它坑。官方可以当它是保护。社区当它是 opcode。当它是 opcode 之后，拿掉保险丝就是删词。留下保险丝，某些钟必须绕开它。绕开仍是阅读。阅读写进 Wiki，保险丝就升级成平台的一部分。Bedrock 的火把和 Java 的熄灭条件不必同一份。合写的是：高频振荡会被节流。分写的是：节流之后谁还能亮。
-
-**准连接**是这条「去看邻居」多看了一格。活塞、发射器、投掷器判断「我该不该动」时，除了查自己所在的格，还会查**上方那一格**有没有东西处于激活状态——哪怕那一格是空气。于是一个经典的场面可以成立：活塞头顶放一块实心方块，方块顶上铺一根粉，粉隔着方块把下方的活塞点亮。[^qc] 成因不是神秘学。成因是：这些机构复用「这一格该不该亮」的检查时，把检查坐标往上偏了一格——检查函数把这台机器当成了一块普通方块来问：「如果有电源作用在你头顶那格，你会不会亮？」偏完，空气也算被问到的空间。问到了，就准连接。
-
-它为什么常和 BUD 缠在一起：粉和中继器发出的更新通知，历史上多半只走得出大约两格。准连接却能让「该亮」的判定落在三格外。于是活塞可以进入一种状态：**按规则该动，却还没收到通知**；下一次任何方块更新点到它，它才补做那次该做的检查——这次补做，就是后文的更新式 QC。MC-108 把这类现象标成 Works as Intended。[^wai] 标成意图，不是标成电路正确；标成意图，是承认已经有人靠它造墙。制作台没有准连接，说明这不是「所有方块的天性」，是这几个机构的检查函数写远了。远出来的那一格，就是语言。
+本文主要以 **Java Edition 26.3 的默认规则**为参照。需要特别说明的是：Mojang 自 1.21.2 起仍然保留一个可选的 **Redstone Experiments** Feature Flag；26.3 中 `RedstoneWireBlock` 仍同时存在默认与实验性两套 Wire Evaluator，因此实验行为不能和普通世界混写。[^release] [^wire] [^redstone-experiment-flag]
 
 ```mermaid
 flowchart LR
-  N["通知走得近"] --> G["缝"]
-  C["检查看得远"] --> G
-  G --> B["该亮却还没被叫到"]
+  Source["Signal Source"] --> Query["信号查询"]
+  Query --> Wire["Redstone Wire"]
+  Query --> Device["Mechanism"]
+  Wire --> Neighbor["Neighbor Updates"]
+  Device --> Schedule["Scheduled Tick / Block Event"]
+  Neighbor --> Device
+  Schedule --> State["新的 Block State"]
+  State --> Neighbor
 ```
 
-图不是电路。它只钉死成因：两边半径不一致，状态机就会卡在「该变未变」。把通知补到和检查一样远，准连接式 BUD 会少一条路。把检查收短到只看自己那一格，准连接消失。两条路都是立法。两条路都会让墙上已有的程序换语义。
+## 一个组件为什么会认为自己被供电？
 
-```java
-boolean shouldActivate(Piston p) {
-  return isPowered(p.pos()) || isPowered(p.pos().above()); // 示意：上方那格哪怕是空气
-}
+最容易误解红石的地方，是把“充能”想成每个方块内部都保存了一个统一的电量。
+
+Java 当前实现更接近**按需查询**：组件需要知道自己是否有信号时，会查看周围 Block State 向特定方向能提供什么 Redstone Signal，再根据方块是否能够导电等规则组合结果。
+
+### 信号首先是一个 0–15 的整数
+
+Redstone Dust 的 `POWER` 是一个 0–15 的 Block State 属性。信号源可以输出 15，Wire 从邻近 Wire 接收到的强度则逐格衰减。当前 `RedstoneWireEvaluator` 会把来自普通 Block Signal 与邻近 Wire 的结果组合起来，得到该位置新的 Wire Strength。[^wire-evaluator]
+
+概念上可以简化成：
+
+```text
+new wire power
+=
+max(
+  signal from non-wire sources,
+  strongest neighboring wire - 1
+)
 ```
 
-示意不是源码。Bedrock 没有这句或。同一张活塞墙，护照先问你在哪条产品线。
+并把结果限制在 0–15。
 
-Bedrock 把红石刻拆成产出与消费两段，合起来仍是两游戏刻。粉可以每游戏刻改一次力，看起来却只在其中一段刷新（尺子在那边已经分开，见[《游戏循环与刻》](/impl/tick)）。本章要补的是：两段式让「同一刻里谁先说话」变成另一套口令。Java 的更新顺序教科书不能当译本。译本会把灯点错。合写只剩合同：信号是整数，占格，能推方块。分写从准连接开始，一直写到班次。
+这解释了 Redstone Dust 最基本的传播距离，却还没有解释“为什么隔着一个实心方块也能继续供电”。那需要下一层查询。
 
-<Impl title="没有『方块已充电』这一格状态">
-许多「充能」是查询，不是存档字段。查询发生在有人通知的时候。通知走不远，查询看得远，中间那截差就是 BUD 的缝。把充能做成每格一个真正的 bit，准连接会消失，机器会更干净，二十年墙也会重写。
-</Impl>
+### “弱 / 强充能”更适合看成两类信号查询
 
-<Note>
-删掉句中的「Java」，准连接句子不成立。合写的是：信号是 0–15 的整数，占格，能推方块。分写的是谁去看上方那一格。
-</Note>
+社区通常使用 **weak power / strong power**、软充能 / 强充能来解释红石。
 
-## 活塞与更新顺序；BUD 作为社会 API
+这个模型很有用，但从当前 Java 代码看，更精确的对应是：
 
-活塞是红石接到世界上的手。信号不只点灯，还改格；改格，计算才有身体——门、飞行器、能把方块当磁带的装置。这只手要分班次，不是分电压。中继器和火把把延迟写进计划刻：预约未来某一刻再醒。活塞被通知时先检查该不该动，再排一条方块事件；真正把格变成「正在移动」、把方块带走，发生在方块事件那一班。检查若恰好落在实体或方块实体那一班之后，事件往往要等到下一刻才开始——于是链式活塞会比「两游戏刻伸完」再晚一截。[^tick] 两截之间，别的粉还可以再改一次。所以「立刻」在循环里是班次。班次对不上，社区叫半刻、零刻：同一游戏刻里电源被放上又被撤走，机构看见一次脉冲，墙上的钟却还没走到下一个红石刻。这里不要步骤，要成因：同一刻里，通知、计划、实体、事件并不是同一个时刻。Bedrock 的活塞更死：启动延迟钉在两游戏刻，而且只在消费那一段红石刻认输入。删掉 Java 或 Bedrock，「这只活塞何时出手」就不是同一个词。
+- `BlockState.getSignal(...)`：该 Block 向某一面提供的普通 / weak signal；
+- `BlockState.getDirectSignal(...)`：该 Block 向某一面提供的 direct / strong signal；
+- `BlockState.isRedstoneConductor(...)`：这个方块能不能把进入自身的 Direct Signal 纳入对外查询。[^signal-getter] [^block-state-signal]
 
-**更新顺序**是隐式图的遍历次序。六个邻居谁先被点名，哪一根粉先减到 0，哪一只活塞先报名。次序是确定的，所以能被读成语言。次序几乎不写在官方说明书里，所以语言长在 Wiki。改次序等于换 opcode 的大小端。飞行器、瞬间线、某些钟，吃的是次序，不是 15 档本身。一次「更合理的邻接遍历」会引发革命，因为合理是电路课的词，次序是这台虚拟机的词。
+`SignalGetter.getSignal(pos, direction)` 的核心关系可以概念化为：
 
-次序还跟区块接缝有关。粉跨过区块边界，通知可能晚一截，也可能在加载顺序里换一个方向先说话。同一种子、同一朝向，两台机器若跨在不同的区块柱上，仍可能对不上时序。这不是随机，这是：虚拟机的内存按区块分页，页与页之间没有一条官方总线。生存服把核心装置做成区块对齐的，常常不是为了好看，是为了让这台 VM 的页边界别切在程序中间。切在中间，教科书失效；失效的那一夜，也会被叫成革命。
+```text
+own weak signal of block
+        ↓
+is this block a redstone conductor?
+   ↙                    ↘
+ no                     yes
+ ↓                       ↓
+own signal      max(own signal, direct signal entering it)
+```
 
-**BUD**（方块更新检测器）是一种状态机：机构已经该变，还在等一次邻居通知。准连接是制造这种状态的常见办法，不是唯一办法。卡住的活塞、某些组件各自的更新半径，都能长出同类的缝。[^bud] 观察者是合法的侦测器：方块变了，它眨眼。BUD 是侦测「变了却还没告诉我」。两种侦测不要收成一种零件。收成一种，你会以为发了观察者身份证，民间那条 opcode 就注销了。没有注销。社会 API 的意思是：Wiki 把它写成零件，视频把它当积木，核心把它当不能破坏的时序。官方没有发布 BUD。社区发布了。发布之后，修缝就是下架零件。下架可以。下架时若只说「那本来就不是功能」，墙上的人会听见「你们读错了说明书」。说明书在他们那边。
+于是所谓“一个实心方块被强充能以后，可以继续让旁边装置读到信号”，不是因为世界给这个方块永久写入了：
 
-观察者没有消灭 BUD，正如配方书没有消灭九格。收编承认需求。需求若只被收编一半，另一半仍在墙上。制作台没有准连接，观察者没有把活塞的检查函数改短。短了，墙会塌。塌完灯更老实。老实不是这台虚拟机的 KPI。
+```text
+powered = true
+```
 
-粘液和蜂蜜把这只手乘上一个系数。一只活塞能推的不再是「它正对着的那一格」，而是被粘在一起的一组。飞行器能从玩具变成交通，是因为副作用的半径变了：一次方块事件改的是一片，不是一格。[^slime] 改半径不是加关卡。改半径是让同一套更新顺序能搬一座房子。搬房子的程序仍然写在从未印刷的指令表上。指令表一改，天上那一层停的就不是一盏灯。
+而是下一位读取者查询它时，`SignalGetter` 发现这是一个 Redstone Conductor，于是把进入这个位置的 Direct Signal 也考虑进去。
 
-<Callout type="warning" title="零搭建">
-能指着「该亮却还没被通知」就够了。下一格中继器朝哪、沙子怎么掉，不在本章。成因是检查函数看远了、通知走近了。图纸是攻略。
+<Callout type="info" title="供电很多时候是查询结果，不是独立存档状态">
+某些红石组件确实会把 `POWERED` 或 `POWER` 保存进自己的 Block State，但“一块普通石头现在被强充能”并不需要给 Stone 增加一个新的 Block State。它可以由周围信号在查询时推导出来。
 </Callout>
 
-<Alternative title="若活塞只看自己那一格">
-准连接消失。活塞墙要多一圈粉。BUD 少一条路。教程会更像电路。飞行器和某些农场要重写。你得到更可测的机构。你失去的是：空气那一格也被算进语言。语言已经写在十年的服上。
-</Alternative>
+这也是为什么“强 / 弱”并不是“15 比 7 更强”。它们首先描述**传播能力不同的信号路径**，信号数值本身仍然可以是 0–15。
 
-## 未定义行为变成接口的社会过程
+### 不同 Source 可以对不同方向给出不同答案
 
-接口不从 Javadoc 来。它走一条很慢的河。
+Lever、Button、Torch、Repeater、Observer 并不是统一地向六个方向输出同一个值。
 
-先有可复现的怪。同一种子、同一朝向、同一刻，灯的状态能被截图。能截图，就能教。能教，Wiki 就收条目。条目稳定，视频就用它当积木。生存服不敢更新，不是因为懒，是因为积木已经焊进冰道和农场。工单系统里，有人标 Bug，有人标 WAI。WAI 一旦盖章，怪癖升级成平台：你不能再假装自己不知道有人靠它说话。[^wai] MC-108 不是一张普通工单。它把「活塞去看上方那一格空气」从可修的失误，写成意图。意图一旦公开，社区 API 就有了宪法条文。条文可以废。废条文要走立法，不能走「我们擦了一下灰」。Bedrock 从未签署这条。那边的宪法是另一本：两段式红石刻、没有准连接、另一套活塞启动延迟。同一品牌下两部宪法，误用无法完整跨境传播。跨境失败不是翻译事故。跨境失败证明：社区 API 绑定的是实现，不是商标。
+例如当前实现中，一个组件可以：
 
-然后出现两种立法者。官方改通知范围，以为在修正确；社区这一边——服务器插件、Carpet 一类调试工具、Paper 的兼容开关——把旧时序冻住，以为在保护语言。两边都对。对的不是电学，对的是：这套程序没有规格书，规格书是社会过程；过程的产物叫社区 API。API 的测试集是世界上还在转的机器，不是单元测试。机器一停，就革命。
+- 普通信号向多个方向输出；
+- Direct Signal 只输出到特定方向；
+- 完全不向自己的输入面输出；
+- 只在 `POWERED` 状态时成为 Signal Source。
 
-测试怎么做，也暴露了这台 VM 脏在哪。回归不是断言函数返回值。回归是把一座结构从原理图贴回世界，看飞行器还飞不飞、看漏斗钟还跳不跳。结构方块、原理图工具、种子录像，都是民间测试架。官方快照说明写「修了粉的连线」，测试架上灭的是十年前一座没人提交过 PR 的冰道。Mojira 是立法会：WAI 盖章，等于把一条民间 opcode 收进平台；Unresolved 挂着，等于这条 opcode 还在试用。YouTube 和 Wiki 是发行渠道：能教的才算稳定。不能教的，只是某个人存档里的奇迹。奇迹不成 API。能截图、能复述、能让别人在另一张图上复现的，才成。
+因此“这个方块有没有电”本身就是过度简化的问题。
 
-模组把这件事写得更硬。Carpet 一类工具把更新顺序、随机刻、甚至红石的边角冻成可开关的实验。开关的存在本身就是证词：有人需要旧 CPU。Paper 的兼容开关为的是生存服不敢更新时，语言还在。这不是开服手册。这是：第二作者已经在运行时里立法，正作每一次「修正确」，都要和这份运行时对账。对不上，核心留下旧版，或者把开关打开。留下旧版，是用版本号当指令集版本。打开开关，是用配置文件当补丁。两种都在说：墙上的时间比工单上的正确性贵。
+更有用的问题是：
 
-兼容性高于正确性，发生在测试集已经比规格大的时候。红石的测试集是十年误用。正确性是「活塞不该看空气」。兼容性是「看空气的那一万台机器还要转」。高于，不是永远不修。高于是：修的成本按机器数计，不按工单数计。存储章把格式改革写成按对象计费。红石把时序改革写成按已建造的虚拟机计费。对象在柜子里。虚拟机在墙上。
+> **从这个方向查询它时，它给出多少 Signal？**
 
-Bedrock 走了另一条社会过程：没有准连接，有另一套两段式红石刻，那边的教科书不是这边的译本（[《两条产品线：Java 与 Bedrock》](/history/java-bedrock)）。同一品牌，两台虚拟机。Marketplace 收得动附加包，收不走 Java 墙上那套 WAI。货架不是这台 VM 的运行时。
+这让方向成为红石语义的一部分，而不仅是方块贴图朝向。
 
-所以「未定义」是官方视角。社区视角里它早就定义了：定义在可复述的因果里。官方若把未定义清成正确信号，等于宣布那些定义作废。作废可以。作废是立法。立法要付墙上的时间。
+### Comparator 还多了一套 Analog Output
 
-「未定义」这个词本身会骗人。编译器里的未定义行为是：你可以当它不存在，下一次编译可以换一种炸法。红石的怪癖不是那种。同一种子、同一朝向、同一刻，灯的对错能被截图十年。能截图的东西，玩家不会叫它未定义。玩家叫它机制。官方叫它未定义，是因为规格书从未承诺。社区 API 就住在这道缝里：一边不承诺，一边已交付。交付的凭证是 Wiki 条目和还在转的核心。凭证比承诺重。重的时候，修 bug 听起来像撕合同。
+Comparator 并不只读取普通 Redstone Signal。
 
-影像把合同公开（[《影像与一代人的媒介》](/history/media-education)）。教学视频不教过关，教「这一刻谁先被点名」。点名顺序一旦被念成口令，口令就会进生存服：服不敢更新，不是因为管理员迷信旧版，是口令已经焊进冰道。焊进冰道的程序没有版本号——版本号在 jar 上，程序在墙上。两边对不上，就革命。
+Container 等方块还可以提供 `getAnalogOutputSignal`；Comparator 会根据面对的方块读取这类模拟输出，再进行 Compare 或 Subtract。当前 `ComparatorBlock` 仍通过自己的 `getInputSignal` / `getOutputSignal` 路径处理这类输入。[^comparator] [^diode-current]
 
-## 隐式虚拟机的工程现实
+这让箱子填充程度、唱片机状态等世界数据能够被映射到 0–15。
 
-红石是虚拟机，却没有程序计数器。没有一份「当前执行到第几行」。程序就是粉和机关在格子上的形状。数据是 0–15。时钟是游戏刻和那把社区尺。副作用是推格、放实体、改亮度。调试器是你的眼睛和 F3。
+从架构上看，它相当于给 Block 增加另一种接口：
 
-工程上这很脏。脏在：测试必须启动一座世界；回归是「飞行器还飞吗」；优化必须不改遍历次序。脏在：它和光照、流体、实体抢同一刻。粉一亮，可能触发光照收回、漏斗对账、活塞排进方块事件。隐式图没有模块边界；没有边界，才有误用；没有边界，MSPT 才会被一座红石钟买光（机制见[《游戏循环与刻》](/impl/tick)）。五十毫秒是付款日，红石钟是会自己下单的顾客。
+```text
+world state
+    ↓
+analog measurement
+    ↓
+0..15 signal
+    ↓
+redstone network
+```
 
-脏还有一层：这台 VM 的内存就是世界。比特写在灯上，磁带写在活塞推来推去的方块上，时钟占格，能被苦力怕炸，能被水冲。炸完还能修，是因为指令和数据共用建造那把尺。干净的脚本语言把内存藏进数组。墙上的语言把内存暴露成你可以挖掉的格。暴露，所以能住。暴露，所以一次「更合理的邻接遍历」会把别人家里的程序改成未定义。未定义在官方嘴里。在玩家嘴里，那是上一版的确定次序。
+红石因此不只是“电源和导线”，也是其他游戏系统把状态暴露给自动化的一条通道。
 
-观察者、比较器、合成器，是官方偶尔把民间 opcode 收成方块。收成方块，等于给这条指令发身份证。没发证的那些——准连接、某些零刻、更新顺序的某一端——仍靠社会过程续期。续期的条件是稳定。稳定靠的不是没人改代码。稳定靠的是改的人付墙上的时间。1.11 给了观察者，BUD 还在。1.16 让粉的连线更诚实，圆点被加回来当减压阀。1.21 给了合成器，工作台那九格还在。收编是加法。加法不会自动把旧指令表作废。作废要另一次立法。
+## Redstone Dust 怎样传播信号？
 
-要抄的不是「加一种红石粉」。要抄的是：把一份离散因果嵌进建造用的格子，故意留出检查半径和通知半径之间的缝，然后把缝交给社会过程去命名。缝太小，机器少；缝太大，卡顿和杜普会从同一张图里长出来——那句话在[《方块更新、光照与流体》](/impl/block-updates-light-fluid)里。红石是这张图上的程序。程序能算，是因为缝稳定；稳定靠的是兼容性压过洁癖。
+Redstone Wire 看起来最接近传统电线，但实现上它同时承担三件事：
 
-优化模组把这件事写成产品。Lithium 一类以「算得更快、行为仍像原版」为卖点。[^lith] 卖点本身是证词：更新顺序和班次是 ABI。改 ABI 就能换一台更快的 CPU，也会换一种语言。Paper 曾经用兼容开关把旧时序冻住，不是因为喜欢脏。是因为生存服的测试集比补丁说明大。优化若只保证「灯还会亮」，飞行器仍可能停。要保证的是：六个邻居仍按同一份口令被点名。口令对上，MSPT 才是同一台机器上的账单。口令对不上，你优化掉的是语言。
+1. 保存当前 `POWER`；
+2. 根据附近环境决定自己向哪边连接；
+3. 当强度变化时通知相关方块。
 
-干净的虚拟机更好测：字节码、规格、版本号。干净的虚拟机很难长在家里的墙上。墙上的 VM 能被水冲、能被苦力怕炸、能和门住在一起。炸完还能修。修完还是那套格。这是产品。产品选择了脏。脏了二十年，脏本身变成平台。平台上能跑计算机，也能跑一门灯。灯不是玩具。计算机不是官方关卡。二者共用同一份未写完的指令表。
+这三个职责彼此关联，却不是同一件事。
 
-计算机是这台 VM 的存在证明，不是玩法清单。有人用灯当比特、用活塞当手、用世界当磁带，算出的东西可以很慢、可以很大、可以只为证明「能算」。能算，是因为 0–15、班次、更新顺序足够稳定，稳定到能当未文档的指令集。官方没有发布这台机器。社区用误用发布了。发布之后，你不能再把红石说成「门上的灯」。灯还在。灯只是这台机器最浅的一层系统调用。
+### 连接形状会影响它向哪里输出
 
-粉一亮还会去买别的账。红石灯改亮度，光照要灌入或收回，流体计划刻可能同时在走。水能把粉冲走，1.13 之后还能和某些机构挤进同一格；挤进同一格，通知图更密。密不是丰富，密是同一刻里水和粉抢队列。抢输了，TPS 先告状。告状的不是「红石太高级」，是高级和低级在付同一笔 50 毫秒。
+当前 `RedstoneWireBlock` 保存 North / South / East / West 四个 `RedstoneSide` 属性，以及 0–15 的 `POWER`。连接可以是 `NONE`、`SIDE` 或 `UP`。[^wire]
 
-活塞出手还会生产实体：掉落物、正在移动的那一截、被推出轨道的矿车。红石因此不是纯方块系统，它是把实体的税和信号的因果焊在一起的那一层。焊住，飞行器才像交通；焊住，一座钟才可能一边算逻辑一边把 MSPT 买光。开发者若只抄「0–15 的电线」，抄到的是解谜。解谜不生产实体。这台 VM 生产实体。生产实体，才住得进生存服。
+也就是说，Wire 的视觉形状不是纯客户端装饰。
 
-卷四会考：要不要把这台 VM 收成显式调度器。本章不代答。本章钉的是：你若先把怪癖擦掉再谈重写，擦掉的是测试集。测试集在玩家的墙上。墙上的时间比正确信号贵。显式调度器可以更好测、更好写模组、更好让 Bedrock 和 Java 共用一份口令。更好测不是免费。免费的幻觉是：清干净再重写，重写会更轻松。清干净的瞬间，十年飞行器先停。停完你得到的是另一款游戏的电线。电线可以很诚实。诚实要另开一本说明书。这本书写的是：说明书已经写在误用里。
+Mojang 在 20w18a 曾专门调整这一点，让 Redstone Wire 的**视觉连接与实际供电方向更加一致**：看起来连接的一侧会供电，没有视觉连接的一侧则不再按旧行为偷偷供电。[^20w18a]
 
-<Constraint name="怪癖即平台" verdict="地基" chain="稳定怪癖 → 被写成教科书 → 修复等于改指令集">
-未说明但稳定的因果，就是接口。接口的测试集是还在转的机器。抄走 0–15 和活塞，丢掉 WAI 与更新顺序，你会得到更诚实的电路课，失去这台长在墙上的虚拟机。诚实可以。诚实是立法。立法按墙上的时间计费。
-</Constraint>
+20w21a 又加入了单格 Wire 在 Cross 与 Dot 之间切换的能力，其中 Dot 不给四周方块供电。[^20w21a]
 
-第二部到此收住：刻是共享真实，实体是税，口袋是财产，粉是隐式虚拟机。下一章把镜头转向看见和听见：画面怎么拼出来，协议怎么骗过手感，其中有多少是谎言。权威仍在这一刻上，谎言在客户端。第三部会把客户端拆开。拆开之前先钉死：模拟已经在这一刻里把因果结完；结完的账，画面可以晚一点画，不能另结一份。另结一份，熔炉和活塞就对不上你看见的白天；对不上，就不是同一座世界。第三部可以讨论怎么骗手感，但骗的前提是这一刻的账已经在服务器上结过。没结过的流畅只是你的显卡。显卡买得走三角形，买不走熔炉、活塞和白天——后三者认刻，不认帧；认刻的，才是共享真实。
+这两次变化说明一个很重要的实现原则：
+
+> **如果玩家需要从世界几何推断系统行为，显示状态与逻辑状态最好尽量共享同一份数据。**
+
+否则同一根 Wire 会出现“看起来没连，却实际上给电”的双重语义。
+
+### Wire 的强度变化会继续触发 Neighbor Update
+
+Wire 计算出新强度以后，事情还没有结束。
+
+周围的 Repeater、Piston、Lamp、Door 之所以会响应，是因为 Wire 的变化继续引发 Neighbor Update。默认 Java 26.3 的 `DefaultRedstoneWireEvaluator` 仍然按局部递归式方式更新 Wire；`RedstoneWireBlock` 也保留对邻近 Wire 与邻居方块的更新入口。[^wire] [^default-wire]
+
+因此一条长 Wire 的变化不是：
+
+```text
+计算一个数组
+→ 一次提交
+```
+
+而更像：
+
+```text
+某格重新计算
+→ 状态改变
+→ 通知附近位置
+→ 下一格重新计算
+→ 继续展开
+```
+
+这正是上一章 Update Cascade 在红石中的具体表现。
+
+### “信号传播”与“邻居被通知”是两张图
+
+这两个概念很容易混在一起。
+
+**Signal Graph** 回答：
+
+> 谁能从谁那里读到多少 Signal？
+
+**Update Graph** 回答：
+
+> 某个状态变化以后，谁会被通知重新检查？
+
+```mermaid
+flowchart LR
+  A["Power Source"] -->|Signal| B["Wire"]
+  B -->|Signal| C["Piston"]
+
+  A2["State Change"] -->|Neighbor Update| B2["Wire"]
+  B2 -->|Neighbor Update| C2["Piston"]
+```
+
+很多普通电路里，两张图看起来几乎一致，于是玩家感觉“有电就会动”。
+
+但准连接和 BUD 恰恰来自：
+
+> **能读到 Signal 的范围，与能收到 Update 的范围并不总是完全相同。**
+
+这也是为什么红石不能只用一个简单的“信号 Flood Fill”解释。
+
+## 为什么有些组件立刻变化，有些必须等待？
+
+红石把上一章的各种调度方式全部用上了。
+
+Wire 可以在更新链中立即重新计算；Repeater / Comparator 等 Diode 会通过 Scheduled Tick 延迟变化；Observer 把检测到的 Shape Change 转成短脉冲；Piston 则进一步使用 Block Event。
+
+所以“一个 Redstone Tick”不是所有红石组件共享的唯一执行阶段。
+
+### Repeater 把延迟做成 Scheduled Tick
+
+Repeater 的作用不只是把输出恢复到 15。
+
+它还显式保存：
+
+- Facing；
+- Delay；
+- Powered；
+- Locked。
+
+当前 `RepeaterBlock` 继承 `DiodeBlock`。当输入变化时，`DiodeBlock` 会检查是否应该切换状态，再按对应 Delay 安排 Scheduled Tick；Repeater 的侧面输入还能决定 `LOCKED`。[^repeater] [^diode-current]
+
+这意味着 Repeater 的基本语义是：
+
+```text
+input changed
+     ↓
+should output change?
+     ↓
+schedule future block tick
+     ↓
+re-check / commit powered state
+```
+
+而不是立即把输入复制到输出。
+
+因此 Delay 首先属于**游戏时间调度**，其次才是玩家口中的“电路延迟”。
+
+### Comparator 复用 Diode 时序，但输入语义不同
+
+Comparator 和 Repeater 都建立在 `DiodeBlock` 上，因此共享一部分输入、侧输入、Scheduled Tick 与定向输出基础设施。
+
+但 Comparator 的核心问题不是：
+
+> 输入是否大于零？
+
+而是：
+
+- 主输入是多少？
+- 侧输入是多少？
+- 当前是 Compare 还是 Subtract？
+- 前方方块是否提供 Analog Output？
+
+所以同一种“延迟组件框架”可以承载完全不同的信号运算。
+
+这是一种值得借鉴的分层：
+
+> **调度方式可以复用，计算规则不必复用。**
+
+### Observer 把 Block State / Shape Change 变成脉冲
+
+Observer 更像一个边沿检测器。
+
+当前 Java 的 `ObserverBlock` 会在它观察的方向收到 `updateShape` 时安排后续 Tick，再从背面输出一个短暂 Signal。[^observer-current]
+
+因此 Observer 并不是每 Tick 扫描：
+
+```text
+watchedState != oldState ?
+```
+
+它复用了方块更新基础设施：
+
+```text
+watched block changes
+      ↓
+shape update reaches observer
+      ↓
+observer schedules tick
+      ↓
+POWERED toggles
+      ↓
+output pulse
+```
+
+这和 BUD 有历史关系，但两者不是同一个实现机制。后面会专门区分。
+
+### Piston 使用的不是普通 Scheduled Tick，而是 Block Event
+
+Piston 收到 Neighbor Update 后，会先调用 `checkIfExtend` 判断自己当前是否应该伸出或收回。
+
+真正移动方块并不会在这个函数里立刻完成。服务端会排入 Block Event，随后在 `ServerLevel` 的 Block Event 阶段执行 `PistonBaseBlock.triggerEvent`。[^piston] [^piston-events]
+
+这让一次 Piston 行为天然分成：
+
+```mermaid
+flowchart LR
+  Update["Neighbor Update"] --> Check["checkIfExtend"]
+  Check --> Event["queue Block Event"]
+  Event --> Recheck["事件执行时再次检查"]
+  Recheck --> Resolve["PistonStructureResolver"]
+  Resolve --> Move["写入 Moving Piston"]
+  Move --> Animate["PistonMovingBlockEntity"]
+  Animate --> Settle["落地为最终 Block"]
+```
+
+因此 Piston 的“响应时间”不能只看 Signal 什么时候变化，还要看 Block Event 在当前 Server Tick 的哪个阶段被排入。
+
+这会直接把我们带到红石最难的一层：**同一个 Tick 内部的顺序**。
+
+## 同一个 Tick 里，谁先更新为什么会改变结果？
+
+上一章已经说明：同一个 Tick 并不等于所有系统同时发生。
+
+红石把这个事实推到了最明显的位置。
+
+如果两个 Piston 同时发现自己应该动作，或者一条 Wire 同时向多个方向传播变化，那么：
+
+- 谁先收到 Neighbor Update；
+- 谁先重新计算自己的 Signal；
+- 谁先预约 Scheduled Tick；
+- 谁先进入 Block Event；
+
+都可能改变中间状态。
+
+### 读取顺序、通知顺序和执行阶段不是同一件事
+
+Java 当前至少存在三类容易混淆的顺序：
+
+1. **Signal Query Order**：某个位置为了判断自己是否有电，按什么顺序查询周围方向；
+2. **Neighbor Update Order**：一个 Block 变化以后，按什么顺序通知邻居；
+3. **Scheduler / Event Order**：已经排队的 Scheduled Tick 或 Block Event 在什么时候执行。
+
+当前 26.3 的默认实现里，`SignalGetter`、`NeighborUpdater` 和 Block Shape Update 分别拥有自己的方向顺序。技术上它们甚至不是同一个数组。[^signal-order]
+
+这意味着：
+
+> **“先看谁”和“先告诉谁”本来就是两个问题。**
+
+如果把它们都笼统叫作 Redstone Update Order，很容易把一个组件为什么先触发解释错层。
+
+### 更新顺序决定中间状态能不能被观察到
+
+假设 A 和 B 都会影响 C。
+
+如果顺序是：
+
+```text
+A changes
+→ C checks world
+→ B changes
+```
+
+那么 C 看见的是：
+
+```text
+A = new
+B = old
+```
+
+如果顺序改成：
+
+```text
+A changes
+→ B changes
+→ C checks world
+```
+
+C 看见的就是：
+
+```text
+A = new
+B = new
+```
+
+最终稳定状态可能完全相同，但 C 在中间是否产生过 Pulse、是否预约过一次 Tick、是否排入过 Block Event，都可能不同。
+
+因此红石时序问题常常不是：
+
+> 最后 Signal 是多少？
+
+而是：
+
+> **在传播过程中的哪个瞬间，哪个组件读取了哪一版世界？**
+
+这正是同步数字电路和事件驱动系统里都会遇到的问题，只不过 Minecraft 没有给所有方块提供一个统一的 Clock Edge。
+
+### 默认 Wire 传播仍然带着历史递归结构
+
+Java 26.3 默认世界使用 `DefaultRedstoneWireEvaluator`。
+
+当前实现会从变化位置开始重新计算单格 Wire Power，再由方块更新继续向外展开。这个过程继承了很多历史时序特性，也意味着网络改变时，中间状态会在递归传播中逐步出现。[^default-wire] [^signal-dust]
+
+这些中间状态通常只存在于同一个 Server Tick 内，客户端甚至可能根本看不到。
+
+但其他服务端组件可以看见。
+
+因此：
+
+> **“玩家没有看到闪一下”不等于这一瞬间没有进入过游戏逻辑。**
+
+这也是为什么某些红石装置会利用极短的状态窗口。
+
+### Redstone Experiments 正是在试验另一种传播顺序
+
+24w33a 引入的 Redstone Experiments 尝试重写 Wire 的这部分行为。
+
+实验模式的主要变化包括：
+
+- 一整条受影响 Wire Network 会先计算新的 Signal Strength；
+- 然后再产生 Block Updates；
+- Wire 越靠近 Power Source，越早发出更新；
+- 邻居更新顺序根据更新传播方向构造 Orientation；
+- 目标之一是减少“机器换个方向或换个坐标就变行为”的情况。[^24w33a]
+
+24w34a 又把分叉时的大部分随机选择改成 Left-first，只在缺乏方向上下文时保留少量随机性。[^24w34a]
+
+当前 26.3 的代码仍然同时包含：
+
+```text
+DefaultRedstoneWireEvaluator
+ExperimentalRedstoneWireEvaluator
+```
+
+并由 `RedstoneWireBlock.useExperimentalEvaluator(...)` 根据 World Feature Flag 选择。[^wire] [^experimental-wire]
+
+<Callout type="warning" title="不要把实验 Redstone 当成 Java 26.3 默认行为">
+Redstone Experiments 在 26.3 仍然是独立 Feature Flag。普通世界继续使用默认 Wire Evaluator。讨论更新顺序时必须先说明 World 是否启用了实验，否则两套结论会互相矛盾。
+</Callout>
+
+这个实验本身很值得开发者观察，因为它把一个长期隐式的设计问题变得非常清楚：
+
+> **为了更高性能和方向一致性，可以先算完整网络再发通知；但改变通知顺序，会直接改变依赖旧时序的机器。**
+
+这不是单纯的优化问题，也不是单纯的玩法问题，而是两者碰在了一起。
+
+## 准连接为什么会出现？
+
+Quasi-connectivity，通常简称 **QC**，是 Java Redstone 最容易被说成“玄学”的行为之一。
+
+但从当前实现看，它的原因非常具体。
+
+### Piston 不只检查自己周围，还会检查上方位置周围
+
+当前 `PistonBaseBlock.getNeighborSignal` 先检查 Piston 自己周围的信号，然后还会检查**Piston 上方那一格周围**的信号。[^piston-qc]
+
+因此可以出现：
+
+```text
+power source
+     ↓
+[ space above piston ]
+     ↓
+   piston
+```
+
+Power Source 并没有直接接触 Piston，却仍然满足 Piston 的“应该被激活”查询。
+
+这不是所有 Block 的通用规则。
+
+当前 Java 中，Piston、Dispenser、Dropper 属于这类会向上多检查一层的少数机制；Crafter 并不因此自动获得 QC。[^piston-qc] [^qc-ticket]
+
+所以更准确的说法是：
+
+> **准连接不是 Redstone 世界的一条全局电学定律，而是少数组件的 Activation Query 范围更大。**
+
+### QC 的关键不是“隔空供电”，而是查询范围
+
+如果把 QC 解释成：
+
+> Signal 可以穿过空气。
+
+会立刻遇到很多反例。
+
+真正发生的是：
+
+```text
+Piston asks:
+"would my own position be powered?"
+        +
+"would the space above me be powered?"
+```
+
+只要第二个问题回答 Yes，Piston 就认为自己应该动作。
+
+因此“空气被供电”也只是方便描述，不意味着 Air Block 本身获得了新的持久化 Power State。
+
+### MC-108 把这个行为正式留在了 Java
+
+Quasi-connectivity 很早就被报告为 Bug。旧 Mojira 的 MC-108 描述的正是 Piston / Dispenser / Dropper 会被“对其上方空间供电”的 Source 激活。
+
+该 Issue 最终被标记为 **Resolved: Works As Intended**。[^qc-ticket]
+
+这件事的重要性不在于证明：
+
+> 任何 Bug 一旦有人使用，就永远不能修。
+
+它只说明一个现实：
+
+> **当一个实现行为已经长期稳定、可重复，并且官方明确选择保留，它就开始承担兼容接口的角色。**
+
+后面讨论技术债时还会回到这一点。
+
+## QC 为什么经常和 BUD 一起出现？
+
+准连接本身只回答：
+
+> 如果现在检查，Piston 应不应该激活？
+
+它没有保证：
+
+> Power Source 变化时，Piston 一定会立即收到 Neighbor Update。
+
+这两个条件的差异，才会产生很多经典的 BUD 行为。
+
+### “应该变化”不等于“已经知道应该变化”
+
+考虑一个 Piston：
+
+1. 上方某个位置进入了能让它 QC-powered 的状态；
+2. 这个变化并没有直接通知到 Piston；
+3. Piston 因此仍保留旧状态；
+4. 之后附近任意一次相关 Neighbor Update 到达；
+5. Piston 再执行 `getNeighborSignal`；
+6. 此时它才发现自己早就应该动作。
+
+于是系统出现了：
+
+```text
+logical condition changed
+        ↓
+component not notified
+        ↓
+state temporarily stale
+        ↓
+unrelated later update arrives
+        ↓
+component catches up
+```
+
+这就是许多 **Block Update Detector** 行为的根。
+
+### Signal Graph 和 Update Graph 的错位在这里真正显现
+
+前面已经区分了两张图。
+
+在 QC BUD 中：
+
+```mermaid
+flowchart LR
+  Power["Power condition"] --> Query["Piston activation query"]
+  Query --> Should["应该激活"]
+
+  Power2["Power source changed"] -.-> Missing["没有对应 Neighbor Update 到达"]
+  Missing --> Stale["Piston 暂时保持旧状态"]
+  Later["其他更新"] --> Check["重新查询"]
+  Check --> Should
+```
+
+Piston 的查询能力已经“看见”更大的范围，但 Update Notification 并没有完全覆盖这个查询范围。
+
+所以出现：
+
+> **该变，但还没被叫来检查。**
+
+这比“Piston 有一个神秘的 BUD Mode”更接近真实实现。
+
+### BUD 和 QC 不是同义词
+
+QC 是一种特殊 Activation Query。
+
+BUD 描述的是：
+
+> 利用 Update 到达与状态查询之间的关系，侦测附近某种变化。
+
+QC 很容易制造 BUD 条件，但并不是所有 BUD 都依赖 QC，也不是所有 QC 用法都在做 BUD。Minecraft Wiki 和旧 Bug Tracker 也长期把两者区分。[^qc-wiki]
+
+这一区分很重要，因为 Observer 出现以后：
+
+- QC 没有消失；
+- BUD 的需求也没有完全消失；
+- Observer 更不是“把所有 BUD Bug 正式化之后旧机制就没用了”。
+
+### Observer 是显式传感器，不是 QC 的替代实现
+
+Java Observer 主要依赖被观察面的 Shape / Block State Update，并通过 Scheduled Tick 输出 Pulse。
+
+它的输入范围、检测事件与输出时序都写在自己的 Block 行为中。
+
+QC BUD 则来自：
+
+- 某组件的 Signal Query 范围；
+- Neighbor Update 的传播；
+- 两者之间的差异。
+
+因此两者即使都能回答：
+
+> 附近发生变化了吗？
+
+也不是同一个 API。
+
+这正好体现一个成熟系统经常出现的情况：
+
+> **后来的显式功能可以覆盖旧技巧的一部分用途，却不一定复制旧机制的所有语义。**
+
+## Piston 为什么是更新顺序最好的放大镜？
+
+Redstone Lamp 只需要改变亮灭。
+
+Piston 会真正重写世界。
+
+一次 Piston 动作可能：
+
+- 找出一串要推动的 Block；
+- 拒绝不可推动对象；
+- 破坏某些允许被破坏的 Block；
+- 处理 Slime / Honey 粘连；
+- 临时创建 Moving Piston；
+- 推动碰撞到的 Entity；
+- 最后把临时状态落成新的 Block State。
+
+因此时序上的一个微小差异，很容易在 Piston 上变成明显的结构差异。
+
+### 检查 Signal 和执行移动是两个阶段
+
+收到 Neighbor Update 时，`PistonBaseBlock.checkIfExtend` 只负责：
+
+1. 查询现在是否应该伸缩；
+2. 如果需要伸出，先让 `PistonStructureResolver` 判断能不能移动；
+3. 把对应 Block Event 加入队列。[^piston]
+
+真正执行动作时，`triggerEvent` 还会重新确认条件。
+
+因此：
+
+```text
+Update arrives
+      ↓
+Piston decides "I may need to move"
+      ↓
+Block Event queued
+      ↓
+world may change again
+      ↓
+Block Event phase
+      ↓
+Piston re-checks and commits
+```
+
+这种**两阶段提交**是很多零刻、短脉冲和 Piston 时序现象的基础。
+
+### PistonStructureResolver 负责回答“这一整组方块能不能移动”
+
+Piston 不只是检查正前方一个 Block。
+
+当前 `PistonStructureResolver` 会构建：
+
+- `toPush`；
+- `toDestroy`；
+
+并沿 Slime / Honey 的粘连关系继续扩展移动集合。普通 Piston 一次移动最多处理固定上限的 Block，而不同 Block 还能通过 Push Reaction、Block Entity 等规则拒绝移动。[^piston-events]
+
+这里体现的是另一个很通用的架构原则：
+
+> **复杂操作先做可行性分析，再一次性提交，不要移动到一半才发现后面有 Obsidian。**
+
+这与数据库 Transaction 的动机类似，只是对象变成了空间中的 Block 集合。
+
+### Moving Piston 是一种临时运行时表示
+
+和上一章 Falling Block 类似，正在被推动的 Block 暂时不适合继续作为普通静态 Block State。
+
+Minecraft 会写入 Moving Piston 占位，并用 `PistonMovingBlockEntity` 保存真正被搬运的 Block State、进度和运动信息。[^piston-events]
+
+于是一次移动经历：
+
+```text
+static blocks
+     ↓
+moving placeholder + runtime state
+     ↓
+animation / entity pushing
+     ↓
+static blocks again
+```
+
+这再次说明：
+
+> **静态世界表示和动态过渡表示可以不同。**
+
+Piston 只是在 Redstone 驱动下大量使用了这一模式。
+
+## Java 与 Bedrock 为什么不能共用一份红石时序说明？
+
+很多基础概念两版相似：
+
+- Signal Strength；
+- Dust；
+- Repeater；
+- Comparator；
+- Piston；
+- Observer。
+
+但复杂 Redstone Build 并不能因此保证跨版本行为一致。
+
+Microsoft 当前面向 Creator 的 Java / Bedrock 差异文档直接指出：复杂 Redstone Circuit 可能表现不同，其中一个明确原因就是 **Bedrock 不支持 Quasi-connectivity，而 Java 支持**；Piston 行为与 Update 方式也存在差异。[^bedrock-differences]
+
+### QC 就是最清晰的实现分叉
+
+Java：
+
+```text
+Piston activation query
+includes space above
+```
+
+Bedrock：
+
+```text
+no Java-style quasi-connectivity
+```
+
+旧 Bedrock Issue MCPE-14664 也把“没有 QC”标为 Works As Intended。[^bedrock-qc]
+
+因此不能把 Java 的：
+
+> “只要上方空间被供电，Piston 就会认为自己应该动作”
+
+写成 Minecraft 全产品线共同规则。
+
+### Update Order 也不是可以直接翻译的细节
+
+即使两个版本最后都支持同样的 Block 和 0–15 Signal，一个 Build 仍可能依赖：
+
+- 谁先更新；
+- Pulse 保留多久；
+- Piston 在哪个阶段响应；
+- Observer 检测什么 Update；
+- 同 Tick 内是否保留某个中间状态。
+
+这些差异很难靠“把 Java Tick 换算成 Bedrock Tick”解决。
+
+因为问题不是时间单位不同，而是：
+
+> **事件图本身不同。**
+
+所以本书后面的 Bedrock 章节会把它作为“另一套实现”看待，而不是把 Java 的源码规则翻译成 C++ 名字。
+
+
+## 为什么更新顺序会变成兼容问题？
+
+红石最棘手的长期维护问题，不是每一条规则本身都多复杂，而是这些规则已经被玩家组合成了大量依赖时序的机器。
+
+如果修改的是一个纯视觉效果，玩家重新适应即可。
+
+如果修改的是：
+
+- Wire 通知邻居的顺序；
+- Piston 什么时候排入 Block Event；
+- Observer 哪类变化能看到；
+- 某个机制是否还具备 QC；
+- 短 Pulse 是否会被某个阶段捕获；
+
+那么改变的可能不是一个方块，而是一整类机器。
+
+### 20w18a / 20w21a 展示了“修正语义”也会改变机器
+
+20w18a 的 Redstone Wire 改动目标非常清楚：让 Block State、Rendering 和 Behavior 更一致。Wire 看起来连接到哪一侧，就真正向哪一侧供电。[^20w18a]
+
+从 API 设计角度，这是一种很合理的收敛。
+
+但任何依赖旧语义的 Contraption 都可能受到影响。
+
+20w21a 随后允许单格 Redstone Dust 在 Cross 与 Dot 之间切换，并明确 Dot 不向四周供电。[^20w21a]
+
+这不是简单的“官方修错了又改回来”，而更像一次接口重设计：
+
+1. 先让视觉状态与逻辑状态对齐；
+2. 再给玩家一个明确可控的状态，表达“这一格 Wire 是否向四周说话”。
+
+相比保留一个看不见的例外，**显式 Block State** 更容易理解、保存和测试。
+
+### Redstone Experiments 把兼容成本直接写进了实验说明
+
+24w33a 的 Redstone Experiments 试图同时改善：
+
+- Wire 性能；
+- 更新顺序；
+- 旋转 / 坐标相关行为；
+- 网络整体重新计算方式。[^24w33a]
+
+官方也明确提醒，这类变化可能影响已有 Contraption。
+
+到了 1.21.2 的正式说明中，Redstone Experiments 仍然是**可选实验**，并直接列出一个 Known Issue：减少 Wire 的额外 Neighbor Updates 会影响依赖 Quasi-connectivity 的装置，官方计划以后再处理。[^redstone-experiment-1212]
+
+这段历史非常有代表性。
+
+从实现角度看：
+
+> 少发不必要的 Neighbor Update，当然更便宜。
+
+从已有世界看：
+
+> 有些玩家恰好就在利用那些“本来不必要”的 Update。
+
+于是性能优化触碰了行为兼容。
+
+26.3 仍然保留默认与实验 Evaluator 两套实现，也说明这个权衡并没有被简单地以“新的一定更正确”结束。[^redstone-experiment-flag] [^experimental-wire]
+
+### 稳定行为会逐渐变成事实上的接口
+
+一个行为是否来自最初设计意图，并不能完全决定它后来是否重要。
+
+更实际的兼容判断通常要问：
+
+- 行为是否 deterministic？
+- 玩家是否能稳定复现？
+- Wiki / 教程是否把它作为基础机制传播？
+- 大量长期世界是否依赖它？
+- 官方过去是否明确承诺或选择保留？
+- 修正它能得到什么收益？
+- 有没有迁移方案或显式替代机制？
+
+QC 就是典型例子。
+
+MC-108 记录了它最初作为 Bug 被报告的历史，但最终 Resolution 是 Works As Intended。[^qc-ticket]
+
+这不需要被升格成：
+
+> “只要是稳定 Bug，就永远不应该修。”
+
+更准确的工程结论是：
+
+> **当 emergent behavior 已经成为外部内容的依赖，修改它的成本就必须按 API change 评估，而不能只按内部代码清理评估。**
+
+### 回归测试不能只测单个 Block
+
+如果只给 Repeater 写测试：
+
+```text
+input on
+→ after delay
+→ output on
+```
+
+并不能保证大型机器兼容。
+
+红石真正需要的回归层次至少包括：
+
+```text
+Unit:
+单个组件规则
+
+Integration:
+多个组件的更新顺序
+
+Structure:
+典型 Piston / Observer / QC Contraption
+
+Transform:
+旋转、镜像、不同坐标后行为是否仍符合目标
+
+Performance:
+大型 Wire Network 的更新预算
+```
+
+24w33a 的实验甚至把“希望机器不再依赖 global orientation”作为明确目标之一。[^24w33a]
+
+这提醒自研沙盒开发者：
+
+> **可编程式玩法的测试对象不是只有 API 函数，还包括玩家已经搭出来的结构。**
+
+当程序本身就是世界中的几何时，Structure Test 就很接近 Integration Test。
+
+## 从红石系统可以抽象出什么？
+
+如果只看外观，红石像一套简化电路。
+
+如果只看玩家创造，又很容易把它直接叫作编程语言。
+
+从实现角度看，它更具体：
+
+- Block 提供定向 Signal Query；
+- Wire 维护离散 Signal Strength；
+- Neighbor Update 负责通知；
+- Scheduled Tick 提供延迟；
+- Block Event 提供另一类提交阶段；
+- Piston 把信号转换成世界几何修改；
+- Comparator 把其他系统状态映射成模拟值；
+- Observer 把 Block State 变化转换成 Pulse；
+- Update Order 决定同一 Tick 中哪个中间状态能被看见。
+
+这些机制组合以后，才产生玩家能够利用的逻辑行为。
+
+### 红石没有一个中央“电路求解器”
+
+系统里没有一个每 Tick 都运行的：
+
+```text
+solveAllRedstoneCircuits()
+```
+
+去扫描整张世界。
+
+它更像上一章描述的局部事件系统：
+
+```mermaid
+flowchart TD
+  Change["局部状态改变"] --> Notify["Neighbor / Shape Update"]
+  Notify --> Query["重新查询 Signal"]
+  Query --> Different{"状态变了吗？"}
+  Different -->|否| Stop["停止"]
+  Different -->|是| Commit["提交 Block State"]
+  Commit --> Later["立即传播 / Scheduled Tick / Block Event"]
+  Later --> Notify
+```
+
+这也是它能够存在于巨大世界里的原因：没有活动的 Redstone 网络几乎没有运行时传播成本。
+
+### 但“局部”不等于“简单”
+
+一条 Wire 只读取邻域，一个 Piston 只查询有限范围，一个 Repeater 只预约自己的 Tick。
+
+可当这些局部状态机互相触发以后，就会出现：
+
+- Feedback Loop；
+- Clock；
+- Pulse；
+- Memory；
+- Sequencing；
+- Conditional Routing。
+
+复杂性来自**组合后的状态空间**，而不是某个组件本身拥有复杂代码。
+
+这和 Cellular Automata、Event-driven System、Digital Logic 都有相似之处，但不必强行把红石归类成其中任何一种。
+
+真正有用的认识是：
+
+> **简单的局部规则，只要拥有稳定的时间和传播语义，就足以构成比单个规则复杂得多的系统。**
+
+### 可预测性来自“规则稳定”，不来自“规则像现实”
+
+Redstone Dust 不需要符合真实电阻定律。
+
+Piston 也不需要符合刚体动力学。
+
+玩家真正需要的是：
+
+- 同样输入能重复得到同样结果；
+- Delay 能被计数；
+- Signal Strength 能被测量；
+- 更新条件能被学习；
+- 已经建立的机器不会无缘无故换语义。
+
+因此红石的工程质量不能只用：
+
+> 它像不像真实电路？
+
+来判断。
+
+更合适的问题是：
+
+> **这套离散规则是否可观察、可组合、可复现，并且升级时有明确的兼容策略？**
 
 ## 这一章留下什么
 
-- **爱好者**：准连接不是玄学，是活塞去看了上方那一格空气。BUD 不是作弊，是「该亮却还没被叫到」。修 bug 会革命，因为你的飞行器是程序，程序写在从未印刷的指令表上。Java 的表和 Bedrock 的表不是同一本。粉的圆点、火把的保险丝、墙上的更新顺序，都是这本表上的词。删词就是立法。
-- **开发者**：能抄走的是离散信号（0–15、强弱充能是查询不是每格一个 bit）、中继器走计划刻而活塞走方块事件、通知半径与检查半径不一致会长出 BUD。能一起抄走的还有：观察者是收编，WAI 是把怪癖升成平台，兼容性按已建造的机器计费。抄不走的是二十年教科书和墙上的测试集；准连接只活在 Java；Bedrock 的两段式红石刻不是这套口令的译本。你若按电路图清干净，灯会更老实，虚拟机会变回解谜电线。解谜电线很好。它不是这台能算、能飞、能被苦力怕炸的程序。立法时记住：你改的是指令集。
+Redstone 的“电”不是一个存进世界所有 Block 的统一状态。组件在需要时查询周围 Signal；普通 Signal、Direct Signal 与 Redstone Conductor 共同形成玩家常说的弱 / 强充能。Redstone Wire 再把 0–15 的 Signal 变成能够沿空间传播的局部网络。
 
-[^obs]: Java Edition 1.11 加入观察者，用于侦测方块更新。见 [Observer](https://minecraft.wiki/w/Observer)、[Java Edition 1.11](https://minecraft.wiki/w/Java_Edition_1.11)。
+真正让 Redstone 变复杂的是时间。Wire 可以立即展开 Neighbor Update；Repeater 与 Comparator 使用 Scheduled Tick；Observer 把 Shape Change 转换成延迟 Pulse；Piston 则先判断，再把真正的世界修改排入 Block Event。**同一个 Tick 内部仍然存在多个执行阶段，而中间状态可以被其他组件读到。**
 
-[^dust]: 红石粉信号强度 0–15，每格衰减 1。见 [Redstone Dust](https://minecraft.wiki/w/Redstone_Dust)、[Redstone mechanics](https://minecraft.wiki/w/Redstone_mechanics)。
+Quasi-connectivity 也不需要神秘化。Java 的 Piston、Dispenser、Dropper 会把 Activation Query 扩展到上方空间；如果这个“能看见的范围”和 Neighbor Update 实际通知到的范围不一致，就可能出现“按规则应该变化，却还没收到通知”的状态，这正是很多 QC / BUD 行为的来源。Bedrock 没有 Java 这套 QC，因此两版的高级 Redstone 不能共享一份时序说明。[^bedrock-differences]
 
-[^qc]: 准连接：活塞、发射器、投掷器可被「会激活其上方空间」的信号激活，即使该空间为空气。见 [Tutorial:Quasi-connectivity](https://minecraft.wiki/w/Tutorial:Quasi-connectivity)。制作台不受准连接影响。
+最后，更新顺序本身也是行为的一部分。Mojang 对 Redstone Wire 的多次重构，以及至今仍以 Feature Flag 存在的 Redstone Experiments，都说明一个成熟沙盒必须同时面对两个目标：**让实现更一致、更高效，也让已经建立在旧行为上的世界尽可能可理解地继续运行。**
 
-[^wai]: Mojira [MC-108](https://bugs.mojang.com/browse/MC-108) 将活塞 / 发射器 / 投掷器的准连接标为 Works as Intended。Bedrock 无此机制，见如 [MCPE-14664](https://bugs.mojang.com/browse/MCPE/issues/MCPE-14664)。
+对开发者来说，最值得继承的是几条边界：**Signal Query 与 Neighbor Notification 分离；即时传播与延迟调度分离；逻辑判定与世界提交分离；默认规则与实验规则分离；内部实现优化与外部行为兼容分离。** 当这些边界清楚以后，红石就不再是一堆“玄学特性”，而是一套可以被逐层分析的事件驱动模拟。
 
-[^tick]: 中继器、红石火把走计划刻；活塞被通知后排方块事件，真正移动发生在方块事件班。Java 活塞启动延迟随通知落在哪一班而为 0 或 1 游戏刻；Bedrock 固定 2 游戏刻且只在消费段认输入。红石刻在 Java 为社区用语（2 游戏刻）。见 [Tick](https://minecraft.wiki/w/Tick)、[Piston](https://minecraft.wiki/w/Piston)。
+第二部到这里收束。前五章已经回答了世界生成以后最重要的运行时问题：时间怎样推进，方块变化怎样传播，Entity 怎样移动与决策，Item 怎样被保存与加工，Redstone 又怎样把这些局部系统组织成可编程的因果链。下一章开始进入客户端：服务器中的这份世界状态，怎样最终变成玩家看到、听到并操作到的画面与反馈。
 
-[^bud]: 准连接与 BUD 不是同一集合：存在不产生 BUD 的 QC，也存在不依赖 QC 的 BUD。见 [Tutorial:Quasi-connectivity](https://minecraft.wiki/w/Tutorial:Quasi-connectivity)；BUD 概述见 [Tutorial:Block update detector](https://minecraft.wiki/w/Tutorial:Block_update_detector)。
+[^release]: Mojang Studios，《Minecraft Java Edition 26.3》，2026-09-15。见 https://feedback.minecraft.net/hc/en-us/articles/48913133328013-Minecraft-Java-Edition-26-3
 
-[^18a]: Java 快照 20w18a（2020-04-29）调整红石粉：视觉连线与逻辑供电对齐，并修复如 MC-2255。见 Mojang，《Minecraft Snapshot 20w18a》，<https://www.minecraft.net/en-us/article/minecraft-snapshot-20w18a>；[Java Edition 20w18a](https://minecraft.wiki/w/Java_Edition_20w18a)。
+[^wire]: Java 26.3 `RedstoneWireBlock` 当前保存四向 `RedstoneSide`、`POWER`，并同时引用默认 / 实验 Redstone Wire Evaluator；类中保留 `useExperimentalEvaluator`。见 NeoForge 26.3 映射 Javadoc：https://aldak0.ru/javadoc/26.3.x/net/minecraft/world/level/block/RedstoneWireBlock.html
 
-[^dot]: 20w21a 起，孤立红石粉可在十字与圆点间切换；圆点不给四周方块供电。该行为进入 Java 1.16。见 Mojang，《Minecraft Snapshot 20w21a》，<https://www.minecraft.net/en-us/article/minecraft-snapshot-20w21a>；[Redstone Dust](https://minecraft.wiki/w/Redstone_Dust)。
+[^redstone-experiment-flag]: Java 26.3 当前仍保留 `FeatureFlags.REDSTONE_EXPERIMENTS`；对应 World Feature Flag 在服务器 API 中也仍可见。见 https://aldak.netlify.app/javadoc/26.3.x/index-files/index-18 与 https://purpurmc.org/javadoc/org/bukkit/FeatureFlag.html
 
-[^rep]: 中继器可被侧面的中继器或比较器锁定，冻结输出。见 [Redstone Repeater](https://minecraft.wiki/w/Redstone_Repeater)。
+[^wire-evaluator]: Java 26.3 `RedstoneWireEvaluator` 定义 `getBlockSignal`、`getIncomingWireSignal` 与 Wire Signal 更新接口，子类为 `DefaultRedstoneWireEvaluator` 与 `ExperimentalRedstoneWireEvaluator`。见 https://aldak0.ru/javadoc/26.3.x/net/minecraft/world/level/redstone/RedstoneWireEvaluator.html
 
-[^cmp]: 比较器可读取容器装满程度并输出 0–15。见 [Redstone Comparator](https://minecraft.wiki/w/Redstone_Comparator)。
+[^signal-getter]: Java 26.3 `SignalGetter` 提供 `getSignal`、`getDirectSignal`、`getDirectSignalTo`、`hasNeighborSignal`、`getBestNeighborSignal` 等 Redstone 查询。见 https://aldak0.ru/javadoc/26.3.x/net/minecraft/world/level/SignalGetter.html
 
-[^torch]: 红石火把在短时间内被过快开关会熄灭一段时间，直到再收到方块更新。见 [Redstone Torch](https://minecraft.wiki/w/Redstone_Torch)。
+[^block-state-signal]: Java 26.3 `BlockStateBase` 当前分别暴露 `isRedstoneConductor`、`isSignalSource`、`getSignal`、`getDirectSignal` 与 `getAnalogOutputSignal`。见 https://aldak0.ru/javadoc/26.3.x/net/minecraft/world/level/block/state/BlockBehaviour.BlockStateBase.html
 
-[^slime]: Java 1.8 加入粘液块，可与活塞一起移动相邻的粘液块；1.15 加入蜂蜜块，移动规则不同。见 [Slime Block](https://minecraft.wiki/w/Slime_Block)、[Honey Block](https://minecraft.wiki/w/Honey_Block)、[Java Edition 1.8](https://minecraft.wiki/w/Java_Edition_1.8)。
+[^comparator]: Java 26.3 `ComparatorBlock` 继承 `DiodeBlock`，实现自己的 `getInputSignal` / `getOutputSignal` 和 Comparator Mode。见 https://aldak0.ru/javadoc/26.3.x/net/minecraft/world/level/block/ComparatorBlock.html
 
-[^crafter]: Java / Bedrock 1.21 加入合成器：红石信号可驱动自动合成。见 [Crafter](https://minecraft.wiki/w/Crafter)、[Java Edition 1.21](https://minecraft.wiki/w/Java_Edition_1.21)。
+[^diode-current]: Java 26.3 `DiodeBlock` 当前统一承担定向输入、侧输入、Scheduled Tick、输出和 Neighbor 检查等 Repeater / Comparator 共享基础设施。见 https://aldak0.ru/javadoc/26.3.x/net/minecraft/world/level/block/DiodeBlock.html
 
-[^lith]: Lithium 是面向 Java 版的游戏逻辑优化模组，公开目标包括在保持原版行为的前提下降低 tick 耗时。见 [Lithium](https://modrinth.com/mod/lithium)。
+[^20w18a]: Mojang Studios，《Minecraft Java Edition Snapshot 20w18a》，2020-04-29。该快照明确将 Redstone Wire 的 Block State、Rendering 和 Behavior 对齐，让视觉连接侧与实际供电侧一致。见 https://feedback.minecraft.net/hc/en-us/articles/360042479372-Minecraft-Java-Edition-Snapshot-20W18A
+
+[^20w21a]: Mojang Studios，《Minecraft Java Edition Snapshot 20w21a》，2020-05-20。该快照加入单格 Redstone Wire 的 Cross / Dot 切换，Dot 不向周围方块供电。见 https://feedback.minecraft.net/hc/en-us/articles/360043476792-Minecraft-Java-Edition-Snapshot-20W21A
+
+[^default-wire]: Java 26.3 `DefaultRedstoneWireEvaluator` 仍作为 Redstone Wire 的默认强度更新实现；`ExperimentalRedstoneWireEvaluator` 是独立实现。见 https://aldak0.ru/javadoc/26.3.x/net/minecraft/world/level/redstone/DefaultRedstoneWireEvaluator.html
+
+[^signal-dust]: How Java Minecraft Works，《Signal and dust》，按 Java 26.3 源码追踪 `SignalGetter`、`RedstoneWireBlock`、默认与实验 Wire Evaluator 的信号计算与更新链。见 https://minecraftdocs.dev/systems/blocks/signal-and-dust
+
+[^repeater]: Java 26.3 `RepeaterBlock` 当前拥有 `DELAY`、`LOCKED`，继承 `DiodeBlock` 的 Scheduled Tick 与信号处理。见 https://aldak0.ru/javadoc/26.3.x/net/minecraft/world/level/block/RepeaterBlock.html
+
+[^observer-current]: Java 26.3 `ObserverBlock` 当前通过 `updateShape`、`startSignal` 与 Scheduled `tick` 处理观察与输出。见 https://aldak.netlify.app/javadoc/26.3.x/net/minecraft/world/level/block/observerblock
+
+[^piston]: Java 26.3 `PistonBaseBlock` 当前包含 `checkIfExtend`、`getNeighborSignal`、`triggerEvent`、`moveBlocks` 与 `PistonStructureResolver` 相关入口。见 https://aldak0.ru/javadoc/26.3.x/net/minecraft/world/level/block/piston/PistonBaseBlock.html
+
+[^piston-events]: How Java Minecraft Works，《Pistons and block events》，按 Java 26.3 源码追踪 Piston 从 Neighbor Update、Block Event、Structure Resolver 到 Moving Piston Block Entity 的执行阶段。见 https://minecraftdocs.dev/systems/blocks/pistons-and-block-events
+
+[^signal-order]: How Java Minecraft Works，《Signal and dust》，按 Java 26.3 核对 `SignalGetter.DIRECTIONS`、`NeighborUpdater.UPDATE_ORDER` 与 `BlockBehaviour.UPDATE_SHAPE_ORDER`，三者分别承担读取、邻居通知与 Shape Update 顺序。见 https://minecraftdocs.dev/systems/blocks/signal-and-dust
+
+[^24w33a]: Mojang Studios，《Minecraft Java Edition Snapshot 24w33a》，2024。Redstone Experiments 首次公开实验 Wire Network 两阶段更新、方向相对的 Neighbor Order 与降低坐标 / 朝向依赖等目标。见 https://feedback.minecraft.net/hc/en-us/articles/29296154589581-Minecraft-Java-Edition-Snapshot-24w33a
+
+[^24w34a]: Mojang Studios，《Minecraft Java Edition Snapshot 24w34a》，2024。实验 Wire Update 在等距分叉时改为 Left-first，减少随机行为。见 https://feedback.minecraft.net/hc/en-us/articles/29460715867277-Minecraft-Java-Edition-Snapshot-24w34a
+
+[^experimental-wire]: Java 26.3 `ExperimentalRedstoneWireEvaluator` 当前仍实现 `calculateCurrentChanges`、`causeNeighborUpdates` 与 Orientation-aware propagation。见 https://aldak0.ru/javadoc/26.3.x/net/minecraft/world/level/redstone/ExperimentalRedstoneWireEvaluator.html
+
+[^piston-qc]: How Java Minecraft Works，《Pistons and block events》，按 Java 26.3 核对 `PistonBaseBlock.getNeighborSignal`：Piston 会检查自身邻域，以及上方位置的邻域；Dispenser / Dropper 也具有对应的上方查询行为。见 https://minecraftdocs.dev/systems/blocks/pistons-and-block-events
+
+[^qc-ticket]: Mojang Bug Tracker，MC-108，《Droppers, Dispensers and Pistons activate when blocks are providing power diagonally or two blocks above》。该 Issue 当前为 Resolved / Works As Intended。见 https://bugs-legacy.mojang.com/browse/MC-108
+
+[^qc-wiki]: Minecraft Wiki，《Tutorial:Quasi-connectivity》。该文区分 Quasi-connectivity 与 BUD，并记录 QC 适用于 Java 的 Piston / Dispenser / Dropper。见 https://minecraft.wiki/w/Tutorial%3AQuasi-connectivity
+
+[^bedrock-differences]: Microsoft Learn，《Differences between Minecraft Bedrock Edition and Minecraft Java Edition》。官方 Creator 文档明确指出 Bedrock 不支持 Quasi-connectivity，复杂 Redstone Circuit、Piston 与 Update 行为可能与 Java 不同。见 https://learn.microsoft.com/en-us/minecraft/creator/documents/differencesbetweenbedrockandjava
+
+[^bedrock-qc]: Mojang Bug Tracker，MCPE-14664，《There is no quasi connectivity》，Resolved / Works As Intended。见 https://bugs-legacy.mojang.com/browse/MCPE-14664
+
+[^redstone-experiment-1212]: Mojang Studios，《Minecraft Java Edition 1.21.2》。正式版说明仍将 Redstone Changes 保持为可选 Experiment，并明确 Known Issue：减少 Wire 的额外 Neighbor Updates 会影响 QC-based contraptions。见 https://www.minecraft.net/en-us/article/minecraft-java-edition-1-21-2
