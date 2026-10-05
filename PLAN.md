@@ -762,7 +762,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 #### `design/10` 命令、数据驱动与地图创作
 
-- 目标文件：`docs/design/(part3)/commands-data-maps.mdx` · 两类 · ▤
+- 目标文件：`docs/design/(part3)/commands-data-maps.mdx` · 两类 · ✎
 - **简介**：当玩家开始用命令、函数、数据包 / Add-On、资源与行为数据安排事件和规则时，创作从“搭东西”进入“编排玩法”。冒险地图、CTM、小游戏和 RPG 都在这里出现。
 - **要回答**：Minecraft 怎样让玩家在不完全重写游戏的情况下，开始编排规则、事件和关卡？
 - **交叉**：`impl/13`、`history/04`、`design/08`、`design/11`
