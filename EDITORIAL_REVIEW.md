@@ -111,7 +111,7 @@
 | --- | --- |
 | [03 物品、合成与库存](<docs/design/(part2)/items-crafting-inventory.mdx>) | 已按卷二新结构重写：从材料进入库存、合成建立资源关系、工具与装备承载能力，到 Bundle、Shulker Box、可再生资源、交易与长期物流；不再把角色成长写成错误路线。 |
 | [04 世界生成与探索](<docs/design/(part2)/worldgen-exploration.mdx>) | 已按卷二新结构重写：从未知、距离、可返回，到地形 / 群系 / 结构的不同职责，再讨论种子、稀有性、指引、Caves & Cliffs 与程序生成的上限；不再把“找不到”或“可探索不可通关”当成绝对原则。 |
-| [07 红石：把物理做成编程](<docs/design/(part2)/redstone.mdx>) | 先定义“可误用系统”的判据，再用一台装置证明某行为从物理发现变成社区语言；Java／Bedrock 的同一装置对照最有说服力。“官方不教”要有具体教学范围和年代，不能只靠印象。把更新顺序细节留给卷三 08。 |
+| [09 红石、机器与自动化](<docs/design/(part3)/redstone-automation.mdx>) | 已按卷二新结构重写：从感知、信号、状态和时间进入，再把 Hopper、Comparator、Crafter 接进资源循环；计算机只作为表达能力上限案例，Java / Bedrock 差异与历史行为放在兼容边界，不再把“可误用”预设成整章答案。 |
 | [08 命令、数据包与地图](<docs/design/(part2)/commands-datapacks.mdx>) | “能做 RPG”和“不能加新动词”之间缺一条成本线：原有指令能模拟到什么程度、要付出多少性能／维护代价、何时才需改程序？以一张具体地图为例，比罗列计分板和函数更自然。此章限定 Java 数据包，别暗示 Bedrock 完全同型。 |
 | [05 生物、战斗与威胁](<docs/design/(part2)/mobs-combat.mdx>) | 已按卷二新结构重写：先看生物如何改变空间判断，再区分威胁、资源、伙伴与 Villager 经济；Warden 用于说明避战也可以成立，Java / Bedrock 战斗差异只作为边界，不再预设“战斗不够好却足够用”。 |
 | [06 进度、维度与游戏后期](<docs/design/(part2)/progression-dimensions.mdx>) | 已按卷二新结构重写：承认击败末影龙是官方认可的完成节点，同时区分一条目标线、一次速通、All Advancements、服务器赛季与长期世界；Nether / End、Elytra、Shulker Box、Beacon 和基础设施分别放回 progression 与后期成本变化中讨论。 |
