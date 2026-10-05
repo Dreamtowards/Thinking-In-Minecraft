@@ -3,6 +3,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { forceCollide, forceLink, forceManyBody, forceSimulation, forceX, forceY, type SimulationNodeDatum } from 'd3-force';
 import { buildKnowledgeMapData, type MapTag } from '@/lib/knowledge-map';
 import { getTagData } from '@/lib/tags';
+import { tagHref } from '@/lib/tag-utils';
 import { topicColor } from './topic-colors';
 
 type PreviewNode = MapTag & SimulationNodeDatum;
@@ -68,7 +69,7 @@ export function TagMapPreview() {
             })}
           </g>
           {nodes.map((node) => (
-            <a key={node.id} href={`/map?view=tags&tag=${encodeURIComponent(node.id)}`} aria-label={`${node.id}，${node.count} 篇章节，打开标签地图`} className="group outline-none">
+            <a key={node.id} href={tagHref(node.id)} aria-label={`${node.id}，${node.count} 篇章节，按标签浏览`} className="group outline-none">
               <title>{node.id} · {node.count} 篇章节</title>
               <circle cx={node.x} cy={node.y} r={24} fill="transparent" />
               <circle cx={node.x} cy={node.y} r={Math.min(15, 6 + Math.sqrt(node.count) * 2)} fill={topicColor(node.topic)} className="stroke-transparent group-hover:stroke-current group-focus:stroke-current" strokeWidth={3} />
