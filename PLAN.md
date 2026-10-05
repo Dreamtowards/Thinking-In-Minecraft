@@ -121,9 +121,9 @@ docs/
 │   ├── data-model.mdx         # 01 体素世界的数据模型
 │   ├── storage.mdx            # 02 存储与序列化
 │   ├── worldgen.mdx           # 03 世界生成
-│   ├── light-fluid-updates.mdx# 04 光照、流体与方块更新
-│   ├── tick.mdx               # 05 游戏循环与刻
-│   ├── entities.mdx           # 06 实体与碰撞
+│   ├── tick.mdx               # 04 游戏循环、Tick 与调度
+│   ├── block-updates-light-fluid.mdx # 05 方块更新、光照与流体
+│   ├── entities.mdx           # 06 实体、移动与 AI
 │   ├── items.mdx              # 07 物品、库存与合成
 │   ├── redstone.mdx           # 08 红石的实现
 │   ├── client-render.mdx      # 09 客户端与渲染
@@ -1056,8 +1056,8 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 ### `impl/06` 实体、移动与 AI
 
-- **目标文件**：由现有 `entities.mdx` 重写
-- **状态**：待重写
+- **目标文件**：`docs/impl/(part2)/entities.mdx`
+- **状态**：✎ 已按新版结构重写
 - **核心问题**：哪些对象需要作为 Entity 存在？它们怎样移动、碰撞并决定行为？
 - **建议内容**：
   1. Entity / Block Entity / Display Entity 等边界
