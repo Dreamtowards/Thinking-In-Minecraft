@@ -67,8 +67,8 @@ Java Edition 1.13 的 “Flattening” 正是在这一层做过一次很大的�
 
 ```mermaid
 flowchart LR
-  Pos["Block Position"] --> State["Block State<br/>chest[facing=north]"]
-  Pos --> BE["Block Entity<br/>inventory / custom data"]
+  Pos["Block Position"] --> State["Block State\nchest[facing=north]"]
+  Pos --> BE["Block Entity\ninventory / custom data"]
 ```
 
 这也是为什么 **Block Entity 不是另一种 Block State**。前者保存每个实例独有、规模更大的数据；后者适合有限、可枚举的状态组合。当前 Java 的数据格式也仍然把 block state 与 block entity data 作为不同概念处理。[^block-entity-current]
