@@ -107,7 +107,7 @@ docs/
 │   ├── worldgen-exploration.mdx    # 04 世界生成与探索
 │   ├── mobs-combat.mdx             # 05 生物、战斗与威胁
 │   ├── progression-dimensions.mdx  # 06 进度、维度与游戏后期
-│   ├── building-space.mdx          # 07 建造与空间（新增）
+│   ├── creation-as-play.mdx          # 07 创造为何成为玩法（新增）
 │   ├── creative-tools.mdx          # 08 创造模式与创作工具
 │   ├── redstone-automation.mdx     # 09 红石、机器与自动化
 │   ├── commands-data-maps.mdx      # 10 命令、数据驱动与地图创作
@@ -253,7 +253,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
     "---第二部 · 资源、探索与进度---",
     "items-crafting-inventory", "worldgen-exploration", "mobs-combat", "progression-dimensions",
     "---第三部 · 创造与扩展---",
-    "building-space", "creative-tools", "redstone-automation", "commands-data-maps", "mods-expansion",
+    "creation-as-play", "creative-tools", "redstone-automation", "commands-data-maps", "mods-expansion",
     "---第四部 · 多人、社区与继承---",
     "multiplayer-world", "emergent-play", "what-to-inherit"
   ]
@@ -635,7 +635,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 06 进度、维度与游戏后期 · `progression-dimensions`
 
 第三部 · 创造与扩展
-07 建造与空间 · `building-space`
+07 创造为何成为玩法 · `creation-as-play`
 08 创造模式与创作工具 · `creative-tools`
 09 红石、机器与自动化 · `redstone-automation`
 10 命令、数据驱动与地图创作 · `commands-data-maps`
@@ -733,14 +733,14 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 这一部研究玩家怎样从**使用世界**逐渐变成**创造世界、编排规则乃至修改游戏的人**。这不是一条官方规定的升级树，只是一种分析顺序：建造 → 更强工具 → 自动化 → 数据驱动创作 → 模组。
 
-#### `design/07` 建造与空间 · 新章
+#### `design/07` 创造为何成为玩法 · 重写
 
-- 目标文件：`docs/design/(part3)/building-space.mdx` · 两类 · ✎
-- **简介**：Minecraft 最具代表性的活动之一此前没有独立章节。本章研究逐块放置为什么能形成建筑、道路、基地和城市，以及玩家怎样把随机生成的空间逐渐变成“自己的地方”。
-- **要回答**：为什么如此粗粒度、逐块放置的建造方式仍能产生强烈的空间表达和长期依恋？
-- **交叉**：`design/01`、`design/02`、`design/08`、`history/13`
-- **大纲**：从庇护所到基地；方格 / 尺度 / 材料 / 重复；Survival 与 Creative 中建造意义的差异；道路、仓库、旧基地与地方感；多人公共空间与共同历史。
-- **验收**：这是“为什么建造成立”，不是建筑教程或建筑风格史；不要和第 08 章混成工具评测；可从旧 `creative-mode`、`emergence`、`voxel-primitive` 中迁移有关地方感和作品意义的材料。
+- 目标文件：`docs/design/(part3)/creation-as-play.mdx` · 两类 · ✎
+- **简介**：不再把建造仅仅理解为建筑空间问题，而是追问为什么游戏要把一部分作者权交给玩家。Minecraft 的建造只是最低门槛的一层，之后还会继续发展成表达、UGC、地图、服务器与模组。
+- **要回答**：创造能为核心玩法带来什么？什么时候建造 / UGC 会增强目标、资源循环和玩家表达，什么时候又只是功能堆砌、稀释核心或制造平台成本？
+- **交叉**：`design/01`、`design/02`、`design/08`、`design/10`、`design/11`、`history/13`
+- **大纲**：创造并非所有游戏必需；创造如何生成玩家目标、吸收资源、重新配置环境和承载世界 Progression；从个人表达进入 UGC；Minecraft / Teardown / VRChat 的创作门槛与表达上限；AIGC 可能降低意图到作品的距离；建造、UGC 与平台化的成本和风险。
+- **验收**：核心是“为什么创造值得成为玩法”，不是建筑学、工具评测或 UGC 宣传稿。必须同时讨论收益与代价，并明确很多优秀游戏完全不需要建造。第 08 章负责具体创作工具，本章只在跨产品比较时讨论工具层级。
 
 #### `design/08` 创造模式与创作工具
 
@@ -826,7 +826,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 | `worldgen.mdx` | 改名 + 整章重写 | `worldgen-exploration.mdx` → 04《世界生成与探索》 |
 | `mobs-combat.mdx` | 保留 slug，整章重写 | `mobs-combat.mdx` → 05《生物、战斗与威胁》 |
 | `dimensions-endgame.mdx` | 改名 + 整章重写 | `progression-dimensions.mdx` → 06《进度、维度与游戏后期》 |
-| （无） | **新增** | `building-space.mdx` → 07《建造与空间》 |
+| （无） | **新增** | `creation-as-play.mdx` → 07《创造为何成为玩法》 |
 | `creative-mode.mdx` | 改名 + 约 80% 重写 | `creative-tools.mdx` → 08《创造模式与创作工具》；地方感 / 建筑意义 → 07 |
 | `redstone.mdx` | 改名 + 整章重写 | `redstone-automation.mdx` → 09《红石、机器与自动化》 |
 | `commands-datapacks.mdx` | 改名 + 整章重写 | `commands-data-maps.mdx` → 10《命令、数据驱动与地图创作》 |
