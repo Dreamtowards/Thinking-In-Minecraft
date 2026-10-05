@@ -6,7 +6,7 @@
 tags: [modding, player-authorship, community]
 ```
 
-未填写标签的文章照常显示。每章通常选择 3–5 个正文确实展开的主题，沿用已有名称；标签描述研究对象或问题，不提前确定结论。不要给每章添加没有区分度的 `Minecraft` 标签。
+未填写标签的文章照常显示。每章通常选择 3–10 个正文确实展开的主题，沿用已有名称；标签描述研究对象或问题，不提前确定结论。不要给每章添加没有区分度的 `Minecraft` 标签。
 
 标签统一使用英文，优先小写，多个单词用连字符连接，例如 `modding`、`player-authorship`、`worldgen`、`persistent-world`、`ugc`、`ai`、`java`、`bedrock`。显示名称和 URL 直接使用英文标签，暂不维护翻译字典。相同主题沿用同一个标签，不混用 `mod`、`mods`、`modding`。
 
