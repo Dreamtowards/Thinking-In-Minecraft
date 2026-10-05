@@ -1,7 +1,7 @@
 import { createRequire } from 'node:module';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { remarkMdxMermaid } from 'fumadocs-core/mdx-plugins';
+import { remarkMdxMermaid, rehypeCodeDefaultOptions } from 'fumadocs-core/mdx-plugins';
 import { defineConfig, type MDXPresetOptions } from 'fumadocs-mdx/config';
 import type { Plugin } from 'unified';
 import { rehypeStyleToObject } from './lib/rehype-style-object';
@@ -39,6 +39,16 @@ export default defineConfig({
       remarkRehypeOptions: {
         footnoteLabel: '注释',
         footnoteBackLabel: '返回正文',
+      },
+      rehypeCodeOptions: {
+        ...rehypeCodeDefaultOptions,
+        fallbackLanguage: 'text',
+        langAlias: {
+          mcfunction: 'text',
+        },
+        onError(error) {
+          console.warn('[mdx] code highlight failed, rendering as plain text:', error);
+        },
       },
       rehypePlugins: (v) => [
         rehypeStyleToObject,
