@@ -46,11 +46,11 @@ flowchart TB
 
 可以先把最常混在一起的三个词拆开。
 
-**Serialization（序列化）**回答“这份数据怎样编码成字节”。整数是几个字节？字符串怎样表示？嵌套对象怎样开始和结束？NBT、MessagePack、CBOR、BSON、Protocol Buffers 都在这一层提供不同答案。
+**Serialization（序列化）** 回答“这份数据怎样编码成字节”。整数是几个字节？字符串怎样表示？嵌套对象怎样开始和结束？NBT、MessagePack、CBOR、BSON、Protocol Buffers 都在这一层提供不同答案。
 
-**Schema（数据模式）**回答“这些字段是什么意思、哪些字段应该存在”。即使一个解析器知道某段 NBT 是一个 Compound，它也不会自动知道 `Pos` 应该有三个坐标、`Items` 是库存，或者旧版数字方块 ID 应该怎样解释。Minecraft 的 Chunk format、Entity format、Item Stack format 才是在序列化格式之上建立的领域结构。
+**Schema（数据模式）** 回答“这些字段是什么意思、哪些字段应该存在”。即使一个解析器知道某段 NBT 是一个 Compound，它也不会自动知道 `Pos` 应该有三个坐标、`Items` 是库存，或者旧版数字方块 ID 应该怎样解释。Minecraft 的 Chunk format、Entity format、Item Stack format 才是在序列化格式之上建立的领域结构。
 
-**Storage（存储）**则回答“这些字节放在哪里、怎样找到和更新”。Region File、LevelDB、SQLite 都属于这一层。
+**Storage（存储）** 则回答“这些字节放在哪里、怎样找到和更新”。Region File、LevelDB、SQLite 都属于这一层。
 
 因此：
 

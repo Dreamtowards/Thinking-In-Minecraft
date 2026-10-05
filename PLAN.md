@@ -120,7 +120,7 @@ docs/
 │   ├── index.mdx
 │   ├── data-model.mdx         # 01 体素世界的数据模型
 │   ├── storage.mdx            # 02 存储与序列化
-│   ├── worldgen-pipeline.mdx  # 03 世界生成管线
+│   ├── worldgen.mdx           # 03 世界生成
 │   ├── light-fluid-updates.mdx# 04 光照、流体与方块更新
 │   ├── tick.mdx               # 05 游戏循环与刻
 │   ├── entities.mdx           # 06 实体与碰撞
@@ -979,8 +979,8 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 ### `impl/03` 世界生成
 
-- **目标文件**：建议由 `worldgen-pipeline.mdx` 迁移为更简洁的 `worldgen.mdx`
-- **状态**：待重写
+- **目标文件**：`docs/impl/(part1)/worldgen.mdx`
+- **状态**：✎ 已按新版结构重写
 - **核心问题**：一个尚不存在的区域，怎样从 Seed 变成真正的地形、群系、结构和资源？
 - **建议内容**：
   1. Seed、伪随机与确定性边界
