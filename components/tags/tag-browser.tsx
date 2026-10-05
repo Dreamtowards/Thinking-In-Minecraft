@@ -5,16 +5,14 @@ import { volumeLabels } from '@/lib/tags';
 import type { TaggedArticle, TagWithCount } from '@/lib/tag-utils';
 import { TagFilters } from './tag-filters';
 import { TagLink } from './tag-link';
+import { TagMapPreview } from '@/components/knowledge-map/tag-map-preview';
 
 export function TagBrowser({ tags, articles, active }: { tags: TagWithCount[]; articles: TaggedArticle[]; active?: TagWithCount }) {
   return (
     <DocsPage full>
       <DocsTitle>{active ? `标签：${active.tag}` : '标签'}</DocsTitle>
       <DocsDescription>沿着同一个主题，探索历史、设计、技术与重新发明之间的联系。</DocsDescription>
-      <Link href={active ? `/map?view=tags&tag=${encodeURIComponent(active.id)}` : '/map?view=tags'}
-        className="mb-6 inline-flex w-fit items-center gap-2 rounded-lg border px-3 py-2 text-sm text-fd-muted-foreground hover:bg-fd-accent hover:text-fd-foreground">
-        在节点地图中探索 <ArrowRight size={16} aria-hidden="true" />
-      </Link>
+      {!active && <TagMapPreview />}
       <TagFilters tags={tags} activeId={active?.id} />
       <section className="mt-8 space-y-4" aria-label="相关章节">
         <div className="flex items-center justify-between gap-3">

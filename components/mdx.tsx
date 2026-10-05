@@ -7,6 +7,7 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 import { Alternative, Constraint, Figure, Impl, Memoir, Note } from '@/components/mdx/blocks';
 import { BookToc } from '@/components/book-toc';
+import { TagMapPreview } from '@/components/knowledge-map/tag-map-preview';
 import { Mermaid } from '@/components/mdx/mermaid';
 
 function nodeText(node: ReactNode): string {
@@ -92,6 +93,7 @@ export function getMDXComponents(components?: MDXComponents) {
     Tabs,
     Tab,
     BookToc,
+    TagMapPreview,
     ...components,
   };
 
