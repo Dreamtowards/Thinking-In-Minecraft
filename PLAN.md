@@ -744,7 +744,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 #### `design/08` 创造模式与创作工具
 
-- 目标文件：`docs/design/(part3)/creative-tools.mdx` · 两类 · ▤
+- 目标文件：`docs/design/(part3)/creative-tools.mdx` · 两类 · ✎
 - **简介**：从 Creative Mode 到 WorldEdit、Axiom、Structure Block、WorldPainter、Bedrock Editor，Minecraft 存在多个不同层级的创作方式。本章研究游戏模式、权限和专业工具各自解决什么问题。
 - **要回答**：Creative Mode 为什么存在？什么时候它已经不够，需要更强的编辑工具？游戏模式和创作工具应该怎样分工？
 - **交叉**：`design/07`、`design/10`、`rewrite/07`

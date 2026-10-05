@@ -542,22 +542,25 @@
               "written": true
             },
             {
-              "id": "design/04",
-              "title": "创造模式不是关卡编辑器",
+              "id": "design/08",
+              "title": "创造模式与创作工具",
               "audience": "both",
-              "desc": "生存 / 创造 / 冒险 / 旁观是同一世界的四种权限，不是四个游戏。创造必须寄生于生存规则才有意义。无限资源改变的是建造的社会意义。关卡编辑器是另一类产品。",
-              "question": "四种模式是四种游戏，还是四种权限？",
+              "desc": "Creative Mode 取消资源与生存成本，却仍保留逐块建造；当规模扩大后，Structure Block、WorldEdit、Axiom、WorldPainter 与 Bedrock Editor 又承担不同层级的创作工作。",
+              "question": "Creative Mode 为什么存在？什么时候逐块建造已经不够，需要更高层的选择、复制、笔刷、变换甚至地图级工具？",
               "sections": [
-                "为什么创造模式仍像在玩 Minecraft",
-                "创造寄生于生存规则（方块、物理、尺度）",
-                "无限资源的社会意义：展示、协作、大厅",
-                "权限模型表",
-                "对照：Studio、GMod、关卡编辑器"
+                "Creative Mode 首先改变的是成本",
+                "逐块建造什么时候开始变慢",
+                "从方块到结构：复用已经做好的东西",
+                "从结构到选区：直接表达改这一片",
+                "从命令到可视化编辑：Axiom 与 Bedrock Editor",
+                "有些工作甚至应该在进入世界以前完成",
+                "创作工具真正改变的是编辑单位",
+                "Undo 为什么是一条很重要的分界线",
+                "工具越强，权限问题也越明显",
+                "游戏模式和创作工具应该怎样分工"
               ],
-              "tags": [
-                "先写"
-              ],
-              "href": "/design/creative-mode",
+              "tags": [],
+              "href": "/design/creative-tools",
               "written": true
             },
             {

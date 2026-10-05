@@ -103,7 +103,7 @@
 | [01 方块与可修改世界](<docs/design/(part1)/modifiable-world.mdx>) | 已按卷二新结构重写：先区分空间表示、视觉形态、编辑粒度与修改权限，再讨论可指认性、挖放循环、尺度取舍、跨系统位置关系与持久性；Rising World、Enshrouded、Teardown 作为不同可塑世界的对照。 |
 | [02 最小动词集与手感](<docs/design/(part1)/verbs-feel.mdx>) | “七个动词”是作者分析用的分类，不是游戏官方不变的清单；解释游泳、交易、潜行等为何被合并。写“没有独立于身体的默认建造编辑器”，避免与下一章创造模式矛盾。用一次挖—放—撤回的时间序列写手感。 |
 | [02 生存与玩家目标](<docs/design/(part1)/survival-goals.mdx>) | 已按卷二新结构重写：把目标来源拆成环境压力、资源依赖与玩家计划；强调 Survival 影响优先级而不是规定唯一目标，并把物品、怪物、进度和建造的细节分别留给后续章节。 |
-| [04 创造模式不是关卡编辑器](<docs/design/(part1)/creative-mode.mdx>) | 生存／创造／冒险／旁观既是模式，也改变权限和体验，不能只称“四把钥匙”。表格分别列资源、破坏／放置、死亡、移动、作者工具；再对照 WorldEdit/Axiom/Bedrock Editor，说明工具层如何在运行时补足创造模式。 |
+| [08 创造模式与创作工具](<docs/design/(part3)/creative-tools.mdx>) | 已按卷二新结构重写：从 Creative Mode 的施工成本出发，区分 Structure Block、WorldEdit、Axiom、Bedrock Editor 与 WorldPainter 的编辑尺度；强调选区、笔刷、Undo / Redo 与权限，而不再围绕“创造不是关卡编辑器”辩论。 |
 
 ### 第二部：系统如何互相咬合
 
