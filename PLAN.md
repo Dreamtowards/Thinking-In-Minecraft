@@ -254,7 +254,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
     "items-crafting-inventory", "worldgen-exploration", "mobs-combat", "progression-dimensions",
     "---第三部 · 创造与扩展---",
     "building-space", "creative-tools", "redstone-automation", "commands-data-maps", "mods-expansion",
-    "---第四部 · 多人、涌现与继承---",
+    "---第四部 · 多人、社区与继承---",
     "multiplayer-world", "emergent-play", "what-to-inherit"
   ]
 }
@@ -641,7 +641,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 10 命令、数据驱动与地图创作 · `commands-data-maps`
 11 模组与玩法扩展 · `mods-expansion`
 
-第四部 · 多人、涌现与继承
+第四部 · 多人、社区与继承
 12 多人游戏与共同世界 · `multiplayer-world`
 13 设计之外的玩法 · `emergent-play`
 14 Minecraft 值得继承什么？ · `what-to-inherit`
@@ -780,7 +780,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 ---
 
-### 第四部 · 多人、涌现与继承
+### 第四部 · 多人、社区与继承
 
 这一部把视野从单个玩家扩大：**当更多人进入同一世界、并不断发现设计者没有逐项安排的玩法时，Minecraft 的设计边界在哪里？最后又有哪些东西值得新的沙盒继续研究？**
 
