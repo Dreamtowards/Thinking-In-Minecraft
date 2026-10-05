@@ -1200,8 +1200,8 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 ### `impl/13` 数据包、资源包与数据驱动
 
-- **目标文件**：现有 `datapacks.mdx`
-- **状态**：待重写
+- **目标文件**：`docs/impl/(part4)/datapacks.mdx`
+- **状态**：✎ 已按新版结构重写
 - **核心问题**：不改引擎代码，Minecraft 到底允许创作者替换哪些数据、规则和表现？
 - **建议内容**：
   1. Namespace / registry
