@@ -36,17 +36,19 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
       {typeof page.data.description === 'string' ? (
         <DocsDescription className="mb-0">{page.data.description}</DocsDescription>
       ) : null}
-      <div className="flex flex-row flex-wrap gap-2 items-center border-b pb-6 mb-6">
+      <div className="flex min-w-0 items-center gap-2 border-b pb-4">
         {tags.length > 0 && (
-          <nav aria-label="章节标签" className="flex flex-1 flex-wrap gap-1.5">
+          <nav aria-label="章节标签" className="flex min-w-0 flex-1 flex-nowrap gap-1.5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [&>a]:shrink-0">
             {tags.map((tag) => <TagLink key={tag} tag={tag} />)}
           </nav>
         )}
-        <SectionNumberToggle />
-        <ViewOptionsPopover
-          markdownUrl={markdownUrl}
-          githubUrl={`https://github.com/${gitConfig.user}/${gitConfig.repo}/blob/${gitConfig.branch}/docs/${page.path}`}
-        />
+        <div className="flex shrink-0 items-center gap-2">
+          <SectionNumberToggle />
+          <ViewOptionsPopover
+            markdownUrl={markdownUrl}
+            githubUrl={`https://github.com/${gitConfig.user}/${gitConfig.repo}/blob/${gitConfig.branch}/docs/${page.path}`}
+          />
+        </div>
       </div>
       <DocsBody>
         <MDX
