@@ -4,7 +4,7 @@ import { TagFilters } from './tag-filters';
 export function TagDirectory() {
   return (
     <div className="not-prose mb-8">
-      <TagFilters tags={getTagCounts()} />
+      <TagFilters tags={getTagCounts()} singleLine />
     </div>
   );
 }
