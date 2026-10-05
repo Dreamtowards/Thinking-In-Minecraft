@@ -1117,8 +1117,8 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 ### `impl/09` 客户端渲染与反馈
 
-- **目标文件**：以 `client-render.mdx` 为主，吸收旧 `feel-client.mdx` 中视觉 / 音频反馈
-- **状态**：待重写
+- **目标文件**：`docs/impl/(part3)/client-render.mdx`
+- **状态**：✎ 已按新版结构重写；已吸收 `feel-client.mdx` 中视觉 / 音频反馈，Prediction 材料留待 `impl/10` 迁移
 - **核心问题**：服务器知道的世界，客户端怎样把它变成可见、可听、可理解的体验？
 - **建议内容**：
   1. Chunk mesh / rebuild
