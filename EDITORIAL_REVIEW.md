@@ -21,7 +21,7 @@
 | P0 | [卷三 03](<docs/impl/(part1)/worldgen-pipeline.mdx>) | “两个人走了不同的路，同一串数字都可以长出另一座山”把生成次序引起的局部差异说成地形普遍改写。分开写主地形、跨区块结构／装饰、版本与产品线变更、存档已有区块；只对有证据的版本与场景讨论次序效应。 |
 | P0 | [卷一 10](<docs/history/(part4)/revenue.mdx>)、[卷一 11](<docs/history/(part4)/grey-economy.mdx>) | 商业规则有时态。书中对 2014 年服务器变现限制的叙述可作历史，但不宜直接当作现行完整规则；现行官方使用指南允许**不造成竞争优势、也不损害他人体验**的部分玩法权益。表格分别列“2014 当时规定／当前规则／实际做法”，并给访问日期。见[官方 EULA](https://www.minecraft.net/en-us/eula)与[官方使用指南](https://www.minecraft.net/en-us/usage-guidelines)。 |
 | P0 | [卷一 01](<docs/history/(part1)/infiniminer.mdx>)、[02](<docs/history/(part1)/alpha.mdx>)、[03](<docs/history/(part1)/mojang-beta.mdx>) | 三章脚注定义均为 0，却有具体日期、价格、版本与人物表态。“未完成是产品策略”“玩家变成共同作者”尤其需要避免用后来结果倒推当时意图。补同时代论坛／博客、发布记录、采访；找不到的动机改写为编辑推论。 |
-| P1 | [卷二导读](docs/design/index.mdx)、[卷二 06](<docs/design/(part2)/progression-dimensions.mdx>)、[卷二 13](<docs/design/(part4)/emergence.mdx>) | 卷二 06 已处理“通关是一句空话”的问题：承认龙、速通、Advancements 与服务器赛季都有真实终点，同时区分“结束一条目标线”与“封存长期世界”。卷二导读与涌现章仍需在各自重写时清理过度总括。 |
+| P1 | [卷二导读](docs/design/index.mdx)、[卷二 06](<docs/design/(part2)/progression-dimensions.mdx>)、[卷二 13](<docs/design/(part4)/emergent-play.mdx>) | 卷二 06 已处理“通关是一句空话”的问题；卷二 13 也已重写，不再把“涌现必然”“目标外包”当成前提，而是区分规则提供可能、玩家发现 / 主动设计、社区传播三层。卷二导读仍需在全卷完成后统一重写。 |
 | P1 | [卷三 13](<docs/impl/(part4)/datapacks.mdx>)、[卷三 15](<docs/impl/(part4)/bedrock.mdx>)、[卷一 08](<docs/history/(part3)/java-bedrock.mdx>) | “数据包不能增加新动词”“Bedrock 的扩展面停在 JSON”容易把 Java 的边界误套到 Bedrock。分别标明版本、产品线、官方扩展面和第三方改程序能力。Bedrock 官方文档已有脚本驱动的自定义方块／物品组件，见[Microsoft Learn 的 Custom Components](https://learn.microsoft.com/en-us/minecraft/creator/documents/scripting/custom-components?view=minecraft-bedrock-stable)。 |
 | P1 | 章节篇幅与枢纽密度 | 按中文汉字粗计、排除脚注定义，47 章有 12 章低于普通章 4000 字目标；6 个标为“枢纽”的章节有 5 个低于 8000 字目标。卷一和卷三导读也低于 800 字目标。数字只作找薄弱论证的线索，不建议填充说明性段落。优先补案例、反例与版本差异。 |
 
@@ -128,7 +128,7 @@
 | 章 | 建议的具体改法 |
 | --- | --- |
 | [12 多人游戏与共同世界](<docs/design/(part4)/multiplayer-world.mdx>) | 已按卷二新结构重写并合并旧《规则由谁制定》：从共享世界中的合作、分工和公共空间进入，再讨论物品交换、财产、grief、游戏设置 / 插件 / 玩家约定三层规则，以及朋友 Realm、公共生存服和小游戏网络的不同组织方式；不再把“多人是默认状态”或“单人档是延迟的多人档”作为结论。 |
-| [14 留白、涌现与玩家作者性](<docs/design/(part4)/emergence.mdx>) | “涌现是必然”过强：有规则组合不等于一定有人发现、传播、维护。写出可观察的三步：规则提供可能，玩家实践形成惯例，社区工具使惯例可复制。房子、红石、地图、影像共享创作空间，但并非同一种权利或生产条件。 |
+| [13 设计之外的玩法](<docs/design/(part4)/emergent-play.mdx>) | 已按卷二新结构重写：从刷怪塔、冰船、Parkour、SkyBlock、Speedrun 与红石案例进入，区分规则被重新利用、玩家主动设计和社区传播；把 emergence 放到现象之后再定义，并明确“规则可能性 ≠ 玩法必然出现”。 |
 | [15 约束即深度](<docs/design/(part4)/constraints.mdx>) | 目前是全卷最充分的枢纽章，却有较长的前十四章回顾。压短回顾，把篇幅给两个正例、两个反例：一项特例带来组合，一项只增加例外；一项现代化补了真实痛点，一项填掉了玩家的决定空间。最后给开发者可操作的停手测试。 |
 | [16 可迁移原则清单](<docs/design/(part4)/transferable.mdx>) | 十二条可保留为索引，但每条增加“证据章／适用条件／会失败的环境”中最必要的一格。删去与卷一 12 重复的“窗口已关”长论；改用一个假想新沙盒的设计决策做总演练，读者才会带走方法而非格言。 |
 

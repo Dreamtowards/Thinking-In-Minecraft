@@ -795,7 +795,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 #### `design/13` 设计之外的玩法
 
-- 目标文件：`docs/design/(part4)/emergent-play.mdx` · 两类 · ▤
+- 目标文件：`docs/design/(part4)/emergent-play.mdx` · 两类 · ✎
 - **简介**：刷怪塔、冰船高速路、红石计算机、Parkour、Speedrun、Skyblock、服务器玩法等大量内容并不是开发者逐项写成关卡。本章从这些具体例子进入“涌现”问题。
 - **要回答**：为什么 Minecraft 会不断出现设计者没有明确安排过的玩法？这究竟来自规则组合、玩家目标、社区传播，还是历史偶然？
 - **交叉**：`design/04`、`design/09`、`design/12`、`history/06`
