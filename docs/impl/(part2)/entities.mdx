@@ -754,8 +754,8 @@ Pathfinding 则可能探索一片更大的节点区域。环境突然改变、�
 
 > **Block 倾向于按变化付费；Entity 倾向于按活跃实例和能力付费。具体成本取决于这一 Tick 真正运行了哪些系统。**
 
-<Callout type="warning" title="性能预算留到第 11 章">
-本章只解释 Entity 为什么产生这些工作。Entity / Block Entity / Worldgen / GC / Chunk I/O 各自占多少 MSPT，以及 Simulation Distance 怎样决定活动范围，会在《区块加载、世界流送与性能预算》中统一建模。
+<Callout type="warning" title="性能预算留到第 12 章">
+本章只解释 Entity 为什么产生这些工作。Entity / Block Entity / Worldgen / GC / Chunk I/O 各自占多少 MSPT，会在《性能分析与优化》中统一建模；Simulation Distance 怎样决定活动范围则见第 11 章[《区块生命周期与世界流送》](/impl/chunk-streaming)。
 </Callout>
 
 ## 这一章留下什么

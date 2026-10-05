@@ -1,4 +1,4 @@
 {
-  "title": "工程教训",
-  "pages": ["tech-debt", "modifiable-engine"]
+  "title": "两种实现与长期演化",
+  "pages": ["java-runtime", "bedrock", "tech-debt", "modifiable-engine"]
 }

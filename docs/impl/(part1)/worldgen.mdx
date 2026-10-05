@@ -385,7 +385,7 @@ flowchart TD
 
 为什么不直接按照本文前四章的顺序执行？因为概念上的因果关系与区块中间结果的依赖不是同一件事。生物群系可以先采样保存；结构部件需要提前为地形适配提供信息；特征则要等到地形与雕刻准备好以后，才能可靠地查询和修改空间。
 
-这里讨论的是**生成依赖**，不是完整 Chunk Lifecycle。玩家距离、Ticket、Render Distance、Simulation Distance、客户端发送、保活与卸载会决定“哪些区块现在值得推进到什么状态”，但那些属于后面的[《区块加载、世界流送与性能预算》](/impl/chunk-streaming-performance)，不是 worldgen 本身。本章只保留 worldgen 为了正确生成一个区域所必须知道的阶段和邻域关系。
+这里讨论的是**生成依赖**，不是完整 Chunk Lifecycle。玩家距离、Ticket、Render Distance、Simulation Distance、客户端发送、保活与卸载会决定“哪些区块现在值得推进到什么状态”，但那些属于后面的[《区块生命周期与世界流送》](/impl/chunk-streaming)，不是 worldgen 本身。本章只保留 worldgen 为了正确生成一个区域所必须知道的阶段和邻域关系。
 
 ### 从 Population 到显式生成阶段
 

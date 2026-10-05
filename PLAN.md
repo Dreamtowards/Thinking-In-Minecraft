@@ -115,27 +115,28 @@ docs/
 │   ├── multiplayer-world.mdx       # 12 多人游戏与共同世界
 │   ├── emergent-play.mdx           # 13 设计之外的玩法
 │   └── what-to-inherit.mdx         # 14 Minecraft 值得继承什么？
-├── impl/                      # 卷三 · 18 章
+├── impl/                      # 卷三 · 19 章
 │   ├── meta.json
 │   ├── index.mdx
 │   ├── data-model.mdx         # 01 体素世界的数据模型
-│   ├── storage.mdx            # 02 存储与序列化
+│   ├── storage.mdx            # 02 存档、序列化与版本迁移
 │   ├── worldgen.mdx           # 03 世界生成
 │   ├── tick.mdx               # 04 游戏循环、Tick 与调度
 │   ├── block-updates-light-fluid.mdx # 05 方块更新、光照与流体
 │   ├── entities.mdx           # 06 实体、移动与 AI
-│   ├── items.mdx              # 07 物品、库存与合成
-│   ├── redstone.mdx           # 08 红石的实现
-│   ├── client-render.mdx      # 09 客户端与渲染
-│   ├── protocol.mdx           # 10 网络协议
-│   ├── feel-client.mdx        # 11 音频、粒子与手感谎言
-│   ├── mod-architecture.mdx   # 12 模组与插件架构
+│   ├── items.mdx              # 07 物品、库存与配方系统
+│   ├── redstone.mdx           # 08 红石与更新顺序
+│   ├── client-render.mdx      # 09 客户端渲染与反馈
+│   ├── networking.mdx         # 10 网络架构与状态同步
+│   ├── chunk-streaming.mdx    # 11 区块生命周期与世界流送
+│   ├── performance.mdx        # 12 性能分析与优化（待写）
 │   ├── datapacks.mdx          # 13 数据包、资源包与数据驱动
-│   ├── java-runtime.mdx       # 14 Java 版运行时
-│   ├── bedrock.mdx            # 15 Bedrock 作为另一次实现
-│   ├── servers.mdx            # 16 服务端与规模
-│   ├── tech-debt.mdx          # 17 技术债作为产品策略
-│   └── modifiable-engine.mdx  # 18 可被模组的引擎才是完整产品
+│   ├── mod-architecture.mdx   # 14 Mod、Mixin 与加载器
+│   ├── servers.mdx            # 15 插件、服务端软件与规模化
+│   ├── java-runtime.mdx       # 16 Java 版运行时与发布环境
+│   ├── bedrock.mdx            # 17 Bedrock：另一套实现
+│   ├── tech-debt.mdx          # 18 兼容、重构与技术债
+│   └── modifiable-engine.mdx  # 19 技术实现留下了什么（待迁移 slug）
 ├── rewrite/                   # 卷四 · 11 章（最后写）
 │   ├── meta.json
 │   ├── index.mdx
@@ -164,7 +165,7 @@ docs/
     └── exercises.mdx
 ```
 
-69 篇正编：序 3 + 卷导读 4 + 章 13+14+18+11 + 附录 6。番外另计，不承担主线论证。卷二重构完成并退休旧文件后按此计数。
+70 篇正编：序 3 + 卷导读 4 + 章 13+14+19+11 + 附录 6。番外另计，不承担主线论证。卷二重构完成并退休旧文件后按此计数。
 
 ---
 
@@ -187,7 +188,7 @@ docs/
 | 卷二 01–06 | 建造、自动化、Mod 等后续章节才有清楚的基础世界 / 资源 / 进度语境 |
 | 卷一 04–05 + 卷二 10–12 | 卷三模组 / 插件架构与服务器设计 |
 | 卷三 08 | 红石哪些能力来自设计、哪些来自实现怪癖与事实接口 |
-| 卷一 08 + 卷三 15 | Java / Bedrock 哪些差异属于历史偶然、哪些已经变成玩家语义 |
+| 卷一 08 + 卷三 17 | Java / Bedrock 哪些差异属于历史偶然、哪些已经变成玩家语义 |
 | 卷二 01–13 | 卷二 14 才能整理“值得继承什么”，不能预先固定原则 |
 | 前三卷阶段结论 | 卷四的 Reinvention 压力测试 |
 | 卷四压力测试 | 全书结语与卷二 14 的最终修订 |
@@ -265,21 +266,18 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 ```json
 {
   "title": "卷三 · 技术实现",
-  "pages": [
-    "index",
-    "---第一部 · 世界如何存在---",
-    "data-model", "storage", "worldgen-pipeline", "light-fluid-updates",
-    "---第二部 · 模拟如何推进---",
-    "tick", "entities", "items", "redstone",
-    "---第三部 · 呈现与交互---",
-    "client-render", "protocol", "feel-client",
-    "---第四部 · 可扩展性与双引擎---",
-    "mod-architecture", "datapacks", "java-runtime", "bedrock", "servers",
-    "---第五部 · 工程教训---",
-    "tech-debt", "modifiable-engine"
-  ]
+  "pages": ["(part1)", "(part2)", "(part3)", "(part4)", "(part5)"],
+  "defaultOpen": true
 }
 ```
+
+目标 Part 导航：
+
+- `impl/(part1)/meta.json`：世界与数据 → `data-model`, `storage`, `worldgen`
+- `impl/(part2)/meta.json`：世界如何运行 → `tick`, `block-updates-light-fluid`, `entities`, `items`, `redstone`
+- `impl/(part3)/meta.json`：客户端、网络与性能 → `client-render`, `networking`, `chunk-streaming`, `performance`
+- `impl/(part4)/meta.json`：扩展与服务器生态 → `datapacks`, `mod-architecture`, `servers`
+- `impl/(part5)/meta.json`：两种实现与长期演化 → `java-runtime`, `bedrock`, `tech-debt`, 最终卷结语
 
 `rewrite/meta.json`：
 
@@ -388,7 +386,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 - 文件：`docs/history/alpha.mdx` · 两类 · ▤
 - **简介**：Cave Game 公开以后，Minecraft 没有先躲回工作室里完成自己。生存、合成、无限世界、付费访问与多人先后加入，玩家几乎是在游戏定型的同时学会了它。
 - **要回答**：一个还没有定型的游戏，怎样在公开开发中逐渐变成已经有人愿意长期游玩和付费的产品？
-- **交叉**：`history/09`、`impl/17`
+- **交叉**：`history/09`、`impl/18`
 - **大纲**：
   1. 游戏还没定型，玩家已经进来了：开发与体验在时间上重叠
   2. Survival Test：可修改空间第一次和生存压力结合
@@ -441,7 +439,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 - 文件：`docs/history/servers.mdx` · 两类 · ▤
 - **简介**：同一份 Minecraft 客户端，可以进入完全不同的规则、经济与玩法。服务器把多人从“共享一张存档”推向由运营者持续设计和维护的游戏空间。
 - **要回答**：服务器怎样从“多人共用一张世界”逐渐变成拥有自己玩法、进度与运营体系的产品？
-- **交叉**：`design/12`、`impl/16`、`history/11`
+- **交叉**：`design/12`、`impl/15`、`history/11`
 - **大纲**：
   1. 同一客户端为什么可以进入完全不同的游戏：插件与服务端规则改变体验
   2. 三种代表性方向：建筑 / 创造、生存社区、小游戏网络
@@ -495,7 +493,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 - 文件：`docs/history/java-bedrock.mdx` · 两类 · ✎
 - **简介**：Minecraft 同时存在 Java 与 Bedrock 两条产品线。它们共享大部分内容，却拥有不同的代码、平台、存档、联机与扩展生态；这种分裂不是一次简单移植留下的尾巴，而是十多年产品历史叠出来的结果。
 - **要回答**：Minecraft 为什么会走到需要长期维护两套实现的地步？商业层能统一以后，为什么技术与社区层仍然难以真正合并？
-- **交叉**：`impl/15`、`appendix/java-bedrock`、`design/09`、`history/04`、`history/05`
+- **交叉**：`impl/17`、`appendix/java-bedrock`、`design/09`、`history/04`、`history/05`
 - **大纲**：
   1. Pocket Edition 早于微软收购：移动平台为什么从一开始就需要另一份实现
   2. Pocket / Windows 10 / 主机逐步汇成 Bedrock：Better Together 如何把“多平台都有”推进到“多平台能一起玩”
@@ -893,7 +891,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
    世界生成本身已经足够大，应专心讨论 Seed、Noise / Density、Terrain、Biome、Feature、Structure、Carver、生成阶段与确定性。不要把完整 Chunk Lifecycle、多人加载、流送与性能预算塞进这一章。
 
 2. **Chunk Lifecycle 属于运行时世界流送，而不是 Worldgen 的附属。**
-   “什么时候加载 / 生成 / 发送 / 模拟 / 保存 / 卸载”跨越 I/O、Worldgen、Simulation Distance、多人玩家加载与性能，应放到 `impl/11`《区块加载、世界流送与性能预算》。
+   “什么时候加载 / 生成 / 发送 / 模拟 / 保存 / 卸载”跨越 I/O、Worldgen、Simulation Distance、多人玩家加载与性能，应放到 `impl/11`《区块生命周期与世界流送》；统一的性能预算与优化则放到 `impl/12`。
 
 3. **`impl/05` 标题采用《方块更新、光照与流体》。**
    标题保持具体、直观、有技术感；正文再抽象出“局部状态通过邻域、Tick 与 Update 传播”的共同机制。除了 Neighbor Update、Scheduled Tick、Random Tick、Light、Water / Lava，还应包含 Fire Spread、Crop / Sapling / Grass、Leaves Decay 等局部变化。不要把火焰传播遗忘在体系外。
@@ -908,7 +906,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
    需要明确区分 **FPS / TPS / Ping**，建立 50 ms/tick、Render Distance、Simulation Distance、Chunk I/O / Generation、Entity / Block Entity、GC、线程与任务调度等预算模型。目标不是“优化技巧大全”，而是解释性能为什么是一组不同预算。
 
 7. **Mod 与 Server Plugin 是两条不同扩展路线。**
-   Java Mod Loader / Mixin / Forge / Fabric / NeoForge 放在 `impl/13`；Bukkit / Spigot / Paper / Proxy / 运维与大型服务器放在 `impl/14`。不要再用一章同时解释客户端 Mod 和服务端 Plugin。
+   Java Mod Loader / Mixin / Forge / Fabric / NeoForge 放在 `impl/14`；Bukkit / Spigot / Paper / Proxy / 运维与大型服务器放在 `impl/15`。不要再用一章同时解释客户端 Mod 和服务端 Plugin。
 
 8. **Java / Bedrock 是两套实现，不属于“扩展性”章节。**
    二者统一放在第五部，与兼容、重构、技术债一起讨论长期演化。
@@ -919,7 +917,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
    - `design/05 生物、战斗与威胁` → `impl/06 实体、移动与 AI`
    - `design/03 物品、合成与库存` → `impl/07 物品、库存与配方系统`
    - `design/09 红石、机器与自动化` → `impl/08 红石与更新顺序`
-   - `design/12 多人游戏与共同世界` → `impl/10 客户端—服务器架构与网络同步`
+   - `design/12 多人游戏与共同世界` → `impl/10 网络架构与状态同步`
 
    卷二回答“为什么这种玩法关系成立”，卷三回答“计算机里怎样让它成立”。
 
@@ -1112,8 +1110,8 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 ## 第三部 · 客户端、网络与性能
 
-**Part 职责**：回答“服务器里的世界怎样变成玩家看到、听到、操作到的世界；多人状态怎样同步；巨大世界又怎样只加载当前需要的一部分”。
-旧 `feel-client.mdx` 在这一轮退休并拆分到 09 / 10，腾出 11 给 Chunk Streaming 与性能模型。
+**Part 职责**：回答“服务器里的世界怎样变成玩家看到、听到、操作到的世界；多人状态怎样同步；巨大世界怎样只维护当前需要的一部分；这些工作最终又占用哪一份性能预算”。
+旧 `feel-client.mdx` 已拆分到 09 / 10 并退休；11 专讲 Chunk Lifecycle / Streaming，12 再统一建立性能分析与优化模型。
 
 ### `impl/09` 客户端渲染与反馈
 
@@ -1132,7 +1130,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
   - 不把“原版为什么不用某某现代算法”写成先验批判。
 - **旧文件处理**：`feel-client.mdx` 已拆分并吸收到 `impl/09` / `impl/10`，现已退休删除。
 
-### `impl/10` 客户端—服务器架构与网络同步
+### `impl/10` 网络架构与状态同步
 
 - **目标文件**：`docs/impl/(part3)/networking.mdx`
 - **状态**：✎ 已按新版结构重写；`protocol.mdx` 已迁移为 `networking.mdx`，`feel-client.mdx` 的 Prediction / Reconciliation 材料已吸收
@@ -1150,27 +1148,49 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
   - 应明确 Java Edition 到 1.3.1 才把单人统一到 integrated server 架构。
 - **吸收旧章**：`feel-client.mdx` 中客户端预测、输入响应、服务器确认等材料迁入本章。
 
-### `impl/11` 区块加载、世界流送与性能预算
+### `impl/11` 区块生命周期与世界流送
 
-- **目标文件**：建议新建 `docs/impl/(part3)/chunk-streaming-performance.mdx`
-- **状态**：新增章
-- **核心问题**：Minecraft 世界明明巨大，为什么机器不需要同时加载、模拟和渲染整个世界？性能又到底花在哪里？
+- **目标文件**：`docs/impl/(part3)/chunk-streaming.mdx`
+- **状态**：✎ 已按新版结构重写
+- **核心问题**：Minecraft 世界可以不断延伸，但运行时为什么只需要让玩家附近的一部分 Chunk 存在于内存、参与模拟并发送给客户端？
 - **建议内容**：
-  1. Chunk Lifecycle：不存在 / 请求 / 磁盘读取或生成 / loaded / active / save / unload
-  2. Chunk ticket / player loading / spawn area（按版本准确描述）
-  3. Render Distance vs Simulation Distance
-  4. 多玩家怎样扩大 loaded / simulated area
-  5. Chunk I/O 与 Worldgen 的运行时成本
-  6. 线程、worker、async I/O / generation 的边界
-  7. 50 ms/tick budget
-  8. Entity / Block Entity / Block Update / Worldgen / GC 等预算来源
-  9. FPS vs TPS vs Ping
-  10. Profiling：先找预算去哪了，而不是先背“优化技巧”
+  1. Disk Chunk / ProtoChunk / LevelChunk / Client Chunk：为什么“loaded”不是一个二元状态
+  2. ChunkStatus 与 FullChunkStatus
+  3. Ticket：谁在请求 Chunk，加载与模拟为什么是两张图
+  4. Player Loading / Simulation、forceload、Portal、Ender Pearl 等加载来源
+  5. 固定 Spawn Chunks 已在现代 Java 移除
+  6. View / Render Distance vs Simulation Distance
+  7. 多玩家怎样合并 Server-side 活动区域
+  8. 磁盘读取或生成 → FULL → send → tick → dirty / save → unload
+  9. PlayerChunkSender / Client Chunk Cache / Forget Chunk
 - **边界**：
   - Worldgen 算法本身回到 `impl/03`；
-  - Rendering 算法本身回到 `impl/09`；
-  - 本章关注 runtime streaming 与 budget。
-- **重要意义**：这是旧 Vol. III 最明显缺失的统一章节之一。
+  - Region / NBT 等存储格式回到 `impl/02`；
+  - Chunk 的 CPU / I/O 成本只说明来源，不在本章展开优化；
+  - FPS / TPS / GC / Profiling 统一去 `impl/12`。
+- **重点**：本章讲生命周期与空间所有权，不把“Chunk Loading”缩成一次磁盘读取。
+
+### `impl/12` 性能分析与优化
+
+- **目标文件**：建议新建 `docs/impl/(part3)/performance.mdx`
+- **状态**：新增章
+- **核心问题**：Minecraft 出现“卡顿”时，究竟是哪一份时间、内存、I/O 或网络预算超了；开发者又怎样先定位瓶颈，再选择真正命中它的优化？
+- **建议内容**：
+  1. FPS / Frame Time vs TPS / MSPT vs Ping / RTT
+  2. 50 ms Server Tick Budget 与 Client Frame Budget
+  3. CPU：Entity / AI / Block Update / Redstone / Worldgen / Chunk Rebuild
+  4. GPU：Terrain / Entity / Transparency / Shader / Resolution
+  5. Memory / Allocation / GC
+  6. Chunk I/O / Save / Network
+  7. Main Thread / Worker / Parallelism 的收益与边界
+  8. Profiling：F3 / Debug、JFR、async-profiler、spark、Flame Graph
+  9. 优化的基本手段：少做、晚做、复用、批处理、并行、换数据结构
+  10. Sodium / Lithium / C2ME / FerriteCore / Entity Culling / OptiFine 等分别优化哪一层
+- **边界**：
+  - 不写“优化技巧大全”；
+  - 不把所有问题归咎于 Java、GC 或 Main Thread；
+  - 优化 Mod 用作架构案例，不写安装与跑分评测。
+- **主线**：先建立预算模型，再 Profiling，最后讨论优化；不要从“推荐哪些 Mod”开篇。
 
 ---
 
@@ -1178,7 +1198,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 **Part 职责**：回答“原版实现之外，Minecraft 提供或被社区建立了哪些扩展面；单机 / 小服又怎样扩展到完整创作与服务端生态”。
 
-### `impl/12` 数据包、资源包与数据驱动
+### `impl/13` 数据包、资源包与数据驱动
 
 - **目标文件**：现有 `datapacks.mdx`
 - **状态**：待重写
@@ -1191,7 +1211,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
   5. 数据驱动怎样降低扩展成本，又在哪里需要代码
 - **避免旧命题**：不使用“温和模组的政治”作为章节框架。
 
-### `impl/13` Mod、Mixin 与加载器
+### `impl/14` Mod、Mixin 与加载器
 
 - **目标文件**：由现有 `mod-architecture.mdx` 重写；Bukkit / Paper 内容迁出
 - **状态**：待重写
@@ -1203,10 +1223,10 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
   4. Registry / event / lifecycle
   5. Loader 与游戏版本兼容矩阵
   6. 为什么升级 Mod 成本高
-- **边界**：Bukkit / Paper / Proxy 不在本章展开，统一去 `impl/14`。
+- **边界**：Bukkit / Paper / Proxy 不在本章展开，统一去 `impl/15`。
 - **态度**：比较加载器哲学与工程取舍，不站队。
 
-### `impl/14` 插件、服务端软件与规模化
+### `impl/15` 插件、服务端软件与规模化
 
 - **目标文件**：由现有 `servers.mdx` 为主，吸收 `mod-architecture.mdx` 中 Bukkit / Paper 相关内容
 - **状态**：待重写
@@ -1228,7 +1248,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 **Part 职责**：回答“为什么今天存在 Java 与 Bedrock 两套实现；语言、运行时、兼容与长期重构又怎样塑造现在的 Minecraft”。
 
-### `impl/15` Java 版运行时与发布环境
+### `impl/16` Java 版运行时与发布环境
 
 - **目标文件**：现有 `java-runtime.mdx`
 - **状态**：待重写
@@ -1244,7 +1264,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 - **边界**：不要把性能问题全部归咎于“用了 Java”。
 - **避免旧命题**：不预设“2009 年的正确选择”或“Java 卡住了 Minecraft”。
 
-### `impl/16` Bedrock：另一套实现
+### `impl/17` Bedrock：另一套实现
 
 - **目标文件**：现有 `bedrock.mdx`
 - **状态**：待重写
@@ -1258,7 +1278,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
   6. 两套实现怎样长期追求 parity
 - **重点**：性能只是差异之一，语义与生态差异往往更直接影响玩家与创作者。
 
-### `impl/17` 兼容、重构与技术债
+### `impl/18` 兼容、重构与技术债
 
 - **目标文件**：由现有 `tech-debt.mdx` 重写
 - **状态**：待重写
@@ -1272,7 +1292,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
   6. 第三方优化 / Paper / Mod 生态能说明什么、不能说明什么
 - **避免旧命题**：不再以“技术债作为产品策略”“兼容性必须高于正确性”作为先验答案。
 
-### `impl/18` 技术实现留下了什么 · 卷结语
+### `impl/19` 技术实现留下了什么 · 卷结语
 
 - **目标文件**：旧 `modifiable-engine.mdx` 只作为素材；建议执行时迁移到更中性的 slug
 - **状态**：待重写
@@ -1281,10 +1301,11 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
   1. 数据模型与持久化
   2. Tick 与局部模拟
   3. Client / Server authority
-  4. Chunk Streaming / budget
-  5. 数据驱动与社区扩展面
-  6. Java / Bedrock 双实现
-  7. 兼容与长期演化
+  4. Chunk Streaming 与空间工作集
+  5. 性能预算、Profiling 与优化
+  6. 数据驱动与社区扩展面
+  7. Java / Bedrock 双实现
+  8. 兼容与长期演化
 - **作用**：为 Vol. IV 提供待验证的工程假设，而不是提前宣布“完整产品必须可模组”。
 - **避免旧命题**：删除《可被模组的引擎才是完整产品》这一绝对标题。
 
@@ -1297,22 +1318,22 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 | 旧内容 | 新归宿 |
 | --- | --- |
 | `worldgen-pipeline.mdx` 中 Worldgen 主体 | `impl/03 世界生成` |
-| `worldgen-pipeline.mdx` 中完整 Chunk Lifecycle / 多线程加载 | `impl/11 区块加载、世界流送与性能预算` |
+| `worldgen-pipeline.mdx` 中完整 Chunk Lifecycle / 多线程加载 | `impl/11 区块生命周期与世界流送` |
 | `light-fluid-updates.mdx` | `impl/05 方块更新、光照与流体` → `block-updates-light-fluid.mdx` |
 | `entities.mdx` | `impl/06 实体、移动与 AI` |
 | `client-render.mdx` | `impl/09 客户端渲染与反馈` |
 | `feel-client.mdx` 中音频 / 粒子 / 视觉反馈 | `impl/09` |
 | `feel-client.mdx` 中 prediction / server confirmation | `impl/10` |
-| `feel-client.mdx` 本体 | 内容迁完后退休 |
-| `protocol.mdx` | `impl/10 客户端—服务器架构与网络同步` |
-| 旧各章散落的性能材料 | 汇总 / 去重到 `impl/11`，原章只保留本系统必要性能背景 |
-| `mod-architecture.mdx` 中 Java Mod / Mixin / Loader | `impl/13` |
-| `mod-architecture.mdx` 中 Bukkit / Paper | `impl/14` |
-| `servers.mdx` | `impl/14 插件、服务端软件与规模化` |
-| `java-runtime.mdx` | `impl/15` |
-| `bedrock.mdx` | `impl/16` |
-| `tech-debt.mdx` | `impl/17` |
-| `modifiable-engine.mdx` | 仅作 `impl/18` 素材，旧命题退休 |
+| `feel-client.mdx` 本体 | 已完成迁移并退休 |
+| `protocol.mdx` | `impl/10 网络架构与状态同步` → `networking.mdx` |
+| 旧各章散落的性能材料 | 汇总 / 去重到 `impl/12 性能分析与优化`，原章只保留本系统必要性能背景 |
+| `mod-architecture.mdx` 中 Java Mod / Mixin / Loader | `impl/14` |
+| `mod-architecture.mdx` 中 Bukkit / Paper | `impl/15` |
+| `servers.mdx` | `impl/15 插件、服务端软件与规模化` |
+| `java-runtime.mdx` | `impl/16` |
+| `bedrock.mdx` | `impl/17` |
+| `tech-debt.mdx` | `impl/18` |
+| `modifiable-engine.mdx` | 仅作 `impl/19` 素材，旧命题退休 |
 
 ### 推荐执行顺序
 
@@ -1321,18 +1342,18 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
    先把“数据模型 / 保存 / 世界生成”的边界立稳，尤其不要再把 Chunk Lifecycle 塞回 Worldgen。
 3. **重写 04–08：世界如何运行。**
    Tick → 方块局部变化 → Entity Simulation → Item / Inventory → Redstone，建立运行时对象地图。
-4. **重写 09–11：客户端、网络与性能。**
-   在这一阶段拆掉 `feel-client.mdx`，并新增 `chunk-streaming-performance.mdx`。
-5. **重写 12–14：扩展与服务器生态。**
+4. **重写 09–12：客户端、网络与性能。**
+   客户端渲染 → 网络同步 → Chunk Streaming → 性能分析；`feel-client.mdx` 已在 09 / 10 中拆分退休。
+5. **重写 13–15：扩展与服务器生态。**
    数据驱动 → Java Mod → Server Plugin / Operations，明确三层扩展面。
-6. **重写 15–17：两种实现与长期演化。**
-7. **最后写 18 和 `impl/index` 最终版。**
-   前 17 章完成前，不提前锁定“最小内核”“技术原则”数量。
+6. **重写 16–18：两种实现与长期演化。**
+7. **最后写 19 和 `impl/index` 最终版。**
+   前 18 章完成前，不提前锁定“最小内核”“技术原则”数量。
 8. 全卷完成后统一：
    - 删除已退休旧稿；
    - 同步中文 / 英文导航；
    - 检查 Vol. II / Vol. IV 交叉引用；
-   - 回看 Vol. IV 中对 `impl/04–11` 的引用是否仍使用旧编号或旧命题。
+   - 回看 Vol. IV 中对 `impl/04–12` 的引用是否仍使用旧编号或旧命题。
 9. 如果执行过程中发现真实实现并不支持 PLAN 中的抽象，**优先修改 PLAN 和章节职责，不维护这份结构本身。**
 
 ---
@@ -1384,7 +1405,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 - 文件：`docs/rewrite/accidents.mdx` · 开发者 · ▤
 - **简介**：把 Java、全局 20 TPS、双产品线、部分 bug 与方块特例放回历史语境；同时承认某些“偶然”经过多年使用后可能已经获得设计价值，不能因为技术上难看就自动删除。
 - **要回答**：哪些可以替换，哪些虽然偶然却已经成为玩家语义？
-- **交叉**：`impl/14`、`impl/05`、`impl/08`、`history/08`
+- **交叉**：`impl/16`、`impl/05`、`impl/08`、`history/08`
 - **大纲**：
   1. 语言与运行时：偶然不等于错误
   2. 固定 tick、更新顺序与可解释因果
@@ -1548,7 +1569,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 ### `appendix/java-bedrock` Java / Bedrock 对照表
 
 - **简介**：世界格式、红石、战斗、模组 / 附加包、市场、平台能力。
-- **大纲**：逐项表；每行链到 `history/08` 或 `impl/15`。
+- **大纲**：逐项表；每行链到 `history/08` 或 `impl/17`。
 
 ### `appendix/glossary` 术语表 · 可提前
 
