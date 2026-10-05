@@ -769,7 +769,7 @@ Render / View Distance 与 Simulation Distance 的分离则让世界可以“看
 
 **对开发者来说**，最值得带走的是一种 Demand-driven Streaming 结构：让 Storage、Residency、Simulation、Replication 和 Rendering 各自拥有清楚的生命周期，不要试图用一个 `loaded` 布尔值同时控制它们。Minecraft 当前的 Ticket Level 和 Chunk 半径只是这一原则的一种具体实现，并不是必须照抄的答案。
 
-下一章《性能分析与优化》会从这里继续：当工作集已经被限制在“当前需要的世界”以后，为什么它仍然可能跑不动？FPS、TPS、MSPT、Ping、GC、Entity、Worldgen、Rendering 和 Chunk I/O 各自占用的是哪一份预算，又怎样通过 Profiling 判断应该优化哪一层？
+下一章[《性能分析与优化》](/impl/performance)会从这里继续：当工作集已经被限制在“当前需要的世界”以后，为什么它仍然可能跑不动？FPS、TPS、MSPT、Ping、GC、Entity、Worldgen、Rendering 和 Chunk I/O 各自占用的是哪一份预算，又怎样通过 Profiling 判断应该优化哪一层？
 
 [^spawn-chunks]: Mojang Studios，《Minecraft Java Edition 1.21.9 - The Copper Age》，2025。该版本移除固定 Spawn Chunks，并说明 Forceload、Portal、Ender Pearl、玩家加入 / 世界创建等新的 World Loading 条件；当前 26.3 延续这套模型。见 https://feedback.minecraft.net/hc/en-us/articles/39966147272589-Minecraft-Java-Edition-1-21-9-The-Copper-Age
 

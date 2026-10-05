@@ -129,7 +129,7 @@ docs/
 │   ├── client-render.mdx      # 09 客户端渲染与反馈
 │   ├── networking.mdx         # 10 网络架构与状态同步
 │   ├── chunk-streaming.mdx    # 11 区块生命周期与世界流送
-│   ├── performance.mdx        # 12 性能分析与优化（待写）
+│   ├── performance.mdx        # 12 性能分析与优化
 │   ├── datapacks.mdx          # 13 数据包、资源包与数据驱动
 │   ├── mod-architecture.mdx   # 14 Mod、Mixin 与加载器
 │   ├── servers.mdx            # 15 插件、服务端软件与规模化
@@ -1172,8 +1172,8 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 ### `impl/12` 性能分析与优化
 
-- **目标文件**：建议新建 `docs/impl/(part3)/performance.mdx`
-- **状态**：新增章
+- **目标文件**：`docs/impl/(part3)/performance.mdx`
+- **状态**：✎ 已按新版结构重写
 - **核心问题**：Minecraft 出现“卡顿”时，究竟是哪一份时间、内存、I/O 或网络预算超了；开发者又怎样先定位瓶颈，再选择真正命中它的优化？
 - **建议内容**：
   1. FPS / Frame Time vs TPS / MSPT vs Ping / RTT
