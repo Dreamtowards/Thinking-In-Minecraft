@@ -1,4 +1,4 @@
 {
   "title": "两种实现与长期演化",
-  "pages": ["java-runtime", "bedrock", "tech-debt", "modifiable-engine"]
+  "pages": ["java-runtime", "bedrock", "tech-debt", "technical-legacy"]
 }
