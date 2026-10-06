@@ -122,7 +122,7 @@ docs/
 │   ├── storage.mdx            # 02 存档、序列化与版本迁移
 │   ├── worldgen.mdx           # 03 世界生成
 │   ├── tick.mdx               # 04 游戏循环、Tick 与调度
-│   ├── block-updates-light-fluid.mdx # 05 方块更新、光照与流体
+│   ├── block-updates.mdx      # 05 方块更新、光照与流体
 │   ├── entities.mdx           # 06 实体、移动与 AI
 │   ├── items.mdx              # 07 物品、库存与配方系统
 │   ├── redstone.mdx           # 08 红石与更新顺序
@@ -277,7 +277,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 目标 Part 导航：
 
 - `impl/(part1)/meta.json`：世界与数据 → `data-model`, `storage`, `worldgen`
-- `impl/(part2)/meta.json`：世界如何运行 → `tick`, `block-updates-light-fluid`, `entities`, `items`, `redstone`
+- `impl/(part2)/meta.json`：世界如何运行 → `tick`, `block-updates`, `entities`, `items`, `redstone`
 - `impl/(part3)/meta.json`：客户端、网络与性能 → `client-rendering`, `networking`, `chunk-streaming`, `performance`
 - `impl/(part4)/meta.json`：扩展与服务器生态 → `data-driven`, `modding`, `server-ecosystem`
 - `impl/(part5)/meta.json`：平台、兼容与长期演化 → `java-runtime`, `bedrock`, `compatibility`, `technical-legacy`
@@ -1026,7 +1026,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 ### `impl/05` 方块更新、光照与流体
 
-- **目标文件**：`docs/impl/(part2)/block-updates-light-fluid.mdx`
+- **目标文件**：`docs/impl/(part2)/block-updates.mdx`
 - **状态**：✎ 已按新版结构重写
 - **核心问题**：一个方块变化以后，这种变化怎样在附近世界继续传播？
 - **建议结构**：
@@ -1485,7 +1485,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 | --- | --- |
 | `worldgen-pipeline.mdx` 中 Worldgen 主体 | `impl/03 世界生成` |
 | `worldgen-pipeline.mdx` 中完整 Chunk Lifecycle / 多线程加载 | `impl/11 区块生命周期与世界流送` |
-| `light-fluid-updates.mdx` | `impl/05 方块更新、光照与流体` → `block-updates-light-fluid.mdx` |
+| `light-fluid-updates.mdx` | `impl/05 方块更新、光照与流体` → `block-updates.mdx` |
 | `entities.mdx` | `impl/06 实体、移动与 AI` |
 | `client-rendering.mdx` | `impl/09 客户端渲染与反馈` |
 | `feel-client.mdx` 中音频 / 粒子 / 视觉反馈 | `impl/09` |
