@@ -111,7 +111,7 @@ Class<?> modClass = loader.loadClass("com.example.MyMod");
 
 > 字节码是可读的、可修改的，而且可以在运行时加载。这让社区能够在没有官方 Mod API 的情况下扩展游戏。
 
-第 14 章[《Mod、Mixin 与加载器》](/impl/mod-architecture)详细讨论了这套机制。
+第 14 章[《Mod、Mixin 与加载器》](/impl/modding)详细讨论了这套机制。
 
 ### 对比：C++ 的 Modding
 
@@ -379,7 +379,7 @@ Bedrock Edition 用 C++ 编写，Modding 生态远不如 Java Edition：
 
 > Java 的可修改字节码不是 Minecraft 的"本质"，但它是 Mod 生态繁荣的**关键enabler**。
 
-第 14 章[《Mod、Mixin 与加载器》](/impl/mod-architecture)详细讨论了这套机制。
+第 14 章[《Mod、Mixin 与加载器》](/impl/modding)详细讨论了这套机制。
 
 ## 性能优化：社区 vs 官方
 
@@ -417,7 +417,7 @@ Java Edition 的性能优化历史，几乎是一部"社区先行、官方跟进
 - 区域化多线程（Regionised Threading）；
 - 突破单线程 Tick 限制，但 Plugin 需要重写。[^folia]
 
-第 15 章[《插件、服务端软件与规模化》](/impl/servers)详细讨论了服务端优化。
+第 15 章[《插件、服务端软件与规模化》](/impl/server-ecosystem)详细讨论了服务端优化。
 
 ### 为什么社区能优化，官方不直接采用？
 
@@ -441,7 +441,7 @@ Java Edition 的性能优化历史，几乎是一部"社区先行、官方跟进
 
 > **官方背负的兼容性约束远大于社区 Mod。**
 
-第 18 章[《兼容、重构与技术债》](/impl/tech-debt)会详细讨论这个权衡。
+第 18 章[《兼容、重构与技术债》](/impl/compatibility)会详细讨论这个权衡。
 
 ## 原生库与 LWJGL
 

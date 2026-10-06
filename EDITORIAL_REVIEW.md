@@ -17,12 +17,12 @@
 
 | 优先级 | 位置 | 发现与处理 |
 | --- | --- | --- |
-| P0 | [卷三导读](docs/impl/index.mdx)、[卷三 10](<docs/impl/(part3)/protocol.mdx>)、[卷三 16](<docs/impl/(part4)/servers.mdx>) | 导读称单人档的客户端／服务器权威分工“从第一天就在”，正文却指出 Java 单人集成服务端是在 1.3 之后。导读还称“两**个进程**住在同一个窗口”。统一历史时间线，并把进程、线程、逻辑角色分开。可改为“今天的 Java 单人游戏运行集成服务端；这不是初版就有的架构”。 |
+| P0 | [卷三导读](docs/impl/index.mdx)、[卷三 10](<docs/impl/(part3)/protocol.mdx>)、[卷三 16](<docs/impl/(part4)/server-ecosystem.mdx>) | 导读称单人档的客户端／服务器权威分工“从第一天就在”，正文却指出 Java 单人集成服务端是在 1.3 之后。导读还称“两**个进程**住在同一个窗口”。统一历史时间线，并把进程、线程、逻辑角色分开。可改为“今天的 Java 单人游戏运行集成服务端；这不是初版就有的架构”。 |
 | P0 | [卷三 03](<docs/impl/(part1)/worldgen-pipeline.mdx>) | “两个人走了不同的路，同一串数字都可以长出另一座山”把生成次序引起的局部差异说成地形普遍改写。分开写主地形、跨区块结构／装饰、版本与产品线变更、存档已有区块；只对有证据的版本与场景讨论次序效应。 |
 | P0 | [卷一 10](<docs/history/(part4)/revenue.mdx>)、[卷一 11](<docs/history/(part4)/grey-economy.mdx>) | 商业规则有时态。书中对 2014 年服务器变现限制的叙述可作历史，但不宜直接当作现行完整规则；现行官方使用指南允许**不造成竞争优势、也不损害他人体验**的部分玩法权益。表格分别列“2014 当时规定／当前规则／实际做法”，并给访问日期。见[官方 EULA](https://www.minecraft.net/en-us/eula)与[官方使用指南](https://www.minecraft.net/en-us/usage-guidelines)。 |
 | P0 | [卷一 01](<docs/history/(part1)/infiniminer.mdx>)、[02](<docs/history/(part1)/alpha.mdx>)、[03](<docs/history/(part1)/mojang-beta.mdx>) | 三章脚注定义均为 0，却有具体日期、价格、版本与人物表态。“未完成是产品策略”“玩家变成共同作者”尤其需要避免用后来结果倒推当时意图。补同时代论坛／博客、发布记录、采访；找不到的动机改写为编辑推论。 |
 | P1 | [卷二导读](docs/design/index.mdx)、[卷二 06](<docs/design/(part2)/progression-dimensions.mdx>)、[卷二 13](<docs/design/(part4)/emergent-play.mdx>) | 卷二 06 已处理“通关是一句空话”的问题；卷二 13 也已重写，不再把“涌现必然”“目标外包”当成前提，而是区分规则提供可能、玩家发现 / 主动设计、社区传播三层。卷二导读仍需在全卷完成后统一重写。 |
-| P1 | [卷三 13](<docs/impl/(part4)/datapacks.mdx>)、[卷三 15](<docs/impl/(part4)/bedrock.mdx>)、[卷一 08](<docs/history/(part3)/java-bedrock.mdx>) | “数据包不能增加新动词”“Bedrock 的扩展面停在 JSON”容易把 Java 的边界误套到 Bedrock。分别标明版本、产品线、官方扩展面和第三方改程序能力。Bedrock 官方文档已有脚本驱动的自定义方块／物品组件，见[Microsoft Learn 的 Custom Components](https://learn.microsoft.com/en-us/minecraft/creator/documents/scripting/custom-components?view=minecraft-bedrock-stable)。 |
+| P1 | [卷三 13](<docs/impl/(part4)/data-driven.mdx>)、[卷三 15](<docs/impl/(part4)/bedrock.mdx>)、[卷一 08](<docs/history/(part3)/java-bedrock.mdx>) | “数据包不能增加新动词”“Bedrock 的扩展面停在 JSON”容易把 Java 的边界误套到 Bedrock。分别标明版本、产品线、官方扩展面和第三方改程序能力。Bedrock 官方文档已有脚本驱动的自定义方块／物品组件，见[Microsoft Learn 的 Custom Components](https://learn.microsoft.com/en-us/minecraft/creator/documents/scripting/custom-components?view=minecraft-bedrock-stable)。 |
 | P1 | 章节篇幅与枢纽密度 | 按中文汉字粗计、排除脚注定义，47 章有 12 章低于普通章 4000 字目标；6 个标为“枢纽”的章节有 5 个低于 8000 字目标。卷一和卷三导读也低于 800 字目标。数字只作找薄弱论证的线索，不建议填充说明性段落。优先补案例、反例与版本差异。 |
 
 ## 目录与阅读结构
@@ -68,7 +68,7 @@
 | 章 | 建议的具体改法 |
 | --- | --- |
 | [04 模组作为第二作者](<docs/history/(part2)/mods-as-authors.mdx>) | “原版从来不是完整产品”会直接排除长期只玩原版的人。改问：哪些需求必须依赖第二作者才能满足，哪些本来就无需满足？选一个模组／插件的生命周期说明贡献、依赖和失效，避免把资源包、客户端模组、服务器插件的风险只按“崩溃域”划开。 |
-| [05 服务器即新游戏](<docs/history/(part2)/servers.mdx>) | 让创造服、生存服、小游戏服各有一个可观察的规则差异；Hypixel 与 2b2t 各回答不同问题。Bukkit 危机要写清事件性质与前后时间线，证明“基础设施脆弱”具体脆在哪里。 |
+| [05 服务器即新游戏](<docs/history/(part2)/server-ecosystem.mdx>) | 让创造服、生存服、小游戏服各有一个可观察的规则差异；Hypixel 与 2b2t 各回答不同问题。Bukkit 危机要写清事件性质与前后时间线，证明“基础设施脆弱”具体脆在哪里。 |
 | [06 影像、教育与一代人的媒介](<docs/history/(part2)/media-education.mdx>) | “影像先于教程”很有力，可用一个玩法知识如何从视频流入游戏内界面的例子坐实。梦核与教育版跨出本 part 的 2011—2014 范围，应标成后续影响；“很多人从视频学会”不要写成未经调查的比例判断。 |
 
 ### 第三部：产品线与治理
@@ -157,7 +157,7 @@
 
 | 章 | 建议的具体改法 |
 | --- | --- |
-| [09 客户端与渲染](<docs/impl/(part3)/client-render.mdx>) | “原版为何不用贪婪网格”涉及作者动机，若无开发者材料就写成设计权衡：非立方模型、透明层、快速重建、资源包与兼容。优化模组是可比较实现，不是性能债的自动判决；列比较条件。 |
+| [09 客户端与渲染](<docs/impl/(part3)/client-rendering.mdx>) | “原版为何不用贪婪网格”涉及作者动机，若无开发者材料就写成设计权衡：非立方模型、透明层、快速重建、资源包与兼容。优化模组是可比较实现，不是性能债的自动判决；列比较条件。 |
 | [10 网络协议](<docs/impl/(part3)/protocol.mdx>) | 统一集成服务端的历史时间线。协议确是代理、多版本服和跨版本工具的约束，但普通模组升级首先常碰字节码／映射／内部 API；不要把“模组兼容瓶颈”大半归给协议。用一个包或一次客户端—服务器往返讲清权威。 |
 | [11 音频、粒子与手感谎言](<docs/impl/(part3)/feel-client.mdx>) | 按“纯本地反馈／先预测后确认／必须等待权威”分三类，分别放音效、方块裂纹、库存或受伤案例。“谎言”可留标题，正文应说明何时只是表现与逻辑异步，不等于客户端真的预测了事件。无障碍一节接到可见／可听反馈的等价性。 |
 
@@ -165,17 +165,17 @@
 
 | 章 | 建议的具体改法 |
 | --- | --- |
-| [12 模组与插件架构](<docs/impl/(part4)/mod-architecture.mdx>) | 用一项跨版本改动分别展示 Forge／Fabric／NeoForge、Bukkit／Paper 的适配问题。把映射、事件 API、Mixin、类加载各自的职责分开；“没有稳定 API 时注入即 API”是结论，需要兼容成本作证。 |
-| [13 数据包、资源包与数据驱动](<docs/impl/(part4)/datapacks.mdx>) | 明确只讲 Java 官方数据层，并在表中区分“不能原生定义”“可以命令模拟但代价高”“必须改程序”。新版本能力会变，表格标版本。不要把“官方故意停在新动词之前”写成可证明的设计意图，除非有官方表态。 |
+| [12 模组与插件架构](<docs/impl/(part4)/modding.mdx>) | 用一项跨版本改动分别展示 Forge／Fabric／NeoForge、Bukkit／Paper 的适配问题。把映射、事件 API、Mixin、类加载各自的职责分开；“没有稳定 API 时注入即 API”是结论，需要兼容成本作证。 |
+| [13 数据包、资源包与数据驱动](<docs/impl/(part4)/data-driven.mdx>) | 明确只讲 Java 官方数据层，并在表中区分“不能原生定义”“可以命令模拟但代价高”“必须改程序”。新版本能力会变，表格标版本。不要把“官方故意停在新动词之前”写成可证明的设计意图，除非有官方表态。 |
 | [14 Java 版运行时](<docs/impl/(part4)/java-runtime.mdx>) | 拆开 JVM 的成本与主线程、区块、渲染器的成本；“卡因为 Java／可模组因为 Java”两边都要具体检验。选一个由运行时决定的案例和一个与语言无关的案例，避免偶然／本质表变成口号。 |
 | [15 Bedrock 作为另一次实现](<docs/impl/(part4)/bedrock.mdx>) | 保留“语义差异比跑分重要”，但别把“市场审核”推成所有 Bedrock 扩展都只能在货架销售。按平台、附加包、Script API、Editor、Marketplace 分层；拿一个可复现的 Java／Bedrock 差异讲“同名不同因果”。 |
-| [16 服务端与规模](<docs/impl/(part4)/servers.mdx>) | “万人服”通常是网络级人数，不是一个模拟进程同时跑一万人；给出大厅、代理、多个游戏实例的拓扑，再讨论单实例刻预算。把 Paper 等写成取舍：性能提升可能改变更新顺序或插件兼容，不只是一键加速。 |
+| [16 服务端与规模](<docs/impl/(part4)/server-ecosystem.mdx>) | “万人服”通常是网络级人数，不是一个模拟进程同时跑一万人；给出大厅、代理、多个游戏实例的拓扑，再讨论单实例刻预算。把 Paper 等写成取舍：性能提升可能改变更新顺序或插件兼容，不只是一键加速。 |
 
 ### 第五部：工程教训
 
 | 章 | 建议的具体改法 |
 | --- | --- |
-| [17 技术债作为产品策略](<docs/impl/(part5)/tech-debt.mdx>) | “技术债作为产品策略”易误认官方有持续的预设计划。区分当年的交付选择、后来为兼容被迫保留、社区主动补足。针对红石、存档、性能各列一次“改／不改”的实际成本，不把所有第三方工作都叫“民间官方”。 |
+| [17 技术债作为产品策略](<docs/impl/(part5)/compatibility.mdx>) | “技术债作为产品策略”易误认官方有持续的预设计划。区分当年的交付选择、后来为兼容被迫保留、社区主动补足。针对红石、存档、性能各列一次“改／不改”的实际成本，不把所有第三方工作都叫“民间官方”。 |
 | [18 可被模组的引擎才是完整产品](<docs/impl/(part5)/modifiable-engine.mdx>) | 标题像价值宣判，会让原版玩家变成反例。改问“在 Minecraft 这样的可再开发系统里，完整产品还包括哪些层？”最小内核逐项标出卷三证据与反例；不要在这里把卷四待考的“本质属性”提前定论。 |
 
 ## 文风、证据和可读性的统一处理

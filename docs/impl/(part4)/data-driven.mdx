@@ -62,7 +62,7 @@ assets/<namespace>/...
 这条边界和前两章直接相连：
 
 - [《网络架构与状态同步》](/impl/networking)里的 Server Authority 决定游戏规则和共享状态；
-- [《客户端渲染与反馈》](/impl/client-render)里的 Renderer / Sound / UI 消费 Client Resources。
+- [《客户端渲染与反馈》](/impl/client-rendering)里的 Renderer / Sound / UI 消费 Client Resources。
 
 所以“数据”和“资源”不是按文件扩展名区分，而是按**谁消费这份内容、它属于哪一层运行时职责**区分。
 
@@ -878,7 +878,7 @@ flowchart TB
 
 Mod 可以新增一种 Data Component Type，再让 Data Pack 去配置它；也可以新增一种 Renderer，再让 Resource Pack 为它提供 Texture。三层不是互斥阵营，而是可以互相提供扩展点。
 
-下一章[《Mod、Mixin 与加载器》](/impl/mod-architecture)就从这里继续：当现有 Schema 和 Evaluator 不够时，Java 社区怎样进一步修改**定义这些边界的程序本身**。
+下一章[《Mod、Mixin 与加载器》](/impl/modding)就从这里继续：当现有 Schema 和 Evaluator 不够时，Java 社区怎样进一步修改**定义这些边界的程序本身**。
 
 ## 这一章留下什么
 

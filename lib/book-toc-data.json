@@ -858,7 +858,7 @@
                 "优化模组作为证据"
               ],
               "tags": [],
-              "href": "/impl/client-render",
+              "href": "/impl/client-rendering",
               "written": true
             },
             {
@@ -916,7 +916,7 @@
                 "兼容矩阵"
               ],
               "tags": [],
-              "href": "/impl/mod-architecture",
+              "href": "/impl/modding",
               "written": true
             },
             {
@@ -933,7 +933,7 @@
                 "政治含义"
               ],
               "tags": [],
-              "href": "/impl/datapacks",
+              "href": "/impl/data-driven",
               "written": true
             },
             {
@@ -984,7 +984,7 @@
                 "大型服务器作为另一种引擎用法"
               ],
               "tags": [],
-              "href": "/impl/servers",
+              "href": "/impl/server-ecosystem",
               "written": true
             }
           ]
@@ -1008,7 +1008,7 @@
                 "民间官方实现"
               ],
               "tags": [],
-              "href": "/impl/tech-debt",
+              "href": "/impl/compatibility",
               "written": true
             },
             {

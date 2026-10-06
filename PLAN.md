@@ -89,7 +89,7 @@ docs/
 │   ├── alpha.mdx              # 02 Alpha 的公开开发
 │   ├── mojang-beta.mdx        # 03 Mojang 成立、Beta 与正式版
 │   ├── mods-as-authors.mdx    # 04 模组作为第二作者
-│   ├── servers.mdx            # 05 服务器即新游戏
+│   ├── server-ecosystem.mdx            # 05 服务器即新游戏
 │   ├── media-education.mdx    # 06 影像与一代人的媒介
 │   ├── acquisition.mdx        # 07 微软收购
 │   ├── java-bedrock.mdx       # 08 两条产品线
@@ -115,7 +115,7 @@ docs/
 │   ├── multiplayer-world.mdx       # 12 多人游戏与共同世界
 │   ├── emergent-play.mdx           # 13 设计之外的玩法
 │   └── what-to-inherit.mdx         # 14 Minecraft 值得继承什么？
-├── impl/                      # 卷三 · 19 章
+├── impl/                      # 卷三 · 19 章主线 + 3 章可选专题
 │   ├── meta.json
 │   ├── index.mdx
 │   ├── data-model.mdx         # 01 体素世界的数据模型
@@ -126,17 +126,20 @@ docs/
 │   ├── entities.mdx           # 06 实体、移动与 AI
 │   ├── items.mdx              # 07 物品、库存与配方系统
 │   ├── redstone.mdx           # 08 红石与更新顺序
-│   ├── client-render.mdx      # 09 客户端渲染与反馈
+│   ├── client-rendering.mdx      # 09 客户端渲染与反馈
 │   ├── networking.mdx         # 10 网络架构与状态同步
 │   ├── chunk-streaming.mdx    # 11 区块生命周期与世界流送
 │   ├── performance.mdx        # 12 性能分析与优化
-│   ├── datapacks.mdx          # 13 数据包、资源包与数据驱动
-│   ├── mod-architecture.mdx   # 14 Mod、Mixin 与加载器
-│   ├── servers.mdx            # 15 插件、服务端软件与规模化
+│   ├── data-driven.mdx          # 13 数据包、资源包与数据驱动
+│   ├── modding.mdx   # 14 Mod、Mixin 与加载器
+│   ├── server-ecosystem.mdx            # 15 插件、服务端软件与规模化
 │   ├── java-runtime.mdx       # 16 Java 版运行时与发布环境
 │   ├── bedrock.mdx            # 17 Bedrock：另一套实现
-│   ├── tech-debt.mdx          # 18 兼容、重构与技术债
-│   └── modifiable-engine.mdx  # 19 技术实现留下了什么（待迁移 slug）
+│   ├── compatibility.mdx          # 18 兼容、重构与技术债
+│   ├── technical-legacy.mdx   # 19 技术实现留下了什么
+│   ├── create.mdx             # 专题 01 Create：从方块到机械系统
+│   ├── valkyrien-skies.mdx    # 专题 02 Valkyrien Skies：让体素世界运动起来
+│   └── voxy.mdx               # 专题 03 Voxy：重新定义可见世界
 ├── rewrite/                   # 卷四 · 11 章（最后写）
 │   ├── meta.json
 │   ├── index.mdx
@@ -165,7 +168,7 @@ docs/
     └── exercises.mdx
 ```
 
-70 篇正编：序 3 + 卷导读 4 + 章 13+14+19+11 + 附录 6。番外另计，不承担主线论证。卷二重构完成并退休旧文件后按此计数。
+70 篇主线正编：序 3 + 卷导读 4 + 章 13+14+19+11 + 附录 6。Vol. III《扩展的极限》3 篇专题与番外另计，不承担主线论证。卷二重构完成并退休旧文件后按此计数。
 
 ---
 
@@ -233,7 +236,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
     "---第一部 · 起源（2009–2011）---",
     "infiniminer", "alpha", "mojang-beta",
     "---第二部 · 成为文化（2011–2014）---",
-    "mods-as-authors", "servers", "media-education",
+    "mods-as-authors", "server-ecosystem", "media-education",
     "---第三部 · 平台化与治理（2014–）---",
     "acquisition", "java-bedrock", "version-evolution",
     "---第四部 · 产业与遗产---",
@@ -266,7 +269,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 ```json
 {
   "title": "卷三 · 技术实现",
-  "pages": ["(part1)", "(part2)", "(part3)", "(part4)", "(part5)"],
+  "pages": ["(part1)", "(part2)", "(part3)", "(part4)", "(part5)", "(part6)"],
   "defaultOpen": true
 }
 ```
@@ -275,10 +278,10 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 - `impl/(part1)/meta.json`：世界与数据 → `data-model`, `storage`, `worldgen`
 - `impl/(part2)/meta.json`：世界如何运行 → `tick`, `block-updates-light-fluid`, `entities`, `items`, `redstone`
-- `impl/(part3)/meta.json`：客户端、网络与性能 → `client-render`, `networking`, `chunk-streaming`, `performance`
-- `impl/(part4)/meta.json`：扩展与服务器生态 → `datapacks`, `mod-architecture`, `servers`
-- `impl/(part5)/meta.json`：两种实现与长期演化 → `java-runtime`, `bedrock`, `tech-debt`, `technical-legacy`
-- `impl/(part6)/meta.json`：扩展的极限 → `create`, `valkyrien-skies`, `distant-horizons`, `engine-mod-boundaries`
+- `impl/(part3)/meta.json`：客户端、网络与性能 → `client-rendering`, `networking`, `chunk-streaming`, `performance`
+- `impl/(part4)/meta.json`：扩展与服务器生态 → `data-driven`, `modding`, `server-ecosystem`
+- `impl/(part5)/meta.json`：平台、兼容与长期演化 → `java-runtime`, `bedrock`, `compatibility`, `technical-legacy`
+- `impl/(part6)/meta.json`：扩展的极限 → `create`, `valkyrien-skies`, `voxy`（可选专题，不承担主线收束）
 
 `rewrite/meta.json`：
 
@@ -437,7 +440,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 #### `history/05` 服务器即新游戏 · 枢纽
 
-- 文件：`docs/history/servers.mdx` · 两类 · ▤
+- 文件：`docs/history/server-ecosystem.mdx` · 两类 · ▤
 - **简介**：同一份 Minecraft 客户端，可以进入完全不同的规则、经济与玩法。服务器把多人从“共享一张存档”推向由运营者持续设计和维护的游戏空间。
 - **要回答**：服务器怎样从“多人共用一张世界”逐渐变成拥有自己玩法、进度与运营体系的产品？
 - **交叉**：`design/12`、`impl/15`、`history/11`
@@ -828,7 +831,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 | （无） | **新增** | `creation-as-play.mdx` → 07《创造为何成为玩法》 |
 | `creative-mode.mdx` | 改名 + 约 80% 重写 | `creative-tools.mdx` → 08《创造模式与创作工具》；地方感 / 建筑意义 → 07 |
 | `redstone.mdx` | 改名 + 整章重写 | `redstone-automation.mdx` → 09《红石、机器与自动化》 |
-| `commands-datapacks.mdx` | 改名 + 整章重写 | `commands-data-maps.mdx` → 10《命令、数据驱动与地图创作》 |
+| `commands-data-driven.mdx` | 改名 + 整章重写 | `commands-data-maps.mdx` → 10《命令、数据驱动与地图创作》 |
 | `mods-as-method.mdx` | 改名 + 整章重写 | `mods-expansion.mdx` → 11《模组与玩法扩展》 |
 | `multiplayer.mdx` | 改名 + 整章重写 | `multiplayer-world.mdx` → 12《多人游戏与共同世界》 |
 | `who-makes-rules.mdx` | **退休并合并** | 有效内容并入 12 |
@@ -880,7 +883,9 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 >
 > 旧版主要问题不是缺少技术点，而是 Part 边界混乱：Worldgen 与 Chunk Lifecycle 混写，客户端反馈与网络预测拆散，Mod / Plugin / Server / Java Runtime / Bedrock 被塞在同一部，性能问题则散落各章却缺少统一模型。新版改为一条更容易理解的技术主线：
 >
-> **世界与数据 → 世界如何运行 → 客户端、网络与性能 → 扩展与服务器生态 → 两种实现与长期演化**
+> **世界与数据 → 世界如何运行 → 客户端、网络与性能 → 扩展与服务器生态 → 平台、兼容与长期演化**
+>
+> 五部构成主线；其后另设可选专题 **“扩展的极限”**，用系统级 Mod 案例测试前文边界。
 
 本卷不再预设「技术债与设计自由同源」「实体才是税」「可被模组的引擎才是完整产品」等结论。它们若成立，应由后文事实与反例重新赢回来。
 
@@ -934,7 +939,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 - **建议结构**：
   1. 为什么技术卷不能只是 API / 算法清单
-  2. 五部地图
+  2. 五部主线与一个专题
   3. 面向爱好者与开发者的双层阅读方式
   4. Vol. II 与 Vol. III 的对应关系
   5. 链到 `impl/01`
@@ -1116,7 +1121,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 ### `impl/09` 客户端渲染与反馈
 
-- **目标文件**：`docs/impl/(part3)/client-render.mdx`
+- **目标文件**：`docs/impl/(part3)/client-rendering.mdx`
 - **状态**：✎ 已按新版结构重写；已吸收 `feel-client.mdx` 中视觉 / 音频反馈
 - **核心问题**：服务器知道的世界，客户端怎样把它变成可见、可听、可理解的体验？
 - **建议内容**：
@@ -1201,7 +1206,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 ### `impl/13` 数据包、资源包与数据驱动
 
-- **目标文件**：`docs/impl/(part4)/datapacks.mdx`
+- **目标文件**：`docs/impl/(part4)/data-driven.mdx`
 - **状态**：✎ 已按新版结构重写
 - **核心问题**：不改引擎代码，Minecraft 到底允许创作者替换哪些数据、规则和表现？
 - **建议内容**：
@@ -1214,7 +1219,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 ### `impl/14` Mod、Mixin 与加载器
 
-- **目标文件**：`docs/impl/(part4)/mod-architecture.mdx`
+- **目标文件**：`docs/impl/(part4)/modding.mdx`
 - **状态**：✎ 已按新版结构重写；Bukkit / Paper 内容留给 `impl/15`
 - **核心问题**：没有稳定、完整的官方 Java Mod API 时，社区怎样把游戏代码本身变成扩展面？
 - **建议内容**：
@@ -1229,7 +1234,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 ### `impl/15` 插件、服务端软件与规模化
 
-- **目标文件**：由现有 `servers.mdx` 为主，吸收 `mod-architecture.mdx` 中 Bukkit / Paper 相关内容
+- **目标文件**：由现有 `server-ecosystem.mdx` 为主，吸收 `modding.mdx` 中 Bukkit / Paper 相关内容
 - **状态**：待重写
 - **核心问题**：当 Minecraft 从几个人一起玩变成长期公共服务器或大型网络，哪些职责已经超出原版 Dedicated Server？
 - **建议内容**：
@@ -1245,9 +1250,9 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 ---
 
-## 第五部 · 两种实现与长期演化
+## 第五部 · 平台、兼容与长期演化
 
-**Part 职责**：回答“为什么今天存在 Java 与 Bedrock 两套实现；语言、运行时、兼容与长期重构又怎样塑造现在的 Minecraft”。
+**Part 职责**：把前面讨论的具体机制放回它们真正运行的平台与十多年产品历史中：Java / JVM 与 Bedrock 分别提供了怎样的实现条件，兼容、重构与历史约束又怎样塑造 Minecraft 的长期演化。
 
 ### `impl/16` Java 版运行时与发布环境
 
@@ -1313,7 +1318,7 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 ### `impl/18` 兼容、重构与技术债
 
-- **目标文件**：由现有 `tech-debt.mdx` 重写
+- **目标文件**：由现有 `compatibility.mdx` 重写
 - **状态**：待重写
 - **核心问题**：一款长期演化十多年的沙盒，什么时候应该保持兼容，什么时候又必须打破旧结构？
 - **建议内容**：
@@ -1397,7 +1402,9 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 ## 第六部 · 扩展的极限
 
-**Part 职责**：通过深入分析机械动力、航空学、Distant Horizons 等突破性 Mod 案例，展示社区如何通过 Mod 重写 Minecraft 的核心系统，突破原版的技术约束。这些 Mod 不是"加内容"，而是"重新定义引擎"。
+**定位**：可选专题，不承担 Vol. III 前五部的线性知识主线，也不取代 `impl/19` 的卷内总结。这里用少数系统级 Mod 做压力测试：当社区获得代码级修改能力后，前面那些看似稳定的技术前提究竟能被推到哪里？
+
+选择案例的标准不是“最有名”或“最好玩”，而是它是否真正改动了前文讨论过的系统边界。当前先保留三个互补案例：机械系统、动态体素物理、远距离世界表示。
 
 ### `impl/20` 机械动力：重新定义方块
 
@@ -1452,61 +1459,21 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 - **篇幅**：约 400-500 行
 - **交叉**：`impl/01 数据模型`、`impl/04 Tick`、`impl/06 实体`、`impl/14 Mod 架构`
 
-### `impl/22` 渲染突破：Distant Horizons 与 LOD
+### `impl/22` Voxy：重新定义可见世界
 
-- **目标文件**：`docs/impl/(part6)/distant-horizons.mdx`
+- **目标文件**：`docs/impl/(part6)/voxy.mdx`
 - **状态**：☐ 未开始
-- **核心问题**：原版渲染距离受限于性能，Distant Horizons 如何通过 LOD 突破这个限制？
+- **核心问题**：原版客户端通常围绕当前加载的 Chunk 构建可见世界；Voxy 怎样通过另一套远距离世界表示与 LOD，把“玩家能够看见的范围”和“需要完整加载、网格化与模拟的范围”进一步分离？
 - **建议内容**：
-  1. **原版渲染的限制**：
-     - 渲染距离 vs 性能
-     - Chunk Mesh 生成成本
-     - 为什么原版没有 LOD
-  2. **Distant Horizons 的解决方案**：
-     - LOD（Level of Detail）远景
-     - 预生成低精度 Chunk
-     - 技术实现：分离渲染与模拟
-  3. **为什么原版不采纳这些优化？**：
-     - 技术复杂度
-     - 存储成本
-     - 不是"所有玩家都需要"
-  4. **其他渲染优化 Mod**：
-     - Sodium：Chunk Mesh 优化
-     - Iris：Shader 支持
-     - Entity Culling：实体裁剪
-  5. **这一章留下什么**：
-     - 爱好者：为什么 Distant Horizons 能看得更远
-     - 开发者：LOD 的技术原理与代价
-- **篇幅**：约 300-400 行
-- **交叉**：`impl/09 客户端渲染`、`impl/11 区块流送`、`impl/12 性能`、`impl/14 Mod 架构`
-
-### `impl/23` 引擎级 Mod 的边界与代价 · Part 6 结语
-
-- **目标文件**：`docs/impl/(part6)/engine-mod-boundaries.mdx`
-- **状态**：☐ 未开始
-- **核心问题**：这些 Mod 突破了什么？付出了什么代价？为什么官方不采纳？
-- **建议内容**：
-  1. **三个案例回顾**：
-     - 机械动力：方块不再"独立"
-     - 航空学：世界不再"静态"
-     - Distant Horizons：渲染不再"瓶颈"
-  2. **共同的代价**：
-     - 性能成本
-     - 兼容性破坏
-     - 复杂度爆炸
-     - 用户门槛
-  3. **为什么官方不采纳**：
-     - 不是"所有玩家都需要"
-     - 会破坏原版的简洁性
-     - 兼容成本太高
-  4. **Mod 与官方的边界**：
-     - 官方：保持核心简洁、兼容优先
-     - Mod：允许激进创新、用户自选
-  5. **这一章留下什么**：
-     - 爱好者：理解这些"魔法 Mod"的代价
-     - 开发者：深度扩展的可能性与边界
-- **篇幅**：约 300-400 行
-- **交叉**：`impl/14 Mod 架构`、`impl/18 兼容与技术债`、`impl/19 技术遗产`
+  1. 原版 Chunk / Section / Mesh / Render Distance 的基本成本链
+  2. 为什么简单扩大原版渲染距离会迅速放大 CPU、GPU、内存与 I/O 成本
+  3. LOD 的核心不是“少画一点”，而是远处世界可以使用不同的数据表示
+  4. 多尺度表示、缓存与远景更新需要解决什么问题
+  5. 可见世界、客户端工作集与服务器 Simulation Distance 为什么不是同一个集合
+  6. Voxy 与原版渲染、世界流送、资源包 / Shader 等系统的边界
+  7. 从案例反看：一个巨大世界究竟需要多少“真实数据”才能在视觉上存在
+- **边界**：不写跑分或优化 Mod 推荐榜；Sodium、Distant Horizons 等只在比较不同技术路线确实有助于理解时作为对照。
+- **交叉**：`impl/09 客户端渲染`、`impl/11 区块流送`、`impl/12 性能`、`impl/14 Modding`
 
 ---
 
@@ -1520,20 +1487,20 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 | `worldgen-pipeline.mdx` 中完整 Chunk Lifecycle / 多线程加载 | `impl/11 区块生命周期与世界流送` |
 | `light-fluid-updates.mdx` | `impl/05 方块更新、光照与流体` → `block-updates-light-fluid.mdx` |
 | `entities.mdx` | `impl/06 实体、移动与 AI` |
-| `client-render.mdx` | `impl/09 客户端渲染与反馈` |
+| `client-rendering.mdx` | `impl/09 客户端渲染与反馈` |
 | `feel-client.mdx` 中音频 / 粒子 / 视觉反馈 | `impl/09` |
 | `feel-client.mdx` 中 prediction / server confirmation | `impl/10` |
 | `feel-client.mdx` 本体 | 已完成迁移并退休 |
 | `protocol.mdx` | `impl/10 网络架构与状态同步` → `networking.mdx` |
 | 旧各章散落的性能材料 | 汇总 / 去重到 `impl/12 性能分析与优化`，原章只保留本系统必要性能背景 |
-| `mod-architecture.mdx` 中 Java Mod / Mixin / Loader | `impl/14` |
-| `mod-architecture.mdx` 中 Bukkit / Paper | `impl/15` |
-| `servers.mdx` | `impl/15 插件、服务端软件与规模化` |
+| `modding.mdx` 中 Java Mod / Mixin / Loader | `impl/14` |
+| `modding.mdx` 中 Bukkit / Paper | `impl/15` |
+| `server-ecosystem.mdx` | `impl/15 插件、服务端软件与规模化` |
 | `java-runtime.mdx` | `impl/16` |
 | `bedrock.mdx` | `impl/17` |
-| `tech-debt.mdx` | `impl/18` |
+| `compatibility.mdx` | `impl/18` |
 | `modifiable-engine.mdx` | 已退休，`impl/19 技术遗产` 已重写 |
-| 新增：Part 6 扩展的极限 | `impl/20-23`（机械动力、航空学、Distant Horizons、结语）|
+| 新增：Part 6 扩展的极限 | `impl/20-22`（Create、Valkyrien Skies、Voxy；可选专题） |
 
 ### 推荐执行顺序
 
@@ -1546,18 +1513,18 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
    客户端渲染 → 网络同步 → Chunk Streaming → 性能分析；`feel-client.mdx` 已在 09 / 10 中拆分退休。
 5. **重写 13–15：扩展与服务器生态。**
    数据驱动 → Java Mod → Server Plugin / Operations，明确三层扩展面。
-6. **重写 16–19：两种实现与长期演化。**
-   Java 运行时 → Bedrock → 兼容与技术债 → 技术遗产（卷结语）。
-7. **编写 20–23：扩展的极限（Part 6 新增）。**
-   机械动力 → 航空学 → Distant Horizons → 引擎级 Mod 的边界与代价。
+6. **重写 16–19：平台、兼容与长期演化。**
+   Java 运行时 → Bedrock → 兼容与技术债 → 技术实现留下了什么；到这里完成 Vol. III 主线。
+7. **按需编写 20–22：扩展的极限。**
+   Create → Valkyrien Skies → Voxy。它们是可选专题，不要求在主线完稿前完成。
 8. **最后写 `impl/index` 最终版。**
-   前 23 章完成前，不提前锁定”核心特征”或”技术原则”数量。
-8. 全卷完成后统一：
+   主线 19 章完成前，不提前锁定“核心特征”或“技术原则”数量；Part 6 可以随后继续扩充。
+9. 全卷完成后统一：
    - 删除已退休旧稿；
    - 同步中文 / 英文导航；
    - 检查 Vol. II / Vol. IV 交叉引用；
-   - 回看 Vol. IV 中对 `impl/04–23` 的引用是否仍使用旧编号或旧命题。
-9. 如果执行过程中发现真实实现并不支持 PLAN 中的抽象，**优先修改 PLAN 和章节职责，不维护这份结构本身。**
+   - 回看 Vol. IV 中对 `impl/04–22` 的引用是否仍使用旧编号或旧命题。
+10. 如果执行过程中发现真实实现并不支持 PLAN 中的抽象，**优先修改 PLAN 和章节职责，不维护这份结构本身。**
 
 ---
 

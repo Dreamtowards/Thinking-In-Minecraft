@@ -1,4 +1,4 @@
 {
-  "title": "两种实现与长期演化",
-  "pages": ["java-runtime", "bedrock", "tech-debt", "technical-legacy"]
+  "title": "平台、兼容与长期演化",
+  "pages": ["java-runtime", "bedrock", "compatibility", "technical-legacy"]
 }
