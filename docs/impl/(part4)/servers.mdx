@@ -4,7 +4,11 @@ description: 从原版 Dedicated Server、Bukkit Plugin API 到 Paper 性能优�
 tags: [server, plugin, bukkit, spigot, paper, proxy, velocity, operations, performance, java]
 ---
 
-十个人的生存服和一千人的服务器网络，用的可能是同一份 `server.jar`。但它们面对的问题已经完全不同。
+十个朋友开了一个生存服，用的是 Mojang 官方的 `server.jar`。每天晚上一起上线建造、探险，周末备份一次存档。服务器偶尔会因为区块加载卡顿几秒，但重启一下就好了。
+
+另一个服务器同时有一千名玩家在线：大厅里有人在聊天，生存服务器里有人在挖矿，BedWars 游戏正在进行，创造服务器里有人在建筑。他们用的不是 Mojang 的原版服务端，而是 Paper、Velocity Proxy、数十台服务器进程、数据库、备份系统和监控工具组成的完整基础设施。
+
+同样是"Minecraft 服务器"，但它们面对的问题已经完全不同。
 
 十个人的服务器，原版 Dedicated Server 通常够用：世界保存在一个文件夹里，玩家彼此认识，op 权限可以手动管理，偶尔卡顿可以重启，备份只需要定时复制存档目录。
 
