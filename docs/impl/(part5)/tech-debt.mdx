@@ -1,14 +1,12 @@
 ---
 title: 兼容、重构与技术债
-description: 从存档格式迁移、协议版本兼容到 Mod 适配、历史行为保留，理解为什么 Minecraft 不能"推倒重来"。兼容成本体现在多个层次：存档（Block ID、NBT、World Format）、协议（Packet、ViaVersion）、Mod（字节码、Mixin）、玩法（Quasi-Connectivity、Redstone 时序）。技术债不是"代码写得烂"，而是"向后兼容 + 社区依赖历史行为"的必然结果。
+description: 理解为什么 Minecraft 不能"推倒重来"。兼容成本体现在存档迁移、协议版本、Mod 适配和历史行为保留四个层次。技术债不是"代码写得烂"，而是向后兼容与社区依赖的必然结果。
 tags: [compatibility, technical-debt, refactoring, backwards-compatibility, versioning]
 ---
 
-1.13 的 **Flattening（扁平化）** 更新让所有数字方块 ID 变成命名空间标识符（如 `minecraft:stone`）。这是一次巨大的重构，但代价是：所有旧版本的 Mod 一夜之间全部失效，工业 Mod 的成千上万个方块变成"未知方块"，玩家的世界需要通过 DataFixerUpper 转换才能在新版本打开。
+1.13 的 Flattening 更新让所有数字方块 ID 变成命名空间标识符。这是一次巨大的重构，代价是：所有旧版本 Mod 失效，玩家的世界需要通过 DataFixerUpper 转换才能打开。
 
-为什么 Mojang 不能"把代码重写一遍，修复所有历史问题"？为什么每次大版本更新，Mod 都要重新适配？为什么 Quasi-Connectivity 这个明显的 Bug 不能直接修复？
-
-答案是：**兼容成本**。
+为什么 Mojang 不能"把代码重写一遍"？为什么每次大版本更新 Mod 都要重新适配？为什么 Quasi-Connectivity 这个明显的 Bug 不能修复？答案是：**兼容成本**。
 
 本章要回答的核心问题是：
 
