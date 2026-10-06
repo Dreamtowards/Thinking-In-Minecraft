@@ -1,125 +1,551 @@
 ---
-title: Bedrock 作为另一次实现
-description: C++、跨平台、独立渲染栈。行为包、附加包、脚本 API。红石、战斗、世界格式的语义分叉比跑分更致命。Marketplace 反过来约束能做什么。换语言重写之后，分叉会变成两个游戏。
+title: Bedrock：另一套实现
+description: 从 C++ 重写、跨平台架构到 Add-On / Script API、Marketplace 审核，理解 Bedrock 为什么不是"Java Edition 的优化版"，而是逐渐形成了不同语义与扩展模型的另一套实现。Redstone、刷怪、存档格式的分叉证明：换语言会导致玩法分叉。
+tags: [bedrock, cpp, cross-platform, add-on, marketplace, parity, java-bedrock]
+authors: ["Opus 5.5"]
 ---
 
-> **本章命题**：语义差异比性能差异更致命。Bedrock 不是「优化过的 Java」。它是另一次实现：换了语言、换了扩展面、换了一部分因果。因果一换，同名的游戏会拒绝同一张原理图、同一份存档、同一条模组河。
+家长在手机上买了"Minecraft"，以为电脑上的 Mod 世界也能玩。Java Edition 玩家把红石机器的截图发给主机上的朋友，却发现"灯不亮"。两个人玩的真的是同一个游戏吗？
 
-## 问题
+Bedrock Edition 用 C++ 重写，最初是为了在移动设备、主机和 VR 上运行。它确实更快、更省电、启动更快，但同时也带来了：**Redstone 时序不同**（没有 Quasi-Connectivity）、**刷怪机制不同**、**战斗机制不同**（没有 1.9 的攻击冷却）、**存档格式不同**（LevelDB vs Anvil）、**Mod 生态几乎消失**（Add-On 和 Script API 能力有限）。
 
-家长买了手机上那个叫 Minecraft 的东西，以为电脑上的模组世界也能进去。Java 玩家把红石机器截图发给主机上的朋友，灯不亮——[《两条产品线：Java 与 Bedrock》](/history/java-bedrock)写过：收银台捆上了，世界没有捆。
+这些差异不是"移植损耗"或"还没对齐完"，而是**两套实现的语义分叉**。Mojang 和微软确实在追求 Parity（功能对等），但某些核心差异已经难以消除——不是因为技术不可能，而是因为两边的玩家社区已经依赖各自的历史行为。
 
-要回答：语义差异为何比性能差异更致命？可被证伪的说法是：这只是移植损耗，C++ 跑得快一些，功能会对齐；Bedrock 就是优化版。只要还存在准连接只活在一边、只要还存在存档打不开、只要 Marketplace 的附加包进不了 Forge，这句话就不成立。损耗可以补。语义分叉补完会变成另一种玩法。另一种玩法可以很好。它不是同一台虚拟机上的同一份口令。
+本章要回答的核心问题是：
 
-上一章（[《Java 版运行时》](/impl/java-runtime)）把 Java 写成偶然。偶然已经被换过一次。换完发生了什么，是本章的证据。禁止的读法写在方法里：不得把这边说成那边的皮肤。
+> **为什么 Bedrock 不是"Java 换成 C++ 的优化版"，而是逐渐形成了不同语义与扩展模型的另一套实现？这对理解"什么是 Minecraft"意味着什么？**
 
-<Cards>
-  <Card title="两个 Minecraft" href="/history/java-bedrock" description="捆的是收银台。没捆因果。" />
-  <Card title="准连接只活在一边" href="/impl/redstone" description="删掉 Java，句子不成立。" />
-  <Card title="扩展面停在动词前" href="/impl/datapacks" description="这边的温和河叫附加包。" />
-</Cards>
+我们会看到，Bedrock 的架构选择（C++、RenderDragon、LevelDB）确实带来了性能优势，但同时也塑造了不同的扩展模型（Add-On / Script API vs Mod Loader / Mixin）、不同的商业模式（Marketplace 审核 vs 社区自由分发）、以及不同的玩法语义（Redstone、刷怪、战斗）。这不是"哪个更好"的问题，而是"两套实现如何分叉"的现实。
 
-## 另一次实现不是移植
+本文主要以 **Bedrock 1.21.50** 为当前参照，对比 Java Edition 1.21.4。
 
-移植假定同一份规格，换一套编译器。Bedrock 从 Pocket Edition 起就不是这份规格的缩小版。它要进触控、进商店、进主机认证、进跨设备联机。要进的房间，对「谁可以改程序」的答案相反：商店要审核，主机要分级，手机要省电。房间反过来塑造引擎——不是先有一份 Java 规格再翻译成 C++。是另写一份能进房间的程序，再用品牌把它叫做同一个词。
+## 为什么需要 Bedrock？
 
-所以「另一次实现」是产品决策，不是工程偷懒。决策证明语言可换。决策同时证明：换语言时若没有同一份语义测试集，测试集会在墙上分家。飞行器停的那一侧，会说另一侧坏了。另一侧会说这边根本没这个功能。两边都对。对的不是性能。对的是：没有共同的未定义行为宪法。Java 把一份怪癖标成 WAI。Bedrock 从未签署。未签署，就不是同一台隐式 VM。
+在讨论技术差异之前，先理解 Bedrock 的起源和目标。
 
-「Parity」作为官方口语，听起来像工期表。工期表假定有一份共同规格在两边逐项打勾。红石那一章（[《红石的实现》](/impl/redstone)）已经说明：规格在 Java 这边有一半写在墙上。墙上的东西无法打勾到「没有准连接」的那一侧而不立法。立法会停飞行器，或逼另一侧长出准连接。两边都不想付这笔。于是 parity 变成内容清单对齐：同一只生物、同一张新木头。内容对齐，因果不必对齐。内容对齐能上新闻。因果不对齐，灯不亮。灯不亮更致命，因为它发生在已经以为「同一款游戏」的房间里。
+### Pocket Edition 的商业需求
 
-性能差是真的，尤其在能效和低端设备上。真，仍是次要句。次要句当主句，才会长出「Bedrock = 优化版」。优化版假定同一份玩法，只是帧更高。帧更高却少了准连接，不是优化。是另一种红石。另一种红石可以更干净、更好教。干净会让十年教科书作废。作废是语义事件。语义事件比跑分贵。
+**2011 年**，Mojang 与 Aron Nieminen（4J Studios）合作开发 **Pocket Edition**，最初用 C++ 编写，目标是 iOS 和 Android。[^pe-history]
 
-贵，还因为玩家已经用口令住进某一侧。口令不能靠补丁包一夜翻译。翻译要改手、改农场、改「这台机器该不该亮」。改完，品牌仍叫同一个词，房间里已经是两套物理课。物理课分班，比帧数分档更早结束「优化版」这个称呼。
+为什么不直接移植 Java Edition？
 
-## 技术栈与扩展模型
+**移动设备的约束**：
+- 内存有限（早期 Android 设备只有 512MB RAM）；
+- CPU 性能弱（ARM 架构，功耗优先）；
+- 触控输入（不是键盘鼠标）；
+- 应用商店审核（Google Play、App Store）。
 
-C++、自研渲染栈（后来的 RenderDragon）、跨平台后端，服务的是进房间，不是服务 Mixin（渲染栈对照见[《客户端与渲染》](/impl/client-render)）。Java 的民间官方渲染改的是那一套 OpenGL 提交。Bedrock 的提交在另一栋楼里。楼可以更快。楼不允许你用加载器切开主循环。切开主循环会进不了商店。
+**跨平台需求（后来）**：
+- Xbox、PlayStation、Nintendo Switch；
+- Windows 10（UWP）；
+- VR（Oculus、PSVR）。
 
-扩展模型因此另写。资源包改看见。行为包改实体与规则的 JSON。脚本 API 在沙盒里跑 JavaScript，权限分层，before 事件里不能随便改世界。[^script] 这是官方承认的扩展面，比 Java 数据包更像「能写一点逻辑」，仍不是任意 jar。任意 jar 是 Java 模组河的活法。活法进不了这张桌子，不是因为 C++ 做不到注入。是因为注入过不了审核。审核是扩展面的墙。墙比语言硬。
+Java Edition 的架构不适合这些平台：
+- JVM 在移动设备上内存占用太大；
+- 某些主机（如 Xbox、Switch）不允许运行 JVM；
+- 应用商店不接受"可任意加载代码"的应用（Mod Loader 会被拒）。
 
-脚本看起来像「终于能写程序了」。写的是沙盒里的调度：监听事件，改组件，生成实体，在允许的时机碰世界。调度能做出小游戏和互动地图。调度加不出 Mixin 那种「切进活塞检查」。切不进，墙上的怪癖就不会作为民间 opcode 繁殖。不繁殖，Java 红石教科书就没有译本。没有译本，不是脚本作者不够努力。是权限模型故意不给切口。故意，才能过主机认证。过认证，才能进房间。进房间，是这条产品线的第一约束。第一约束排在「和 Java 共用一台隐式 VM」之前。排完，扩展面再宽，也宽不到加载器河。
+### 从 Pocket Edition 到 Bedrock Edition
 
-世界存在 LevelDB 里，不是 Anvil 的 region 文件（两边的格式见[《存储与序列化》](/impl/storage)）。柜子不同，翻译器不是改个后缀。存档分叉是产品线分叉的硬证据：同一座家，搬不过去。搬不过去，比「这边帧数高」更早结束「同一游戏」这句话。
+**2017 年**，微软将所有非 Java 版本统一为 **Bedrock Edition**：[^bedrock-unification]
 
-触控把「使用」收成长按或按钮，战斗没有同一根冷却条，红石没有同一套班次。输入不同，可以仍是同一动词（[《最小动词集与手感》](/design/verbs-feel)权衡的就是这条线）。班次不同，就不是同一动词的时间形状。时间形状一换，误用换口令。口令换了，社区教科书不能当译本。译本失败，是语义。语义失败，性能再好也接不进 Java 那条第二作者河：河水认的是切口和怪癖，不是跑分。
+- Pocket Edition（iOS / Android）
+- Windows 10 Edition（UWP）
+- Xbox One Edition
+- Nintendo Switch Edition
+- PlayStation（后来加入）
 
-<Impl title="脚本有权限，没有切口">
-before 事件里不能随便改世界，是为了稳定。稳定是审核友好。审核友好换不来 Mixin 那种「切进活塞检查函数」。切不进，准连接不会作为民间 opcode 长出来。长不出来，就没有同一份墙上的 VM 可翻译。
-</Impl>
+**统一的好处**：
+- 共享代码库（C++ / RenderDragon）；
+- 跨平台联机（Xbox 和手机可以一起玩）；
+- 统一的 Marketplace（内容商店）。
+
+**统一的代价**：
+- 必须通过所有平台的审核（主机、应用商店）；
+- 不能有"任意加载代码"的 Mod Loader；
+- 某些玩法需要适配触控和手柄。
+
+### Bedrock 的核心目标
+
+Bedrock Edition 的设计目标与 Java Edition 不同：
+
+| 目标 | Java Edition | Bedrock Edition |
+|------|--------------|-----------------|
+| **平台** | PC（Windows / macOS / Linux） | 移动、主机、PC、VR |
+| **性能** | 中高端 PC | 移动设备、低端硬件 |
+| **输入** | 键盘鼠标 | 触控、手柄、键鼠 |
+| **扩展** | Mod Loader（社区自由） | Add-On / Script API（官方审核） |
+| **商业** | Java 售价 + Realms | Marketplace + Realms + Minecoins |
+| **社区** | 开放 Mod 生态 | 审核内容商店 |
+
+**这不是"Java 的优化版"，而是为了不同用户群和商业模式的重新实现。**
 
 <Note>
-删掉句中的「Bedrock」或「Java」，附加包、准连接、LevelDB 的句子会断。合写只剩：两边都挖、都放、都有刻。分写从扩展面开始，一直写到灯。
+卷一第 08 章[《两条产品线》](/history/java-bedrock)详细讨论了 Java / Bedrock 的商业历史。
 </Note>
 
-## 语义分叉表
+## C++ 实现：性能与代价
 
-至少五行。行是玩家能核对的因果，不是跑分。[^qc] [^combat] [^be-te] [^fmt]
+Bedrock 用 C++ 重写，带来了性能优势，但也改变了架构和可扩展性。
 
-| 玩家能核对的事 | Java | Bedrock |
-| --- | --- | --- |
-| 活塞看不看上方那格空气 | 准连接存在，MC-108 为 WAI | 无准连接 |
-| 红石何时认输入 | 与主循环同队；社区红石刻 = 2 游戏刻 | 产出 / 消费两段，活塞启动更死 |
-| 近战连点 | 1.9 后有冷却 | 没有同一根冷却条 |
-| 活塞能不能推带方块实体的方块 | 通常不能 | 能 |
-| 作物、树叶、铜氧化这类随机刻事务的快慢 | `randomTickSpeed` 默认 3 | 同名规则默认 1，只宜当相对速度看 |
-| 世界怎么躺在磁盘上 | Anvil 分区文件 | LevelDB |
-| 第二作者怎么进门 | 加载器 + 注入；数据包为温和层 | 附加包 + 脚本；Marketplace 审核 |
+### 性能优势
 
-表可以再长。长不是为了骂哪一边缺功能。长是为了证伪「对齐中」。对齐中假定差在工期。工期补得上冷却条，补不上十年 WAI，也补不上已经按 LevelDB 写下的手机存档。补冷却条，PVP 口令会换。换口令是立法。立法按已经记住的手计费。手感那一章（[《网络架构与状态同步》](/impl/networking)）写过钉子。钉子分叉，比 GC 分叉更像两个游戏。
+**更低的内存占用**  
+- 没有 JVM 开销（Java Edition 需要 2-4GB 堆内存）；
+- Bedrock 在移动设备上通常只需 1GB 左右。
 
-红石章把同一张原理图写成护照问题（[《红石的实现》](/impl/redstone)）。护照在这里变成表。表上任何一行单独看都可以说「偏好」。几行叠在一起，偏好变成产品：你无法同时把 Java 墙上的 VM 和 Bedrock 的审核扩展面说成同一份物理。无法同时，就是致命。致命不是崩溃。致命是品牌说「都叫 Minecraft」时，玩家的灯不亮。
+**更快的启动**  
+- 不需要加载 JVM、预热 JIT；
+- Bedrock 启动通常只需几秒（Java Edition 可能需要 30 秒以上，尤其是装了 Mod）。
 
-## Marketplace 的反向约束
+**更好的帧率**  
+- C++ 可以直接控制内存布局；
+- 更好的 CPU Cache 利用率；
+- 没有 GC 停顿。
 
-货架看起来是分发。分发会反过来改能做什么。能上架的，要过审核、要可定价、要能在主机上关停、最好不要任意本地代码。于是扩展面被训练成：JSON 加沙盒脚本，资源可热发，逻辑可抽查。训练成功，手机上的孩子能装到皮肤和地图。训练成功，也把 Forge 那种共同立法关在门外。门外不是审美失败。是房间的门卫。
+**更适合移动设备**  
+- ARM 架构优化；
+- 低功耗（省电）；
+- 触控友好的 UI。
 
-Marketplace 包常常锁在账号和购买状态上，外部专用服务器不一定带得走。带不走，UGC 就不是 Java 那种「把文件夹扔进 mods」。UGC 是租。租能规模化。租让第二作者变成供货商。供货商可以过得很好。供货商立法的方式，和加载器矩阵立法的方式，不是同一种政治。把 Marketplace 听成「Bedrock 的模组」，会把审核听成 API。审核是过滤。API 是承诺。过滤可以明天加严。承诺变严要走弃用。两边都叫扩展。扩展的利息由不同的人付。
+### 代价：Mod 生态几乎消失
 
-反向约束还会漏进正作功能：官方更愿意加能进货架叙事的内容，更不愿意加只能靠注入才稳的边角。边角在 Java 是社区 API。在 Bedrock 可能从未存在。从未存在，就没有革命可革——因为没有那台墙上的 VM。没有，可以是设计。设计会让跨产品线的教科书失败。失败是语义税。税单开给品牌：为什么买一份仍不是全部。
+Java Edition 的 Mod 生态依赖：
 
-账号锁还有一层工程后果：世界目录不再是完整产品。Java 整合包可以把 mods 文件夹和世界一起打包带走。Bedrock 的货架包若绑在购买状态上，带走的家会缺一块脸、缺一张图、缺一段脚本。缺，不是文件损坏。是产品假定「人跟着账号走，世界跟着人走」。假定对家庭账号友好。假定对「把存档拷到另一台没登录的电脑」不友好。不友好会反过来训练作者：别把关键玩法做成必须买的附加包，或者反过来，把关键玩法做成必须买的附加包。两种训练都在改能做什么。改完，扩展面就不是中性管道。管道有收费闸。闸是反向约束的金属部分。
+- 字节码可反编译（第 16 章讨论过）；
+- Mixin 在运行时注入代码；
+- Mod Loader 动态加载 `.jar` 文件。
 
-货架还会训练作者写什么。能定价的皮肤、能过分级的小游戏图、能热更新的资源，会挤掉「给活塞开一个民间 opcode」这种活。活不是没有人想做。是做了上不了架，上不了架就没有房间。Java 的加载器河不靠架。不靠架，才能养工业包这种无法审核成商品的系统。系统进不了 Marketplace，不是工业包不够好。是商品合同不收系统当 SKU——系统会把默认世界变成另一款游戏，而主机上的默认必须仍叫 Minecraft。默认一肥，空循环的问题在卷二写过。这边用货架把肥挡住。挡住，是反向约束的完成态。
+**Bedrock 用 C++ 后，这些都不可能了**：
 
-<Callout type="warning" title="禁止优化版读法">
-跑得顺、能上手机，不能写成「同一游戏的正确实现」。正确实现要先有同一份因果。因果已经分叉。分叉之后，快是快。快的是另一款 Minecraft。
+**二进制难以修改**  
+- C++ 编译成机器码，难以反编译；
+- 没有"字节码"这一层可修改的中间表示；
+- Modding 需要逆向工程和内存补丁（风险高、门槛高）。
+
+**应用商店不允许任意代码加载**  
+- iOS App Store 禁止运行时下载和执行代码；
+- 主机（Xbox、Switch）同样禁止；
+- 即使 Windows 10 版本，也要通过 Microsoft Store 审核。
+
+**官方没有提供 Mod API**  
+- Java Edition 虽然没有官方 Mod API，但社区可以通过 Mixin 扩展；
+- Bedrock 的二进制不提供扩展点，官方也不鼓励第三方 Mod。
+
+**结果**：
+
+> Bedrock 的第三方 Mod 生态几乎不存在。社区只能通过官方提供的 **Add-On** 和 **Script API** 扩展游戏。
+
+第 16 章[《Java 版运行时与发布环境》](/impl/java-runtime)讨论了 Java 的字节码为什么能支持 Mod 生态。
+
+### C++ 的架构差异
+
+Bedrock 的 C++ 实现不是"Java 代码逐行翻译成 C++"，而是重新设计的架构。
+
+**实体组件系统（ECS）**  
+- Bedrock 使用类似 ECS 的架构（Entity-Component）；
+- 实体由组件组成（HealthComponent、TransformComponent 等）；
+- 对比：Java Edition 是传统的继承层次（Entity → LivingEntity → Mob）。
+
+**RenderDragon 渲染引擎**  
+- Bedrock 的自研渲染引擎，支持延迟渲染（Deferred Rendering）；
+- 对比：Java Edition 用 LWJGL + OpenGL（第 16 章讨论过）。
+
+**多线程架构**  
+- Bedrock 的某些系统（渲染、网络）可以多线程并行；
+- 对比：Java Edition 的主循环仍然是单线程（第 04 章讨论过）。
+
+**LevelDB 存储**  
+- Bedrock 使用 Google 的 LevelDB 存储世界数据；
+- 对比：Java Edition 使用 Anvil 格式（Region 文件）（第 02 章讨论过）。
+
+这些架构差异不是"优化"，而是**不同的设计选择**，各有优劣。
+
+<Callout type="warning">
+不要把 Bedrock 理解成"Java Edition 的 C++ 移植"。它是从头设计的另一套实现，只是共享了方块、物品和生物的**内容**，而不是共享**系统架构**。
 </Callout>
 
-## 两个游戏的工程现实
+## 扩展模型：Add-On vs Mod
 
-工程上你面对的是：两份世界表示、两份协议、两份扩展面、两份测试集。Geyser 一类桥证明翻译能续命——桥的工作层就是协议，翻译的边界见[《网络协议》](/impl/networking)。续命会丢语义——准连接过不了桥，就不是翻译损失了一点画质。丢失的是语言。语言丢了，机器停。机器停，两边的作者会互相指责实现。指责找错了科室。科室是产品线，不是优化开关。
+Bedrock 的扩展模型与 Java Edition 完全不同。
 
-Realms 和好友列表让 Bedrock 的多人更像默认。默认是产品逻辑。默认改变不了 LevelDB 里的家搬不进 Anvil。搬不进，家庭房间里已经是两个存档两种灯。工程现实因此不是「再做一个转换器」。转换器能搬方块，搬不走未签署的因果，也搬不走账号锁住的货架包。三件叠在一起，两个游戏的说法才不是修辞。修辞是「都叫 Minecraft」。非修辞是：启动器可以进两扇门，门后不是同一份物理。
+### Add-On：官方支持的扩展
 
-对开发者，抄「C++ 跨平台」能抄到进房间。抄不走 Java 的切口河，也抄不走 Bedrock 已经长出来的审核河。你若从 Java 重写到原生，并假设社区 API 会跟着走，墙上的测试集会投票反对。你若从第一天就按商店写扩展面，模组文化不会自动发生。不会自动，不是玩家不够爱。是门卫不同。门卫不同，完整产品的形状不同：一边是内核加加载器，一边是客户端加货架。两边都挖。两边都不是对方的皮肤。
+Bedrock 提供两种官方扩展方式：
 
-卷四会考偶然能否进兼容层。本章不代答该扔掉哪一行表。本章钉的是：换语言重写之后，若不去对齐语义测试集，分叉会变成两个游戏。两个游戏可以共存。共存已经发生。发生了还说优化版，是把品牌偷换成规格。
+**Resource Pack（资源包）**  
+- 改变视觉和音频（纹理、模型、音效）；
+- 与 Java Edition 的资源包类似，但格式不兼容。
 
-<Constraint name="语义分叉比跑分贵" verdict="地基" chain="另写实现 → 测试集分家 → 同名不再是同一物理">
-性能能解释为什么手机能玩。解释不了灯为什么不亮。抄走 C++ 和附加包，丢掉准连接、存档格式和审核墙，你会得到能进商店的客户端，失去「一份原理图走遍 Minecraft」的幻觉。幻觉可以破。破了要改口令。口令在玩家手里。
-</Constraint>
+**Behavior Pack（行为包）**  
+- 修改游戏逻辑（实体行为、战利品表、配方）；
+- 通过 JSON 文件定义；
+- 类似 Java Edition 的 Data Pack，但能力更强（可以修改实体 AI）。
 
-<Memoir title="截图里的灯">
-同一套台阶，同一卷粉。那边不亮。不是网不好。是那一行表从来没签过。口令「Bedrock 不行」能当情绪。情绪底下是护照。护照上写着产品线，不是帧数。
-</Memoir>
+**示例：自定义实体**
 
-<Alternative title="若从第一天强制同一份红石规格">
-跨平台会更慢，或其中一边要革掉墙上的 VM。你得到更可翻译的品牌。你失去的是：某一侧已经靠未签署的怪癖建成的城市，以及另一侧已经靠审核进店的货架。统一规格是立法。立法两边都要死人。
-</Alternative>
+```json
+{
+  "format_version": "1.16.0",
+  "minecraft:entity": {
+    "description": {
+      "identifier": "custom:my_mob",
+      "is_spawnable": true,
+      "is_summonable": true
+    },
+    "components": {
+      "minecraft:health": {
+        "value": 20,
+        "max": 20
+      },
+      "minecraft:movement": {
+        "value": 0.25
+      }
+    }
+  }
+}
+```
 
-下一章看同一内核如何既给单人档用、又给万人网络用。原版没有把兴趣管理当成一等公民。第三方核心是证据，不是安装推荐。
+**能做什么**：
+- 修改现有实体的属性；
+- 创建新的实体（但模型和行为受限于现有组件）；
+- 修改战利品表、配方、世界生成。
+
+**不能做什么**：
+- 不能添加新的方块类型（只能修改现有方块的行为）；
+- 不能添加新的游戏机制（如红石组件）；
+- 不能修改核心游戏循环（Tick、Chunk Loading）。
+
+### Script API：JavaScript 脚本
+
+2021 年起，Bedrock 引入 **Script API**（基于 JavaScript / TypeScript）。[^script-api]
+
+**运行环境**：
+- JavaScript 引擎（QuickJS）；
+- 沙盒执行（不能访问文件系统、网络）；
+- 通过事件系统与游戏交互。
+
+**示例：监听方块破坏**
+
+```javascript
+import { world } from '@minecraft/server';
+
+world.afterEvents.playerBreakBlock.subscribe((event) => {
+  const { player, block } = event;
+  player.sendMessage(`You broke a ${block.typeId}!`);
+});
+```
+
+**能做什么**：
+- 监听游戏事件（玩家行为、方块更新、实体生成）；
+- 修改实体属性、生成实体；
+- 创建自定义游戏规则和小游戏。
+
+**不能做什么**：
+- 不能修改方块或实体的底层行为（如 Piston 的推动逻辑）；
+- 不能像 Mixin 那样"注入"到游戏代码中；
+- 性能受限（JavaScript 比原生代码慢）。
+
+### 对比：Java Mod vs Bedrock Add-On
+
+| 能力 | Java Mod（Forge/Fabric） | Bedrock Add-On / Script API |
+|------|--------------------------|----------------------------|
+| 添加新方块 | ✅ 完全自定义 | ❌ 只能修改现有方块 |
+| 添加新实体 | ✅ 完全自定义 | ⚠️ 基于现有组件 |
+| 修改红石逻辑 | ✅ 可以通过 Mixin | ❌ 不能修改 |
+| 修改 Tick 循环 | ✅ 可以注入 | ❌ 不能修改 |
+| 访问底层系统 | ✅ 通过反射和 Mixin | ❌ 沙盒限制 |
+| 跨版本兼容性 | ❌ 每个大版本需要重写 | ⚠️ 相对稳定 |
+| 审核要求 | ❌ 社区自由分发 | ✅ Marketplace 需审核 |
+
+**核心差异**：
+
+> Java Mod 可以修改游戏的**任何部分**（通过 Mixin 和反射），而 Bedrock Add-On 只能在官方提供的**扩展点**内工作。
+
+这不是"Bedrock 的 Add-On 不够好"，而是：
+
+- **Java Edition**：社区可以自由扩展，但需要逆向工程和适配每个版本；
+- **Bedrock Edition**：官方提供稳定的 API，但能力受限，且需要通过审核。
+
+第 14 章[《Mod、Mixin 与加载器》](/impl/mod-architecture)详细讨论了 Java Mod 的工作原理。
+
+## Marketplace：审核与商业模式
+
+Bedrock 的 **Marketplace** 是官方内容商店，创作者可以出售皮肤、地图、纹理包和 Add-On。
+
+### Marketplace 的运作方式
+
+**创作者提交内容**：
+- 通过 Minecraft Partner Program 申请；
+- 内容需要通过审核（质量、兼容性、适龄）；
+- 定价以 **Minecoins**（虚拟货币）计算。
+
+**玩家购买内容**：
+- 内容绑定到 Microsoft 账户；
+- 可以在所有登录该账户的设备上使用；
+- 无法导出或分享给其他账户。
+
+**分成**：
+- 微软和创作者分成（具体比例未公开）；
+- 创作者可以获得稳定收入。
+
+### Marketplace 的约束
+
+Marketplace 的审核机制会反过来限制创作者能做什么：
+
+**技术限制**：
+- 不能使用任意代码（只能用 Add-On / Script API）；
+- 不能访问文件系统或网络；
+- 不能修改核心游戏机制。
+
+**内容限制**：
+- 需要适合所有年龄段（主机分级要求）；
+- 不能包含暴力、色情、版权侵权内容；
+- 需要在所有平台上运行（移动、主机、PC）。
+
+**商业限制**：
+- 内容绑定账户，不能自由分享；
+- 玩家需要购买 Minecoins；
+- 创作者需要通过审核才能上架。
+
+### 对比：Java 社区 vs Bedrock Marketplace
+
+| 特性 | Java Edition | Bedrock Edition |
+|------|--------------|-----------------|
+| 分发方式 | 自由分发（CurseForge、Modrinth） | Marketplace 审核 |
+| 内容绑定 | 文件（可复制） | 账户（购买） |
+| 创作自由 | 完全自由 | 受审核限制 |
+| 收入模式 | 捐赠、Patreon | Marketplace 分成 |
+| 法律风险 | 创作者自负 | 微软审核 |
+| 跨账户分享 | ✅ 可以 | ❌ 不能 |
+
+**核心差异**：
+
+> Java Edition 的 Mod 生态是**社区自治**的，Bedrock 的 Marketplace 是**官方管理**的。
+
+这不是"哪个更好"，而是两种不同的生态模型：
+
+- **Java**：创作自由、法律风险自负、难以盈利；
+- **Bedrock**：审核保护、稳定收入、创作受限。
+
+卷一第 11 章[《模组、服务器与灰色经济》](/history/grey-economy)讨论了 Java Mod 的商业模式。
+
+## 语义分叉：为什么"灯不亮"
+
+Bedrock 最致命的问题不是性能或 Mod 生态，而是**玩法语义的分叉**。
+
+### Redstone：Quasi-Connectivity 的缺失
+
+**Java Edition**：
+- 活塞和其他红石组件有 **Quasi-Connectivity（准连接）**；
+- 活塞会检查上方一格是否有信号，即使没有直接连接；
+- 这是一个历史 Bug，但已经成为玩家依赖的"特性"。[^qc]
+
+**Bedrock Edition**：
+- **没有 Quasi-Connectivity**；
+- 活塞只检查直接相邻的方块；
+- 红石逻辑更"正确"，但与 Java 不兼容。
+
+**后果**：
+
+> 大量 Java Edition 的红石机器在 Bedrock 上**无法工作**。
+
+玩家会发现：
+- BUD（Block Update Detector）不工作；
+- 某些门、电梯、飞行器失效；
+- 需要重新设计红石电路。
+
+第 08 章[《红石与更新顺序》](/impl/redstone)详细讨论了 QC 的技术原理。
+
+### 刷怪机制：不同的生成规则
+
+**Java Edition**：
+- 敌对生物在光照等级 0 生成；
+- Despawn 距离：24-128 方块；
+- 刷怪上限：70 个敌对生物。
+
+**Bedrock Edition**：
+- 敌对生物在光照等级 7 及以下生成（不同！）；
+- Despawn 规则不同（距离和条件）；
+- 刷怪上限更复杂（分类型计算）。
+
+**后果**：
+
+> Java Edition 的刷怪塔在 Bedrock 上效率完全不同，甚至可能不工作。
+
+### 战斗机制：攻击冷却的缺失
+
+**Java Edition**：
+- 1.9 引入攻击冷却（Attack Cooldown）；
+- 需要等待冷却条恢复才能打出满伤害；
+- 盾牌可以格挡。
+
+**Bedrock Edition**：
+- **没有攻击冷却**；
+- 可以连续点击快速攻击（像 1.8 及以前）；
+- 盾牌机制不同。
+
+**后果**：
+
+> Java 和 Bedrock 的 PvP 玩法完全不同。
+
+Java 玩家习惯等待冷却、使用盾牌和斧头，Bedrock 玩家习惯连点和快速移动。
+
+### 方块实体：活塞的差异
+
+**Java Edition**：
+- 活塞通常**不能推动方块实体**（如箱子、熔炉）；
+- 例外：部分方块实体在某些版本可以被推动（历史行为）。
+
+**Bedrock Edition**：
+- 活塞**可以推动某些方块实体**（如箱子）；
+- 这让某些机器（如可移动存储）更容易制作。
+
+**后果**：
+
+> Bedrock 的某些机器在 Java 上不可能实现，反之亦然。
+
+### 存档格式：不能互转
+
+**Java Edition**：
+- Anvil 格式（Region 文件，`.mca`）；
+- NBT 序列化。
+
+**Bedrock Edition**：
+- LevelDB（键值数据库）；
+- 不同的序列化格式。
+
+**后果**：
+
+> Java 和 Bedrock 的存档**不能直接互转**。
+
+虽然有第三方工具（如 Amulet Editor、MCC Toolchest）可以转换，但：
+- 红石机器会失效（QC 差异）；
+- 某些方块实体可能丢失；
+- Mod 内容无法转换。
+
+### 语义分叉表
+
+| 玩法 | Java Edition | Bedrock Edition |
+|------|--------------|-----------------|
+| **Quasi-Connectivity** | ✅ 存在（历史行为） | ❌ 不存在 |
+| **攻击冷却** | ✅ 1.9+ 有冷却 | ❌ 无冷却（可连点） |
+| **活塞推方块实体** | ❌ 通常不能 | ✅ 某些可以 |
+| **敌对生物生成光照** | 0 | ≤ 7 |
+| **随机刻速度** | `randomTickSpeed` 默认 3 | 默认 1（不同语义） |
+| **存档格式** | Anvil (`.mca`) | LevelDB |
+| **Mod 支持** | Forge / Fabric | Add-On / Script API |
+
+**这不是"还没对齐完"**：
+
+> 某些差异（如 QC、攻击冷却）已经成为各自玩家社区依赖的**核心玩法**，难以统一。
+
+## Parity：追求功能对等的努力
+
+Mojang 和微软确实在追求 **Parity**（Java 和 Bedrock 的功能对等）。[^parity]
+
+### 已经对齐的
+
+**内容 Parity**：
+- 大部分方块、物品、生物在两个版本都有；
+- 新版本更新（如 1.19 The Wild Update）同时发布到 Java 和 Bedrock；
+- 世界生成（生物群系、结构）基本一致。
+
+**UI / UX Parity**：
+- 两个版本的界面越来越接近；
+- 都支持触控、手柄、键鼠（Bedrock 优势更大）。
+
+### 难以对齐的
+
+**底层机制**：
+- Redstone（QC、更新顺序）；
+- 刷怪机制；
+- 战斗机制（攻击冷却）。
+
+**扩展模型**：
+- Java 的 Mod 生态无法"移植"到 Bedrock；
+- Bedrock 的 Marketplace 审核模式也不会出现在 Java。
+
+**平台限制**：
+- Bedrock 需要通过主机和应用商店审核，Java 不需要；
+- Java 可以随意安装 Mod，Bedrock 不能。
+
+### 为什么 Parity 困难？
+
+**技术债**：
+- Java 的 QC 是历史 Bug，但已经成为"特性"；
+- 修改会破坏现有玩家的红石机器。
+
+**玩家社区**：
+- Java 玩家依赖 QC、攻击冷却、Mod；
+- Bedrock 玩家依赖触控、跨平台联机、Marketplace。
+
+**商业约束**：
+- Bedrock 需要通过审核，不能有"任意加载代码"；
+- Java 的开放 Mod 生态是核心卖点，不能放弃。
+
+**结果**：
+
+> Parity 只能在**内容层面**（方块、生物、生物群系）对齐，**机制层面**（Redstone、战斗、Mod）难以统一。
+
+第 18 章[《兼容、重构与技术债》](/impl/tech-debt)会详细讨论为什么"修复历史行为"如此困难。
+
+## 跨平台联机：Bedrock 的优势
+
+Bedrock 最大的优势之一是**跨平台联机**。
+
+### 实现方式
+
+**统一的网络协议**：
+- 所有 Bedrock 平台使用相同的协议；
+- Xbox、手机、PC、Switch 可以一起玩。
+
+**Realms**：
+- 官方托管的多人服务器；
+- 自动备份、跨平台访问；
+- 订阅制（付费）。
+
+**Xbox Live 集成**：
+- 好友列表、邀请、成就；
+- 主机玩家更熟悉这套系统。
+
+### 对比：Java Edition 的局限
+
+**Java Edition 的多人**：
+- 需要手动设置服务器（Dedicated Server）；
+- 或使用 Realms（付费）；
+- 不能与 Bedrock 联机。
+
+**第三方桥接**：
+- **Geyser**：允许 Bedrock 客户端连接到 Java 服务器；[^geyser]
+- 协议转换，但某些功能（如 QC、Mod）无法完美兼容。
+
+**核心差异**：
+
+> Bedrock 的跨平台联机是**一等公民**（官方支持），Java 的多人是**社区驱动**（自建服务器）。
+
+第 10 章[《网络架构与状态同步》](/impl/networking)讨论了 Java Edition 的网络架构。
 
 ## 这一章留下什么
 
-- **爱好者**：手机上的 Minecraft 能更顺，仍可能点不亮你截图里的灯。存档搬不过去。模组进不了货架。这不是「还没优化完」。这是两款游戏共用一个名字。
-- **开发者**：能抄走的是为进商店而另写实现、把扩展面收成数据包式的附加包加沙盒脚本、用跨平台后端换房间。能一起抄走的还有：语义表必须先于跑分——准连接、红石班次、战斗冷却、方块实体推移、世界格式、作者怎么进门。抄不走的是 Java 模组河、Marketplace 审核、两份已经写下的存档。你不得把 Bedrock 写成优化版 Java。换语言已经发生。发生之后，分叉比帧数更贵。贵在测试集。测试集在玩家手上，不在基准测试里。
+从 C++ 实现、跨平台架构到 Add-On、Marketplace 与语义分叉，Bedrock Edition 证明了：换语言不仅改变性能，也会改变生态和玩法。
 
-[^script]: Bedrock 脚本 API 在行为包中运行 JavaScript，由 GameTest 发展而来。见 Microsoft，《Introduction to Scripting》，<https://learn.microsoft.com/en-us/minecraft/creator/documents/scripting/introduction>；[Add-on](https://minecraft.wiki/w/Add-on)。
+Bedrock 用 C++ 重写，最初是为了在移动设备、主机和 VR 上运行。它确实获得了更好的性能（更低内存、更快启动、更高帧率）、跨平台能力（移动、主机、PC、VR 统一联机）、以及官方内容商店（Marketplace，创作者可以盈利）。但同时付出了代价：**Mod 生态几乎消失**（C++ 二进制难以修改，应用商店不允许任意代码加载）、**扩展能力受限**（Add-On 和 Script API 只能在官方扩展点内工作，不能像 Java Mod 那样修改任何部分）、**语义分叉**（Redstone 没有 QC、战斗没有攻击冷却、刷怪机制不同、存档格式不兼容）。
 
-[^qc]: Java 准连接见 Mojira [MC-108](https://bugs.mojang.com/browse/MC-108)；Bedrock 无此机制。对照见本书 [《红石的实现》](/impl/redstone)。
+Mojang 和微软确实在追求 Parity（功能对等），但某些核心差异已经难以消除——不是因为技术不可能，而是因为两边的玩家社区已经依赖各自的历史行为。Java 玩家依赖 QC、攻击冷却、Mod 生态；Bedrock 玩家依赖触控、跨平台联机、Marketplace。两个版本在**内容层面**（方块、生物、生物群系）可以对齐，但**机制层面**（Redstone、战斗、扩展模型）已经分叉成两个不同的游戏。
 
-[^combat]: Java 1.9 近战冷却；Bedrock 无同一根冷却条。见 [Java Edition 1.9](https://minecraft.wiki/w/Java_Edition_1.9)；本书 [《最小动词集与手感》](/design/verbs-feel)。
+**对爱好者来说**，"Bedrock 是优化版"这句话不准确。Bedrock 确实更快、更省电，但它不是"Java Edition 加速"，而是另一套实现。如果你依赖 QC、Mod、或 Java 的红石教程，Bedrock 不是"升级选项"。如果你需要在手机和主机上玩、需要触控友好、需要跨平台联机，Bedrock 是更好的选择。两个版本共享品牌和内容，但玩法和生态已经分叉。
 
-[^be-te]: Java 活塞通常推不走带方块实体的方块；Bedrock 可以。见 [Block entity](https://minecraft.wiki/w/Block_entity)。
+**对开发者来说**，能抄走的是：**C++ 可以带来性能优势**（尤其是内存和启动速度），**跨平台架构需要从头设计**（不是"移植"），**官方审核的内容商店可以让创作者盈利**（但会限制创作自由），**ECS 架构在某些场景比继承层次更灵活**。不能照抄的是：Bedrock 的具体 C++ 架构、RenderDragon 渲染引擎、LevelDB 存储、Marketplace 的审核流程。真正值得继承的是：**换语言会导致语义分叉，除非有统一的语义测试集**；**性能和生态是权衡，不是免费的**（Bedrock 快但 Mod 少，Java 慢但 Mod 多）；**扩展模型塑造社区文化**（Java 的自由 Mod 生态 vs Bedrock 的审核 Marketplace）；**跨平台需求会反过来约束设计**（主机审核、应用商店限制、触控输入）。
 
-[^fmt]: Java 世界为 Anvil 分区；Bedrock 为 LevelDB。见 [Anvil file format](https://minecraft.wiki/w/Anvil_file_format)、[Bedrock Edition level format](https://minecraft.wiki/w/Bedrock_Edition_level_format)；本书 [《存储与序列化》](/impl/storage)。
+[^pe-history]: Minecraft Wiki，《Pocket Edition》。Pocket Edition 最初由 Aron Nieminen 用 C++ 开发，2011 年发布。
+
+[^bedrock-unification]: Minecraft Wiki，《Bedrock Edition》。2017 年，微软将所有非 Java 版本统一为 Bedrock Edition。
+
+[^script-api]: Minecraft Creator Portal，《Scripting API》。Bedrock 的 JavaScript 脚本 API。
+
+[^qc]: Minecraft Wiki，《Quasi-connectivity》。Java Edition 的历史行为，Bedrock 不支持。
+
+[^parity]: Mojang，《Parity》。官方追求 Java 和 Bedrock 的功能对等。
+
+[^geyser]: GeyserMC，https://geysermc.org/。允许 Bedrock 客户端连接到 Java 服务器的桥接工具。
