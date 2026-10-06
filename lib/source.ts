@@ -5,6 +5,7 @@ import { docsContentRoute, docsRoute } from './shared';
 import { defineDocs } from 'fumadocs-mdx/macro';
 import { metaSchema, pageSchema } from 'fumadocs-core/source/schema';
 import { z } from 'zod';
+import { authorSchema } from './authors';
 
 const docs = defineDocs({
   dir: 'docs',
@@ -15,6 +16,7 @@ const docs = defineDocs({
       title: z.string().optional(),
       description: z.string().optional(),
       tags: z.array(z.string().trim().min(1)).optional(),
+      authors: z.array(authorSchema).optional(),
     }),
     postprocess: {
       includeProcessedMarkdown: true,

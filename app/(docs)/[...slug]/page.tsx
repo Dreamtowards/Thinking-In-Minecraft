@@ -16,6 +16,8 @@ import { normalizeTags } from '@/lib/tag-utils';
 import { isCurrentBookPage } from '@/lib/tags';
 import { SectionNumberToggle } from '@/components/mdx/section-number-toggle';
 import { numberArticleSections } from '@/components/mdx/section-numbers';
+import { AuthorsCompact } from '@/components/mdx/authors-compact';
+import { normalizeAuthors } from '@/lib/authors';
 
 export const revalidate = false;
 
@@ -37,6 +39,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
         <DocsDescription className="mb-0">{page.data.description}</DocsDescription>
       ) : null}
       <div className="flex min-w-0 items-center gap-2 border-b pb-4">
+        <AuthorsCompact authors={normalizeAuthors(page.data.authors)} />
         {tags.length > 0 && (
           <nav aria-label="章节标签" className="flex min-w-0 flex-1 flex-nowrap gap-1.5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [&>a]:shrink-0">
             {tags.map((tag) => <TagLink key={tag} tag={tag} />)}
