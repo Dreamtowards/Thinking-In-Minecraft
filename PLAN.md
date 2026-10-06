@@ -1254,29 +1254,61 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 - **状态**：待重写
 - **核心问题**：Java / JVM 这套运行环境为 Minecraft 带来了什么，又限制了什么？
 - **建议内容**：
-  1. JVM / bytecode
-  2. JIT
-  3. GC
-  4. Classpath / class loading
-  5. Native libraries / rendering backend
-  6. Launcher / bundled runtime / Java version migration
-  7. Java 与 Mod 生态的关系
-- **边界**：不要把性能问题全部归咎于“用了 Java”。
-- **避免旧命题**：不预设“2009 年的正确选择”或“Java 卡住了 Minecraft”。
+  1. **JVM 与字节码**：为什么 Notch 选择 Java；bytecode、class loading、热加载
+  2. **JIT 与性能**：解释执行 → JIT 编译；为什么 Minecraft 启动后会”变快”
+  3. **GC 与内存管理**：自动内存管理的便利与卡顿代价；不同 GC 算法（G1、ZGC）
+  4. **Classpath 与依赖**：库的加载与冲突；Mod Loader 怎样修改 Classpath
+  5. **Native Libraries**：LWJGL、GLFW、OpenGL/Vulkan 绑定；JNI 的边界
+  6. **Launcher 与运行时打包**：
+     - 官方启动器（认证、版本管理、Java 捆绑）
+     - 第三方启动器（MultiMC、Prism Launcher、HMCL）
+     - Java 版本迁移（Java 8 → 17 → 21）
+     - 为什么需要捆绑 JRE
+  7. **Java 与 Mod 生态的关系**：
+     - 为什么 Java 能让 Mod 生态繁荣（字节码可修改、反编译、Mixin）
+     - Bedrock 用 C++ 后为什么 Modding 困难
+     - 对比：如果 Minecraft 用 C++/Rust，Mod 生态会怎样
+- **边界**：
+  - 不要把性能问题全部归咎于”用了 Java”；
+  - 性能分析已在 impl/12，这里只讨论 JVM 的结构性特征；
+  - Mod Loader 的具体实现在 impl/14，这里只讨论 JVM 提供的可能性。
+- **避免旧命题**：不预设”2009 年的正确选择”或”Java 卡住了 Minecraft”。
+- **交叉**：`impl/12 性能`、`impl/14 Mod 架构`、`impl/17 Bedrock`、`history/01 Infiniminer`
 
 ### `impl/17` Bedrock：另一套实现
 
 - **目标文件**：现有 `bedrock.mdx`
 - **状态**：待重写
-- **核心问题**：为什么 Bedrock 不是“Java 换成 C++ 的优化版”，而是逐渐形成了不同语义与扩展模型的另一套实现？
+- **核心问题**：为什么 Bedrock 不是”Java 换成 C++ 的优化版”，而是逐渐形成了不同语义与扩展模型的另一套实现？
 - **建议内容**：
-  1. C++ / 跨平台约束
-  2. World / rendering / networking 等实现差异
-  3. Behavior Pack / Add-On / Script API
-  4. Java / Bedrock 行为语义分叉
-  5. Marketplace 与创作者平台约束
-  6. 两套实现怎样长期追求 parity
+  1. **为什么需要 Bedrock**：
+     - 跨平台需求（主机、移动、VR）
+     - 性能约束（移动设备、主机固定硬件）
+     - 商业需求（Marketplace、Realms、合作授权）
+  2. **C++ 实现的优势与代价**：
+     - 更好的性能、更低的内存占用
+     - 但 Modding 困难、社区工具链薄弱
+  3. **核心系统的实现差异**：
+     - 世界生成（Noise、Biome）
+     - 渲染（RenderDragon、Deferred Pipeline）
+     - 网络与同步（Protocol、Authority Model）
+     - Chunk Lifecycle 与 Tick 调度
+  4. **扩展模型的差异**：
+     - Add-On / Behavior Pack vs Java Data Pack
+     - Script API（JavaScript）vs Java Mod
+     - Marketplace 的审核、分成与平台约束
+  5. **语义分叉**：
+     - Redstone 时序差异（Java QC vs Bedrock 严格逻辑）
+     - 刷怪机制（spawn rules、despawn distance）
+     - 战斗机制（攻击冷却、盾牌）
+     - 物品、附魔、药水效果的细微差异
+  6. **Parity 追求与现实**：
+     - 官方努力统一（Parity 项目）
+     - 为什么某些差异难以消除（实现架构、历史玩家依赖）
+     - Java 独占特性 vs Bedrock 独占特性
 - **重点**：性能只是差异之一，语义与生态差异往往更直接影响玩家与创作者。
+- **避免**：不写成”Java vs Bedrock 哪个更好”；应该是”两套实现各自解决什么问题，付出什么代价”。
+- **交叉**：`impl/16 Java Runtime`、`impl/18 兼容与技术债`、`history/08 两条产品线`
 
 ### `impl/18` 兼容、重构与技术债
 
@@ -1284,19 +1316,99 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 - **状态**：待重写
 - **核心问题**：一款长期演化十多年的沙盒，什么时候应该保持兼容，什么时候又必须打破旧结构？
 - **建议内容**：
-  1. 什么叫技术债，什么只是历史约束
-  2. Flattening / Components / world migration 等重构窗口
-  3. 红石 / world format / protocol / mod compatibility
-  4. 事实接口与历史行为
-  5. 什么时候兼容优先，什么时候重构优先
-  6. 第三方优化 / Paper / Mod 生态能说明什么、不能说明什么
-- **避免旧命题**：不再以“技术债作为产品策略”“兼容性必须高于正确性”作为先验答案。
+  1. **什么是技术债，什么是历史约束**：
+     - 技术债：早期设计决策在后来成为负担
+     - 历史约束：社区依赖的行为，即使”不合理”也不能轻易改
+     - 不要把所有”旧代码”都叫技术债
+  2. **存档兼容**：
+     - Block ID 迁移（1.13 Flattening）
+     - NBT 格式演化
+     - World Format（Anvil → 1.18 扩展高度 → 新 Chunk Format）
+     - 为什么不能”推倒重来”
+  3. **协议兼容**：
+     - Protocol Version 演化
+     - ViaVersion 等多版本服务器
+     - 为什么 Snapshot 不保证协议稳定
+  4. **Mod/Plugin 兼容**：
+     - 为什么每次大版本更新 Mod 都要重写
+     - Mapping（MCP → Yarn → Mojmap）
+     - 事实 API 与官方 API 的区别
+  5. **玩法兼容（历史行为）**：
+     - Quasi-Connectivity（QC）：Bug 变特性
+     - Redstone 时序：Paper 优化后机器失效
+     - 刷怪机制：版本更新后农场产量变化
+     - 案例：1.8 战斗更新、1.9 PvP 社区分裂
+  6. **重构窗口**：
+     - 1.13 Flattening（Block State 扁平化）
+     - 1.16 数据包扩展
+     - 1.19+ Data Component（Item Stack 组件化）
+     - 什么时候可以打破兼容性
+  7. **第三方优化能说明什么**：
+     - Paper / Folia / Sodium 等优化
+     - 它们证明了什么、不能证明什么
+     - 为什么 Mojang 不直接”抄”第三方优化
+  8. **兼容性的代价与收益**：
+     - 保持兼容：玩家信任、存档安全、社区稳定
+     - 打破兼容：清理债务、提升性能、解锁新能力
+     - 什么时候兼容优先，什么时候重构优先
+- **避免旧命题**：
+  - 不再以”技术债作为产品策略”或”兼容性必须高于正确性”作为先验答案；
+  - 不要把”Mojang 不重构”写成”代码烂”；
+  - 不要把第三方优化写成”官方应该学习的榜样”。
+- **交叉**：
+  - `history/04 模组作为第二作者`（Bukkit DMCA）
+  - `history/09 版本演进`（1.8 战斗、1.13 Flattening）
+  - `impl/08 红石`（QC、历史时序）
+  - `impl/14 Mod 架构`（Mapping、兼容成本）
+  - `impl/15 服务端软件`（Paper 优化的代价）
 
 ### `impl/19` 技术实现留下了什么 · 卷结语
 
 - **目标文件**：旧 `modifiable-engine.mdx` 只作为素材；建议执行时迁移到更中性的 slug
 - **状态**：待重写
 - **核心问题**：读完整个技术卷以后，哪些实现关系值得带进 Vol. IV，哪些只是 Minecraft 的历史偶然？
+- **建议内容**：
+  1. **回看五部**：
+     - Part 1：世界是数据（Block State、Chunk、Registry）
+     - Part 2：世界在运行（Tick、Update、Entity、Redstone）
+     - Part 3：世界被看见和同步（Client、Network、Streaming、Performance）
+     - Part 4：世界可以扩展（Data Pack、Mod、Plugin、Proxy）
+     - Part 5：两套实现与长期演化（Java/Bedrock、兼容成本）
+  2. **爱好者层结语**：
+     - 理解实现后，对 Minecraft 的认识有什么改变？
+     - 为什么某些"合理的建议"技术上很难实现？
+     - 为什么有些"Bug"不能修（兼容、历史行为）？
+     - 服务器卡顿、Mod 冲突、版本更新背后的原因
+  3. **开发者层结语**：
+     - **值得继承的技术思路**：
+       - 方块世界的数据模型（Palette、稀疏表示）
+       - Tick 调度与兴趣管理（Simulation Distance、Chunk Lifecycle）
+       - 客户端预测与服务器确认
+       - 数据驱动扩展（Registry、Data Pack）
+       - Mod 友好的架构（反射、Mixin、Event）
+     - **Minecraft 特有的历史包袱**（不应照抄）：
+       - 32 位 Block ID 时代的遗留
+       - Quasi-Connectivity 等历史 Bug
+       - 单一主线程的 Tick 模型
+       - Java Reflection 依赖的 Mod 生态
+     - **实现与设计的关系**：
+       - 哪些玩法来自设计，哪些来自实现偶然
+       - 红石、刷怪机、农场等"发现式玩法"
+       - 兼容成本如何反过来塑造设计空间
+  4. **为卷四铺垫**：
+     - 如果不以"复制 Minecraft"为目标，而是设计下一代沙盒世界
+     - 哪些实现约束可以放弃（单线程、Java、历史格式）
+     - 哪些实现能力必须保留（可修改、持久化、可扩展、多人同步）
+     - 新技术（ECS、并行、WASM、ML）能改变什么
+  5. **开放问题**：
+     - Minecraft 是否已经到了"不能再改"的程度？
+     - Folia、Bedrock 等实验能说明什么？
+     - 下一代沙盒会是什么样？
+- **验收**：
+  - 不写成"十二条可迁移原则"；
+  - 允许结论是"目前还不能确定"；
+  - 卷四完成后应回头修订本章。
+- **交叉**：`design/14 值得继承什么`、`rewrite/01 我们到底在重写什么`、`rewrite/02 必须保留的设计不变量`
 - **建议回看**：
   1. 数据模型与持久化
   2. Tick 与局部模拟
