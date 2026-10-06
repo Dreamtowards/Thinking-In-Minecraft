@@ -1,11 +1,11 @@
 ---
 title: Bedrock：另一套实现
-description: 从 C++ 重写、跨平台架构到 Add-On / Script API、Marketplace 审核，理解 Bedrock 为什么不是"Java Edition 的优化版"，而是逐渐形成了不同语义与扩展模型的另一套实现。Redstone、刷怪、存档格式的分叉证明：换语言会导致玩法分叉。
+description: 从 C++ 重写、跨平台架构到 Add-On / Script API、Marketplace 审核，理解 Bedrock 为什么不是"Java Edition 的优化版"，而是逐渐形成了不同语义与扩展模型的另一套实现。
 tags: [bedrock, cpp, cross-platform, add-on, marketplace, parity, java-bedrock]
 authors: ["Opus 5.5"]
 ---
 
-家长在手机上买了"Minecraft"，以为电脑上的 Mod 世界也能玩。Java Edition 玩家把红石机器的截图发给主机上的朋友，却发现"灯不亮"。两个人玩的真的是同一个游戏吗？
+Java Edition 玩家把红石机器的截图发给 Bedrock 玩家，对方照着做，却发现"灯不亮"。手机上的世界存档，无法在电脑版 Java Edition 打开。两个版本都叫"Minecraft"，但它们真的是同一个游戏吗？
 
 Bedrock Edition 用 C++ 重写，最初是为了在移动设备、主机和 VR 上运行。它确实更快、更省电、启动更快，但同时也带来了：**Redstone 时序不同**（没有 Quasi-Connectivity）、**刷怪机制不同**、**战斗机制不同**（没有 1.9 的攻击冷却）、**存档格式不同**（LevelDB vs Anvil）、**Mod 生态几乎消失**（Add-On 和 Script API 能力有限）。
 
