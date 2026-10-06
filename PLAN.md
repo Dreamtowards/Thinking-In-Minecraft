@@ -1213,8 +1213,8 @@ Java 与 Bedrock 分述。回答「要回答」那一句。结尾给两类读者
 
 ### `impl/14` Mod、Mixin 与加载器
 
-- **目标文件**：由现有 `mod-architecture.mdx` 重写；Bukkit / Paper 内容迁出
-- **状态**：待重写
+- **目标文件**：`docs/impl/(part4)/mod-architecture.mdx`
+- **状态**：✎ 已按新版结构重写；Bukkit / Paper 内容留给 `impl/15`
 - **核心问题**：没有稳定、完整的官方 Java Mod API 时，社区怎样把游戏代码本身变成扩展面？
 - **建议内容**：
   1. Class loading / mapping / transformed code
