@@ -2,6 +2,7 @@
 title: 区块生命周期与世界流送
 description: 从 ChunkStatus、Ticket 与 Simulation Distance 到客户端流送、保存和卸载，理解近乎无限的世界怎样只让当前需要的一部分真正进入运行时。
 tags: [chunk, streaming, chunk-lifecycle, tickets, simulation-distance, world-loading, java]
+authors: ["GPT 5.6 Sol"]
 ---
 
 玩家一直向东走时，地平线会不断出现新的山、森林和洞穴。对玩家来说，这是一个连续世界；对运行时来说，前方每一片区域却可能处于完全不同的状态：有的已经存在于存档里，只需要读回；有的从未生成；有的已经在服务器内存中，却不参与 Entity Tick；有的正在模拟，却还没有发送给某个客户端；有的刚刚离开所有人的活动范围，正在等待保存和卸载。
